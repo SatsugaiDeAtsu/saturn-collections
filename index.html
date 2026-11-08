@@ -730,7 +730,7 @@ function rOverview(){
       <div class="box"><div class="box-h"><h3>Top anime genres</h3><span class="small muted">completed</span></div><div class="box-b">${topG.map(([g,n])=>`<div class="hbar" style="--c:var(--anime)"><span>${esc(g)}</span><div class="tr"><i style="width:${n/gmx*100}%"></i></div><span class="mono muted">${n}</span></div>`).join('')}</div></div>
     </div>
   </section>
-  ${favRow('Favorite films','films',favF.map(f=>({t:f.t,img:f.img||'',sub:f.y,b:f.r?stars(f.r):'',o:()=>openFilm(f)})))}
+  ${favRow('Favorite films','films',favF.map(f=>({t:f.t,img:f.img||'',sub:f.y,b:f.r?f.r+'★':'',o:()=>openFilm(f)})))}
   ${favRow('Favorite games','games',favG.map(g=>({t:g.t,img:g.img||'',sub:g.pf[0]||'',b:g.r?g.r+'/5':'',o:()=>openGame(g)})))}
   ${favRow('Favorite anime','anime',D.hof.malFavs.anime.map(([id,t,sub])=>{const a=anime.find(x=>x.id===id);return {t:a?a.t:t,img:a?a.img:'',sub,b:a&&a.sc?String(a.sc):'',o:()=>a?openAnime(a):window.open('https://myanimelist.net/anime/'+id,'_blank')}}))}
   ${favRow('Favorite manga','manga',D.hof.malFavs.manga.map(([id,t,sub])=>{const m=manga.find(x=>x.id===id);return {t:m?m.t:t,img:m?m.img:'',sub,b:m&&m.sc?String(m.sc):'',o:()=>m?openManga(m):window.open('https://myanimelist.net/manga/'+id,'_blank')}}))}
@@ -867,7 +867,7 @@ function rHof(){
     const p10=manga.filter(m=>m.sc===10).sort((a,b)=>b.mal-a.mal);
     G('g-m10','Perfect 10s','Every manga I scored 10 out of 10.','ten','#d24a5f','',[sec('s-m10','Scored 10','',grid(p10.map(m=>hItem('m'+m.id+'~'+m.t,m.type+(m.y?' · '+m.y:''))).join('')))]);
   }else if(hofSeg==='films'){
-    const fc=(t,y)=>{const f=filmByKey[norm(t)+'|'+y];const idx=HOFITEMS.push({film:f||null,t,y})-1;return `<div class="card" data-h="${idx}">${cover(t,'',f&&f.r?`<span class="badge">${f.r}★</span>`:'')}<div class="meta"><div class="tt">${esc(t)}</div><div class="ss"><span>${y||''}</span><span>${f&&f.lk?'♥':''}</span></div></div></div>`};
+    const fc=(t,y)=>{const f=filmByKey[norm(t)+'|'+y];const idx=HOFITEMS.push({film:f||null,t,y})-1;return `<div class="card" data-h="${idx}">${cover(t,f&&f.img||'',f&&f.r?`<span class="badge">${f.r}★</span>`:'')}<div class="meta"><div class="tt">${esc(t)}</div><div class="ss"><span>${y||''}</span><span>${f&&f.lk?'♥':''}</span></div></div></div>`};
     const favF=D.lbFavUris.map(u=>filmUri[u]).filter(Boolean);
     G('g-ftop','Letterboxd top 4','The four films on my Letterboxd profile.','star','#e8733a','https://letterboxd.com/SatsugaiDeAtsu/',[sec('s-ftop','Top 4','',grid(favF.map(f=>fc(f.t,f.y)).join('')))]);
     G('g-flist','My lists','Lists I made on Letterboxd.','films','#e8733a','https://letterboxd.com/SatsugaiDeAtsu/lists/',D.filmLists.map((l,i)=>sec('s-fl'+i,l.name,l.desc,grid(l.items.map(([t,y])=>fc(t,y)).join('')))));
