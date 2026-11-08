@@ -319,7 +319,9 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 @keyframes kb{from{transform:scale(1.08)}to{transform:scale(1)}}
 .spot h2{font-size:28px}
 .spot .dots{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
-.spot .dots button{width:22px;height:6px;border:0;background:var(--line2);cursor:pointer;padding:0}
+.spot .dots{max-width:520px}
+.spotnote{margin-top:10px;font-style:italic;color:var(--ink2);font-size:13.5px;border-left:3px solid var(--gold);padding-left:10px;white-space:pre-line}
+.spot .dots button{width:14px;height:6px;border:0;background:var(--line2);cursor:pointer;padding:0}
 .spot .dots button.on{background:var(--gold)}
 .wr-hero{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:14px}
 .wr-num{padding:16px;border-top:4px solid var(--c)}
@@ -328,8 +330,55 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .wr-years{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}
 .wr-years button{border:1px solid var(--line2);background:var(--panel);padding:6px 14px;font-weight:700;cursor:pointer}
 .wr-years button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+@keyframes glow{0%,100%{opacity:.1;transform:scale(1)}50%{opacity:.28;transform:scale(1.12)}}
+.banner .glow{transform-box:fill-box;transform-origin:center;animation:glow 5s ease-in-out infinite}
+@keyframes cloud{from{transform:translateX(-160px)}to{transform:translateX(460px)}}
+.banner .cloud{animation:cloud 26s linear infinite}.banner .cloud.c2{animation-duration:34s;animation-delay:-12s}
+@keyframes sway2{0%,100%{transform:translateX(-14px) rotate(-20deg)}50%{transform:translateX(14px) rotate(25deg)}}
+.banner .sway2{transform-box:fill-box;transform-origin:center;animation:sway2 2.6s ease-in-out infinite}
+@keyframes fall{0%{transform:translate(0,0)}100%{transform:translate(-160px,240px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.banner .spin{transform-origin:243px 123px;animation:spin 18s linear infinite}
+@keyframes jolt{0%,86%,100%{transform:translate(0,0)}88%{transform:translate(-3px,2px)}90%{transform:translate(3px,-2px)}92%{transform:translate(-2px,-1px)}94%{transform:translate(2px,1px)}}
+.banner .jolt{animation:jolt 3.2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.banner .bob{animation:bob 2.2s ease-in-out infinite}.banner .float{animation:bob 3.4s ease-in-out infinite}
+@keyframes beam{0%,100%{transform:rotate(-14deg)}50%{transform:rotate(14deg)}}
+.banner .beam{transform-box:view-box;transform-origin:670px 0;animation:beam 6s ease-in-out infinite}
+@keyframes clap{0%,60%,100%{transform:rotate(-26deg)}72%{transform:rotate(0)}76%{transform:rotate(-6deg)}80%{transform:rotate(0)}}
+.banner .clap{transform-box:fill-box;transform-origin:0% 100%;animation:clap 2.4s ease-in-out infinite}
+@keyframes press{0%,20%,100%{transform:scale(1);filter:none}8%{transform:scale(.7);filter:brightness(1.8)}}
+.banner .press{transform-box:fill-box;transform-origin:center;animation:press 2s ease-in-out infinite}
+@keyframes flip{0%,30%{transform:scaleX(1);opacity:0}35%{opacity:1}65%{transform:scaleX(-1);opacity:1}70%,100%{transform:scaleX(-1);opacity:0}}
+.banner .flip{transform-box:view-box;transform-origin:680px 0;animation:flip 4.5s ease-in-out infinite}
+@keyframes ink{0%{stroke-dashoffset:1}12%,100%{stroke-dashoffset:0}}
+.banner .ink{stroke-dasharray:1;stroke-dashoffset:1;animation:ink 5s linear infinite}
+@keyframes write{0%,100%{transform:translate(0,0) rotate(0)}25%{transform:translate(-40px,8px) rotate(-3deg)}50%{transform:translate(-80px,16px) rotate(2deg)}75%{transform:translate(-30px,30px) rotate(-2deg)}}
+.banner .quill{transform-box:fill-box;transform-origin:0% 100%;animation:write 5s ease-in-out infinite}
+@keyframes shine{0%,60%{transform:translateX(0) skewX(-20deg)}100%{transform:translateX(260px) skewX(-20deg)}}
+.banner .shine{animation:shine 3.5s ease-in-out infinite}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 @media (max-width:640px){.spot{grid-template-columns:110px 1fr}.spot h2{font-size:20px}.wall .track{grid-template-rows:repeat(4,130px);grid-auto-columns:88px}.wall .track .cover{height:130px}}
+
+.quote{display:block;font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:17px;color:#f3e6f6;max-width:640px;line-height:1.5;opacity:0;transform:translateY(8px);filter:blur(4px);transition:opacity .6s,transform .6s,filter .6s;min-height:3em}
+.quote.in{opacity:1;transform:none;filter:none}.quote.out{opacity:0;transform:translateY(-8px);filter:blur(4px)}
+.quote .qm{color:#ffb3c8;font-size:1.4em;line-height:0;vertical-align:-.15em;margin:0 2px}
+.quote .qby{display:block;font-style:normal;font-family:Inter,sans-serif;font-size:12px;color:#cdb9d4;margin-top:4px;letter-spacing:.04em}
+.marquee{margin:-4px 0 14px;overflow:hidden;background:var(--bar);border:1px solid #000;padding:10px 0;display:grid;gap:10px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
+.mq{overflow:hidden}.mqt{display:flex;gap:10px;width:max-content}
+.mq.l .mqt{animation:mql 90s linear infinite}.mq.r .mqt{animation:mqr 90s linear infinite}
+.marquee:hover .mqt{animation-play-state:paused}
+@keyframes mql{to{transform:translateX(-50%)}}@keyframes mqr{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+.mqi{width:92px;flex:none}.mqi .cover{aspect-ratio:2/3}.mqi .cover .ct{display:none}
+.athumb{width:34px;flex:none}.athumb .cover{padding:3px}
+.card:has(.cover.gold){border-color:#e3b44a;box-shadow:0 0 0 1px #e3b44a,0 6px 18px -8px rgba(227,180,74,.6)}
+.cover.gold .badge{font-size:15px;padding:5px 9px;font-family:"Space Grotesk",sans-serif}
+.cover.gold::after{border:0;background:linear-gradient(115deg,transparent 30%,rgba(255,240,196,.55) 45%,transparent 60%);background-size:250% 100%;background-position:120% 0;opacity:0;transition:opacity .2s}
+@keyframes cshine{from{background-position:120% 0}to{background-position:-60% 0}}
+@keyframes tapg{0%{transform:scale(1)}35%{transform:scale(1.06) rotate(-1deg)}60%{transform:scale(.98)}100%{transform:scale(1)}}
+@keyframes tapn{0%{transform:scale(1)}40%{transform:scale(.95)}100%{transform:scale(1)}}
+.card.tapgold{animation:tapg .6s ease}.card.tapgold .cover.gold::after{opacity:1;animation:cshine .6s ease}
+.card.tap,.couple.tap{animation:tapn .35s ease}
 footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:var(--ink3)}
 
 @media (max-width:900px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}}
@@ -376,7 +425,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:v
 <script>
 (async function(){
 "use strict";
-let D,SET={};try{const j=u=>fetch(u,{cache:'no-cache'}).then(r=>r.json());const [a,g,b,s]=await Promise.all([j('data/site.json'),j('data/games.json'),j('data/books.json'),j('data/settings.json').catch(()=>({}))]);D=Object.assign(a,g,b);SET=s}catch(e){document.getElementById('app').innerHTML='<div class="empty">Could not load data/site.json.</div>';return}
+let D,SET={};try{const j=u=>fetch(u,{cache:'no-cache'}).then(r=>r.json());const [a,g,b,s,q]=await Promise.all([j('data/site.json'),j('data/games.json'),j('data/books.json'),j('data/settings.json').catch(()=>({})),j('data/quotes.json').catch(()=>({quotes:[]}))]);D=Object.assign(a,g,b,q);SET=s}catch(e){document.getElementById('app').innerHTML='<div class="empty">Could not load data/site.json.</div>';return}
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm=s=>String(s||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
@@ -392,6 +441,7 @@ let theme=store.get('theme',null);
 if(!theme){try{theme=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}catch(e){theme='light'}}
 root.dataset.theme=theme;
 document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#editbtn'))editSetup()});
+document.addEventListener('pointerdown',e=>{const c=e.target.closest&&e.target.closest('.card,.couple');if(!c)return;const g=!!c.querySelector('.cover.gold');c.classList.remove('tap','tapgold');void c.offsetWidth;c.classList.add(g?'tapgold':'tap');setTimeout(()=>c.classList.remove('tap','tapgold'),700)});
 $('#theme').onclick=()=>{theme=theme==='dark'?'light':'dark';root.dataset.theme=theme;store.set('theme',theme)};
 
 
@@ -421,40 +471,41 @@ const RING='<svg class="ring" viewBox="0 0 64 64" aria-hidden="true"><path d="M6
 const LOGO=(s)=>`<svg width="${s}" height="${s}" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lgP" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff5c86"/><stop offset=".55" stop-color="#b8264a"/><stop offset="1" stop-color="#6a2fc4"/></linearGradient><linearGradient id="lgR" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f6d27a" stop-opacity="0"/><stop offset=".3" stop-color="#f6d27a"/><stop offset=".7" stop-color="#fff2c9"/><stop offset="1" stop-color="#f6d27a" stop-opacity="0"/></linearGradient></defs><path d="M6 37c-4 6 10 6 26-1s28-17 26-22" fill="none" stroke="url(#lgR)" stroke-width="2.4" opacity=".55"/><circle cx="32" cy="32" r="15" fill="url(#lgP)"/><path d="M19 27c5-2 18-2 26 2" stroke="#fff" stroke-opacity=".25" stroke-width="2" fill="none"/><path d="M6 37c-4 6 10 6 26-1s28-17 26-22" fill="none" stroke="url(#lgR)" stroke-width="2.4" stroke-dasharray="0 23 60" /><circle cx="51" cy="14" r="1.6" fill="#fff"/><circle cx="12" cy="18" r="1" fill="#fff" opacity=".7"/></svg>`;
 const STARS=(n,x0,x1,seed)=>{let h=seed||3,s='';const r=()=>{h=(h*9301+49297)%233280;return h/233280};for(let i=0;i<n;i++){const x=x0+r()*(x1-x0),y=r()*200,o=.25+r()*.6,z=r()<.15?1.8:.9;s+=`<circle class="${z>1?'star':''}" style="animation-delay:-${(r()*4).toFixed(1)}s" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${z}" fill="#fff" opacity="${o.toFixed(2)}"/>`}return s};
 const ART={
- anime:c=>`<circle cx="700" cy="70" r="46" fill="#ffe7ef" opacity=".92"/><circle cx="700" cy="70" r="62" fill="#ffe7ef" opacity=".08"/>
+ anime:c=>`<circle class="glow" cx="700" cy="70" r="70" fill="#ffd0de" opacity=".14"/><circle cx="700" cy="70" r="46" fill="#ffe7ef" opacity=".92"/>
+  <g class="cloud" opacity=".18"><rect x="420" y="58" width="120" height="10" rx="5" fill="#fff"/><rect x="450" y="70" width="80" height="8" rx="4" fill="#fff"/></g><g class="cloud c2" opacity=".12"><rect x="600" y="132" width="140" height="9" rx="4" fill="#fff"/></g>
   <g fill="#14081a" opacity=".95"><rect x="560" y="96" width="210" height="9"/><rect x="548" y="88" width="234" height="9"/><rect x="580" y="112" width="170" height="7"/><rect x="590" y="105" width="10" height="95"/><rect x="730" y="105" width="10" height="95"/></g>
   <g fill="${c}"><rect x="548" y="88" width="234" height="3" opacity=".9"/></g>
   <path d="M820 20 C760 30 720 60 690 40 M780 24 c-8 10-6 22 4 30" stroke="#3a1a2e" stroke-width="5" fill="none"/>
   ${[[760,40],[742,52],[790,58],[722,30],[800,30],[770,70]].map(([x,y],i)=>`<g class="bloom" style="animation-delay:${i*.4}s" transform="translate(${x} ${y}) rotate(${i*31})"><ellipse rx="9" ry="5" fill="#ffb3c8"/><ellipse rx="5" ry="9" fill="#ff9fbb" opacity=".85"/><circle r="2" fill="#fff4f7"/></g>`).join('')}
-  ${Array.from({length:14},(_,i)=>{const x=430+((i*53)%390),d=(i*0.83)%7,dur=7+(i%5);return `<g class="petal" style="animation-delay:-${d}s;animation-duration:${dur}s"><ellipse cx="${x}" cy="-10" rx="5" ry="3" fill="#ffb3c8" opacity=".8"/></g>`}).join('')}
+  ${Array.from({length:26},(_,i)=>{const x=380+((i*37)%460),d=(i*0.71)%9,dur=6+(i%6);return `<g class="petal" style="animation-delay:-${d}s;animation-duration:${dur}s"><g class="sway2" style="animation-delay:-${(i*.3)%2}s"><ellipse cx="${x}" cy="-10" rx="${4+i%3}" ry="${2.5+(i%2)}" fill="${i%3?'#ffb3c8':'#ff8fb0'}" opacity=".85"/></g></g>`}).join('')}
   <g stroke="#fff" stroke-opacity=".12" stroke-width="2">${[0,1,2,3,4,5].map(i=>`<line x1="${430+i*8}" y1="${200-i*30}" x2="${380+i*8}" y2="${210-i*30}"/>`).join('')}</g>`,
- manga:c=>`<g transform="translate(470 18) rotate(-4)"><rect width="150" height="100" fill="#fff"/><rect x="158" width="170" height="60" fill="#fff"/><rect x="158" y="68" width="170" height="110" fill="#fff"/><rect y="108" width="150" height="70" fill="#fff"/>
+ manga:c=>`<g transform="translate(470 18) rotate(-4)"><g class="jolt"><rect width="150" height="100" fill="#fff"/><rect x="158" width="170" height="60" fill="#fff"/><rect x="158" y="68" width="170" height="110" fill="#fff"/><rect y="108" width="150" height="70" fill="#fff"/>
   <g fill="#1c0e22" opacity=".85">${Array.from({length:60},(_,i)=>`<circle cx="${8+(i%10)*14+(Math.floor(i/10)%2)*7}" cy="${8+Math.floor(i/10)*15}" r="${(1.2+(i%10)*.32).toFixed(1)}"/>`).join('')}</g>
-  <g stroke="#1c0e22" stroke-width="2">${Array.from({length:14},(_,i)=>`<line x1="243" y1="123" x2="${158+(i/13)*170}" y2="${i%2?68:178}"/>`).join('')}</g><circle cx="243" cy="123" r="22" fill="#fff"/>
-  <path d="M175 10 h90 v34 h-50 l-14 12 v-12 h-26 z" fill="#fff" stroke="#1c0e22" stroke-width="2.5"/><text x="220" y="34" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-weight="700" font-size="18" fill="#1c0e22">!?</text>
-  <g transform="rotate(-8 20 160)"><text class="pop" x="20" y="160" font-family="sans-serif" font-weight="900" font-size="40" fill="${c}">ドン!</text></g></g>`,
- films:c=>`<g transform="translate(520 0)"><path d="M150 0 L300 200 L40 200 Z" fill="#fff" opacity=".06"/><circle cx="150" cy="-6" r="16" fill="#fff" opacity=".4"/>
-  <g transform="translate(150 105) rotate(-12)"><rect x="-90" y="-10" width="180" height="70" fill="#f2e9f5"/><rect x="-90" y="-36" width="180" height="22" fill="#1c0e22" transform="rotate(-10 -90 -14)"/>
-  ${[0,1,2,3,4].map(i=>`<rect x="${-80+i*36}" y="-34" width="16" height="22" fill="#f2e9f5" transform="rotate(-10 -90 -14) skewX(-25)"/>`).join('')}
+  <svg x="158" y="68" width="170" height="110" viewBox="158 68 170 110"><g class="spin" stroke="#1c0e22" stroke-width="2">${Array.from({length:24},(_,i)=>{const a=i/24*Math.PI*2;return `<line x1="243" y1="123" x2="${(243+Math.cos(a)*160).toFixed(0)}" y2="${(123+Math.sin(a)*160).toFixed(0)}"/>`}).join('')}</g></svg><circle cx="243" cy="123" r="22" fill="#fff"/>
+  <g class="bob"><path d="M175 10 h90 v34 h-50 l-14 12 v-12 h-26 z" fill="#fff" stroke="#1c0e22" stroke-width="2.5"/><text x="220" y="34" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-weight="700" font-size="18" fill="#1c0e22">!?</text></g>
+  <g transform="rotate(-8 20 160)"><text class="pop" x="20" y="160" font-family="sans-serif" font-weight="900" font-size="40" fill="${c}">ドン!</text></g></g></g>`,
+ films:c=>`<g transform="translate(520 0)"><path class="beam" d="M150 0 L300 200 L40 200 Z" fill="#fff" opacity=".07"/><circle cx="150" cy="-6" r="16" fill="#fff" opacity=".4"/>
+  <g transform="translate(150 105) rotate(-12)"><rect x="-90" y="-10" width="180" height="70" fill="#f2e9f5"/><g class="clap"><rect x="-90" y="-36" width="180" height="22" fill="#1c0e22"/>
+  ${[0,1,2,3,4].map(i=>`<rect x="${-80+i*36}" y="-34" width="16" height="22" fill="#f2e9f5" transform="skewX(-25)"/>`).join('')}</g>
   <rect x="-90" y="-10" width="180" height="10" fill="${c}"/><text x="-78" y="30" font-family="JetBrains Mono,monospace" font-size="12" fill="#1c0e22">SCENE 01  TAKE 3</text><text x="-78" y="50" font-family="JetBrains Mono,monospace" font-size="12" fill="#1c0e22">ROLL A</text></g></g>
   <g transform="translate(470 150)"><rect x="0" y="0" width="360" height="34" fill="#0c060f"/><g class="strip">${Array.from({length:34},(_,i)=>`<rect x="${6+i*21}" y="4" width="11" height="6" fill="#f2e9f5" opacity=".75"/><rect x="${6+i*21}" y="24" width="11" height="6" fill="#f2e9f5" opacity=".75"/>`).join('')}${[0,1,2,3,4,5,6,7,8,9].map(i=>`<rect x="${10+i*70}" y="12" width="60" height="10" fill="${c}" opacity="${.35+(i%5)*.12}"/>`).join('')}</g></g>`,
- games:c=>`<g transform="translate(560 40)"><path d="M20 20 h140 a28 28 0 0 1 28 28 l12 58 a20 20 0 0 1 -36 14 l-24 -30 h-80 l-24 30 a20 20 0 0 1 -36 -14 l12 -58 a28 28 0 0 1 28 -28z" fill="#f2e9f5"/>
+ games:c=>`<g transform="translate(560 40)"><g class="float"><path d="M20 20 h140 a28 28 0 0 1 28 28 l12 58 a20 20 0 0 1 -36 14 l-24 -30 h-80 l-24 30 a20 20 0 0 1 -36 -14 l12 -58 a28 28 0 0 1 28 -28z" fill="#f2e9f5"/>
   <rect x="38" y="46" width="12" height="36" fill="#1c0e22"/><rect x="26" y="58" width="36" height="12" fill="#1c0e22"/>
-  <circle cx="140" cy="52" r="8" fill="${c}"/><circle cx="158" cy="68" r="8" fill="#ff5c86"/><circle cx="122" cy="68" r="8" fill="#6a2fc4"/><circle cx="140" cy="84" r="8" fill="#f0c43c"/>
-  <rect x="80" y="40" width="16" height="6" fill="#93879a"/><rect x="100" y="40" width="16" height="6" fill="#93879a"/></g>
+  <circle class="press" style="animation-delay:0s" cx="140" cy="52" r="8" fill="${c}"/><circle class="press" style="animation-delay:.5s" cx="158" cy="68" r="8" fill="#ff5c86"/><circle class="press" style="animation-delay:1s" cx="122" cy="68" r="8" fill="#6a2fc4"/><circle class="press" style="animation-delay:1.5s" cx="140" cy="84" r="8" fill="#f0c43c"/>
+  <rect x="80" y="40" width="16" height="6" fill="#93879a"/><rect x="100" y="40" width="16" height="6" fill="#93879a"/></g></g>
   <g transform="translate(470 20)">${[0,1,2,3,4].map(i=>`<path class="${i<4?'beat':''}" style="animation-delay:${i*.15}s" transform="translate(${i*20} 0)" d="M2 4h4v-2h4v2h4v6h-2v2h-2v2h-2v2h-2v-2h-2v-2h-2v-2h-2z" fill="${i<4?'#ff5c86':'#45334f'}"/>`).join('')}</g>
   <text class="blink" x="472" y="186" font-family="JetBrains Mono,monospace" font-size="13" letter-spacing="3" fill="#fff" opacity=".7">PRESS START ▶</text>`,
  books:c=>`<g transform="translate(560 30)"><path d="M120 40 C90 22 40 20 0 30 v120 c40-10 90-8 120 10z" fill="#f7eedf"/><path d="M120 40 C150 22 200 20 240 30 v120 c-40-10-90-8-120 10z" fill="#fff8ec"/><path d="M120 40v120" stroke="#c9b48e" stroke-width="2"/>
   ${[0,1,2,3,4,5,6].map(i=>`<line x1="18" y1="${52+i*13}" x2="${100-(i%3)*8}" y2="${50+i*13}" stroke="#c9b48e" stroke-width="2"/><line x1="140" y1="${50+i*13}" x2="${222-(i%2)*14}" y2="${52+i*13}" stroke="#c9b48e" stroke-width="2"/>`).join('')}
-  <path class="sway" d="M170 30 v48 l10-8 10 8 v-48" fill="${c}"/></g>
+  <path class="sway" d="M170 30 v48 l10-8 10 8 v-48" fill="${c}"/><path class="flip" d="M120 40 C150 22 200 20 240 30 v120 c-40-10-90-8-120 10z" fill="#fff3df" stroke="#e6d6b8"/></g>
   <g transform="translate(460 120)">${[['#c8324f',70],['#6a2fc4',60],['#d9a514',80],['#24a896',66]].map(([col,w],i)=>`<rect x="${i*6}" y="${60-i*18}" width="${w}" height="16" fill="${col}"/><rect x="${i*6+6}" y="${64-i*18}" width="${w-20}" height="2" fill="#fff" opacity=".5"/>`).join('')}</g>
   <text x="520" y="40" font-family="Noto Nastaliq Urdu,serif" font-size="22" fill="#fff" opacity=".35">کتاب</text>`,
- stories:c=>`<g transform="translate(560 24)"><rect x="0" y="10" width="160" height="150" fill="#fff8ec" transform="rotate(-6)"/>${[0,1,2,3,4,5,6,7].map(i=>`<line x1="16" y1="${40+i*14}" x2="${140-(i%3)*18}" y2="${40+i*14}" stroke="#c9b48e" stroke-width="2" transform="rotate(-6)"/>`).join('')}
+ stories:c=>`<g transform="translate(560 24)"><rect x="0" y="10" width="160" height="150" fill="#fff8ec" transform="rotate(-6)"/>${[0,1,2,3,4,5,6,7].map(i=>`<line class="ink" style="animation-delay:${i*.6}s" pathLength="1" x1="16" y1="${40+i*14}" x2="${140-(i%3)*18}" y2="${40+i*14}" stroke="#5a3d2a" stroke-width="2" transform="rotate(-6)"/>`).join('')}
   <g class="quill"><path d="M150 150 C190 90 230 40 250 0 C235 50 210 100 165 160 Z" fill="#f2e9f5"/><path d="M150 150 L240 10" stroke="${c}" stroke-width="2"/><path d="M150 150 l-8 16 l14-8z" fill="#1c0e22"/></g>
   <rect x="200" y="120" width="44" height="40" fill="#1c0e22"/><rect x="208" y="110" width="28" height="12" fill="#1c0e22"/><rect x="200" y="130" width="44" height="6" fill="${c}"/>
   <circle cx="120" cy="170" r="6" fill="#1c0e22"/><circle cx="132" cy="178" r="3" fill="#1c0e22"/></g>`,
- hof:c=>`<g transform="translate(600 30)"><path d="M10 120 L0 30 L45 70 L80 0 L115 70 L160 30 L150 120 Z" fill="${c}"/><path d="M10 120 L0 30 L45 70 L80 0 L80 120Z" fill="#fff" opacity=".18"/><rect x="10" y="120" width="140" height="18" fill="#f0c43c"/>
-  <circle class="twinkle" cx="80" cy="84" r="10" fill="#c8324f"/><circle cx="35" cy="98" r="6" fill="#6a2fc4"/><circle cx="125" cy="98" r="6" fill="#6a2fc4"/><circle cx="0" cy="30" r="6" fill="#fff2c9"/><circle cx="80" cy="0" r="7" fill="#fff2c9"/><circle cx="160" cy="30" r="6" fill="#fff2c9"/></g>
+ hof:c=>`<g transform="translate(600 30)"><g class="float"><clipPath id="crownClip"><path d="M10 120 L0 30 L45 70 L80 0 L115 70 L160 30 L150 120 Z"/></clipPath><path d="M10 120 L0 30 L45 70 L80 0 L115 70 L160 30 L150 120 Z" fill="${c}"/><path d="M10 120 L0 30 L45 70 L80 0 L80 120Z" fill="#fff" opacity=".18"/><rect x="10" y="120" width="140" height="18" fill="#f0c43c"/><g clip-path="url(#crownClip)"><rect class="shine" x="-60" y="0" width="40" height="140" fill="#fff" opacity=".35" transform="skewX(-20)"/></g>
+  <circle class="twinkle" cx="80" cy="84" r="10" fill="#c8324f"/><circle cx="35" cy="98" r="6" fill="#6a2fc4"/><circle cx="125" cy="98" r="6" fill="#6a2fc4"/><circle cx="0" cy="30" r="6" fill="#fff2c9"/><circle cx="80" cy="0" r="7" fill="#fff2c9"/><circle cx="160" cy="30" r="6" fill="#fff2c9"/></g></g>
   ${[0,1,2,3,4,5].map(i=>`<ellipse cx="${560-i*2}" cy="${160-i*22}" rx="12" ry="5" fill="#f0c43c" opacity=".55" transform="rotate(${-40+i*8} ${560-i*2} ${160-i*22})"/><ellipse cx="${800+i*2}" cy="${160-i*22}" rx="12" ry="5" fill="#f0c43c" opacity=".55" transform="rotate(${40-i*8} ${800+i*2} ${160-i*22})"/>`).join('')}`,
  overview:c=>`<g transform="translate(560 -20) scale(3.6)">${LOGO(64).replace(/<svg[^>]*>|<\/svg>/g,'').replace(/lg([PR])/g,'lgO$1')}</g>`,
  search:c=>`<g transform="translate(620 30)"><circle cx="60" cy="60" r="48" fill="none" stroke="#f2e9f5" stroke-width="12"/><circle cx="60" cy="60" r="40" fill="#fff" opacity=".06"/><rect x="96" y="104" width="22" height="70" fill="${c}" transform="rotate(-45 107 139)"/><path d="M36 44 a30 30 0 0 1 22 -14" stroke="#fff" stroke-width="5" fill="none" opacity=".6"/></g>`
@@ -485,7 +536,7 @@ const EMBLEM=(s)=>`<svg class="crest" width="${s}" height="${s}" viewBox="0 0 20
 <path d="M60 9 L84 2 L80 10 Z" fill="#fff6dc"/></g>
 <g class="spark"><path d="M152 60l2 6 6 2-6 2-2 6-2-6-6-2 6-2z" fill="#ffe7a3"/><path d="M44 150l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z" fill="#ffe7a3"/></g>
 <text font-family="Space Grotesk,sans-serif" font-weight="700" font-size="10" letter-spacing="3" fill="#e9cf8a" opacity=".9"><textPath href="#cArc" startOffset="50%" text-anchor="middle" dy="0">· DE ATSU ·</textPath></text>
-<text x="100" y="178" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-weight="600" font-size="8.5" letter-spacing="3" fill="#cdb9d4">REBORN ANEW</text></svg>`;
+</svg>`;
 function banner(k,title,sub,stats,kicker){
   return `<section class="banner" style="--c:${HEX[k]}">${artBg(HEX[k],title.length*13,k)}<div class="in">${k==='overview'?`<div class="emb">${EMBLEM(140)}</div>`:`<div class="bico">${ico(k)}</div>`}<div><div class="kick">${esc(kicker||'Saturn Collections')}</div><h1>${esc(title)}</h1>${sub?`<div class="sub">${sub}</div>`:''}</div>${stats&&stats.length?`<div class="bst">${stats.map(([n,l])=>`<span><b>${n}</b>${esc(l)}</span>`).join('')}</div>`:''}</div></section>`;
 }
@@ -497,7 +548,7 @@ const hash=s=>{let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;ret
 const initials=t=>{const w=String(t).replace(/[^\p{L}\p{N} ]/gu,' ').trim().split(/\s+/).filter(x=>!/^(the|a|an|of|and|no|to|wa|ga)$/i.test(x));return ((w[0]||'?')[0]+((w[1]||'')[0]||'')).toUpperCase()};
 function cover(title,img,extra,cls){
   const c=PAL[hash(title)%PAL.length];
-  const im=(img&&imgOK)?`<img src="${esc(img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="window.__imgFail&&window.__imgFail(this)">`:'';
+  const im=(img&&imgOK)?`<img src="${esc(img)}" alt="" loading="${cls==='eager'?'eager':'lazy'}" referrerpolicy="no-referrer" onerror="window.__imgFail&&window.__imgFail(this)">`:'';
   const gold=/class="badge">(10|5★|5\/5|5)</.test(extra||'');
   return `<div class="cover ${cls||''}${gold?' gold':''}" style="--tc:${c}">${RING}<div class="ini">${esc(initials(title))}</div><div class="ct">${esc(title)}</div>${im}${extra||''}</div>`;
 }
@@ -521,7 +572,7 @@ const stars=r=>{if(!r)return'';const f=Math.floor(r);return '★'.repeat(f)+(r%1
 const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
 
 /* ---------- nav / routing ---------- */
-const ROUTES=[['overview','Overview','#e9ecf5'],['wrapped','Wrapped','#ff6d93'],['hof','Hall of Fame','#f0c43c'],['anime','Anime','#a77ef0'],['manga','Manga','#f06f88'],['films','Films','#f08a50'],['games','Games','#3cc5b2'],['books','Books','#d4a062'],['stories','Stories','#ec7ab0'],['search','Search','#e9ecf5']];
+const ROUTES=[['overview','Overview','#e9ecf5'],['hof','Hall of Fame','#f0c43c'],['anime','Anime','#a77ef0'],['manga','Manga','#f06f88'],['films','Films','#f08a50'],['games','Games','#3cc5b2'],['books','Books','#d4a062'],['stories','Stories','#ec7ab0'],['search','Search','#e9ecf5'],['wrapped','Wrapped','#ff6d93']];
 $('#logo').innerHTML=LOGO(34);
 $('#nav').innerHTML=ROUTES.map(([k,l,c])=>`<a href="#${k}" data-r="${k}" style="--c:${c}">${ico(k)}${l}</a>`).join('');
 let route='overview';
@@ -549,9 +600,9 @@ function rOverview(){
   const words=stories.reduce((s,x)=>s+x.words,0);
   // activity
   const act=[];
-  anime.filter(a=>a.up).sort((a,b)=>b.up-a.up).slice(0,12).forEach(a=>act.push({d:new Date(a.up*1000).toISOString(),k:'anime',t:a.t,w:`${AST[a.st][0]}${a.sc?` · scored ${a.sc}`:''}${a.st===1&&a.eps?` · ep ${a.ep}/${a.eps}`:''}`,o:()=>openAnime(a)}));
-  films.filter(f=>f.wd).sort((a,b)=>b.wd.localeCompare(a.wd)).slice(0,12).forEach(f=>act.push({d:f.wd,k:'films',t:`${f.t} (${f.y})`,w:`Watched${f.r?` · ${stars(f.r)}`:''}`,o:()=>openFilm(f)}));
-  games.filter(g=>g.added).sort((a,b)=>b.added.localeCompare(a.added)).slice(0,10).forEach(g=>act.push({d:g.added,k:'games',t:g.t,w:`Added to ${g.shelf}${g.r?` · ${g.r}/5`:''}`,o:()=>openGame(g)}));
+  anime.filter(a=>a.up).sort((a,b)=>b.up-a.up).slice(0,12).forEach(a=>act.push({img:a.img,d:new Date(a.up*1000).toISOString(),k:'anime',t:a.t,w:`${AST[a.st][0]}${a.sc?` · scored ${a.sc}`:''}${a.st===1&&a.eps?` · ep ${a.ep}/${a.eps}`:''}`,o:()=>openAnime(a)}));
+  films.filter(f=>f.wd).sort((a,b)=>b.wd.localeCompare(a.wd)).slice(0,12).forEach(f=>act.push({img:f.img||'',d:f.wd,k:'films',t:`${f.t} (${f.y})`,w:`Watched${f.r?` · ${stars(f.r)}`:''}`,o:()=>openFilm(f)}));
+  games.filter(g=>g.added).sort((a,b)=>b.added.localeCompare(a.added)).slice(0,10).forEach(g=>act.push({img:g.img||'',d:g.added,k:'games',t:g.t,w:`Added to ${g.shelf}${g.r?` · ${g.r}/5`:''}`,o:()=>openGame(g)}));
   stories.forEach((s,i)=>act.push({d:s.date,k:'stories',t:s.title,w:'Published on Medium',o:()=>{location.hash='stories'}}));
   act.sort((a,b)=>b.d.localeCompare(a.d));
   const acts=act.slice(0,14);
@@ -567,7 +618,10 @@ function rOverview(){
   const fd=[.5,1,1.5,2,2.5,3,3.5,4,4.5,5].map(v=>fr.filter(f=>f.r===v).length);
   const gd=[1,2,3,4,5].map(v=>gr.filter(g=>g.r===v).length);
   const wallItems=[...anime.filter(a=>a.sc===10&&a.img),...manga.filter(m=>m.sc===10&&m.img),...films.filter(f=>f.r===5&&f.img),...books.filter(b=>b.r>=5&&b.img)];
-  const wallHtml=wallItems.length>8?`<div class="wall" aria-hidden="true"><div class="track">${[...wallItems,...wallItems].map(x=>cover(x.t,x.img)).join('')}</div></div>`:'';
+  const shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
+  const W=shuf(wallItems);const half=Math.ceil(W.length/2);
+  const row=(arr,dir)=>`<div class="mq ${dir}"><div class="mqt">${[...arr,...arr].map(x=>`<div class="mqi">${cover(x.t,x.img,'','eager')}</div>`).join('')}</div></div>`;
+  const wallHtml=W.length>8?`<section class="marquee" aria-label="Favourites wall">${row(W.slice(0,half),'l')}${row(W.slice(half),'r')}</section>`:'';
   const nowItems=[
     ...anime.filter(a=>a.st===1).map(a=>({k:'anime',t:a.t,img:a.img,sub:'Watching',p:a.eps?a.ep/a.eps:0,pl:a.eps?`ep ${a.ep}/${a.eps}`:`ep ${a.ep}`,o:()=>openAnime(a)})),
     ...manga.filter(m=>m.st===1).map(m=>({k:'manga',t:m.t,img:m.img,sub:'Reading',p:m.chs?m.ch/m.chs:0,pl:`ch ${m.ch}${m.chs?'/'+m.chs:''}`,o:()=>openManga(m)})),
@@ -576,10 +630,11 @@ function rOverview(){
     ...films.filter(f=>f.wd).sort((a,b)=>b.wd.localeCompare(a.wd)).slice(0,1).map(f=>({k:'films',t:f.t,img:f.img||'',sub:'Last watched',p:0,pl:f.r?stars(f.r):fdate(f.wd),o:()=>openFilm(f)}))];
   window.__now=nowItems;
   const art=k=>`<div class="art">${artBg(HEX[k],k.length*17,k)}</div>`;
-  $('#app').innerHTML=`<div class="wallwrap">${wallHtml}
-  ${banner('overview','SatsugaiDeAtsu','One who dies and is reborn anew, a better version of himself.',[],'House of DeAtsu')}
+  $('#app').innerHTML=`<div>
+  ${banner('overview','SatsugaiDeAtsu','<span id="quote" class="quote"></span>',[],'House of DeAtsu')}
+  ${wallHtml}
   <section class="box prof" style="grid-template-columns:1fr;padding:12px 16px">
-    <div>
+    <div>${ED.on?'<button class="btn" id="qedit" style="float:right">Edit quotes</button>':''}
       <div class="muted">${esc(D.lbProfile.bio||'')} · ${esc(D.gvProfile.about||'')}</div>
       <div class="links" style="margin-top:8px">
         <a class="chip" href="https://myanimelist.net/profile/SatsugaiDeAtsu" target="_blank" rel="noopener"><b style="width:8px;height:8px;background:var(--anime)"></b>MyAnimeList</a>
@@ -589,7 +644,6 @@ function rOverview(){
       </div>
     </div>
   </section>
-  ${nowItems.length?`<section class="box" style="margin-top:16px"><div class="box-h" style="border-top:3px solid var(--accent)"><h2>Currently</h2><span class="small muted">what's on right now</span></div><div class="box-b"><div class="now">${nowItems.map((x,i)=>`<div class="card" data-now="${i}" style="--c:${MED[x.k].c}">${cover(x.t,x.img,'')}<div class="meta"><div class="tt">${esc(x.t)}</div><div class="ss"><span>${esc(MED[x.k].name)} · ${esc(x.sub)}</span><span>${esc(x.pl)}</span>${x.p?`<div class="prog"><i style="width:${Math.round(x.p*100)}%"></i></div>`:''}</div></div></div>`).join('')}</div></div></section>`:''}
   <section class="grid stats" style="margin-top:16px">
     <a class="box stat" href="#anime" style="--c:var(--anime)">${art('anime')}<span class="ic">${ico('anime')}</span><div class="lab"><span>Anime</span><span>${scored.length?avg(scored.map(a=>a.sc)).toFixed(2)+' avg':''}</span></div><div class="num">${fmt(anime.length)}</div><div class="sub">${fmt(epsW)} episodes watched</div>
       ${statusBar([1,2,3,4,6].map(s=>[AST[s][0],ac(s),AST[s][1]]))}</a>
@@ -606,7 +660,7 @@ function rOverview(){
   </section>
   <section class="grid two" style="margin-top:16px">
     <div class="box"><div class="box-h"><h2>Recent activity</h2><span class="small muted">across everything</span></div>
-      <div>${acts.map((a,i)=>`<div class="act" data-a="${i}" style="--c:${MED[a.k].c}"><span class="k"></span><div class="t"><div>${esc(a.t)}</div><div class="small muted">${esc(MED[a.k].name)} · ${esc(a.w)}</div></div><div class="w">${ago(a.d)}</div></div>`).join('')}</div></div>
+      <div>${acts.map((a,i)=>`<div class="act" data-a="${i}" style="--c:${MED[a.k].c}"><span class="k"></span><div class="athumb">${cover(a.t,a.img||'','','mini')}</div><div class="t"><div>${esc(a.t)}</div><div class="small muted">${esc(MED[a.k].name)} · ${esc(a.w)}</div></div><div class="w">${ago(a.d)}</div></div>`).join('')}</div></div>
     <div class="grid" style="align-content:start">
       <div class="box"><div class="box-h"><h3>Anime scores</h3><span class="small muted">${scored.length} scored</span></div><div class="box-b">${dist(ad,ad.map((_,i)=>i+1),'var(--anime)')}</div></div>
       <div class="box"><div class="box-h"><h3>Film ratings</h3><span class="small muted">${fr.length} rated</span></div><div class="box-b">${dist(fd,['½','1','','2','','3','','4','','5'],'var(--film)')}</div></div>
@@ -620,8 +674,10 @@ function rOverview(){
   ${favRow('Favorite manga','manga',D.hof.malFavs.manga.map(([id,t,sub])=>{const m=manga.find(x=>x.id===id);return {t:m?m.t:t,img:m?m.img:'',sub,b:m&&m.sc?String(m.sc):'',o:()=>m?openManga(m):window.open('https://myanimelist.net/manga/'+id,'_blank')}}))}
   <div class="more"><a class="btn" href="#hof">Open the Hall of Fame →</a> <a class="btn" href="#wrapped">See your Wrapped →</a></div></div>
   `;
-  document.querySelectorAll('[data-now]').forEach(el=>el.onclick=()=>nowItems[+el.dataset.now].o());
+
   document.querySelectorAll('.act').forEach(el=>el.onclick=()=>acts[+el.dataset.a].o());
+  startQuotes();
+  const qe=$('#qedit');if(qe)qe.onclick=editQuotes;
 }
 const FAVS={};
 function favRow(title,k,items){
@@ -781,12 +837,29 @@ function rHof(){
     openMal(it)});
 }
 let spotI=0,spotT=null;
-function spotList(){return (D.hof.malFavs.character||[]).map(([id,t,sub])=>({id,t,sub,img:HIMG('c',id)}))}
+let SPOT=null;
+function spotList(){
+  if(SPOT)return SPOT;const H=D.hof,P=[];const add=(code,label)=>{const [kid,nm]=code.split('~');const k=kid[0],id=+kid.slice(1);P.push({k,id,t:nm,img:HIMG(k,id),label})};
+  (H.malFavs.character||[]).forEach(([id,t,sub])=>P.push({k:'c',id,t,img:HIMG('c',id),label:'Top 10 characters on MAL',sub}));
+  (H.malFavs.people||[]).forEach(([id,t])=>P.push({k:'p',id,t,img:HIMG('p',id),label:'Top 10 people on MAL'}));
+  (H.blog[0].secs||[]).forEach(([s,d,it])=>it.forEach(c=>add(c,'Honorary favourites · '+s)));
+  (H.blog[1].secs||[]).forEach(([s,d,it])=>it.forEach(c=>add(c,'Character corner · '+s)));
+  anime.filter(a=>a.sc===10&&a.img).forEach(a=>P.push({own:a,k:'a',id:a.id,t:a.t,img:a.img,label:'Anime · scored 10',note:a.tags}));
+  manga.filter(m=>m.sc===10&&m.img).forEach(m=>P.push({own:m,k:'m',id:m.id,t:m.t,img:m.img,label:'Manga · scored 10',note:m.tags}));
+  films.filter(f=>f.r===5&&f.img).forEach(f=>P.push({film:f,t:f.t,img:f.img,label:'Film · five stars',note:f.rv}));
+  books.filter(b=>b.r>=5&&b.img).forEach(b=>P.push({book:b,t:b.t,img:b.img,label:'Book · five stars',note:b.rv}));
+  games.filter(g=>g.r===5).forEach(g=>P.push({game:g,t:g.t,img:g.img||'',label:'Game · 5/5',note:g.rv}));
+  const seen=new Set();SPOT=P.filter(x=>{const key=(x.k||'')+(x.id||x.t);if(seen.has(key)||!x.img)return false;seen.add(key);return true}).map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(p=>p[1]).slice(0,30);
+  return SPOT;
+}
 function spotlight(){const L=spotList();if(!L.length)return'';const c=L[spotI%L.length];
-  return `<section class="box spot" id="spot"><div class="pic">${c.img?`<img src="${esc(c.img)}" alt="" referrerpolicy="no-referrer">`:cover(c.t,'')}</div><div><div class="kick small" style="text-transform:uppercase;letter-spacing:.12em;font-weight:800;color:var(--gold)">Character spotlight · ${spotI%L.length+1} of ${L.length}</div><h2>${esc(c.t)}</h2><div class="muted">${esc(c.sub)}</div><p class="muted small" style="margin-top:10px">One of my top 10 characters on MAL.</p><div class="dots">${L.map((_,i)=>`<button aria-label="Show ${esc(L[i].t)}" data-spot="${i}" class="${i===spotI%L.length?'on':''}"></button>`).join('')}</div><a class="link small" style="display:inline-block;margin-top:10px" href="https://myanimelist.net/character/${c.id}" target="_blank" rel="noopener">Open on MAL ↗</a></div></section>`}
-function startSpot(){clearInterval(spotT);const bind=()=>document.querySelectorAll('[data-spot]').forEach(b=>b.onclick=()=>{spotI=+b.dataset.spot;swap();startSpot()});
+  const href=c.k&&!c.own?`https://myanimelist.net/${MALK[c.k]}/${c.id}`:'';
+  return `<section class="box spot" id="spot"><div class="pic">${c.img?`<img src="${esc(c.img)}" alt="" referrerpolicy="no-referrer">`:cover(c.t,'')}</div><div><div class="kick small" style="text-transform:uppercase;letter-spacing:.12em;font-weight:800;color:var(--gold)">Spotlight · ${esc(c.label)}</div><h2>${esc(c.t)}</h2>${c.sub?`<div class="muted">${esc(c.sub)}</div>`:''}${c.note?`<p class="spotnote">${esc(c.note.length>220?c.note.slice(0,220)+'…':c.note)}</p>`:''}<div class="dots">${L.map((_,i)=>`<button aria-label="Show ${esc(L[i].t)}" data-spot="${i}" class="${i===spotI%L.length?'on':''}"></button>`).join('')}</div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn" id="spotopen">Open</button><button class="btn" id="spotnext">Next →</button>${href?`<a class="btn" href="${href}" target="_blank" rel="noopener">MAL ↗</a>`:''}</div></div></section>`}
+function startSpot(){clearInterval(spotT);const bind=()=>{document.querySelectorAll('[data-spot]').forEach(b=>b.onclick=()=>{spotI=+b.dataset.spot;swap();startSpot()});
+    const L=spotList(),c=L[spotI%L.length];const o=$('#spotopen');if(o)o.onclick=()=>{if(c.own)return c.k==='a'?openAnime(c.own):openManga(c.own);if(c.film)return openFilm(c.film);if(c.book)return openBook(c.book);if(c.game)return openGame(c.game);openMal({k:c.k,id:c.id,name:c.t})};
+    const n=$('#spotnext');if(n)n.onclick=()=>{spotI++;swap();startSpot()}};
   const swap=()=>{const el=$('#spot');if(!el)return clearInterval(spotT);const tmp=document.createElement('div');tmp.innerHTML=spotlight();el.replaceWith(tmp.firstElementChild);bind()};
-  bind();spotT=setInterval(()=>{if(route!=='hof')return clearInterval(spotT);spotI++;swap()},5000)}
+  bind();spotT=setInterval(()=>{if(route!=='hof')return clearInterval(spotT);spotI++;swap()},6000)}
 function openMal(it){
   modal(it.k==='m'?'manga':'anime',KLAB[it.k],`${cover(it.name,HIMG(it.k,it.id))}<div><h2>${esc(it.name)}</h2><div class="muted">${esc(KLAB[it.k])} on MyAnimeList</div>
   <div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/${MALK[it.k]}/${it.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
@@ -899,6 +972,24 @@ function editBook(b){
   };
   const d=$('#e_del');if(d)d.onclick=()=>{if(d.dataset.sure!=='1'){d.dataset.sure='1';d.textContent='Tap again to delete';return}
     D.books.splice(b.i,1);rebuildBooks();closeM();render();persist('books','Delete book: '+b.t)};
+}
+
+/* ---------- rotating quotes ---------- */
+let quoteT=null,quoteI=Math.floor(Math.random()*1000);
+function startQuotes(){
+  clearInterval(quoteT);const Q=(D.quotes||[]).filter(q=>q&&q.t);if(!Q.length)return;
+  const show=()=>{const el=$('#quote');if(!el)return clearInterval(quoteT);const q=Q[quoteI%Q.length];quoteI++;
+    el.classList.remove('in');void el.offsetWidth;
+    el.innerHTML=`<span class="qm">“</span>${esc(q.t)}<span class="qm">”</span>${q.by?`<span class="qby">— ${esc(q.by)}</span>`:''}`;el.classList.add('in')};
+  show();quoteT=setInterval(()=>{if(route!=='overview')return clearInterval(quoteT);const el=$('#quote');if(el){el.classList.add('out');setTimeout(show,600)}},7000);
+}
+function editQuotes(){
+  modal('overview','Quotes',`<div style="grid-column:1/-1"><h2>Your quotes</h2><p class="muted small" style="margin:6px 0 10px">One quote per line. To add who said it, end the line with — Name. They rotate on the Overview every few seconds.</p>
+  <textarea id="q_all" rows="14" style="width:100%;font:inherit;padding:10px;border:1px solid var(--line2);background:var(--panel);color:var(--ink)">${esc((D.quotes||[]).map(q=>q.t+(q.by?' — '+q.by:'')).join('\n'))}</textarea>
+  <div style="margin-top:12px"><button class="btn pri" id="q_save">Save quotes</button></div></div>`);
+  $('#q_save').onclick=async()=>{const lines=$('#q_all').value.split('\n').map(s=>s.trim()).filter(Boolean);
+    D.quotes=lines.map(l=>{const m=l.match(/^(.*?)\s+[—-]{1,2}\s+([^—-]+)$/);return m?{t:m[1].replace(/^["“]|["”]$/g,''),by:m[2].trim()}:{t:l.replace(/^["“]|["”]$/g,''),by:''}});
+    closeM();render();toast('Saving…');try{await ghSave('data/quotes.json',{quotes:D.quotes},'Update quotes');toast('Saved. Live in about a minute.')}catch(e){toast('Not saved: '+e.message,true)}};
 }
 
 /* ---------- wrapped ---------- */
