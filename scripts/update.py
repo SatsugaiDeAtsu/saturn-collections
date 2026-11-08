@@ -267,40 +267,180 @@ def update_posters():
     log(f'tmdb: looked up {done} posters')
 
 
-def update_hof_images():
-    """Pictures for Hall of Fame characters, people, anime and manga (from Jikan, cached)."""
-    hof = site.get('hof', {})
-    codes = set()
-    def walk(x):
-        if isinstance(x, str) and re.match(r'^[acmp]\d+~', x):
-            codes.add(x.split('~')[0])
-        elif isinstance(x, list):
-            for y in x: walk(y)
-        elif isinstance(x, dict):
-            for y in x.values(): walk(y)
-    walk(hof)
-    favs = hof.get('malFavs', {})
-    for k, pre in (('anime', 'a'), ('manga', 'm'), ('character', 'c'), ('people', 'p')):
-        for e in favs.get(k, []):
-            codes.add(pre + str(e[0]))
-    path = os.path.join(DATA, 'hof_images.json')
-    cache = load_json(path, {})
-    kinds = {'a': 'anime', 'm': 'manga', 'c': 'characters', 'p': 'people'}
-    n = 0
-    for c in sorted(codes):
-        if c in cache or n >= 300:
+from html.parser import HTMLParser
+
+MAL = 'https://myanimelist.net'
+KIND = {'anime': 'a', 'manga': 'm', 'character': 'c', 'people': 'p'}
+LINK = re.compile(r'(?:https?://myanimelist\.net)?/(anime|manga|character|people)/(\d+)')
+
+
+class BlogTokens(HTMLParser):
+    """Turns a MAL blog entry into a stream of text / link / line-break tokens."""
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.depth = 0; self.on = False; self.toks = []; self.link = None
+    def handle_starttag(self, tag, attrs):
+        a = dict(attrs)
+        if not self.on:
+            if tag == 'div' and 'blog_detail_content_wrapper' in (a.get('class') or ''):
+                self.on = True; self.depth = 1
+            return
+        if tag in ('br',):
+            self.toks.append(('br',)); return
+        if tag not in ('img', 'hr', 'input', 'meta', 'link'):
+            self.depth += 1
+        if tag == 'a':
+            m = LINK.search(a.get('href') or '')
+            self.link = [KIND[m.group(1)], int(m.group(2)), '', ''] if m else None
+        elif tag == 'img' and self.link is not None:
+            self.link[3] = a.get('data-src') or a.get('src') or ''
+    def handle_endtag(self, tag):
+        if not self.on:
+            return
+        if tag == 'a' and self.link is not None:
+            self.toks.append(('link', *self.link)); self.link = None
+        if tag in ('div', 'p', 'li', 'tr', 'center', 'table', 'h1', 'h2', 'h3', 'h4', 'h5'):
+            self.toks.append(('br',))
+        self.depth -= 1
+        if self.depth <= 0:
+            self.on = False
+    def handle_data(self, d):
+        if not self.on:
+            return
+        t = re.sub(r'\s+', ' ', d).strip()
+        if not t:
+            return
+        if self.link is not None:
+            self.link[2] += t
+        else:
+            self.toks.append(('text', t))
+
+
+def blog_sections(eid):
+    p = BlogTokens(); p.feed(get(f'{MAL}/blog.php?eid={eid}'))
+    secs, cur, last_link = [], None, False
+    for tk in p.toks:
+        if tk[0] == 'br':
             continue
-        try:
-            j = json.loads(get(f'https://api.jikan.moe/v4/{kinds[c[0]]}/{c[1:]}', tries=2))
-            cache[c] = (((j.get('data') or {}).get('images') or {}).get('jpg') or {}).get('image_url') or ''
-        except Exception:
-            pass
-        n += 1
-        time.sleep(1.1)
-    with open(path, 'w', encoding='utf-8') as f:
-        json.dump(cache, f, indent=0)
-    site['hofImages'] = {k: v for k, v in cache.items() if v}
-    log(f'hall of fame images: fetched {n}, have {len(site["hofImages"])}')
+        if tk[0] == 'text':
+            if cur is None or last_link or cur['items']:
+                cur = {'h': tk[1], 'd': [], 'items': []}; secs.append(cur)
+            else:
+                cur['d'].append(tk[1])
+            last_link = False
+        else:
+            if cur is None:
+                cur = {'h': '', 'd': [], 'items': []}; secs.append(cur)
+            cur['items'].append(tk[1:]); last_link = True
+    return [s for s in secs if s['items']]
+
+
+def nice(t):
+    t = re.sub(r'\s+', ' ', t).strip()
+    if t.isupper() or sum(c.isupper() for c in t) > len(t) * 0.6:
+        t = t.lower()
+        t = t[:1].upper() + t[1:]
+        t = re.sub(r"\bsaturn's\b", "Saturn's", t)
+        t = re.sub(r'\b(va|mal)\b', lambda m: m.group(1).upper(), t)
+    return t
+
+
+def update_hof():
+    hof = load_json(os.path.join(DATA, 'hof.json'), {})
+    cache = load_json(os.path.join(DATA, 'hof_cache.json'), {})
+    fetched = [0]
+    def info(k, i, img=''):
+        code = f'{k}{i}'
+        c = cache.get(code)
+        if not c or not c.get('n'):
+            c = {'n': '', 'img': ''}
+            try:
+                h = get(f'{MAL}/{ {"a":"anime","m":"manga","c":"character","p":"people"}[k] }/{i}', tries=2)
+                m = re.search(r'<meta property="og:title" content="([^"]*)"', h)
+                im = re.search(r'<meta property="og:image" content="([^"]*)"', h)
+                c['n'] = html.unescape(m.group(1)) if m else ''
+                c['img'] = im.group(1) if im else ''
+            except Exception:
+                pass
+            fetched[0] += 1
+            time.sleep(1.0)
+        if img:
+            c['img'] = img          # your own picture from the blog wins
+        cache[code] = c
+        return c
+    # favourites from the profile page
+    prof = get(f'{MAL}/profile/{MAL_USER}')
+    favs = {'anime': [], 'manga': [], 'character': [], 'people': [], 'company': []}
+    for m in re.finditer(r'id="(anime|manga|character|people|company)_favorites"(.*?)</ul>', prof, re.S):
+        kind, body = m.group(1), m.group(2)
+        for li in re.finditer(r'<a href="([^"]+)"[^>]*>(.*?)</a>', body, re.S):
+            href, inner = li.group(1), li.group(2)
+            title = re.search(r'<span class="title[^"]*">(.*?)</span>', inner, re.S)
+            users = re.search(r'<span class="users">(.*?)</span>', inner, re.S)
+            img = re.search(r'data-src="([^"]+)"', inner)
+            title = html.unescape(re.sub(r'<[^>]+>', '', title.group(1)).strip()) if title else ''
+            if kind == 'company':
+                favs['company'].append(title); continue
+            lm = LINK.search(href)
+            if not lm:
+                continue
+            k, i = KIND[lm.group(1)], int(lm.group(2))
+            sub = html.unescape(re.sub(r'<[^>]+>', '', users.group(1)).strip()).replace('\xb7', ' · ') if users else ''
+            pic = re.sub(r'/r/\d+x\d+/', '/', img.group(1).split('?')[0]) if img else ''
+            if pic:
+                cache.setdefault(f'{k}{i}', {'n': title, 'img': ''})['img'] = pic
+                cache[f'{k}{i}']['n'] = cache[f'{k}{i}'].get('n') or title
+            favs[lm.group(1)].append([i, title, sub])
+    if len(favs['anime']) >= 3 and len(favs['character']) >= 3:
+        hof['malFavs'] = favs
+    # blog posts
+    def items(s):
+        out = []
+        for k, i, txt, img in s['items']:
+            c = info(k, i, img)
+            out.append(f'{k}{i}~{c["n"] or txt or "?"}')
+        return out
+    hon_chr = blog_sections(804802)
+    hon, chr_ = [], []
+    prev = ''
+    for s in hon_chr:
+        h = nice(s['h']); d = nice(' '.join(s['d']))
+        if re.match(r'honorary favou?rite', h, re.I):
+            prev = re.sub(r'(?i)honorary favou?rite ', '', h)
+            hon.append([h, d, items(s)])
+        elif re.match(r'honorary mentions', h, re.I) and prev:
+            hon.append([f'Honorary mentions: {prev}', d, items(s)])
+        else:
+            chr_.append([h, d, items(s)])
+    wai = [[nice(s['h']), nice(' '.join(s['d'])), items(s)] for s in blog_sections(804810)]
+    cou = blog_sections(804809)
+    couples, special, sdesc, in_special = [], [], '', False
+    for s in cou:
+        h = s['h']; d = ' '.join(s['d'])
+        if re.match(r'(?i)favou?rite anime couples', h):
+            h, d = d, ''   # first couple's name sits in the description
+        if re.match(r'(?i)a special mention', h):
+            in_special = True
+            parts = re.split(r'(?<=\.)\s+(?=[A-Z][^.]*\()', d)
+            sdesc = ' '.join(parts[:-1]) if len(parts) > 1 else d
+            h = parts[-1] if len(parts) > 1 else ''
+        m = re.match(r'(.*?)\s*\(\s*(.*?)\s*\)\s*$', (h + ' ' + d).strip())
+        name, show = (m.group(1), m.group(2)) if m else (h, d)
+        name = re.sub(r'\s+And\s+', ' and ', name.strip())
+        (special if in_special else couples).append([name, show, items(s)])
+    if len(hon) >= 4 and len(chr_) >= 4 and len(wai) >= 4:
+        hof['blog'] = [{'post': 804802, 'secs': hon}, {'post': 804802, 'secs': chr_}, {'post': 804810, 'secs': wai}]
+        hof['people'] = []
+    if len(couples) >= 10:
+        hof['couples'] = couples
+        hof['specialCouples'] = {'desc': sdesc or hof.get('specialCouples', {}).get('desc', ''), 'pairs': special}
+    with open(os.path.join(DATA, 'hof.json'), 'w', encoding='utf-8') as f:
+        json.dump(hof, f, ensure_ascii=False, indent=1)
+    with open(os.path.join(DATA, 'hof_cache.json'), 'w', encoding='utf-8') as f:
+        json.dump(cache, f, ensure_ascii=False, indent=0)
+    site['hof'] = hof
+    site['hofImages'] = {k: v['img'] for k, v in cache.items() if v.get('img')}
+    log(f'hall of fame: refreshed from MAL, looked up {fetched[0]} new names')
 
 
 # ---------------- Medium ----------------
@@ -408,7 +548,7 @@ def update_grouvee():
 
 
 for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd),
-                 ('posters', update_posters), ('hof images', update_hof_images), ('medium', update_medium), ('grouvee', update_grouvee)]:
+                 ('posters', update_posters), ('hall of fame', update_hof), ('medium', update_medium), ('grouvee', update_grouvee)]:
     try:
         fn()
         status[name] = 'ok'
