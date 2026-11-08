@@ -384,6 +384,8 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .card:has(.cover.gold){border:2px solid transparent;background:linear-gradient(var(--panel),var(--panel)) padding-box,linear-gradient(115deg,#7a0a24,#ff1f4b 25%,#ffc2d0 40%,#ff1f4b 55%,#9b0f30 75%,#ff1f4b) border-box;background-size:100% 100%,300% 100%;animation:redshine 3.5s linear infinite;box-shadow:0 0 14px -2px rgba(255,31,75,.55)}
 /* scored 8-9 / 4-4.5: glowing purple frame */
 .card:has(.cover.pur){border:2px solid transparent;background:linear-gradient(var(--panel),var(--panel)) padding-box,linear-gradient(115deg,#3b1670,#9b5cff 25%,#e3d0ff 40%,#9b5cff 55%,#4a1d8c 75%,#9b5cff) border-box;background-size:100% 100%,300% 100%;animation:redshine 4.5s linear infinite;box-shadow:0 0 12px -2px rgba(155,92,255,.55)}
+.dlcs{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0 2px}.dlcs .tag{opacity:.6}.dlcs .tag.on{opacity:1;border-color:var(--game);color:var(--game)}
+.dlcedit{display:grid;gap:4px}.dlcrow{display:flex;align-items:center;gap:8px;padding:4px 6px;background:var(--bar);border:1px solid var(--line)}.dlcrow span{flex:1}.dlcrow .x{background:none;border:0;color:var(--s4);cursor:pointer;font-size:13px}
 .cover.pur .badge{background:linear-gradient(135deg,#b48cff,#7b3fe4 55%,#4a1d8c);color:#fff;font-weight:700;box-shadow:0 0 8px rgba(155,92,255,.6)}
 @keyframes redshine{from{background-position:0 0,0% 0}to{background-position:0 0,300% 0}}
 .cover.gold .badge{font-size:15px;padding:5px 9px;font-family:"Space Grotesk",sans-serif}
@@ -614,7 +616,8 @@ const films=D.films.map((f,i)=>{const o=Object.assign({},f,{i,logs:f.n,rw:f.rw||
 const filmUri={};films.forEach(f=>filmUri[f.u]=f);
 const listsFor=f=>D.filmLists.filter(l=>l.items.some(([t,y])=>norm(t)===f.n&&y===f.y)).map(l=>l.name);
 const GSH={'Playing':'var(--s1)','Played':'var(--s2)','Backlog':'var(--s3)','Retired':'var(--s4)','Wish List':'var(--s6)'};
-const games=D.games.map((g,i)=>Object.assign({i,n:norm(g.t+' '+(g.fr||[]).join(' '))},g,{img:g.img||(D.gameCovers||{})[g.id]||''}));
+const GDEF=g=>({rp:g.rp||0,hrs:g.hrs||0,dlcs:g.dlcs||[]});
+const games=D.games.map((g,i)=>Object.assign({i,n:norm(g.t+' '+(g.fr||[]).join(' '))},g,{img:g.img||(D.gameCovers||{})[g.id]||''},GDEF(g)));
 const stories=D.stories;
 const MED={overview:{c:'var(--accent)',name:'Edit mode'},hof:{c:'var(--gold)',name:'Hall of Fame'},manga:{c:'var(--manga)',name:'Manga'},books:{c:'var(--book)',name:'Books'},anime:{c:'var(--anime)',name:'Anime'},films:{c:'var(--film)',name:'Films'},games:{c:'var(--game)',name:'Games'},stories:{c:'var(--story)',name:'Stories'}};
 const stars=r=>{if(!r)return'';const f=Math.floor(r);return '★'.repeat(f)+(r%1?'½':'')};
@@ -708,7 +711,7 @@ function rOverview(){
       ${statusBar([1,2,3,4,6].map(s=>[MST[s][0],manga.filter(m=>m.st===s).length,MST[s][1]]))}</a>
     <a class="box stat" href="#films" style="--c:var(--film)">${art('films')}<span class="ic">${ico('films')}</span><div class="lab"><span>Films</span><span>${fr.length?avg(fr.map(f=>f.r)).toFixed(2)+'★ avg':''}</span></div><div class="num">${fmt(fw.length)}</div><div class="sub">${fmt(fr.length)} rated · ${fmt(frv.length)} reviews · ${fmt(films.reduce((s,f)=>s+f.rw,0))} rewatches</div>
       ${statusBar([['Rated',fr.length,'var(--film)'],['Unrated',fw.length-fr.length,'var(--s3)'],['Watchlist',films.length-fw.length,'var(--s6)']])}</a>
-    <a class="box stat" href="#games" style="--c:var(--game)">${art('games')}<span class="ic">${ico('games')}</span><div class="lab"><span>Games</span><span>${gr.length?avg(gr.map(g=>g.r)).toFixed(2)+'/5 avg':''}</span></div><div class="num">${fmt(games.length)}</div><div class="sub">${gs('Played')} played · ${gs('Playing')} playing</div>
+    <a class="box stat" href="#games" style="--c:var(--game)">${art('games')}<span class="ic">${ico('games')}</span><div class="lab"><span>Games</span><span>${gr.length?avg(gr.map(g=>g.r)).toFixed(2)+'/5 avg':''}</span></div><div class="num">${fmt(games.length)}</div><div class="sub">${gs('Played')} played · ${gs('Playing')} playing · ${fmt(Math.round(games.reduce((s,g)=>s+g.hrs,0)))}h · ${games.reduce((s,g)=>s+g.rp,0)} replays</div>
       ${statusBar(Object.keys(GSH).map(k=>[k,gs(k),GSH[k]]))}</a>
     <a class="box stat" href="#books" style="--c:var(--book)">${art('books')}<span class="ic">${ico('books')}</span><div class="lab"><span>Books</span><span>${(()=>{const s=books.filter(b=>b.r);return s.length?avg(s.map(b=>b.r)).toFixed(2)+'★ avg':''})()}</span></div><div class="num">${books.length}</div><div class="sub">${books.filter(b=>b.st==='read').length} read · ${books.filter(b=>b.ur).length} in Urdu</div>
       ${statusBar(Object.keys(BST).map(k=>[BST[k][0],books.filter(b=>b.st===k).length,BST[k][1]]).filter(p=>p[1]))}</a>
@@ -1019,7 +1022,7 @@ const fld=(id,label,val,type,extra)=>`<label class="ef"><span>${label}</span>${t
 const gv=id=>{const el=$('#'+id);return el?el.value.trim():''};
 const list=s=>s.split(',').map(x=>x.trim()).filter(Boolean);
 const today=()=>new Date().toISOString().slice(0,10);
-function rebuildGames(){games.length=0;D.games.forEach((g,i)=>games.push(Object.assign({i,n:norm(g.t+' '+(g.fr||[]).join(' '))},g,{img:g.img||(D.gameCovers||{})[g.id]||''})))}
+function rebuildGames(){games.length=0;D.games.forEach((g,i)=>games.push(Object.assign({i,n:norm(g.t+' '+(g.fr||[]).join(' '))},g,{img:g.img||(D.gameCovers||{})[g.id]||''},GDEF(g))))}
 function rebuildBooks(){books.length=0;D.books.forEach((b,i)=>books.push(Object.assign({},b,{img:b.img||BCOV[b.id]||'',i,title:b.t,n:norm(b.t+' '+b.a+' '+(b.sh||[]).join(' '))})))}
 async function persist(kind,msg){
   toast('Saving…');
@@ -1036,6 +1039,9 @@ function editGame(g){
   ${fld('e_t','Title',g.t)}
   ${fld('e_shelf','Shelf',g.shelf||'Backlog','select:Playing|Played|Backlog|Wish List|Retired')}
   ${fld('e_r','Your rating (0 to 5)',g.r||0,'number','min="0" max="5" step="0.5"')}
+  ${fld('e_rp','Times replayed',g.rp||0,'number','min="0" step="1"')}
+  ${fld('e_hrs','Hours played'+(g.hrsEst?' (currently an estimate)':''),g.hrs||'','number','min="0" step="0.5"')}
+  <div class="ef" style="grid-column:1/-1"><span>DLC (tick the ones you've played)</span><div id="e_dlcs" class="dlcedit"></div><div style="display:flex;margin-top:6px"><input id="e_dlcn" placeholder="Add a DLC name" style="flex:1"><button class="btn" id="e_dlca" type="button" style="border-radius:0">Add</button></div></div>
   ${fld('e_pf','Platforms (comma separated)',(g.pf||[]).join(', '))}
   ${fld('e_g','Genres (comma separated)',(g.g||[]).join(', '))}
   ${fld('e_dev','Developer',(g.dev||[]).join(', '))}
@@ -1046,6 +1052,11 @@ function editGame(g){
   <label class="ef"><span>Favourite</span><select id="e_fav"><option value="0">No</option><option value="1" ${D.gvFav.includes(g.t)?'selected':''}>Yes</option></select></label>
   </div><div class="small" id="e_err" style="color:var(--s4)"></div>
   <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="btn pri" id="e_save">${isNew?'Add game':'Save changes'}</button>${isNew?'':'<button class="btn" id="e_del" style="margin-left:auto;color:var(--s4)">Delete</button>'}</div></div>`);
+  let DL=(g.dlcs||[]).map(d=>({...d}));
+  const drawD=()=>{$('#e_dlcs').innerHTML=DL.length?DL.map((d,i)=>`<label class="dlcrow"><input type="checkbox" data-dp="${i}" ${d.p?'checked':''}> <span>${esc(d.n)}</span><button type="button" class="x" data-dx="${i}" aria-label="Remove">✕</button></label>`).join(''):'<span class="muted small">No DLC listed.</span>';
+    document.querySelectorAll('[data-dp]').forEach(c=>c.onchange=()=>{DL[+c.dataset.dp].p=c.checked?1:0});
+    document.querySelectorAll('[data-dx]').forEach(b=>b.onclick=e=>{e.preventDefault();DL.splice(+b.dataset.dx,1);drawD()})};
+  drawD();$('#e_dlca').onclick=()=>{const n=gv('e_dlcn').trim();if(!n)return;DL.push({n,p:0});$('#e_dlcn').value='';drawD()};
   const gf=$('#g_find');if(gf)gf.onclick=async()=>{const q=gv('g_q');if(!q)return;$('#g_res').textContent='Searching…';
     try{const L=await viaApi('games',q);$('#g_res').innerHTML=L&&L.length?L.slice(0,6).map((x,i)=>`<a class="link" href="#games" data-gp="${i}" style="display:block;padding:4px 0">${esc(x.t)} ${x.y?'('+x.y+')':''} · ${esc(x.meta)}</a>`).join(''):'Nothing found. Fill it in by hand.';
       document.querySelectorAll('[data-gp]').forEach(a=>a.onclick=e=>{e.preventDefault();const x=L[+a.dataset.gp];$('#e_t').value=x.t;$('#e_pf').value=(x.pf||[]).join(', ');$('#e_g').value=(x.g||[]).join(', ');$('#e_dev').value=(x.dev||[]).join(', ');if(x.rel)$('#e_rel').value=x.rel;$('#e_img').value=x.img||'';$('#g_res').textContent='Filled in. Check it and save.'})}
@@ -1055,7 +1066,8 @@ function editGame(g){
     const raw=isNew?{id:Date.now(),u:'',fr:[],pub:[],log:[],shelves:[],rvd:''}:D.games[g.i];
     const oldT=raw.t;const shelf=gv('e_shelf');
     if(isNew||raw.shelf!==shelf)raw.added=today();
-    Object.assign(raw,{img:gv('e_img'),t,shelf,shelves:[shelf],r:+gv('e_r')||0,pf:list(gv('e_pf')),g:list(gv('e_g')),dev:list(gv('e_dev')),rel:gv('e_rel'),rvt:gv('e_rvt'),rv:gv('e_rv')});
+    Object.assign(raw,{img:gv('e_img'),t,shelf,shelves:[shelf],r:+gv('e_r')||0,pf:list(gv('e_pf')),g:list(gv('e_g')),dev:list(gv('e_dev')),rel:gv('e_rel'),rvt:gv('e_rvt'),rv:gv('e_rv'),rp:+gv('e_rp')||0,dlcs:DL});
+    const nh=+gv('e_hrs')||0;if(nh!==(raw.hrs||0)){raw.hrs=nh;delete raw.hrsEst}
     if(raw.rv&&!raw.rvd)raw.rvd=today();
     if(isNew)D.games.unshift(raw);
     D.gvFav=D.gvFav.filter(n=>n!==oldT&&n!==t);if(gv('e_fav')==='1')D.gvFav.push(t);
@@ -1302,21 +1314,22 @@ function openFilm(f){
 
 /* ---------- games ---------- */
 function rGames(){
-  listPage({key:'games',title:'Games',bst:()=>[[games.length,'games'],[games.filter(g=>g.shelf==='Played').length,'played'],[games.filter(g=>g.shelf==='Playing').length,'playing now']],sub:`${games.length} games · from Grouvee · exported ${fdate(D.generated)}`,
+  listPage({key:'games',title:'Games',bst:()=>[[games.length,'games'],[games.filter(g=>g.shelf==='Played').length,'played'],[fmt(Math.round(games.reduce((s,g)=>s+g.hrs,0)))+'h','hours played'],[games.reduce((s,g)=>s+g.rp,0),'replays']],sub:`${games.length} games · from Grouvee · exported ${fdate(D.generated)}`,
     items:()=>games,
-    tabs:[['all','All',()=>true],...Object.keys(GSH).map(k=>[k,k,g=>g.shelf===k]),['reviewed','Reviewed',g=>!!g.rv]],
+    tabs:[['all','All',()=>true],...Object.keys(GSH).map(k=>[k,k,g=>g.shelf===k]),['replayed','Replayed',g=>g.rp>0],['reviewed','Reviewed',g=>!!g.rv]],
     sorts:[['added','Date added'],['rating','Your rating'],['release','Release date'],['title','Title']],
     sorter:k=>({added:(a,b)=>b.added.localeCompare(a.added),rating:(a,b)=>b.r-a.r||b.added.localeCompare(a.added),release:(a,b)=>(b.rel||'').localeCompare(a.rel||''),title:cmpT})[k],
-    card:(g,i)=>`<div class="card" data-i="${i}">${cover(g.t,g.img||'',(g.r?`<span class="badge">${g.r}/5</span>`:'')+`<span class="sline" style="--sc:${GSH[g.shelf]||'var(--s6)'}"></span>`)}<div class="meta"><div class="tt">${esc(g.t)}</div><div class="ss"><span>${esc(g.shelf)}</span><span>${g.rel?g.rel.slice(0,4):''}</span></div></div></div>`,
+    card:(g,i)=>`<div class="card" data-i="${i}">${cover(g.t,g.img||'',(g.r?`<span class="badge">${g.r}/5</span>`:'')+`<span class="sline" style="--sc:${GSH[g.shelf]||'var(--s6)'}"></span>`)}<div class="meta"><div class="tt">${esc(g.t)}</div>${g.dlcs.length?`<div class="ss"><span>+ ${g.dlcs.length} DLC${g.dlcs.some(d=>d.p)?` · ${g.dlcs.filter(d=>d.p).length} played`:''}</span></div>`:''}<div class="ss"><span>${esc(g.shelf)}</span><span>${g.rel?g.rel.slice(0,4):''}</span></div></div></div>`,
     thead:'<th style="width:5px;padding:0"></th><th class="hm">#</th><th></th><th>Game</th><th style="text-align:center">Rating</th><th>Shelf</th><th class="hm">Platform</th><th class="hm" style="text-align:center">Released</th>',
-    row:(g,i)=>`<tr data-i="${i}"><td class="st" style="--sc:${GSH[g.shelf]||'var(--s6)'}"></td><td class="num hm">${i+1}</td><td style="width:54px">${cover(g.t,g.img||'','','mini')}</td><td><div class="ti">${esc(g.t)}</div><div class="alt">${esc(g.dev[0]||'')}</div></td><td class="sc">${g.r?g.r+'/5':'<span class="muted">–</span>'}</td><td class="small">${esc(g.shelf)}</td><td class="small hm">${esc(g.pf.join(', '))}</td><td class="c mono small hm">${g.rel?g.rel.slice(0,4):''}</td></tr>`,
+    row:(g,i)=>`<tr data-i="${i}"><td class="st" style="--sc:${GSH[g.shelf]||'var(--s6)'}"></td><td class="num hm">${i+1}</td><td style="width:54px">${cover(g.t,g.img||'','','mini')}</td><td><div class="ti">${esc(g.t)}</div><div class="alt">${esc(g.dev[0]||'')}${g.dlcs.length?` · ${g.dlcs.length} DLC`:''}${g.hrs?` · ${g.hrs}h`:''}${g.rp?` · replayed ${g.rp}×`:''}</div></td><td class="sc">${g.r?g.r+'/5':'<span class="muted">–</span>'}</td><td class="small">${esc(g.shelf)}</td><td class="small hm">${esc(g.pf.join(', '))}</td><td class="c mono small hm">${g.rel?g.rel.slice(0,4):''}</td></tr>`,
     open:openGame});
 }
 function openGame(g){
-  const hrs=g.log.reduce((s,p)=>s+(p.seconds_played||0),0)/3600;
+  const hrs=g.hrs||g.log.reduce((s,p)=>s+(p.seconds_played||0),0)/3600;
   modal('games','Game',`${cover(g.t,g.img||'')}<div><h2>${esc(g.t)}</h2>${g.dev.length?`<div class="muted">${esc(g.dev.join(', '))}</div>`:''}
-  <div class="bigscore"><div><b>${g.r?g.r+'/5':'–'}</b><small>Your rating</small></div><div><b style="color:${GSH[g.shelf]||'var(--s6)'}">■</b><small>${esc(g.shelf)}</small></div>${hrs?`<div><b>${Math.round(hrs*10)/10}h</b><small>Logged</small></div>`:''}</div>
-  <div class="kv">${g.pf.length?`<div>Platforms</div><div>${g.pf.map(p=>`<span class="tag">${esc(p)}</span>`).join('')}</div>`:''}${g.g.length?`<div>Genres</div><div>${g.g.map(p=>`<span class="tag">${esc(p)}</span>`).join('')}</div>`:''}${g.fr.length?`<div>Franchise</div><div>${esc(g.fr.join(', '))}</div>`:''}${g.pub.length?`<div>Publisher</div><div>${esc(g.pub.join(', '))}</div>`:''}<div>Released</div><div>${g.rel?fdate(g.rel):'–'}</div><div>Added</div><div>${g.added?fdate(g.added):'–'}</div>
+  ${g.dlcs.length?`<div class="dlcs">${g.dlcs.map(d=>`<span class="tag${d.p?' on':''}" title="${d.p?'Played':'Not played'}">${d.p?'✓ ':''}${esc(d.n)}</span>`).join('')}</div>`:''}
+  <div class="bigscore"><div><b>${g.r?g.r+'/5':'–'}</b><small>Your rating</small></div><div><b style="color:${GSH[g.shelf]||'var(--s6)'}">■</b><small>${esc(g.shelf)}</small></div>${hrs?`<div><b>${g.hrsEst?'≈':''}${Math.round(hrs*10)/10}h</b><small>${g.hrsEst?'Hours (estimate)':'Hours played'}</small></div>`:''}<div><b>${g.rp}</b><small>Times replayed</small></div></div>
+  <div class="kv">${g.pf.length?`<div>Platforms</div><div>${g.pf.map(p=>`<span class="tag">${esc(p)}</span>`).join('')}</div>`:''}${g.g.length?`<div>Genres</div><div>${g.g.map(p=>`<span class="tag">${esc(p)}</span>`).join('')}</div>`:''}${g.fr.length?`<div>Franchise</div><div>${esc(g.fr.join(', '))}</div>`:''}${g.pub.length?`<div>Publisher</div><div>${esc(g.pub.join(', '))}</div>`:''}${g.avg?`<div>Average length</div><div>${g.avg}h main story (HowLongToBeat)</div>`:''}<div>Released</div><div>${g.rel?fdate(g.rel):'–'}</div><div>Added</div><div>${g.added?fdate(g.added):'–'}</div>
   ${g.log.map(p=>`<div>Play log</div><div>${[p.date_started&&p.date_started!=='None'?'Started '+fdate(p.date_started):'',p.date_finished&&p.date_finished!=='None'?'Finished '+fdate(p.date_finished):'',p.level_of_completion||'',p.notes?esc(p.notes):''].filter(Boolean).join(' · ')||'–'}</div>`).join('')}</div>
   ${g.rv?`<div class="review" style="--c:var(--game)">${g.rvt?`<b>${esc(g.rvt)}</b>\n`:''}${esc(g.rv)}</div>`:''}
   <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?`<button class="btn pri" id="m_edit">Edit</button>`:''}${g.u?`<a class="btn${ED.on?'':' pri'}" href="${esc(g.u)}" target="_blank" rel="noopener">Open on Grouvee ↗</a>`:''}</div></div>`);
