@@ -969,6 +969,9 @@ function editSetup(){
   <input id="tok" type="password" placeholder="github_pat_..." style="width:100%;padding:10px;border:1px solid var(--line2);background:var(--panel)" value="">
   <div id="tokerr" class="small" style="color:var(--s4);margin-top:6px"></div>
   <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--line)"><b>MyAnimeList</b><p class="muted small" style="margin:4px 0 8px">${MALA.on?'Connected. Anime and manga edits go straight to MAL.':'Connect once so anime and manga edits save to MAL.'}</p><button class="btn" id="malc">${MALA.on?'Reconnect MAL':'Connect MAL'}</button>${MALA.on?' <button class="btn" id="malx">Disconnect</button>':''}</div>
+  ${ED.token?`<div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--line)"><b>Approved manga</b><p class="muted small" style="margin:4px 0 8px">Manga that MAL tags as Erotica only show up once you approve them here. Paste a MAL manga link or ID.</p>
+  <div style="display:flex"><input id="ma_in" placeholder="https://myanimelist.net/manga/12345" style="flex:1;padding:8px;border:1px solid var(--line2);background:var(--panel);color:var(--ink)"><button class="btn" id="ma_add" style="border-radius:0">Approve</button></div>
+  <div id="ma_list" class="small" style="margin-top:8px">${(SET.manga_allow||[]).map(id=>`<span class="chip" style="margin:0 6px 6px 0">${id} <a href="#" data-ma="${id}" aria-label="Remove ${id}" style="color:var(--s4)">✕</a></span>`).join('')||'<span class="muted">None yet.</span>'}</div><div id="ma_msg" class="small muted"></div></div>`:''}
   <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn pri" id="toksave">Save and turn on</button>${ED.token?'<button class="btn" id="tokoff">Turn off editing</button><button class="btn" id="tokdel">Forget token</button>':''}</div></div>`);
   $('#toksave').onclick=async()=>{const v=$('#tok').value.trim()||ED.token;if(!v){$('#tokerr').textContent='Paste a token first.';return}
     $('#tokerr').textContent='Checking…';
@@ -976,6 +979,11 @@ function editSetup(){
     if(!r||!r.ok){$('#tokerr').textContent='That token did not work for saturn-collections.';return}
     const j=await r.json();if(!j.permissions||!j.permissions.push){$('#tokerr').textContent='The token works but cannot save. Give it Contents: read and write.';return}
     ED.token=v;ED.on=true;closeM();syncEditBtn();render();toast('Editing is on')};
+  const saveAllow=async(list,msg)=>{SET.manga_allow=list;$('#ma_msg').textContent='Saving…';
+    try{await ghSave('data/settings.json',SET,msg);await ghSave('data/mal_touch.json',{t:Date.now()},'Refresh after approving manga');$('#ma_msg').textContent='Saved. The manga list refreshes in a couple of minutes.';editSetup()}catch(e){$('#ma_msg').textContent='Not saved: '+e.message}};
+  const maa=$('#ma_add');if(maa)maa.onclick=()=>{const m=(gv('ma_in').match(/(?:manga\/)?(\d+)/)||[])[1];if(!m){$('#ma_msg').textContent='Paste a MAL manga link or its number.';return}
+    const id=+m;const L=SET.manga_allow||[];if(L.includes(id)){$('#ma_msg').textContent='Already approved.';return}saveAllow([...L,id],'Approve manga '+id)};
+  document.querySelectorAll('[data-ma]').forEach(a=>a.onclick=e=>{e.preventDefault();const id=+a.dataset.ma;saveAllow((SET.manga_allow||[]).filter(x=>x!==id),'Unapprove manga '+id)});
   $('#malc').onclick=malConnect;const mx=$('#malx');if(mx)mx.onclick=()=>{MALA.t=null;closeM();toast('MAL disconnected on this device')};
   const off=$('#tokoff');if(off)off.onclick=()=>{ED.on=false;closeM();syncEditBtn();render()};
   const del=$('#tokdel');if(del)del.onclick=()=>{ED.token='';ED.on=false;closeM();syncEditBtn();render();toast('Token removed from this browser')};
