@@ -682,7 +682,9 @@ def hltb_search(title, token):
 JUNK_DLC = re.compile(r'soundtrack|\bost\b|art ?book|wallpaper|avatar|costume|outfit|\bskins?\b|cosmetic|pre-?order|upgrade|deluxe|season pass|'
                       r'bundle|currency|coins|points|booster|\bxp\b|sticker|emote|theme|weapon pack|bonus|digital|edition|demo|'
                       r'starter|cheat|unlock|time saver|supporter|tracks?\b|music|poster|calling card|camo|reticle|operator|blueprint|'
-                      r'tracer|\bkit\b|\bset\b|paint|livery|sound pack|voice pack|horse|mount|pet\b', re.I)
+                      r'tracer|\bkit\b|\bset\b|paint|livery|sound pack|voice pack|horse|mount|pet\b|character|legend pack|squad pack|'
+                      r'weapon|\bvo\b|slots|annual pass|season|battle ?pass|\bpro\b|redsec|nuketown|mask|helmet|gear|vehicle|car pack|bling', re.I)
+STORY_DLC = re.compile(r'expansion|episode|chapter|story|campaign|map pack|content pack|\bdlc\b|add-?on|\bsaga\b|\btale', re.I)
 
 
 def steam_dlcs(title, year):
@@ -700,14 +702,16 @@ def steam_dlcs(title, year):
     names = []
     for i in range(0, len(ids), 30):
         q = json.dumps({'ids': [{'appid': x} for x in ids[i:i + 30]], 'context': {'language': 'english', 'country_code': 'US'},
-                        'data_request': {}}, separators=(',', ':'))
+                        'data_request': {'include_release': True}}, separators=(',', ':'))
         r = json.loads(get('https://api.steampowered.com/IStoreBrowseService/GetItems/v1/?input_json=' + urllib.parse.quote(q), tries=2))
         for it in r.get('response', {}).get('store_items') or []:
             n = re.sub(r'[™®©]', '', it.get('name') or '').strip()
             if n.lower().startswith(title.lower()):
                 n = n[len(title):].strip(' :-–')
-            if n and not JUNK_DLC.search(n):
-                names.append(n)
+            rel_ts = (it.get('release') or {}).get('steam_release_date') or 0
+            recent = rel_ts and time.time() - rel_ts < 400 * 86400  # anything released in the last year counts as worth listing
+            if n and not JUNK_DLC.search(n) and (STORY_DLC.search(n) or recent):
+                names.append(re.sub(r'\s*\b(content pack|map pack|dlc)\b\s*', ' ', n, flags=re.I).strip(' :-–') or n)
         time.sleep(0.5)
     return names
 
@@ -734,7 +738,8 @@ def update_game_meta():
             log('steam dlc lookup failed for', g['t'], e)
             continue
         for n in names or []:
-            if n.lower() not in [x.lower() for x in m.setdefault('dlc', [])]:
+            have = [norm(x) for x in m.setdefault('dlc', [])]
+            if not any(h and (norm(n) == h or norm(n) in h or h in norm(n)) for h in have):
                 m['dlc'].append(n)
                 added.append(f"{g['t']}: {n}")
         if not m.get('dlc'):
