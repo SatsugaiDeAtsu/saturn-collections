@@ -297,8 +297,8 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .crest .spark{animation:twinkle 2.6s ease-in-out infinite}
 .card{transition:transform .18s ease,box-shadow .18s ease,border-color .18s}
 .card:hover{transform:translateY(-3px) rotate(-.4deg);box-shadow:0 10px 24px -10px var(--tc,rgba(0,0,0,.5)),0 0 0 1px var(--accent)}
-.cover.gold{outline:2px solid #e3b44a;outline-offset:-2px;box-shadow:inset 0 0 0 4px rgba(227,180,74,.25)}
-.cover.gold .badge{background:linear-gradient(135deg,#fff0c4,#e3b44a 55%,#9a6a1c);color:#2b1700;font-weight:700}
+.cover.gold{outline:2px solid #d42f5a;outline-offset:-2px;box-shadow:inset 0 0 0 4px rgba(212,47,90,.25)}
+.cover.gold .badge{background:linear-gradient(135deg,#ff7a9c,#d42f5a 55%,#8a1f3d);color:#fff;font-weight:700}
 .now{display:grid;grid-auto-flow:column;grid-auto-columns:120px;gap:10px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory;scrollbar-width:thin}
 .now .card{scroll-snap-align:start}
 .now .card .meta .tt{font-size:11.5px}
@@ -313,6 +313,7 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .wallwrap>*:not(.wall){position:relative;z-index:1}
 .stat .art{height:70px;margin:-14px -14px 10px;overflow:hidden;background:var(--bar);border-bottom:1px solid #000;position:relative}
 .stat .art .bg{position:absolute;inset:0;width:100%;height:100%}
+.stat .art *{animation:none!important}
 .spot{display:grid;grid-template-columns:180px 1fr;gap:18px;align-items:center;padding:16px 20px;border-top:3px solid var(--gold)}
 .spot .pic{aspect-ratio:3/4;position:relative;overflow:hidden;background:var(--bar)}
 .spot .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:kb 6s ease-in-out}
@@ -367,11 +368,10 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .marquee{margin:-4px 0 14px;overflow:hidden;background:var(--bar);border:1px solid #000;padding:10px 0;display:grid;gap:10px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
 .mq{overflow:hidden}.mqt{display:flex;gap:10px;width:max-content}
 .mq.l .mqt{animation:mql 90s linear infinite}.mq.r .mqt{animation:mqr 90s linear infinite}
-.marquee:hover .mqt{animation-play-state:paused}
 @keyframes mql{to{transform:translateX(-50%)}}@keyframes mqr{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 .mqi{width:92px;flex:none}.mqi .cover{aspect-ratio:2/3}.mqi .cover .ct{display:none}
 .athumb{width:34px;flex:none}.athumb .cover{padding:3px}
-.card:has(.cover.gold){border-color:#e3b44a;box-shadow:0 0 0 1px #e3b44a,0 6px 18px -8px rgba(227,180,74,.6)}
+.card:has(.cover.gold){border-color:#d42f5a;box-shadow:0 0 0 1px #d42f5a,0 6px 18px -8px rgba(212,47,90,.65)}
 .cover.gold .badge{font-size:15px;padding:5px 9px;font-family:"Space Grotesk",sans-serif}
 .cover.gold::after{border:0;background:linear-gradient(115deg,transparent 30%,rgba(255,240,196,.55) 45%,transparent 60%);background-size:250% 100%;background-position:120% 0;opacity:0;transition:opacity .2s}
 @keyframes cshine{from{background-position:120% 0}to{background-position:-60% 0}}
@@ -379,6 +379,17 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 @keyframes tapn{0%{transform:scale(1)}40%{transform:scale(.95)}100%{transform:scale(1)}}
 .card.tapgold{animation:tapg .6s ease}.card.tapgold .cover.gold::after{opacity:1;animation:cshine .6s ease}
 .card.tap,.couple.tap{animation:tapn .35s ease}
+.banner .ava img{width:132px;height:132px;object-fit:cover;object-position:center 20%;border-radius:50%;border:3px solid #d42f5a;box-shadow:0 0 0 6px rgba(212,47,90,.18),0 0 34px rgba(212,47,90,.45);display:block}
+@media (max-width:640px){.banner .ava img{width:96px;height:96px}}
+.spot{position:relative;overflow:hidden;grid-template-columns:300px 1fr;min-height:300px;color:#fff;background:var(--bar)}
+.spot .blur{position:absolute;inset:-30px;background-size:cover;background-position:center;filter:blur(28px) saturate(1.3);opacity:.55;transform:scale(1.1)}
+.spot::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(28,14,34,.15),rgba(28,14,34,.85) 55%)}
+.spot>*:not(.blur){position:relative;z-index:1}
+.spot .pic{aspect-ratio:16/10;box-shadow:0 14px 40px rgba(0,0,0,.5)}
+.spot .pic img{object-position:center 25%}
+.spot h2{color:#fff}.spot .muted{color:#e6d6ec}.spotnote{color:#f0e2f4}
+.spot .btn{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.3)}
+@media (max-width:640px){.spot{grid-template-columns:1fr}.spot .pic{aspect-ratio:16/9}}
 footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:var(--ink3)}
 
 @media (max-width:900px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}}
@@ -538,7 +549,7 @@ const EMBLEM=(s)=>`<svg class="crest" width="${s}" height="${s}" viewBox="0 0 20
 <text font-family="Space Grotesk,sans-serif" font-weight="700" font-size="10" letter-spacing="3" fill="#e9cf8a" opacity=".9"><textPath href="#cArc" startOffset="50%" text-anchor="middle" dy="0">· DE ATSU ·</textPath></text>
 </svg>`;
 function banner(k,title,sub,stats,kicker){
-  return `<section class="banner" style="--c:${HEX[k]}">${artBg(HEX[k],title.length*13,k)}<div class="in">${k==='overview'?`<div class="emb">${EMBLEM(140)}</div>`:`<div class="bico">${ico(k)}</div>`}<div><div class="kick">${esc(kicker||'Saturn Collections')}</div><h1>${esc(title)}</h1>${sub?`<div class="sub">${sub}</div>`:''}</div>${stats&&stats.length?`<div class="bst">${stats.map(([n,l])=>`<span><b>${n}</b>${esc(l)}</span>`).join('')}</div>`:''}</div></section>`;
+  return `<section class="banner" style="--c:${HEX[k]}">${artBg(HEX[k],title.length*13,k)}<div class="in">${k==='overview'?`<div class="emb ava">${(()=>{const im=(D.hofImages||{}).c118735;return im?`<img src="${esc(im)}" alt="Subaru Natsuki" referrerpolicy="no-referrer">`:EMBLEM(140)})()}</div>`:`<div class="bico">${ico(k)}</div>`}<div><div class="kick">${esc(kicker||'Saturn Collections')}</div><h1>${esc(title)}</h1>${sub?`<div class="sub">${sub}</div>`:''}</div>${stats&&stats.length?`<div class="bst">${stats.map(([n,l])=>`<span><b>${n}</b>${esc(l)}</span>`).join('')}</div>`:''}</div></section>`;
 }
 
 /* ---------- covers ---------- */
@@ -632,7 +643,6 @@ function rOverview(){
   const art=k=>`<div class="art">${artBg(HEX[k],k.length*17,k)}</div>`;
   $('#app').innerHTML=`<div>
   ${banner('overview','SatsugaiDeAtsu','<span id="quote" class="quote"></span>',[],'House of DeAtsu')}
-  ${wallHtml}
   <section class="box prof" style="grid-template-columns:1fr;padding:12px 16px">
     <div>${ED.on?'<button class="btn" id="qedit" style="float:right">Edit quotes</button>':''}
       <div class="muted">${esc(D.lbProfile.bio||'')} · ${esc(D.gvProfile.about||'')}</div>
@@ -658,6 +668,7 @@ function rOverview(){
     <a class="box stat" href="#stories" style="--c:var(--story)">${art('stories')}<span class="ic">${ico('stories')}</span><div class="lab"><span>Stories</span><span>Medium</span></div><div class="num">${stories.length}</div><div class="sub">${fmt(words)} words written</div>
       ${statusBar([['Stories',stories.filter(s=>!s.tags.includes('articles')).length,'var(--story)'],['Articles',stories.filter(s=>s.tags.includes('articles')).length,'var(--s3)']])}</a>
   </section>
+  <div style="margin-top:16px">${wallHtml}</div>
   <section class="grid two" style="margin-top:16px">
     <div class="box"><div class="box-h"><h2>Recent activity</h2><span class="small muted">across everything</span></div>
       <div>${acts.map((a,i)=>`<div class="act" data-a="${i}" style="--c:${MED[a.k].c}"><span class="k"></span><div class="athumb">${cover(a.t,a.img||'','','mini')}</div><div class="t"><div>${esc(a.t)}</div><div class="small muted">${esc(MED[a.k].name)} · ${esc(a.w)}</div></div><div class="w">${ago(a.d)}</div></div>`).join('')}</div></div>
@@ -854,7 +865,7 @@ function spotList(){
 }
 function spotlight(){const L=spotList();if(!L.length)return'';const c=L[spotI%L.length];
   const href=c.k&&!c.own?`https://myanimelist.net/${MALK[c.k]}/${c.id}`:'';
-  return `<section class="box spot" id="spot"><div class="pic">${c.img?`<img src="${esc(c.img)}" alt="" referrerpolicy="no-referrer">`:cover(c.t,'')}</div><div><div class="kick small" style="text-transform:uppercase;letter-spacing:.12em;font-weight:800;color:var(--gold)">Spotlight · ${esc(c.label)}</div><h2>${esc(c.t)}</h2>${c.sub?`<div class="muted">${esc(c.sub)}</div>`:''}${c.note?`<p class="spotnote">${esc(c.note.length>220?c.note.slice(0,220)+'…':c.note)}</p>`:''}<div class="dots">${L.map((_,i)=>`<button aria-label="Show ${esc(L[i].t)}" data-spot="${i}" class="${i===spotI%L.length?'on':''}"></button>`).join('')}</div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn" id="spotopen">Open</button><button class="btn" id="spotnext">Next →</button>${href?`<a class="btn" href="${href}" target="_blank" rel="noopener">MAL ↗</a>`:''}</div></div></section>`}
+  return `<section class="box spot" id="spot">${c.img?`<div class="blur" style="background-image:url('${esc(c.img)}')"></div>`:''}<div class="pic">${c.img?`<img src="${esc(c.img)}" alt="" referrerpolicy="no-referrer">`:cover(c.t,'')}</div><div><div class="kick small" style="text-transform:uppercase;letter-spacing:.12em;font-weight:800;color:var(--gold)">Spotlight · ${esc(c.label)}</div><h2>${esc(c.t)}</h2>${c.sub?`<div class="muted">${esc(c.sub)}</div>`:''}${c.note?`<p class="spotnote">${esc(c.note.length>220?c.note.slice(0,220)+'…':c.note)}</p>`:''}<div class="dots">${L.map((_,i)=>`<button aria-label="Show ${esc(L[i].t)}" data-spot="${i}" class="${i===spotI%L.length?'on':''}"></button>`).join('')}</div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn" id="spotopen">Open</button><button class="btn" id="spotnext">Next →</button>${href?`<a class="btn" href="${href}" target="_blank" rel="noopener">MAL ↗</a>`:''}</div></div></section>`}
 function startSpot(){clearInterval(spotT);const bind=()=>{document.querySelectorAll('[data-spot]').forEach(b=>b.onclick=()=>{spotI=+b.dataset.spot;swap();startSpot()});
     const L=spotList(),c=L[spotI%L.length];const o=$('#spotopen');if(o)o.onclick=()=>{if(c.own)return c.k==='a'?openAnime(c.own):openManga(c.own);if(c.film)return openFilm(c.film);if(c.book)return openBook(c.book);if(c.game)return openGame(c.game);openMal({k:c.k,id:c.id,name:c.t})};
     const n=$('#spotnext');if(n)n.onclick=()=>{spotI++;swap();startSpot()}};
