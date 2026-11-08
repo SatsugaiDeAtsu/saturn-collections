@@ -614,12 +614,24 @@ def update_game_covers():
     use_igdb = settings.get('igdb') and settings.get('workerUrl')
     today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
     n = 0
+    for gid, v in list(covers.items()):
+        if v.startswith('http'):  # a picked picture (Wikipedia box art etc.): download it once
+            try:
+                b = get_bytes(v)
+                if len(b) > 2000:
+                    open(os.path.join(gd, f'{gid}.jpg'), 'wb').write(b)
+                    covers[gid] = f'covers/g/{gid}.jpg?v={today}'
+            except Exception as e:
+                log('cover download failed', v, e)
+            time.sleep(0.3)
     for g in games:
         gid = str(g.get('id'))
         prev = covers.get(gid)
         if g.get('img') or n >= 150:
             continue
-        if prev and not prev.startswith('miss:'):
+        if prev and not prev.startswith('miss:') and not prev.startswith('http'):
+            continue
+        if prev and prev.startswith('http'):
             continue
         if prev and prev[5:] > (datetime.now(timezone.utc) - timedelta(days=14)).strftime('%Y-%m-%d'):
             continue  # tried recently, try again in two weeks
@@ -645,7 +657,7 @@ def update_game_covers():
         time.sleep(0.5)
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(covers, f, indent=0)
-    site['gameCovers'] = {k: v for k, v in covers.items() if v and not v.startswith('miss:')}
+    site['gameCovers'] = {k: v for k, v in covers.items() if v and not v.startswith('miss:') and not v.startswith('http')}
     missing = [g['t'] for g in games if not g.get('img') and str(g.get('id')) not in site['gameCovers']]
     site['gameCoverMissing'] = missing
     log(f'game covers: looked up {n}, have {len(site["gameCovers"])}, missing {len(missing)}: {missing[:30]}')
