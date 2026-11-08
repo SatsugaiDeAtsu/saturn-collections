@@ -547,8 +547,10 @@ def steam_cover(title):
     import difflib
     res = json.loads(get('https://store.steampowered.com/api/storesearch/?l=english&cc=us&term=' + urllib.parse.quote(title), tries=2))
     best, score = None, 0
+    strip = lambda n: re.sub(r'\b(legacy|enhanced|definitive|remastered|remaster|edition|complete|goty|game of the year|director s cut|the trilogy)\b', '', norm(n)).strip()
     for it in res.get('items') or []:
-        r = difflib.SequenceMatcher(None, norm(it.get('name')), norm(title)).ratio()
+        r = max(difflib.SequenceMatcher(None, norm(it.get('name')), norm(title)).ratio(),
+                1.0 if strip(it.get('name')) == strip(title) else 0)
         if r > score:
             best, score = it, r
     if not best or score < 0.82:
@@ -587,13 +589,14 @@ def wiki_cover(title):
         img = (p.get('pageprops') or {}).get('page_image')
         if not img or 'game' not in (p.get('description') or '').lower():
             continue
-        t, want = norm(re.sub(r'\s*\(.*?\)$', '', p['title'])), norm(title)
-        if not (t == want or want in t or t in want):
-            continue
-        ii = json.loads(get('https://en.wikipedia.org/w/api.php?action=query&format=json&prop=imageinfo&iiprop=url&iiurlwidth=500&titles='
+        if norm(re.sub(r'\s*\(.*?\)$', '', p['title'])) != norm(title):
+            continue  # only the game's own article, never a series page
+        ii = json.loads(get('https://en.wikipedia.org/w/api.php?action=query&format=json&prop=imageinfo&iiprop=url|size&iiurlwidth=500&titles='
                             + urllib.parse.quote('File:' + img), tries=2))
         for pg in ii.get('query', {}).get('pages', {}).values():
             info = (pg.get('imageinfo') or [{}])[0]
+            if info.get('width') and info['height'] < info['width'] * 1.05:
+                continue  # a logo or screenshot, not box art
             src = info.get('thumburl') or info.get('url')
             if src:
                 return get_bytes(src)
