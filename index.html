@@ -1423,7 +1423,6 @@ async function viaApi(kind,q){
     const r=await fetch(`https://api.rawg.io/api/games?key=${SET.rawgKey}&search=${encodeURIComponent(q)}&page_size=16`).then(r=>r.json());
     return (r.results||[]).map(g=>({t:g.name,alt:'',y:(g.released||'').slice(0,4),meta:(g.platforms||[]).map(p=>p.platform.name).slice(0,3).join(', '),sum:'',img:g.background_image||'',url:'https://rawg.io/games/'+g.slug,g:(g.genres||[]).map(x=>x.name)}));
   }
-  if(kind==='games')return null;
   const hint=kind==='films'?'film':'video game';
   const u=`https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch=${encodeURIComponent(q+' '+hint)}&gsrlimit=20&prop=pageimages|description|extracts&exintro=1&explaintext=1&exsentences=2&piprop=thumbnail&pithumbsize=300`;
   const r=await fetch(u).then(r=>r.json());

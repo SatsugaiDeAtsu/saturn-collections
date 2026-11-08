@@ -14,7 +14,7 @@ Manual imports: drop a new export into data/imports/ and the next run uses it:
 import csv, json, os, re, sys, glob, html, time
 import urllib.request, urllib.parse
 import xml.etree.ElementTree as ET
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, 'data')
@@ -542,30 +542,98 @@ def update_book_covers():
     log(f'book covers: looked up {n}, have {len(site["bookCovers"])}')
 
 
+def steam_cover(title):
+    """Portrait cover from Steam's store search (no key needed)."""
+    import difflib
+    res = json.loads(get('https://store.steampowered.com/api/storesearch/?l=english&cc=us&term=' + urllib.parse.quote(title), tries=2))
+    items = res.get('items') or []
+    best, score = None, 0
+    for it in items:
+        r = difflib.SequenceMatcher(None, norm(it.get('name')), norm(title)).ratio()
+        if r > score:
+            best, score = it, r
+    if not best or score < 0.82:
+        return None
+    for u in (f"https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/{best['id']}/library_600x900.jpg",
+              f"https://cdn.cloudflare.steamstatic.com/steam/apps/{best['id']}/library_600x900.jpg"):
+        try:
+            req = urllib.request.Request(u, headers={'User-Agent': UA})
+            with urllib.request.urlopen(req, timeout=30) as r:
+                b = r.read()
+            if len(b) > 3000:
+                return b
+        except Exception:
+            pass
+    return None
+
+
+def wiki_cover(title):
+    """Box art from the game's Wikipedia article."""
+    u = ('https://en.wikipedia.org/w/api.php?action=query&format=json&generator=search&gsrlimit=5&prop=pageimages|description'
+         '&piprop=thumbnail&pithumbsize=500&gsrsearch=' + urllib.parse.quote(title + ' video game'))
+    pages = sorted(json.loads(get(u, tries=2)).get('query', {}).get('pages', {}).values(), key=lambda p: p.get('index', 99))
+    for p in pages:
+        if 'game' in (p.get('description') or '').lower() and p.get('thumbnail'):
+            t = norm(re.sub(r'\s*\(.*?\)$', '', p['title']))
+            if t == norm(title) or norm(title) in t or t in norm(title):
+                req = urllib.request.Request(p['thumbnail']['source'], headers={'User-Agent': UA})
+                with urllib.request.urlopen(req, timeout=30) as r:
+                    return r.read()
+    return None
+
+
 def update_game_covers():
-    """Find covers for games that have none, through your Cloudflare helper (IGDB). Kept in data/game_covers.json."""
-    if not settings.get('igdb') or not settings.get('workerUrl'):
-        return
+    """Covers for games that have none. Default: Steam, then Wikipedia (no keys). With settings.igdb on: IGDB through the Cloudflare helper.
+    Pictures are saved in covers/g/, results remembered in data/game_covers.json."""
     games = load_json(os.path.join(DATA, 'games.json'), {}).get('games', [])
     path = os.path.join(DATA, 'game_covers.json')
     covers = load_json(path, {})
+    gd = os.path.join(os.path.dirname(DATA), 'covers', 'g')
+    os.makedirs(gd, exist_ok=True)
+    use_igdb = settings.get('igdb') and settings.get('workerUrl')
+    today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
     n = 0
     for g in games:
         gid = str(g.get('id'))
-        if g.get('img') or gid in covers or n >= 120:
+        prev = covers.get(gid)
+        if g.get('img') or n >= 150:
             continue
-        try:
-            res = json.loads(get(settings['workerUrl'] + '/games?q=' + urllib.parse.quote(g['t']), tries=2))
-            hit = next((x for x in res if x.get('cover') and norm(x['name']) == norm(g['t'])), None) or next((x for x in res if x.get('cover')), None)
-            covers[gid] = f"https://images.igdb.com/igdb/image/upload/t_cover_big/{hit['cover']['image_id']}.jpg" if hit else ''
-        except Exception:
-            pass
+        if prev and not prev.startswith('miss:'):
+            continue
+        if prev and prev[5:] > (datetime.now(timezone.utc) - timedelta(days=14)).strftime('%Y-%m-%d'):
+            continue  # tried recently, try again in two weeks
         n += 1
-        time.sleep(0.4)
+        img = None
+        try:
+            if use_igdb:
+                res = json.loads(get(settings['workerUrl'] + '/games?q=' + urllib.parse.quote(g['t']), tries=2))
+                hit = next((x for x in res if x.get('cover') and norm(x['name']) == norm(g['t'])), None) or next((x for x in res if x.get('cover')), None)
+                if hit:
+                    img = get_bytes(f"https://images.igdb.com/igdb/image/upload/t_cover_big/{hit['cover']['image_id']}.jpg")
+            if not img:
+                img = steam_cover(g['t'])
+            if not img:
+                img = wiki_cover(g['t'])
+        except Exception as e:
+            log('game cover lookup failed for', g['t'], e)
+        if img:
+            open(os.path.join(gd, f'{gid}.jpg'), 'wb').write(img)
+            covers[gid] = f'covers/g/{gid}.jpg'
+        else:
+            covers[gid] = 'miss:' + today
+        time.sleep(0.5)
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(covers, f, indent=0)
-    site['gameCovers'] = {k: v for k, v in covers.items() if v}
-    log(f'game covers: looked up {n}, have {len(site["gameCovers"])}')
+    site['gameCovers'] = {k: v for k, v in covers.items() if v and not v.startswith('miss:')}
+    missing = [g['t'] for g in games if not g.get('img') and str(g.get('id')) not in site['gameCovers']]
+    site['gameCoverMissing'] = missing
+    log(f'game covers: looked up {n}, have {len(site["gameCovers"])}, missing {len(missing)}: {missing[:30]}')
+
+
+def get_bytes(u):
+    req = urllib.request.Request(u, headers={'User-Agent': UA})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        return r.read()
 
 
 # ---------------- Medium ----------------
