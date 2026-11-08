@@ -393,6 +393,13 @@ button.dlct{cursor:pointer}.dlct .cover{aspect-ratio:2/3;opacity:.45;filter:gray
 .dlctag{position:absolute;left:6px;bottom:6px;font-size:10px;font-weight:700;letter-spacing:.08em;background:rgba(0,0,0,.65);padding:2px 6px}
 .dlcok{position:absolute;right:6px;top:6px;width:22px;height:22px;display:grid;place-items:center;background:var(--game);color:#04110f;font-weight:800;font-size:13px}
 .dlct .x{position:absolute;left:4px;top:4px;width:22px;height:22px;display:grid;place-items:center;background:rgba(0,0,0,.7);color:#ff8a9a;font-size:12px;cursor:pointer}
+.dlcstack{position:absolute;right:6px;bottom:10px;display:flex;flex-direction:row-reverse;z-index:2}
+.dlcstack img{position:static!important;width:30px!important;height:44px!important;object-fit:cover;border:2px solid var(--game);box-shadow:0 3px 10px rgba(0,0,0,.6);margin-left:-12px;background:#000}
+.dlcstack img:first-child{margin-left:0}
+.dlcline{display:flex;gap:6px;align-items:flex-start;margin:5px 0 3px;font-size:12px;line-height:1.3}
+.dlcb{flex:none;font-size:9.5px;font-weight:800;letter-spacing:.1em;background:var(--game);color:#04110f;padding:2px 5px;margin-top:1px}
+.dlcn{color:var(--ink);font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.dlcn i{font-style:normal;color:var(--game);margin:0 4px}
+.mb .dlcline{font-size:13.5px;margin-top:8px}
 .ss.dlcp span{color:var(--game);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .dlcedit{display:grid;gap:4px}.dlcrow{display:flex;align-items:center;gap:8px;padding:4px 6px;background:var(--bar);border:1px solid var(--line)}.dlcrow span{flex:1}.dlcrow .x{background:none;border:0;color:var(--s4);cursor:pointer;font-size:13px}
 .cover.pur .badge{background:linear-gradient(135deg,#b48cff,#7b3fe4 55%,#4a1d8c);color:#fff;font-weight:700;box-shadow:0 0 8px rgba(155,92,255,.6)}
@@ -633,6 +640,10 @@ const GDEF=g=>{const m=(D.gameMeta||{})[g.id]||{};const mine=g.dlcs||[];const pl
   if(!hrs&&avg&&GPLAYED[g.shelf]){hrs=Math.round(avg*(1+rp)*10)/10;est=true}
   const base=g.img||(D.gameCovers||{})[g.id]||'';
   return {rp,avg,hrs,hrsEst:est,dlcs:names.map(n=>({n,p:pl.has(n.toLowerCase())?1:0,img:(m.dimg||{})[n]||'',base,mine:!(m.dlc||[]).some(x=>x.toLowerCase()===n.toLowerCase())}))}};
+const gPlayedDlc=g=>(g.dlcs||[]).filter(d=>d.p);
+const gDlcStack=g=>{const P=gPlayedDlc(g);return P.length?`<div class="dlcstack">${P.slice(0,3).map(d=>`<img src="${esc(LOC(d.img||d.base))}" alt="" title="${esc(d.n)}">`).join('')}</div>`:''};
+const gDlcLine=g=>{const P=gPlayedDlc(g);return P.length?`<div class="dlcline"><span class="dlcb">DLC</span><span class="dlcn">${P.map(d=>esc(d.n)).join('<i>·</i>')}</span></div>`:''};
+const gBadge=g=>g.r?`<span class="badge">${g.r}/5</span>`:'';
 const dlcTile=(d,i,edit)=>`<${edit?'button type="button"':'div'} class="dlct${d.p?' on':''}" ${edit?`data-dp="${i}" aria-pressed="${d.p?'true':'false'}"`:''} title="${esc(d.n)}${d.p?' · played':''}">${cover(d.n,d.img||d.base,`${d.img?'':'<span class="dlctag">DLC</span>'}${d.p?'<span class="dlcok">✓</span>':''}`)}<span class="dn">${esc(d.n)}</span>${edit&&d.mine?`<span class="x" data-dx="${i}" role="button" aria-label="Remove">✕</span>`:''}</${edit?'button':'div'}>`;
 const games=D.games.map((g,i)=>Object.assign({i,n:norm(g.t+' '+(g.fr||[]).join(' '))},g,{img:g.img||(D.gameCovers||{})[g.id]||''},GDEF(g)));
 const stories=D.stories;
@@ -747,7 +758,7 @@ function rOverview(){
     </div>
   </section>
   ${favRow('Favorite films','films',favF.map(f=>({t:f.t,img:f.img||'',sub:f.y,b:f.r?f.r+'★':'',o:()=>openFilm(f)})))}
-  ${favRow('Favorite games','games',favG.map(g=>({t:g.t,img:g.img||'',sub:g.pf[0]||'',b:g.r?g.r+'/5':'',o:()=>openGame(g)})))}
+  ${favRow('Favorite games','games',favG.map(g=>({t:g.t,img:g.img||'',sub:g.pf[0]||'',b:g.r?g.r+'/5':'',x:gDlcStack(g),line:gDlcLine(g),o:()=>openGame(g)})))}
   ${favRow('Favorite anime','anime',D.hof.malFavs.anime.map(([id,t,sub])=>{const a=anime.find(x=>x.id===id);return {t:a?a.t:t,img:a?a.img:'',sub,b:a&&a.sc?String(a.sc):'',o:()=>a?openAnime(a):window.open('https://myanimelist.net/anime/'+id,'_blank')}}))}
   ${favRow('Favorite manga','manga',D.hof.malFavs.manga.map(([id,t,sub])=>{const m=manga.find(x=>x.id===id);return {t:m?m.t:t,img:m?m.img:'',sub,b:m&&m.sc?String(m.sc):'',o:()=>m?openManga(m):window.open('https://myanimelist.net/manga/'+id,'_blank')}}))}
   <div class="more"><a class="btn" href="#hof">Open the Hall of Fame →</a> <a class="btn" href="#wrapped">See your Wrapped →</a></div></div>
@@ -762,7 +773,7 @@ function favRow(title,k,items){
   FAVS[k]=items;
   setTimeout(()=>document.querySelectorAll(`[data-fk="${k}"]`).forEach(el=>el.onclick=()=>items[+el.dataset.i].o()));
   if(!items.length)return'';
-  return `<section class="box" style="margin-top:16px"><div class="box-h" style="border-top:3px solid ${MED[k].c}"><h2>${esc(title)}</h2><a class="link small" href="#${k}">View all</a></div><div class="box-b"><div class="grid favs">${items.map((it,i)=>`<div class="card" data-fk="${k}" data-i="${i}">${cover(it.t,it.img,it.b?`<span class="badge">${esc(it.b)}</span>`:'')}<div class="meta"><div class="tt">${esc(it.t)}</div><div class="ss"><span>${esc(it.sub)}</span></div></div></div>`).join('')}</div></div></section>`;
+  return `<section class="box" style="margin-top:16px"><div class="box-h" style="border-top:3px solid ${MED[k].c}"><h2>${esc(title)}</h2><a class="link small" href="#${k}">View all</a></div><div class="box-b"><div class="grid favs">${items.map((it,i)=>`<div class="card" data-fk="${k}" data-i="${i}">${cover(it.t,it.img,(it.b?`<span class="badge">${esc(it.b)}</span>`:'')+(it.x||''))}<div class="meta"><div class="tt">${esc(it.t)}</div>${it.line||''}<div class="ss"><span>${esc(it.sub)}</span></div></div></div>`).join('')}</div></div></section>`;
 }
 
 
@@ -890,7 +901,7 @@ function rHof(){
     const five=films.filter(f=>f.r===5);
     G('g-f5','Five stars','Every film I rated ★★★★★.','ten','#e8733a','',[sec('s-f5','Rated five stars','',grid(five.map(f=>fc(f.t,f.y)).join('')))]);
   }else if(hofSeg==='games'){
-    const gc=g=>{const idx=HOFITEMS.push({game:g})-1;return `<div class="card" data-h="${idx}">${cover(g.t,g.img||'',g.r?`<span class="badge">${g.r}/5</span>`:'')}<div class="meta"><div class="tt">${esc(g.t)}</div><div class="ss"><span>${esc(g.shelf)}</span></div></div></div>`};
+    const gc=g=>{const idx=HOFITEMS.push({game:g})-1;return `<div class="card" data-h="${idx}">${cover(g.t,g.img||'',gBadge(g)+gDlcStack(g))}<div class="meta"><div class="tt">${esc(g.t)}</div>${gDlcLine(g)}<div class="ss"><span>${esc(g.shelf)}</span></div></div></div>`};
     const favG=D.gvFav.map(n=>games.find(g=>g.t===n)).filter(Boolean);
     G('g-gtop','Grouvee favourites','My favourite games, in order.','star','#8a55e6','https://www.grouvee.com/user/186222-SatsugaiDeAtsu/',[sec('s-gtop','Favourites','',grid(favG.map(gc).join('')))]);
     G('g-g5','Also rated 5/5','','ten','#8a55e6','',[sec('s-g5','Five out of five','',grid(games.filter(g=>g.r===5&&!D.gvFav.includes(g.t)).map(gc).join('')))]);
@@ -1363,15 +1374,15 @@ function rGames(){
     tabs:[['all','All',()=>true],...Object.keys(GSH).map(k=>[k,k,k==='Playing'?g=>g.shelf==='Playing'||g.shelf==='Replaying':g=>g.shelf===k]),['replayed','Replayed',g=>g.rp>0||g.shelf==='Replaying'],['reviewed','Reviewed',g=>!!g.rv]],
     sorts:[['added','Date added'],['rating','Your rating'],['release','Release date'],['title','Title']],
     sorter:k=>({added:(a,b)=>b.added.localeCompare(a.added),rating:(a,b)=>b.r-a.r||b.added.localeCompare(a.added),release:(a,b)=>(b.rel||'').localeCompare(a.rel||''),title:cmpT})[k],
-    card:(g,i)=>`<div class="card" data-i="${i}">${cover(g.t,g.img||'',(g.r?`<span class="badge">${g.r}/5</span>`:'')+`<span class="sline" style="--sc:${GSH[g.shelf]||'var(--s6)'}"></span>`)}<div class="meta"><div class="tt">${esc(g.t)}</div>${g.dlcs.some(d=>d.p)?`<div class="ss dlcp"><span>+ ${esc(g.dlcs.filter(d=>d.p).map(d=>d.n).join(', '))}</span></div>`:''}<div class="ss"><span>${esc(g.shelf)}</span><span>${g.rel?g.rel.slice(0,4):''}</span></div></div></div>`,
+    card:(g,i)=>`<div class="card" data-i="${i}">${cover(g.t,g.img||'',gBadge(g)+gDlcStack(g)+`<span class="sline" style="--sc:${GSH[g.shelf]||'var(--s6)'}"></span>`)}<div class="meta"><div class="tt">${esc(g.t)}</div>${gDlcLine(g)}<div class="ss"><span>${esc(g.shelf)}</span><span>${g.rel?g.rel.slice(0,4):''}</span></div></div></div>`,
     thead:'<th style="width:5px;padding:0"></th><th class="hm">#</th><th></th><th>Game</th><th style="text-align:center">Rating</th><th>Shelf</th><th class="hm">Platform</th><th class="hm" style="text-align:center">Released</th>',
-    row:(g,i)=>`<tr data-i="${i}"><td class="st" style="--sc:${GSH[g.shelf]||'var(--s6)'}"></td><td class="num hm">${i+1}</td><td style="width:54px">${cover(g.t,g.img||'','','mini')}</td><td><div class="ti">${esc(g.t)}</div><div class="alt">${esc(g.dev[0]||'')}${g.dlcs.some(d=>d.p)?` · + ${esc(g.dlcs.filter(d=>d.p).map(d=>d.n).join(', '))}`:''}${g.hrs?` · ${g.hrs}h`:''}${g.rp?` · replayed ${g.rp}×`:''}</div></td><td class="sc">${g.r?g.r+'/5':'<span class="muted">–</span>'}</td><td class="small">${esc(g.shelf)}</td><td class="small hm">${esc(g.pf.join(', '))}</td><td class="c mono small hm">${g.rel?g.rel.slice(0,4):''}</td></tr>`,
+    row:(g,i)=>`<tr data-i="${i}"><td class="st" style="--sc:${GSH[g.shelf]||'var(--s6)'}"></td><td class="num hm">${i+1}</td><td style="width:54px">${cover(g.t,g.img||'','','mini')}</td><td><div class="ti">${esc(g.t)}</div><div class="alt">${esc(g.dev[0]||'')}${gPlayedDlc(g).length?` · <span style="color:var(--game)">DLC: ${esc(gPlayedDlc(g).map(d=>d.n).join(', '))}</span>`:''}${g.hrs?` · ${g.hrs}h`:''}${g.rp?` · replayed ${g.rp}×`:''}</div></td><td class="sc">${g.r?g.r+'/5':'<span class="muted">–</span>'}</td><td class="small">${esc(g.shelf)}</td><td class="small hm">${esc(g.pf.join(', '))}</td><td class="c mono small hm">${g.rel?g.rel.slice(0,4):''}</td></tr>`,
     open:openGame});
 }
 function openGame(g){
   const hrs=g.hrs||g.log.reduce((s,p)=>s+(p.seconds_played||0),0)/3600;
   modal('games','Game',`${cover(g.t,g.img||'')}<div><h2>${esc(g.t)}</h2>${g.dev.length?`<div class="muted">${esc(g.dev.join(', '))}</div>`:''}
-  ${g.dlcs.some(d=>d.p)?`<div class="small" style="margin-top:4px;color:var(--game)">✓ ${g.dlcs.filter(d=>d.p).map(d=>esc(d.n)).join(' · ')}</div>`:''}
+  ${gDlcLine(g)}
   <div class="bigscore"><div><b>${g.r?g.r+'/5':'–'}</b><small>Your rating</small></div><div><b style="color:${GSH[g.shelf]||'var(--s6)'}">■</b><small>${esc(g.shelf)}</small></div>${hrs?`<div><b>${g.hrsEst?'≈':''}${Math.round(hrs*10)/10}h</b><small>${g.hrsEst?'Hours (estimate)':'Hours played'}</small></div>`:''}<div><b>${g.rp}</b><small>Times replayed</small></div></div>
   <div class="kv">${g.pf.length?`<div>Platforms</div><div>${g.pf.map(p=>`<span class="tag">${esc(p)}</span>`).join('')}</div>`:''}${g.g.length?`<div>Genres</div><div>${g.g.map(p=>`<span class="tag">${esc(p)}</span>`).join('')}</div>`:''}${g.fr.length?`<div>Franchise</div><div>${esc(g.fr.join(', '))}</div>`:''}${g.pub.length?`<div>Publisher</div><div>${esc(g.pub.join(', '))}</div>`:''}${g.avg?`<div>Average length</div><div>${g.avg}h main story (HowLongToBeat)</div>`:''}<div>Released</div><div>${g.rel?fdate(g.rel):'–'}</div><div>Added</div><div>${g.added?fdate(g.added):'–'}</div>
   ${g.log.map(p=>`<div>Play log</div><div>${[p.date_started&&p.date_started!=='None'?'Started '+fdate(p.date_started):'',p.date_finished&&p.date_finished!=='None'?'Finished '+fdate(p.date_finished):'',p.level_of_completion||'',p.notes?esc(p.notes):''].filter(Boolean).join(' · ')||'–'}</div>`).join('')}</div>
@@ -1434,7 +1445,7 @@ function rSearch(){
   ${sec('manga',L.manga,(x,i)=>`<div class="card" data-l="manga:${i}">${cover(x.t,x.img,(x.sc?`<span class="badge">${x.sc}</span>`:'')+`<span class="sline" style="--sc:${MST[x.st][1]}"></span>`)}<div class="meta"><div class="tt">${esc(x.t)}</div><div class="ss"><span>${MST[x.st][0]}</span></div></div></div>`)}
   ${sec('books',L.books,(b,i)=>`<div class="card" data-l="books:${i}">${cover(b.t,b.img||'',b.r?`<span class="badge">${b.r}★</span>`:'')}<div class="meta"><div class="tt">${esc(b.t)}</div><div class="ss"><span>${esc(b.a)}</span></div></div></div>`)}
   ${sec('films',L.films,(f,i)=>`<div class="card" data-l="films:${i}">${cover(f.t,f.img||'',f.r?`<span class="badge">${f.r}★</span>`:'')}<div class="meta"><div class="tt">${esc(f.t)}</div><div class="ss"><span>${f.y}</span><span>${f.s==='l'?'Watchlist':'Watched'}</span></div></div></div>`)}
-  ${sec('games',L.games,(g,i)=>`<div class="card" data-l="games:${i}">${cover(g.t,g.img||'',g.r?`<span class="badge">${g.r}/5</span>`:'')}<div class="meta"><div class="tt">${esc(g.t)}</div><div class="ss"><span>${esc(g.shelf)}</span></div></div></div>`)}
+  ${sec('games',L.games,(g,i)=>`<div class="card" data-l="games:${i}">${cover(g.t,g.img||'',gBadge(g)+gDlcStack(g))}<div class="meta"><div class="tt">${esc(g.t)}</div>${gDlcLine(g)}<div class="ss"><span>${esc(g.shelf)}</span></div></div></div>`)}
   ${L.stories.length?`<div class="sect" style="--c:var(--story)"><h2><i></i>Stories</h2>${L.stories.map(s=>`<div><a class="link" href="${esc(s.link)}" target="_blank" rel="noopener">${esc(s.title)} ↗</a></div>`).join('')}</div>`:''}
   </div></div>
   <div class="box" style="margin-top:16px"><div class="box-h"><h2>Search everywhere</h2><span class="small muted" id="xmode"></span></div>
