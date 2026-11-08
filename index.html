@@ -1034,9 +1034,9 @@ async function persist(kind,msg){
   }catch(e){toast('Not saved: '+e.message,true)}
 }
 function editGame(g){
-  const isNew=!g;g=g||{};
+  const isNew=!g||!!g.__new;g=g||{};
   modal('games',isNew?'Add game':'Edit game',`<div style="grid-column:1/-1"><h2>${isNew?'Add a game':esc(g.t)}</h2>
-  ${SET.igdb?`<div class="ef" style="margin-bottom:10px"><span>Find it (fills in the details)</span><div style="display:flex"><input id="g_q" placeholder="Game title" value="${esc(g.t||'')}" style="flex:1"><button class="btn" id="g_find" style="border-radius:0">Find</button></div><div id="g_res" class="small"></div></div>`:''}<div class="eform">
+  ${isNew?`<div class="ef" style="margin-bottom:10px"><span>Find it (fills in the details)</span><div style="display:flex"><input id="g_q" placeholder="Game title" value="${esc(g.t||'')}" style="flex:1"><button class="btn" id="g_find" style="border-radius:0">Find</button></div><div id="g_res" class="small"></div></div>`:''}<div class="eform">
   ${fld('e_t','Title',g.t)}
   ${fld('e_shelf','Shelf',g.shelf||'Backlog','select:Playing|Played|Backlog|Wish List|Retired')}
   ${fld('e_r','Your rating (0 to 5)',g.r||0,'number','min="0" max="5" step="0.5"')}
@@ -1078,7 +1078,7 @@ function editGame(g){
     D.games.splice(g.i,1);D.gvFav=D.gvFav.filter(n=>n!==g.t);rebuildGames();closeM();render();persist('games','Delete game: '+g.t)};
 }
 function editBook(b){
-  const isNew=!b;b=b||{};
+  const isNew=!b||!!b.__new;b=b||{};
   modal('books',isNew?'Add book':'Edit book',`<div style="grid-column:1/-1"><h2>${isNew?'Add a book':esc(b.t)}</h2>
   ${isNew?`<div class="ef" style="margin-bottom:10px"><span>Find it (fills in the details)</span><div style="display:flex"><input id="e_q" placeholder="Title or author" style="flex:1"><button class="btn" id="e_find" style="border-radius:0">Find</button></div><div id="e_res" class="small"></div></div>`:''}
   <div class="eform">
@@ -1092,7 +1092,7 @@ function editBook(b){
   ${fld('e_dr','Date finished',b.dr||'','date')}
   ${fld('e_sh','Shelves (comma separated, e.g. urdu, childhood)',(b.sh||[]).join(', '))}
   ${fld('e_rv','Review',b.rv,'textarea')}
-  ${fld('e_img','Cover image link (optional)',D.books[b.i]?D.books[b.i].img||'':b.img||'','url','placeholder="https://..."')}</div>
+  ${fld('e_img','Cover image link (optional)',!isNew&&D.books[b.i]?D.books[b.i].img||'':b.img||'','url','placeholder="https://..."')}</div>
   <div class="small" id="e_err" style="color:var(--s4)"></div>
   <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="btn pri" id="e_save">${isNew?'Add book':'Save changes'}</button>${isNew?'':'<button class="btn" id="e_del" style="margin-left:auto;color:var(--s4)">Delete</button>'}</div></div>`);
   const f=$('#e_find');if(f)f.onclick=async()=>{const q=gv('e_q');if(!q)return;$('#e_res').textContent='Searching…';
@@ -1423,7 +1423,7 @@ async function viaApi(kind,q){
   }
   if(kind==='books'){
     const r=await fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(q)}&limit=16&fields=title,author_name,first_publish_year,cover_i,key,number_of_pages_median,subject`).then(r=>r.json());
-    return (r.docs||[]).map(b=>({t:b.title,alt:'',y:b.first_publish_year||'',meta:[(b.author_name||[]).slice(0,2).join(', '),b.number_of_pages_median?b.number_of_pages_median+' pages':''].filter(Boolean).join(' · '),sum:'',img:b.cover_i?`https://covers.openlibrary.org/b/id/${b.cover_i}-M.jpg`:'',url:'https://openlibrary.org'+b.key,g:(b.subject||[]).slice(0,4)}));
+    return (r.docs||[]).map(b=>({t:b.title,alt:'',y:b.first_publish_year||'',meta:[(b.author_name||[]).slice(0,2).join(', '),b.number_of_pages_median?b.number_of_pages_median+' pages':''].filter(Boolean).join(' · '),sum:'',img:b.cover_i?`https://covers.openlibrary.org/b/id/${b.cover_i}-M.jpg`:'',url:'https://openlibrary.org'+b.key,g:(b.subject||[]).slice(0,4),a:(b.author_name||[]).slice(0,2).join(', '),p:b.number_of_pages_median||''}));
   }
   if(kind==='anime'){
     const r=await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(q)}&limit=16&sfw=true`).then(r=>r.json());
@@ -1487,12 +1487,19 @@ function showExt(res,kind,q){
   box.querySelectorAll('[data-r]').forEach(el=>el.onclick=()=>{const r=res[+el.dataset.r];const own=ownMatch(kind,r.t,+r.y);if(own){({anime:openAnime,manga:openManga,books:openBook,films:openFilm,games:openGame})[kind](own);return}openExt(kind,r)});
 }
 function openExt(kind,r){
-  setTimeout(()=>{const b=$('#x_add');if(b)b.onclick=()=>editMal(kind,{malId:r.malId,t:r.t,eps:0,chs:0})},0);
+  const canAdd=(kind==='anime'||kind==='manga')?!!r.malId:(kind==='books'||kind==='games');
+  setTimeout(()=>{const b=$('#x_add');if(!b)return;b.onclick=()=>{
+    if(!ED.on){toast(ED.token?'Turn editing on first (pencil button at the top).':'Set up editing first (pencil button at the top).',true);editSetup();return}
+    if(kind==='anime'||kind==='manga')return editMal(kind,{malId:r.malId,t:r.t,eps:0,chs:0});
+    const y=String(r.y||'');
+    if(kind==='books')return editBook({__new:1,t:r.t,a:r.a||'',p:r.p||'',y:y,img:r.img||'',st:'toread',sh:[]});
+    editGame({__new:1,t:r.t,img:r.img||'',pf:r.pf||[],g:r.g||[],dev:r.dev||[],rel:r.rel||(y?y+'-01-01':''),shelf:'Wish List'});
+  }},0);
   const label={anime:'Anime',manga:'Manga',books:'Book',films:'Film',games:'Game'}[kind];
   modal(kind,label+' · not in your list',`${cover(r.t,r.img)}<div><h2>${esc(r.t)} <span class="muted" style="font-weight:500">${esc(r.y)}</span></h2>${r.alt?`<div class="muted">${esc(r.alt)}</div>`:''}
   <div class="kv">${r.meta?`<div>Details</div><div>${esc(r.meta)}</div>`:''}${r.g&&r.g.length?`<div>Genres</div><div>${r.g.map(g=>`<span class="tag">${esc(g)}</span>`).join('')}</div>`:''}</div>
   ${r.sum?`<div class="review" style="--c:${MED[kind].c}">${esc(r.sum)}</div>`:''}
-  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on&&r.malId&&(kind==='anime'||kind==='manga')?'<button class="btn pri" id="x_add">+ Add to my list</button>':''}<a class="btn${ED.on&&r.malId?'':' pri'}" href="${r.url&&r.malId?r.url:OUT[kind](r.t)}" target="_blank" rel="noopener">${r.malId?'Open on MyAnimeList':'Find on '+OUTN[kind]} ↗</a>${r.url?`<a class="btn" href="${esc(r.url)}" target="_blank" rel="noopener">Source ↗</a>`:''}</div></div>`);
+  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${canAdd?'<button class="btn pri" id="x_add">+ Add to my list</button>':''}<a class="btn${canAdd?'':' pri'}" href="${r.url&&r.malId?r.url:OUT[kind](r.t)}" target="_blank" rel="noopener">${r.malId?'Open on MyAnimeList':'Find on '+OUTN[kind]} ↗</a>${r.url?`<a class="btn" href="${esc(r.url)}" target="_blank" rel="noopener">Source ↗</a>`:''}</div></div>`);
 }
 
 $('#foot').innerHTML=`Saturn Collections · data from MyAnimeList, Letterboxd, Grouvee and Medium · last refreshed ${fdate(D.generated)}`;
