@@ -87,12 +87,12 @@
   "character": [
    [
     118735,
-    "Subaru Natsuki",
-    "Re:Zero"
+    "Natsuki, Subaru",
+    "Re:Zero kara Hajimeru Isekai Seikatsu"
    ],
    [
     5187,
-    "Natsu Dragneel",
+    "Dragneel, Natsu",
     "Fairy Tail"
    ],
    [
@@ -102,33 +102,33 @@
    ],
    [
     6977,
-    "Sawako Kuronuma",
+    "Kuronuma, Sawako",
     "Kimi ni Todoke"
    ],
    [
     197929,
-    "Oscar Lyeth Increatos Loz Farsas",
+    "Farsas, Oscar Lyeth Increatos Loz",
     "Unnamed Memory"
    ],
    [
     41000,
-    "Jinbee Tsukishima",
+    "Tsukishima, Jinbee",
     "Mushibugyou"
    ],
    [
     185421,
-    "Jin Haiba",
+    "Haiba, Jin",
     "Tsuiraku JK to Haijin Kyoushi"
    ],
    [
     174177,
-    "Ai Magase",
+    "Magase, Ai",
     "Babylon"
    ],
    [
     183520,
-    "Rentarou Aijou",
-    "100 Girlfriends"
+    "Aijou, Rentarou",
+    "Kimi no Koto ga Daidaidaidaidaisuki na 100-nin no Kanojo"
    ],
    [
     151138,
@@ -136,58 +136,7 @@
     "Beastars"
    ]
   ],
-  "people": [
-   [
-    591,
-    "Kenjirou Tsuda",
-    ""
-   ],
-   [
-    44281,
-    "Yoru Sumino",
-    ""
-   ],
-   [
-    1882,
-    "Hiro Mashima",
-    ""
-   ],
-   [
-    34785,
-    "Rie Takahashi",
-    ""
-   ],
-   [
-    40,
-    "Mamiko Noto",
-    ""
-   ],
-   [
-    672,
-    "Yuuki Kaji",
-    ""
-   ],
-   [
-    65,
-    "Mamoru Miyano",
-    ""
-   ],
-   [
-    337,
-    "Houchuu Ootsuka",
-    ""
-   ],
-   [
-    99,
-    "Miyuki Sawashiro",
-    ""
-   ],
-   [
-    270,
-    "Nobuhiko Okamoto",
-    ""
-   ]
-  ],
+  "people": [],
   "company": [
    "Wit Studio",
    "Shin-Ei Animation",
