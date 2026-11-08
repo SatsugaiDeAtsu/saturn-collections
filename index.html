@@ -655,7 +655,7 @@ function rHof(){
     const five=films.filter(f=>f.r===5);
     G('g-f5','Five stars','Every film I rated ★★★★★.','ten','#e8733a','',[sec('s-f5','Rated five stars','',grid(five.map(f=>fc(f.t,f.y)).join('')))]);
   }else if(hofSeg==='games'){
-    const gc=g=>{const idx=HOFITEMS.push({game:g})-1;return `<div class="card" data-h="${idx}">${cover(g.t,'',g.r?`<span class="badge">${g.r}/5</span>`:'')}<div class="meta"><div class="tt">${esc(g.t)}</div><div class="ss"><span>${esc(g.shelf)}</span></div></div></div>`};
+    const gc=g=>{const idx=HOFITEMS.push({game:g})-1;return `<div class="card" data-h="${idx}">${cover(g.t,g.img||'',g.r?`<span class="badge">${g.r}/5</span>`:'')}<div class="meta"><div class="tt">${esc(g.t)}</div><div class="ss"><span>${esc(g.shelf)}</span></div></div></div>`};
     const favG=D.gvFav.map(n=>games.find(g=>g.t===n)).filter(Boolean);
     G('g-gtop','Grouvee favourites','My favourite games, in order.','star','#8a55e6','https://www.grouvee.com/user/186222-SatsugaiDeAtsu/',[sec('s-gtop','Favourites','',grid(favG.map(gc).join('')))]);
     G('g-g5','Also rated 5/5','','ten','#8a55e6','',[sec('s-g5','Five out of five','',grid(games.filter(g=>g.r===5&&!D.gvFav.includes(g.t)).map(gc).join('')))]);
@@ -746,6 +746,7 @@ function editGame(g){
   ${fld('e_rel','Release date',g.rel||'','date')}
   ${fld('e_rvt','Review title',g.rvt)}
   ${fld('e_rv','Review',g.rv,'textarea')}
+  ${fld('e_img','Cover image link (optional)',g.img||'','url','placeholder="https://..."')}
   <label class="ef"><span>Favourite</span><select id="e_fav"><option value="0">No</option><option value="1" ${D.gvFav.includes(g.t)?'selected':''}>Yes</option></select></label>
   </div><div class="small" id="e_err" style="color:var(--s4)"></div>
   <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="btn pri" id="e_save">${isNew?'Add game':'Save changes'}</button>${isNew?'':'<button class="btn" id="e_del" style="margin-left:auto;color:var(--s4)">Delete</button>'}</div></div>`);
@@ -754,7 +755,7 @@ function editGame(g){
     const raw=isNew?{id:Date.now(),u:'',fr:[],pub:[],log:[],shelves:[],rvd:''}:D.games[g.i];
     const oldT=raw.t;const shelf=gv('e_shelf');
     if(isNew||raw.shelf!==shelf)raw.added=today();
-    Object.assign(raw,{t,shelf,shelves:[shelf],r:+gv('e_r')||0,pf:list(gv('e_pf')),g:list(gv('e_g')),dev:list(gv('e_dev')),rel:gv('e_rel'),rvt:gv('e_rvt'),rv:gv('e_rv')});
+    Object.assign(raw,{img:gv('e_img'),t,shelf,shelves:[shelf],r:+gv('e_r')||0,pf:list(gv('e_pf')),g:list(gv('e_g')),dev:list(gv('e_dev')),rel:gv('e_rel'),rvt:gv('e_rvt'),rv:gv('e_rv')});
     if(raw.rv&&!raw.rvd)raw.rvd=today();
     if(isNew)D.games.unshift(raw);
     D.gvFav=D.gvFav.filter(n=>n!==oldT&&n!==t);if(gv('e_fav')==='1')D.gvFav.push(t);
@@ -778,7 +779,7 @@ function editBook(b){
   ${fld('e_dr','Date finished',b.dr||'','date')}
   ${fld('e_sh','Shelves (comma separated, e.g. urdu, childhood)',(b.sh||[]).join(', '))}
   ${fld('e_rv','Review',b.rv,'textarea')}
-  <input type="hidden" id="e_img" value="${esc(b.img||'')}"></div>
+  ${fld('e_img','Cover image link (optional)',D.books[b.i]?D.books[b.i].img||'':b.img||'','url','placeholder="https://..."')}</div>
   <div class="small" id="e_err" style="color:var(--s4)"></div>
   <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="btn pri" id="e_save">${isNew?'Add book':'Save changes'}</button>${isNew?'':'<button class="btn" id="e_del" style="margin-left:auto;color:var(--s4)">Delete</button>'}</div></div>`);
   const f=$('#e_find');if(f)f.onclick=async()=>{const q=gv('e_q');if(!q)return;$('#e_res').textContent='Searching…';
@@ -899,14 +900,14 @@ function rGames(){
     tabs:[['all','All',()=>true],...Object.keys(GSH).map(k=>[k,k,g=>g.shelf===k]),['reviewed','Reviewed',g=>!!g.rv]],
     sorts:[['added','Date added'],['rating','Your rating'],['release','Release date'],['title','Title']],
     sorter:k=>({added:(a,b)=>b.added.localeCompare(a.added),rating:(a,b)=>b.r-a.r||b.added.localeCompare(a.added),release:(a,b)=>(b.rel||'').localeCompare(a.rel||''),title:cmpT})[k],
-    card:(g,i)=>`<div class="card" data-i="${i}">${cover(g.t,'',(g.r?`<span class="badge">${g.r}/5</span>`:'')+`<span class="sline" style="--sc:${GSH[g.shelf]||'var(--s6)'}"></span>`)}<div class="meta"><div class="tt">${esc(g.t)}</div><div class="ss"><span>${esc(g.shelf)}</span><span>${g.rel?g.rel.slice(0,4):''}</span></div></div></div>`,
+    card:(g,i)=>`<div class="card" data-i="${i}">${cover(g.t,g.img||'',(g.r?`<span class="badge">${g.r}/5</span>`:'')+`<span class="sline" style="--sc:${GSH[g.shelf]||'var(--s6)'}"></span>`)}<div class="meta"><div class="tt">${esc(g.t)}</div><div class="ss"><span>${esc(g.shelf)}</span><span>${g.rel?g.rel.slice(0,4):''}</span></div></div></div>`,
     thead:'<th style="width:5px;padding:0"></th><th class="hm">#</th><th></th><th>Game</th><th style="text-align:center">Rating</th><th>Shelf</th><th class="hm">Platform</th><th class="hm" style="text-align:center">Released</th>',
-    row:(g,i)=>`<tr data-i="${i}"><td class="st" style="--sc:${GSH[g.shelf]||'var(--s6)'}"></td><td class="num hm">${i+1}</td><td style="width:54px">${cover(g.t,'','','mini')}</td><td><div class="ti">${esc(g.t)}</div><div class="alt">${esc(g.dev[0]||'')}</div></td><td class="sc">${g.r?g.r+'/5':'<span class="muted">–</span>'}</td><td class="small">${esc(g.shelf)}</td><td class="small hm">${esc(g.pf.join(', '))}</td><td class="c mono small hm">${g.rel?g.rel.slice(0,4):''}</td></tr>`,
+    row:(g,i)=>`<tr data-i="${i}"><td class="st" style="--sc:${GSH[g.shelf]||'var(--s6)'}"></td><td class="num hm">${i+1}</td><td style="width:54px">${cover(g.t,g.img||'','','mini')}</td><td><div class="ti">${esc(g.t)}</div><div class="alt">${esc(g.dev[0]||'')}</div></td><td class="sc">${g.r?g.r+'/5':'<span class="muted">–</span>'}</td><td class="small">${esc(g.shelf)}</td><td class="small hm">${esc(g.pf.join(', '))}</td><td class="c mono small hm">${g.rel?g.rel.slice(0,4):''}</td></tr>`,
     open:openGame});
 }
 function openGame(g){
   const hrs=g.log.reduce((s,p)=>s+(p.seconds_played||0),0)/3600;
-  modal('games','Game',`${cover(g.t,'')}<div><h2>${esc(g.t)}</h2>${g.dev.length?`<div class="muted">${esc(g.dev.join(', '))}</div>`:''}
+  modal('games','Game',`${cover(g.t,g.img||'')}<div><h2>${esc(g.t)}</h2>${g.dev.length?`<div class="muted">${esc(g.dev.join(', '))}</div>`:''}
   <div class="bigscore"><div><b>${g.r?g.r+'/5':'–'}</b><small>Your rating</small></div><div><b style="color:${GSH[g.shelf]||'var(--s6)'}">■</b><small>${esc(g.shelf)}</small></div>${hrs?`<div><b>${Math.round(hrs*10)/10}h</b><small>Logged</small></div>`:''}</div>
   <div class="kv">${g.pf.length?`<div>Platforms</div><div>${g.pf.map(p=>`<span class="tag">${esc(p)}</span>`).join('')}</div>`:''}${g.g.length?`<div>Genres</div><div>${g.g.map(p=>`<span class="tag">${esc(p)}</span>`).join('')}</div>`:''}${g.fr.length?`<div>Franchise</div><div>${esc(g.fr.join(', '))}</div>`:''}${g.pub.length?`<div>Publisher</div><div>${esc(g.pub.join(', '))}</div>`:''}<div>Released</div><div>${g.rel?fdate(g.rel):'–'}</div><div>Added</div><div>${g.added?fdate(g.added):'–'}</div>
   ${g.log.map(p=>`<div>Play log</div><div>${[p.date_started&&p.date_started!=='None'?'Started '+fdate(p.date_started):'',p.date_finished&&p.date_finished!=='None'?'Finished '+fdate(p.date_finished):'',p.level_of_completion||'',p.notes?esc(p.notes):''].filter(Boolean).join(' · ')||'–'}</div>`).join('')}</div>
