@@ -372,7 +372,7 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .quote.in{opacity:1;transform:none;filter:none}.quote.out{opacity:0;transform:translateY(-8px);filter:blur(4px)}
 .quote.q-m{font-size:16px}.quote.q-l{font-size:14.5px;line-height:1.4}
 .banner.ovb .in{padding-right:200px}
-@media (max-width:640px){.quote{font-size:14px;height:230px}.quote.q-m{font-size:13.5px}.quote.q-l{font-size:12.5px}}
+@media (max-width:640px){.quote{font-size:14px;height:250px}.quote.q-m{font-size:13.5px}.quote.q-l{font-size:12.5px}}
 .quote .qm{color:#ffb3c8;font-size:1.25em;line-height:0;vertical-align:-.1em;margin:0 1px}
 .quote .qby{display:block;font-style:normal;font-family:Inter,sans-serif;font-size:12px;color:#cdb9d4;margin-top:6px;letter-spacing:.03em}
 .marquee{margin:-4px 0 14px;overflow:hidden;background:var(--bar);border:1px solid #000;padding:10px 0;display:grid;gap:10px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
@@ -1176,7 +1176,11 @@ function startQuotes(){
   const show=()=>{const el=$('#quote');if(!el)return clearInterval(quoteT);const q=Q[quoteI%Q.length];quoteI++;
     el.classList.remove('in','out','q-m','q-l');void el.offsetWidth;const L=q.t.length;if(L>260)el.classList.add('q-l');else if(L>120)el.classList.add('q-m');
     const w=q.t.split(' ');const first=w.shift()||'',last=w.length?w.pop():'';
-    el.innerHTML=`<span class="qt"><span class="nw"><span class="qm">“</span>${esc(first)}</span>${w.length?' '+esc(w.join(' ')):''}${last?` <span class="nw">${esc(last)}<span class="qm">”</span></span>`:'<span class="qm">”</span>'}</span><span class="qby">(${esc(q.by||'Unknown')})</span>`;el.classList.add('in')};
+    el.innerHTML=`<span class="qt"><span class="nw"><span class="qm">“</span>${esc(first)}</span>${w.length?' '+esc(w.join(' ')):''}${last?` <span class="nw">${esc(last)}<span class="qm">”</span></span>`:'<span class="qm">”</span>'}</span><span class="qby">(${esc(q.by||'Unknown')})</span>`;
+    // shrink long quotes until they fit the box, so nothing is ever cut off
+    el.style.fontSize='';el.style.justifyContent='flex-start';let fs=parseFloat(getComputedStyle(el).fontSize);
+    while(el.scrollHeight>el.clientHeight+1&&fs>10){fs-=.5;el.style.fontSize=fs+'px'}
+    el.style.justifyContent='';el.classList.add('in')};
   const next=()=>{const el=$('#quote');if(!el||route!=='overview')return;const q=Q[(quoteI)%Q.length];const ms=Math.min(18000,5000+q.t.length*35)+3000;quoteT=setTimeout(()=>{const e2=$('#quote');if(!e2||route!=='overview')return;e2.classList.add('out');setTimeout(()=>{show();next()},600)},ms)};
   clearTimeout(quoteT);show();quoteI--;next();quoteI++;
 }
