@@ -956,11 +956,19 @@ const b64=s=>btoa(unescape(encodeURIComponent(s)));
 async function ghSave(path,obj,msg){
   const api=`https://api.github.com/repos/${REPO}/contents/${path}`;
   const h={Authorization:'Bearer '+ED.token,Accept:'application/vnd.github+json'};
-  const cur=await fetch(api+'?ref=main',{headers:h,cache:'no-store'});
+  const cur=await fetch(api+'?ref=main&_='+Date.now(),{headers:h,cache:'no-store'});
   if(cur.status===401||cur.status===403)throw new Error('GitHub refused the token. Check that it has Contents: read and write for saturn-collections.');
-  const sha=cur.ok?(await cur.json()).sha:undefined;
-  const r=await fetch(api,{method:'PUT',headers:h,body:JSON.stringify({message:msg,content:b64(JSON.stringify(obj,null,0)),sha,branch:'main'})});
-  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.message||('GitHub error '+r.status))}
+  let sha=cur.ok?(await cur.json()).sha:undefined;
+  for(let i=0;i<3;i++){
+    const r=await fetch(api,{method:'PUT',headers:h,body:JSON.stringify({message:msg,content:b64(JSON.stringify(obj,null,0)),sha,branch:'main'})});
+    if(r.ok)return;
+    const e=await r.json().catch(()=>({}));
+    const m=/is at ([0-9a-f]{40})/.exec(e.message||'');
+    if(r.status===409&&m){sha=m[1];continue}
+    throw new Error(e.message||('GitHub error '+r.status));
+  }
+  throw new Error('GitHub kept reporting a newer version. Try again in a minute.');
+}
 }
 function toast(msg,bad){let el=$('#toast');if(!el){el=document.createElement('div');el.id='toast';document.body.appendChild(el)}el.textContent=msg;el.className='show'+(bad?' bad':'');clearTimeout(toast.t);toast.t=setTimeout(()=>el.className='',bad?7000:3500)}
 function editSetup(){
