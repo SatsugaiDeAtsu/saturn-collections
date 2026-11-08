@@ -570,7 +570,8 @@ function openManga(m){
 
 /* ---------- books ---------- */
 const BST={read:['Read','var(--s2)'],reading:['Reading','var(--s1)'],toread:['Want to read','var(--s6)'],dnf:['Did not finish','var(--s4)'],hold:['On hold','var(--s3)']};
-const books=D.books.map((b,i)=>Object.assign({},b,{i,title:b.t,n:norm(b.t+' '+b.a+' '+b.sh.join(' '))}));
+const BCOV=D.bookCovers||{};
+const books=D.books.map((b,i)=>Object.assign({},b,{img:b.img||BCOV[b.id]||'',i,title:b.t,n:norm(b.t+' '+b.a+' '+b.sh.join(' '))}));
 const bstars=r=>{if(!r)return'';const full=Math.floor(r),part=r-full;return '★'.repeat(full)+(part>=.5?'½':'')};
 function rBooks(){
   const shelves=[...new Set(books.flatMap(b=>b.sh))].sort();
@@ -724,7 +725,7 @@ const gv=id=>{const el=$('#'+id);return el?el.value.trim():''};
 const list=s=>s.split(',').map(x=>x.trim()).filter(Boolean);
 const today=()=>new Date().toISOString().slice(0,10);
 function rebuildGames(){games.length=0;D.games.forEach((g,i)=>games.push(Object.assign({i,n:norm(g.t+' '+(g.fr||[]).join(' '))},g)))}
-function rebuildBooks(){books.length=0;D.books.forEach((b,i)=>books.push(Object.assign({},b,{i,title:b.t,n:norm(b.t+' '+b.a+' '+(b.sh||[]).join(' '))})))}
+function rebuildBooks(){books.length=0;D.books.forEach((b,i)=>books.push(Object.assign({},b,{img:b.img||BCOV[b.id]||'',i,title:b.t,n:norm(b.t+' '+b.a+' '+(b.sh||[]).join(' '))})))}
 async function persist(kind,msg){
   toast('Saving…');
   try{

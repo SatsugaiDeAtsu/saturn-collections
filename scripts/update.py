@@ -470,30 +470,30 @@ def update_hof():
 
 
 def update_book_covers():
-    """Fill in missing book covers from Open Library (only touches the cover field)."""
-    path = os.path.join(DATA, 'books.json')
-    data = load_json(path, None)
-    if not data:
-        return
+    """Find covers for books that have none (Open Library). Stored separately in
+    data/book_covers.json so the updater never edits books.json (which you edit on the site)."""
+    books = load_json(os.path.join(DATA, 'books.json'), {}).get('books', [])
+    path = os.path.join(DATA, 'book_covers.json')
+    covers = load_json(path, {})
     n = 0
-    for b in data['books']:
-        if b.get('img') or b.get('coverTried') or n >= 80:
+    for b in books:
+        bid = str(b.get('id'))
+        if b.get('img') or bid in covers or n >= 80:
             continue
-        q = urllib.parse.urlencode({'title': re.sub(r'\s*\(.*?\)\s*', ' ', b['t']).split(':')[0].strip(), 'author': b.get('a', ''), 'limit': 3, 'fields': 'cover_i,title'})
+        title = re.sub(r'\s*\(.*?\)\s*', ' ', b['t']).split(':')[0].strip()
+        q = urllib.parse.urlencode({'title': title, 'author': b.get('a', ''), 'limit': 3, 'fields': 'cover_i'})
         try:
             docs = json.loads(get(f'https://openlibrary.org/search.json?{q}', tries=2)).get('docs') or []
             cov = next((d['cover_i'] for d in docs if d.get('cover_i')), None)
-            if cov:
-                b['img'] = f'https://covers.openlibrary.org/b/id/{cov}-M.jpg'
-            else:
-                b['coverTried'] = 1
+            covers[bid] = f'https://covers.openlibrary.org/b/id/{cov}-M.jpg' if cov else ''
         except Exception:
             pass
         n += 1
         time.sleep(0.6)
     with open(path, 'w', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=0)
-    log(f'book covers: looked up {n}')
+        json.dump(covers, f, indent=0)
+    site['bookCovers'] = {k: v for k, v in covers.items() if v}
+    log(f'book covers: looked up {n}, have {len(site["bookCovers"])}')
 
 
 # ---------------- Medium ----------------
