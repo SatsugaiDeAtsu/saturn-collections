@@ -767,6 +767,16 @@ def update_dlc_pictures():
         imgs = m.setdefault('dimg', {})
         for name in m.get('dlc', []):
             have = imgs.get(name, '')
+            if have.startswith('http'):  # a picked picture: download it once
+                try:
+                    b = get_bytes(have)
+                    fn = f"{gid}_{re.sub(r'[^a-z0-9]+', '-', name.lower()).strip('-')}.jpg"
+                    open(os.path.join(dd, fn), 'wb').write(b)
+                    imgs[name] = 'covers/d/' + fn
+                    got += 1
+                except Exception as e:
+                    log('dlc picture failed', name, e)
+                continue
             if have.startswith('covers/') or (have.startswith('miss:') and have[5:] > retry) or time.time() - t0 > 360 or gid not in games:
                 continue
             b = dlc_picture(games[gid], name)
