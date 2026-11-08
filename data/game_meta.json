@@ -8,13 +8,17 @@
 "dlc": [
 "Road to Ruin"
 ],
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"dimg": {
+"Road to Ruin": "miss:2026-11-08"
+}
 },
 "104343": {
 "avg": 20.8
 },
 "104353": {
-"avg": 6.8
+"avg": 6.8,
+"chk": "2026-11-08"
 },
 "104377": {
 "avg": 15.3,
@@ -22,25 +26,41 @@
 "The Assignment",
 "The Consequence",
 "The Executioner"
-]
+],
+"dimg": {
+"The Assignment": "covers/d/104377_the-assignment.jpg",
+"The Consequence": "covers/d/104377_the-consequence.jpg",
+"The Executioner": "covers/d/104377_the-executioner.jpg"
+}
 },
 "104386": {
 "avg": 9.9,
 "dlc": [
 "Shadows of Rose"
-]
+],
+"dimg": {
+"Shadows of Rose": "miss:2026-11-08"
+}
 },
 "104431": {
 "avg": 8.9,
 "dlc": [
 "The Ghost Survivors"
-]
+],
+"chk": "2026-11-08",
+"dimg": {
+"The Ghost Survivors": "miss:2026-11-08"
+}
 },
 "104440": {
 "avg": 16.2,
 "dlc": [
 "Separate Ways"
-]
+],
+"chk": "2026-11-08",
+"dimg": {
+"Separate Ways": "covers/d/104440_separate-ways.jpg"
+}
 },
 "107187": {
 "avg": 10.3,
@@ -49,7 +69,14 @@
 "The Sacrifice",
 "Cold Stream",
 "The Last Stand"
-]
+],
+"chk": "2026-11-08",
+"dimg": {
+"The Passing": "miss:2026-11-08",
+"The Sacrifice": "miss:2026-11-08",
+"Cold Stream": "miss:2026-11-08",
+"The Last Stand": "miss:2026-11-08"
+}
 },
 "107313": {
 "avg": 15.6,
@@ -57,14 +84,23 @@
 "Genkibowl VII",
 "Gangstas in Space",
 "The Trouble with Clones"
-]
+],
+"dimg": {
+"Genkibowl VII": "covers/d/107313_genkibowl-vii.jpg",
+"Gangstas in Space": "covers/d/107313_gangstas-in-space.jpg",
+"The Trouble with Clones": "covers/d/107313_the-trouble-with-clones.jpg"
+}
 },
 "107315": {
 "avg": 19.9,
 "dlc": [
 "Ultor Exposed",
 "Corporate Warfare"
-]
+],
+"dimg": {
+"Ultor Exposed": "miss:2026-11-08",
+"Corporate Warfare": "miss:2026-11-08"
+}
 },
 "107317": {
 "avg": 17
@@ -75,7 +111,12 @@
 "Gat out of Hell",
 "Enter the Dominatrix",
 "How the Saints Save Christmas"
-]
+],
+"dimg": {
+"Gat out of Hell": "miss:2026-11-08",
+"Enter the Dominatrix": "covers/d/107319_enter-the-dominatrix.jpg",
+"How the Saints Save Christmas": "miss:2026-11-08"
+}
 },
 "107639": {
 "avg": 11.6,
@@ -96,7 +137,13 @@
 "The Secret Armory of General Knoxx",
 "Claptrap's New Robot Revolution"
 ],
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"dimg": {
+"The Zombie Island of Dr. Ned": "miss:2026-11-08",
+"Mad Moxxi's Underdome Riot": "miss:2026-11-08",
+"The Secret Armory of General Knoxx": "miss:2026-11-08",
+"Claptrap's New Robot Revolution": "miss:2026-11-08"
+}
 },
 "109306": {
 "avg": 6.2,
@@ -107,7 +154,11 @@
 "dlc": [
 "Hearts of Stone",
 "Blood and Wine"
-]
+],
+"dimg": {
+"Hearts of Stone": "covers/d/109380_hearts-of-stone.jpg",
+"Blood and Wine": "miss:2026-11-08"
+}
 },
 "109687": {
 "avg": 30.1,
@@ -123,7 +174,11 @@
 "Iki Island",
 "Legends"
 ],
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"dimg": {
+"Iki Island": "miss:2026-11-08",
+"Legends": "covers/d/109820_legends.jpg"
+}
 },
 "109835": {
 "avg": 35.3,
@@ -131,20 +186,33 @@
 "Dawnguard",
 "Hearthfire",
 "Dragonborn"
-]
+],
+"dimg": {
+"Dawnguard": "covers/d/109835_dawnguard.jpg",
+"Hearthfire": "covers/d/109835_hearthfire.jpg",
+"Dragonborn": "covers/d/109835_dragonborn.jpg"
+}
 },
 "110041": {
 "avg": 14.3,
 "dlc": [
 "Left Behind"
-]
+],
+"dimg": {
+"Left Behind": "miss:2026-11-08"
+}
 },
 "110477": {
 "avg": 17,
 "dlc": [
 "Bring Down the Sky",
 "Pinnacle Station"
-]
+],
+"chk": "2026-11-08",
+"dimg": {
+"Bring Down the Sky": "miss:2026-11-08",
+"Pinnacle Station": "miss:2026-11-08"
+}
 },
 "111333": {
 "avg": 7.8,
@@ -154,13 +222,21 @@
 "avg": 8,
 "dlc": [
 "Path to War"
-]
+],
+"chk": "2026-11-08",
+"dimg": {
+"Path to War": "covers/d/112129_path-to-war.jpg"
+}
 },
 "112219": {
 "avg": 3.4,
 "dlc": [
 "Inheritance"
-]
+],
+"chk": "2026-11-08",
+"dimg": {
+"Inheritance": "covers/d/112219_inheritance.jpg"
+}
 },
 "112930": {
 "avg": 6.1,
@@ -199,7 +275,8 @@
 "chk": "2026-11-08"
 },
 "114574": {
-"avg": 9.1
+"avg": 9.1,
+"chk": "2026-11-08"
 },
 "115744": {
 "avg": 9.2,
@@ -211,7 +288,12 @@
 "Nightmare in North Point",
 "The Year of the Snake",
 "Zodiac Tournament"
-]
+],
+"dimg": {
+"Nightmare in North Point": "covers/d/116121_nightmare-in-north-point.jpg",
+"The Year of the Snake": "miss:2026-11-08",
+"Zodiac Tournament": "covers/d/116121_zodiac-tournament.jpg"
+}
 },
 "116900": {
 "avg": 20.6,
@@ -222,13 +304,20 @@
 "dlc": [
 "RAAM's Shadow"
 ],
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"dimg": {
+"RAAM's Shadow": "miss:2026-11-08"
+}
 },
 "117817": {
 "avg": 17.6,
 "dlc": [
 "Undead Nightmare"
-]
+],
+"chk": "2026-11-08",
+"dimg": {
+"Undead Nightmare": "covers/d/117817_undead-nightmare.jpg"
+}
 },
 "117831": {
 "avg": 27,
@@ -236,13 +325,19 @@
 "The Lost and Damned",
 "The Ballad of Gay Tony"
 ],
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"dimg": {
+"The Lost and Damned": "covers/d/117831_the-lost-and-damned.jpg",
+"The Ballad of Gay Tony": "covers/d/117831_the-ballad-of-gay-tony.jpg"
+}
 },
 "117835": {
-"avg": 50.8
+"avg": 50.8,
+"chk": "2026-11-08"
 },
 "118501": {
-"avg": 12.3
+"avg": 12.3,
+"chk": "2026-11-08"
 },
 "118530": {
 "avg": 6.4
@@ -252,7 +347,10 @@
 "dlc": [
 "Justine"
 ],
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"dimg": {
+"Justine": "miss:2026-11-08"
+}
 },
 "120192": {
 "avg": 1.5
@@ -262,7 +360,10 @@
 "dlc": [
 "Phantom Liberty"
 ],
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"dimg": {
+"Phantom Liberty": "covers/d/120722_phantom-liberty.jpg"
+}
 },
 "120728": {
 "avg": 7.4
@@ -273,7 +374,11 @@
 "Echoes of the Fallen",
 "The Rising Tide"
 ],
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"dimg": {
+"Echoes of the Fallen": "covers/d/121340_echoes-of-the-fallen.jpg",
+"The Rising Tide": "covers/d/121340_the-rising-tide.jpg"
+}
 },
 "123119": {
 "avg": 18.3,
@@ -281,7 +386,11 @@
 "Crew Expendable",
 "Last Survivor"
 ],
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"dimg": {
+"Crew Expendable": "covers/d/123119_crew-expendable.jpg",
+"Last Survivor": "covers/d/123119_last-survivor.jpg"
+}
 },
 "123796": {
 "avg": 61.2
@@ -291,7 +400,10 @@
 "dlc": [
 "The Forsaken Hollows"
 ],
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"dimg": {
+"The Forsaken Hollows": "covers/d/124925_the-forsaken-hollows.jpg"
+}
 },
 "125845": {
 "avg": 12.7,
@@ -303,7 +415,16 @@
 "The Path Home",
 "The Serpent's Heart",
 "The Grand Caiman"
-]
+],
+"dimg": {
+"The Forge": "covers/d/125845_the-forge.jpg",
+"The Pillar": "covers/d/125845_the-pillar.jpg",
+"The Nightmare": "covers/d/125845_the-nightmare.jpg",
+"The Price of Survival": "covers/d/125845_the-price-of-survival.jpg",
+"The Path Home": "covers/d/125845_the-path-home.jpg",
+"The Serpent's Heart": "covers/d/125845_the-serpent-s-heart.jpg",
+"The Grand Caiman": "covers/d/125845_the-grand-caiman.jpg"
+}
 },
 "125927": {
 "avg": 49,
@@ -315,10 +436,15 @@
 "The Signal",
 "The Writer"
 ],
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"dimg": {
+"The Signal": "miss:2026-11-08",
+"The Writer": "miss:2026-11-08"
+}
 },
 "130796": {
-"avg": 12.8
+"avg": 12.8,
+"chk": "2026-11-08"
 },
 "130801": {
 "avg": 6.1,
@@ -340,7 +466,17 @@
 "The Stone Prisoner",
 "Warden's Keep"
 ],
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"dimg": {
+"Awakening": "covers/d/134115_awakening.jpg",
+"Witch Hunt": "miss:2026-11-08",
+"Leliana's Song": "miss:2026-11-08",
+"The Golems of Amgarrak": "miss:2026-11-08",
+"Return to Ostagar": "miss:2026-11-08",
+"The Darkspawn Chronicles": "miss:2026-11-08",
+"The Stone Prisoner": "miss:2026-11-08",
+"Warden's Keep": "miss:2026-11-08"
+}
 },
 "134669": {
 "avg": 12.6,
@@ -348,7 +484,12 @@
 "The Heist and the Hazardous",
 "Doc Ketchum's Murderous Mischief",
 "Sabotage Under the Sun"
-]
+],
+"dimg": {
+"The Heist and the Hazardous": "covers/d/134669_the-heist-and-the-hazardous.jpg",
+"Doc Ketchum's Murderous Mischief": "miss:2026-11-08",
+"Sabotage Under the Sun": "miss:2026-11-08"
+}
 },
 "134739": {
 "avg": 29.3,
@@ -359,7 +500,10 @@
 "Episode INTERmission"
 ],
 "avg": 32.3,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"dimg": {
+"Episode INTERmission": "miss:2026-11-08"
+}
 },
 "138994": {
 "dlc": [
@@ -368,7 +512,12 @@
 "Lord of Thunder"
 ],
 "avg": 26.5,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"dimg": {
+"Hellfire Knight": "covers/d/138994_hellfire-knight.jpg",
+"Frozen Empress": "covers/d/138994_frozen-empress.jpg",
+"Lord of Thunder": "covers/d/138994_lord-of-thunder.jpg"
+}
 },
 "139953": {
 "dlc": [
@@ -377,7 +526,12 @@
 "River of Blood"
 ],
 "chk": "2026-11-08",
-"avg": 12.1
+"avg": 12.1,
+"dimg": {
+"Tunnels of Terror": "covers/d/139953_tunnels-of-terror.jpg",
+"Children of the Worm": "covers/d/139953_children-of-the-worm.jpg",
+"River of Blood": "covers/d/139953_river-of-blood.jpg"
+}
 },
 "149525": {
 "avg": 15.3
@@ -387,7 +541,10 @@
 "dlc": [
 "Shadow of the Erdtree"
 ],
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"dimg": {
+"Shadow of the Erdtree": "covers/d/149672_shadow-of-the-erdtree.jpg"
+}
 },
 "152183": {
 "avg": 3.6,
@@ -397,24 +554,34 @@
 "avg": 7.2,
 "dlc": [
 "Wages of Sin"
-]
+],
+"dimg": {
+"Wages of Sin": "covers/d/156496_wages-of-sin.jpg"
+}
 },
 "159647": {
 "dlc": [
 "Part IV: Nirvana"
 ],
 "chk": "2026-11-08",
-"avg": 7
+"avg": 7,
+"dimg": {
+"Part IV: Nirvana": "miss:2026-11-08"
+}
 },
 "165097": {
 "avg": 7.4,
 "dlc": [
 "Team Sabre"
 ],
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"dimg": {
+"Team Sabre": "covers/d/165097_team-sabre.jpg"
+}
 },
 "166131": {
-"avg": 8.6
+"avg": 8.6,
+"chk": "2026-11-08"
 },
 "176417": {
 "avg": 6.1
@@ -429,24 +596,32 @@
 "dlc": [
 "Pigsy's Perfect 10"
 ],
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"dimg": {
+"Pigsy's Perfect 10": "miss:2026-11-08"
+}
 },
 "195471": {
 "dlc": [
 "Dark Arisen"
 ],
 "avg": 36.6,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"dimg": {
+"Dark Arisen": "covers/d/195471_dark-arisen.jpg"
+}
 },
 "198870": {
 "avg": 8.7,
 "chk": "2026-11-08"
 },
 "362263": {
-"avg": 8.1
+"avg": 8.1,
+"chk": "2026-11-08"
 },
 "414254": {
-"avg": 8.3
+"avg": 8.3,
+"chk": "2026-11-08"
 },
 "416842": {
 "avg": 10,
@@ -508,14 +683,25 @@
 "chk": "2026-11-08"
 },
 "152184": {
-"avg": 4.1
+"avg": 4.1,
+"chk": "2026-11-08",
+"dlc": [
+"Prologue"
+],
+"dimg": {
+"Prologue": "covers/d/152184_prologue.jpg"
+}
 },
-"98523": {},
+"98523": {
+"chk": "2026-11-08"
+},
 "140733": {
-"avg": 7.3
+"avg": 7.3,
+"chk": "2026-11-08"
 },
 "1794162993282": {
-"avg": 22.1
+"avg": 22.1,
+"chk": "2026-11-08"
 },
 "421183": {
 "avg": 12.9
@@ -540,5 +726,8 @@
 },
 "130765": {
 "avg": 8
+},
+"1794165211319": {
+"chk": "2026-11-08"
 }
 }
