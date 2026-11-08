@@ -596,7 +596,7 @@ document.addEventListener('load',e=>{if(e.target.tagName==='IMG')imgLoads++},tru
 /* ---------- data model ---------- */
 const AST={1:['Watching','var(--s1)'],2:['Completed','var(--s2)'],3:['On-Hold','var(--s3)'],4:['Dropped','var(--s4)'],6:['Plan to Watch','var(--s6)']};
 const TAGS=D.animeTags||{};
-const anime=D.anime.map(a=>({tags:TAGS[a[0]]||'',id:a[0],t:a[1],alt:a[2],st:a[3],sc:a[4],ep:a[5],eps:a[6],type:a[7],img:a[8]?`https://cdn.myanimelist.net/images/anime/${a[8]}.jpg`:'',y:a[9],g:a[10].map(i=>D.animeGenres[i]),mal:a[11],up:a[12],n:norm(a[1]+' '+a[2])}));
+const anime=D.anime.map(a=>({tags:TAGS[a[0]]||'',id:a[0],t:a[1],alt:a[2],st:a[3],sc:a[4],ep:a[5],eps:a[6],type:a[7],img:a[8]?`https://cdn.myanimelist.net/images/anime/${a[8]}.jpg`:'',y:a[9],g:a[10].map(i=>D.animeGenres[i]),mal:a[11],up:a[12],rw:a[13]||0,rwing:a[14]||0,n:norm(a[1]+' '+a[2])}));
 const filmByKey={};
 const films=D.films.map((f,i)=>{const o=Object.assign({},f,{i,logs:f.n,n:norm(f.t)});filmByKey[norm(f.t)+'|'+f.y]=o;return o});
 const filmUri={};films.forEach(f=>filmUri[f.u]=f);
@@ -690,7 +690,7 @@ function rOverview(){
   </section>
   <div style="margin-top:16px">${wallTop}</div>
   <section class="grid stats" style="margin-top:2px">
-    <a class="box stat" href="#anime" style="--c:var(--anime)">${art('anime')}<span class="ic">${ico('anime')}</span><div class="lab"><span>Anime</span><span>${scored.length?avg(scored.map(a=>a.sc)).toFixed(2)+' avg':''}</span></div><div class="num">${fmt(anime.length)}</div><div class="sub">${fmt(epsW)} episodes watched</div>
+    <a class="box stat" href="#anime" style="--c:var(--anime)">${art('anime')}<span class="ic">${ico('anime')}</span><div class="lab"><span>Anime</span><span>${scored.length?avg(scored.map(a=>a.sc)).toFixed(2)+' avg':''}</span></div><div class="num">${fmt(anime.length)}</div><div class="sub">${fmt(epsW)} episodes watched · ${fmt(anime.reduce((s,a)=>s+a.rw,0))} rewatches</div>
       ${statusBar([1,2,3,4,6].map(s=>[AST[s][0],ac(s),AST[s][1]]))}</a>
     <a class="box stat" href="#manga" style="--c:var(--manga)">${art('manga')}<span class="ic">${ico('manga')}</span><div class="lab"><span>Manga</span><span>${(()=>{const s=manga.filter(m=>m.sc);return s.length?avg(s.map(m=>m.sc)).toFixed(2)+' avg':''})()}</span></div><div class="num">${fmt(manga.length)}</div><div class="sub">${fmt(manga.reduce((s,m)=>s+m.ch,0))} chapters read</div>
       ${statusBar([1,2,3,4,6].map(s=>[MST[s][0],manga.filter(m=>m.st===s).length,MST[s][1]]))}</a>
@@ -1174,17 +1174,17 @@ function editMal(kind,x,fromSearch){
   ${fld('m_st','Status',String(x.st||6),'select:'+[1,2,3,4,6].map(k=>k+'='+S[k][0]).join('|'))}
   ${fld('m_sc','Your score (0 = none)',x.sc||0,'number','min="0" max="10" step="1"')}
   ${isA?fld('m_ep','Episodes watched'+(tot?' (of '+tot+')':''),x.ep||0,'number','min="0"'):fld('m_ch','Chapters read'+(tot?' (of '+tot+')':''),x.ch||0,'number','min="0"')}
-  ${isA?'':fld('m_vol','Volumes read',x.vol||0,'number','min="0"')}
+  ${isA?fld('m_rw','Times rewatched',x.rw||0,'number','min="0"'):fld('m_vol','Volumes read',x.vol||0,'number','min="0"')}
   ${fld('m_tags','Your note (MAL tags)',x.tags||'','textarea')}
   </div><div class="small" id="m_err" style="color:var(--s4)"></div>
   <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="btn pri" id="m_save">${isNew?'Add to my list':'Save to MAL'}</button>${isNew?'':'<button class="btn" id="m_del" style="margin-left:auto;color:var(--s4)">Remove from list</button>'}</div></div>`);
   const sel=$('#m_st');sel.onchange=()=>{if(sel.value==='2'&&tot){const f=$(isA?'#m_ep':'#m_ch');if(f)f.value=tot}};
   $('#m_save').onclick=async()=>{
     const st=+gv('m_st'),sc=+gv('m_sc')||0;const body={status:(isA?AS:MS)[st],score:sc,tags:gv('m_tags')};
-    if(isA)body.num_watched_episodes=+gv('m_ep')||0;else{body.num_chapters_read=+gv('m_ch')||0;body.num_volumes_read=+gv('m_vol')||0}
+    if(isA){body.num_watched_episodes=+gv('m_ep')||0;body.num_times_rewatched=+gv('m_rw')||0}else{body.num_chapters_read=+gv('m_ch')||0;body.num_volumes_read=+gv('m_vol')||0}
     $('#m_save').textContent='Saving…';
     try{await malSave(kind,x.id||x.malId,body);
-      if(!isNew){Object.assign(x,{st,sc,tags:body.tags},isA?{ep:body.num_watched_episodes,up:Math.floor(Date.now()/1000)}:{ch:body.num_chapters_read,vol:body.num_volumes_read})}
+      if(!isNew){Object.assign(x,{st,sc,tags:body.tags},isA?{ep:body.num_watched_episodes,rw:body.num_times_rewatched,up:Math.floor(Date.now()/1000)}:{ch:body.num_chapters_read,vol:body.num_volumes_read})}
       closeM();render();toast('Saved to MyAnimeList. The site catches up in a couple of minutes.')}
     catch(e){$('#m_err').textContent=e.message;$('#m_save').textContent=isNew?'Add to my list':'Save to MAL'}
   };
@@ -1239,9 +1239,9 @@ const cmpT=(a,b)=>a.t.localeCompare(b.t);
 /* ---------- anime ---------- */
 function rAnime(){
   const types=[...new Set(anime.map(a=>a.type))].sort();
-  listPage({key:'anime',title:'Anime list',bst:()=>[[fmt(anime.length),'entries'],[fmt(anime.reduce((s,a)=>s+(a.st===2?(a.eps||a.ep):a.ep),0)),'episodes'],[avg(anime.filter(a=>a.sc).map(a=>a.sc)).toFixed(2),'mean score']],sub:`${fmt(anime.length)} entries · from MyAnimeList · updated ${fdate(D.generated)}`,
+  listPage({key:'anime',title:'Anime list',bst:()=>[[fmt(anime.length),'entries'],[fmt(anime.reduce((s,a)=>s+(a.st===2?(a.eps||a.ep):a.ep),0)),'episodes'],[fmt(anime.reduce((s,a)=>s+a.rw,0)),'rewatches'],[avg(anime.filter(a=>a.sc).map(a=>a.sc)).toFixed(2),'mean score']],sub:`${fmt(anime.length)} entries · from MyAnimeList · updated ${fdate(D.generated)}`,
     items:()=>anime,
-    tabs:[['all','All anime',()=>true],['1','Watching',a=>a.st===1],['2','Completed',a=>a.st===2],['3','On-Hold',a=>a.st===3],['4','Dropped',a=>a.st===4],['6','Plan to Watch',a=>a.st===6]],
+    tabs:[['all','All anime',()=>true],['1','Watching',a=>a.st===1],['2','Completed',a=>a.st===2],['3','On-Hold',a=>a.st===3],['4','Dropped',a=>a.st===4],['6','Plan to Watch',a=>a.st===6],['rw','Rewatched',a=>a.rw>0||a.rwing]],
     sorts:[['updated','Last updated'],['score','Your score'],['mal','MAL score'],['title','Title'],['year','Year (newest)'],['eps','Episodes']],
     extra:S=>`<select id="ltype" aria-label="Type"><option value="">All types</option>${types.map(t=>`<option ${S.type===t?'selected':''}>${esc(t)}</option>`).join('')}</select>`,
     bindExtra:(S,body)=>{$('#ltype').onchange=e=>{S.type=e.target.value;body()}},
@@ -1255,7 +1255,7 @@ function rAnime(){
 function openAnime(a){
   modal('anime','Anime',`${cover(a.t,a.img)}<div><h2>${esc(a.t)}</h2>${a.alt?`<div class="muted">${esc(a.alt)}</div>`:''}
   <div class="bigscore"><div><b>${a.sc||'–'}</b><small>Your score</small></div><div><b>${a.mal?a.mal.toFixed(2):'–'}</b><small>MAL score</small></div><div><b style="color:${AST[a.st][1]}">■</b><small>${AST[a.st][0]}</small></div></div>
-  <div class="kv"><div>Type</div><div>${esc(a.type)}</div><div>Episodes</div><div>${a.st===2&&a.eps?a.eps:a.ep} watched of ${a.eps||'?'}</div><div>Aired</div><div>${a.y||'–'}</div><div>Genres</div><div>${a.g.map(g=>`<span class="tag">${esc(g)}</span>`).join('')||'–'}</div>${a.up?`<div>Updated</div><div>${fdate(new Date(a.up*1000).toISOString())}</div>`:''}</div>
+  <div class="kv"><div>Type</div><div>${esc(a.type)}</div><div>Episodes</div><div>${a.st===2&&a.eps?a.eps:a.ep} watched of ${a.eps||'?'}</div><div>Rewatched</div><div>${a.rw} time${a.rw===1?'':'s'}${a.rwing?' · rewatching now':''}</div><div>Aired</div><div>${a.y||'–'}</div><div>Genres</div><div>${a.g.map(g=>`<span class="tag">${esc(g)}</span>`).join('')||'–'}</div>${a.up?`<div>Updated</div><div>${fdate(new Date(a.up*1000).toISOString())}</div>`:''}</div>
   ${a.tags?`<div class="review" style="--c:var(--anime)">${esc(a.tags)}</div>`:''}
   <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?'<button class="btn pri" id="m_edit">Edit</button>':''}<a class="btn${ED.on?'':' pri'}" href="https://myanimelist.net/anime/${a.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
   const me=$('#m_edit');if(me)me.onclick=()=>editMal('anime',a);

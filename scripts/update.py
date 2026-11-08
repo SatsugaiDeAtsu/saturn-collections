@@ -76,9 +76,37 @@ def mal_list(kind):
     return out
 
 
+def mal_rewatches():
+    """Times rewatched per anime, from the official MAL API (load.json doesn't carry it)."""
+    cid = settings.get('malClientId')
+    if not cid:
+        return None
+    out = {}
+    url = (f'https://api.myanimelist.net/v2/users/{MAL_USER}/animelist'
+           '?fields=list_status%7Bnum_times_rewatched,is_rewatching%7D&limit=1000&nsfw=true')
+    while url:
+        req = urllib.request.Request(url, headers={'User-Agent': UA, 'X-MAL-CLIENT-ID': cid})
+        with urllib.request.urlopen(req, timeout=40) as r:
+            page = json.loads(r.read().decode('utf-8'))
+        for it in page.get('data', []):
+            ls = it.get('list_status') or {}
+            out[it['node']['id']] = (int(ls.get('num_times_rewatched') or 0), 1 if ls.get('is_rewatching') else 0)
+        url = (page.get('paging') or {}).get('next')
+        time.sleep(1)
+    return out
+
+
 # ---------------- MAL anime ----------------
 def update_anime():
     rows = mal_list('anime')
+    old_rw = {a[0]: (a[13], a[14]) for a in site.get('anime', []) if len(a) > 14}
+    try:
+        rw = mal_rewatches()
+    except Exception as e:
+        log('rewatch counts unavailable, keeping previous:', e)
+        rw = None
+    if rw is None:
+        rw = old_rw
     genres, A, tags = [], [], {}
     for a in rows:
         gn = [g['name'] for g in (a.get('genres') or [])]
@@ -95,7 +123,8 @@ def update_anime():
         img = re.sub(r'^.*images/anime/', '', (a.get('anime_image_path') or '').split('?')[0]).replace('.jpg', '')
         A.append([a['anime_id'], title, alt, a['status'], a['score'], a['num_watched_episodes'], a['anime_num_episodes'],
                   a.get('anime_media_type_string') or '', img, year2(a.get('anime_start_date_string')), gi,
-                  float(a.get('anime_score_val') or 0), int(a.get('updated_at') or 0)])
+                  float(a.get('anime_score_val') or 0), int(a.get('updated_at') or 0),
+                  rw.get(a['anime_id'], (0, 0))[0], 1 if a.get('is_rewatching') else rw.get(a['anime_id'], (0, 0))[1]])
         note = '\n'.join(x for x in [str(a.get('tags') or '').strip(), str(a.get('notes') or '').strip()] if x)
         if note:
             tags[str(a['anime_id'])] = note
