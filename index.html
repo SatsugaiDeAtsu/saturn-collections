@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Saturn Collections</title>
 <link rel="icon" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1c0e22">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500&family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
@@ -317,7 +320,8 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .stat .art *{animation:none!important}
 .spot{display:grid;grid-template-columns:180px 1fr;gap:18px;align-items:center;padding:16px 20px;border-top:3px solid var(--gold)}
 .spot .pic{aspect-ratio:3/4;position:relative;overflow:hidden;background:var(--bar)}
-.spot .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:kb 6s ease-in-out}
+.spot .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:fadein .6s ease}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
 @keyframes kb{from{transform:scale(1.08)}to{transform:scale(1)}}
 .spot h2{font-size:28px}
 .spot .dots{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
@@ -384,7 +388,7 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 @keyframes tapn{0%{transform:scale(1)}40%{transform:scale(.95)}100%{transform:scale(1)}}
 .card.tapgold{animation:tapg .6s ease}.card.tapgold .cover.gold::after{opacity:1;animation:cshine .6s ease}
 .card.tap,.couple.tap{animation:tapn .35s ease}
-.banner .ava img{width:132px;height:132px;object-fit:cover;object-position:center 20%;border-radius:50%;border:3px solid #d42f5a;box-shadow:0 0 0 6px rgba(212,47,90,.18),0 0 34px rgba(212,47,90,.45);display:block}
+.banner .ava img{width:140px;height:140px;object-fit:cover;object-position:center 35%;border-radius:50%;border:3px solid #d42f5a;box-shadow:0 0 0 6px rgba(212,47,90,.18),0 0 34px rgba(212,47,90,.45);display:block}
 @media (max-width:640px){.banner .ava img{width:96px;height:96px}}
 .spot{position:relative;overflow:hidden;grid-template-columns:190px 1fr;min-height:300px;color:#fff;background:var(--bar)}
 .spot .blur{position:absolute;inset:-30px;background-size:cover;background-position:center;filter:blur(28px) saturate(1.3);opacity:.55;transform:scale(1.1)}
@@ -395,19 +399,19 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .spot h2{color:#fff}.spot .muted{color:#e6d6ec}.spotnote{color:#f0e2f4}
 .spot .btn{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.3)}
 @media (max-width:640px){.spot{grid-template-columns:120px 1fr}}
-.htiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:16px}
-.htile{position:relative;aspect-ratio:4/5;border:0;padding:0;cursor:pointer;overflow:hidden;background:var(--bar);text-align:left;border-bottom:4px solid var(--c);transition:transform .2s}
+.htiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:16px}
+.htile{position:relative;aspect-ratio:3/4;border:0;padding:0;cursor:pointer;overflow:hidden;background:var(--bar);text-align:left;border-bottom:4px solid var(--c);transition:transform .2s}
 .htile:hover{transform:translateY(-4px)}
 .htile .hbg{position:absolute;inset:0}
-.htile .hbg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 25%;opacity:0;transform:scale(1.08);transition:opacity 1.2s ease,transform 6s ease}
-.htile .hbg img.on{opacity:1;transform:scale(1)}
+.htile .hbg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 25%;opacity:0;transition:opacity 1.2s ease;image-rendering:auto}
+.htile .hbg img.on{opacity:1}
 .htile .hshade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,6,15,.05) 30%,rgba(12,6,15,.92))}
 .htile .hlab{position:absolute;left:0;right:0;bottom:0;padding:14px;color:#fff;display:flex;flex-direction:column;gap:2px}
-.htile .hlab b{font-family:"Space Grotesk";font-size:22px}
+.htile .hlab b{font-family:"Space Grotesk";font-size:18px}
 .htile .hlab small{font-size:11.5px;color:#e3d2ea}
 .htile .hic{width:34px;height:34px;background:var(--c);display:grid;place-items:center;margin-bottom:6px}
 .htile .hic .ico{width:20px;height:20px;color:#fff}
-@media (max-width:900px){.htiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){.htiles{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.htile .hlab{padding:8px}.htile .hlab b{font-size:13px}.htile .hlab small{display:none}.htile .hic{width:24px;height:24px}.htile .hic .ico{width:14px;height:14px}}
 footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:var(--ink3)}
 
 @media (max-width:900px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}}
@@ -567,7 +571,7 @@ const EMBLEM=(s)=>`<svg class="crest" width="${s}" height="${s}" viewBox="0 0 20
 <text font-family="Space Grotesk,sans-serif" font-weight="700" font-size="10" letter-spacing="3" fill="#e9cf8a" opacity=".9"><textPath href="#cArc" startOffset="50%" text-anchor="middle" dy="0">· DE ATSU ·</textPath></text>
 </svg>`;
 function banner(k,title,sub,stats,kicker){
-  return `<section class="banner${k==='overview'?' ovb':''}" style="--c:${HEX[k]}">${artBg(HEX[k],title.length*13,k)}<div class="in">${k==='overview'?`<div class="emb ava"><img src="assets/logo.png" alt=""></div>`:`<div class="bico">${ico(k)}</div>`}<div><div class="kick">${esc(kicker||'Saturn Collections')}</div><h1>${esc(title)}</h1>${sub?`<div class="sub">${sub}</div>`:''}</div>${stats&&stats.length?`<div class="bst">${stats.map(([n,l])=>`<span><b>${n}</b>${esc(l)}</span>`).join('')}</div>`:''}</div></section>`;
+  return `<section class="banner${k==='overview'?' ovb':''}" style="--c:${HEX[k]}">${artBg(HEX[k],title.length*13,k)}<div class="in">${k==='overview'?`<div class="emb ava"><img src="assets/avatar.gif" alt=""></div>`:`<div class="bico">${ico(k)}</div>`}<div><div class="kick">${esc(kicker||'Saturn Collections')}</div><h1>${esc(title)}</h1>${sub?`<div class="sub">${sub}</div>`:''}</div>${stats&&stats.length?`<div class="bst">${stats.map(([n,l])=>`<span><b>${n}</b>${esc(l)}</span>`).join('')}</div>`:''}</div></section>`;
 }
 
 /* ---------- covers ---------- */
@@ -744,7 +748,8 @@ function openManga(m){
   <div class="bigscore"><div><b>${m.sc||'–'}</b><small>Your score</small></div><div><b>${m.mal?m.mal.toFixed(2):'–'}</b><small>MAL score</small></div><div><b style="color:${MST[m.st][1]}">■</b><small>${MST[m.st][0]}</small></div></div>
   <div class="kv"><div>Type</div><div>${esc(m.type)}</div><div>Chapters</div><div>${m.ch} read of ${m.chs||'?'}</div>${m.vols||m.vol?`<div>Volumes</div><div>${m.vol} read of ${m.vols||'?'}</div>`:''}<div>Published</div><div>${m.y||'–'}</div><div>Genres</div><div>${m.g.map(g=>`<span class="tag">${esc(g)}</span>`).join('')||'–'}</div></div>
   ${m.tags?`<div class="review" style="--c:var(--manga)">${esc(m.tags)}</div>`:''}
-  <div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/manga/${m.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
+  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?'<button class="btn pri" id="m_edit">Edit</button>':''}<a class="btn${ED.on?'':' pri'}" href="https://myanimelist.net/manga/${m.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
+  const me=$('#m_edit');if(me)me.onclick=()=>editMal('manga',m);
 }
 
 /* ---------- books ---------- */
@@ -872,6 +877,7 @@ function rHof(){
     openMal(it)});
 }
 let tileT=null;
+const BIG=u=>u&&/cdn\.myanimelist\.net\/images\/(anime|manga|characters|voiceactors)\/\d+\/\d+\.jpg$/.test(u)?u.replace(/\.jpg$/,'l.jpg'):u;
 function hofTiles(){
   const H=D.hof,F=H.malFavs;const ci=c=>{const [kid]=c.split('~');return HIMG(kid[0],+kid.slice(1))};
   const imgsA=[...F.anime.map(([id])=>{const a=anime.find(x=>x.id===id);return a?a.img:HIMG('a',id)}),...anime.filter(a=>a.sc===10).map(a=>a.img)];
@@ -893,7 +899,7 @@ function hofTiles(){
     ['films','Films','var(--film)','films',imgsF,`Top 4 · ${D.filmLists.length} lists · ${films.filter(f=>f.r===5).length} five stars`],
     ['games','Games','var(--game)','games',imgsG,`${D.gvFav.length} favourites`],
     ['books','Books','var(--book)','books',imgsB,`${books.filter(b=>b.r>=5).length} five stars`]
-  ].map(([k,l,c,ic,imgs,sub])=>({k,l,c,ic,imgs:[...new Set(imgs.filter(Boolean))].map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(p=>p[1]).slice(0,12),sub}));
+  ].map(([k,l,c,ic,imgs,sub])=>({k,l,c,ic,imgs:[...new Set(imgs.filter(Boolean).map(BIG))].map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(p=>p[1]).slice(0,12),sub}));
 }
 function rHofHome(){
   const A=D.hof.about;const T=hofTiles();
@@ -927,7 +933,7 @@ function spotList(){
 }
 function spotlight(){const L=spotList();if(!L.length)return'';const c=L[spotI%L.length];
   const href=c.k&&!c.own?`https://myanimelist.net/${MALK[c.k]}/${c.id}`:'';
-  return `<section class="box spot" id="spot">${c.img?`<div class="blur" style="background-image:url('${esc(c.img)}')"></div>`:''}<div class="pic">${c.img?`<img src="${esc(c.img)}" alt="" referrerpolicy="no-referrer">`:cover(c.t,'')}</div><div><div class="kick small" style="text-transform:uppercase;letter-spacing:.12em;font-weight:800;color:var(--gold)">Spotlight · ${esc(c.label)}</div><h2>${esc(c.t)}</h2>${c.sub?`<div class="muted">${esc(c.sub)}</div>`:''}${c.note?`<p class="spotnote">${esc(c.note.length>220?c.note.slice(0,220)+'…':c.note)}</p>`:''}<div class="dots">${L.map((_,i)=>`<button aria-label="Show ${esc(L[i].t)}" data-spot="${i}" class="${i===spotI%L.length?'on':''}"></button>`).join('')}</div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn" id="spotopen">Open</button><button class="btn" id="spotnext">Next →</button>${href?`<a class="btn" href="${href}" target="_blank" rel="noopener">MAL ↗</a>`:''}</div></div></section>`}
+  return `<section class="box spot" id="spot">${c.img?`<div class="blur" style="background-image:url('${esc(c.img)}')"></div>`:''}<div class="pic">${c.img?`<img src="${esc(BIG(c.img))}" alt="" referrerpolicy="no-referrer">`:cover(c.t,'')}</div><div><div class="kick small" style="text-transform:uppercase;letter-spacing:.12em;font-weight:800;color:var(--gold)">Spotlight · ${esc(c.label)}</div><h2>${esc(c.t)}</h2>${c.sub?`<div class="muted">${esc(c.sub)}</div>`:''}${c.note?`<p class="spotnote">${esc(c.note.length>220?c.note.slice(0,220)+'…':c.note)}</p>`:''}<div class="dots">${L.map((_,i)=>`<button aria-label="Show ${esc(L[i].t)}" data-spot="${i}" class="${i===spotI%L.length?'on':''}"></button>`).join('')}</div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn" id="spotopen">Open</button><button class="btn" id="spotnext">Next →</button>${href?`<a class="btn" href="${href}" target="_blank" rel="noopener">MAL ↗</a>`:''}</div></div></section>`}
 function startSpot(){clearInterval(spotT);const bind=()=>{document.querySelectorAll('[data-spot]').forEach(b=>b.onclick=()=>{spotI=+b.dataset.spot;swap();startSpot()});
     const L=spotList(),c=L[spotI%L.length];const o=$('#spotopen');if(o)o.onclick=()=>{if(c.own)return c.k==='a'?openAnime(c.own):openManga(c.own);if(c.film)return openFilm(c.film);if(c.book)return openBook(c.book);if(c.game)return openGame(c.game);openMal({k:c.k,id:c.id,name:c.t})};
     const n=$('#spotnext');if(n)n.onclick=()=>{spotI++;swap();startSpot()}};
@@ -957,6 +963,7 @@ function editSetup(){
   <p class="muted" style="margin:6px 0 12px">Paste your GitHub access token. It's saved only in this browser on this device and is sent only to GitHub.</p>
   <input id="tok" type="password" placeholder="github_pat_..." style="width:100%;padding:10px;border:1px solid var(--line2);background:var(--panel)" value="">
   <div id="tokerr" class="small" style="color:var(--s4);margin-top:6px"></div>
+  <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--line)"><b>MyAnimeList</b><p class="muted small" style="margin:4px 0 8px">${MALA.on?'Connected. Anime and manga edits go straight to MAL.':'Connect once so anime and manga edits save to MAL.'}</p><button class="btn" id="malc">${MALA.on?'Reconnect MAL':'Connect MAL'}</button>${MALA.on?' <button class="btn" id="malx">Disconnect</button>':''}</div>
   <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn pri" id="toksave">Save and turn on</button>${ED.token?'<button class="btn" id="tokoff">Turn off editing</button><button class="btn" id="tokdel">Forget token</button>':''}</div></div>`);
   $('#toksave').onclick=async()=>{const v=$('#tok').value.trim()||ED.token;if(!v){$('#tokerr').textContent='Paste a token first.';return}
     $('#tokerr').textContent='Checking…';
@@ -964,6 +971,7 @@ function editSetup(){
     if(!r||!r.ok){$('#tokerr').textContent='That token did not work for saturn-collections.';return}
     const j=await r.json();if(!j.permissions||!j.permissions.push){$('#tokerr').textContent='The token works but cannot save. Give it Contents: read and write.';return}
     ED.token=v;ED.on=true;closeM();syncEditBtn();render();toast('Editing is on')};
+  $('#malc').onclick=malConnect;const mx=$('#malx');if(mx)mx.onclick=()=>{MALA.t=null;closeM();toast('MAL disconnected on this device')};
   const off=$('#tokoff');if(off)off.onclick=()=>{ED.on=false;closeM();syncEditBtn();render()};
   const del=$('#tokdel');if(del)del.onclick=()=>{ED.token='';ED.on=false;closeM();syncEditBtn();render();toast('Token removed from this browser')};
 }
@@ -1054,7 +1062,7 @@ function startQuotes(){
   const show=()=>{const el=$('#quote');if(!el)return clearInterval(quoteT);const q=Q[quoteI%Q.length];quoteI++;
     el.classList.remove('in','out','q-m','q-l');void el.offsetWidth;const L=q.t.length;if(L>260)el.classList.add('q-l');else if(L>120)el.classList.add('q-m');
     el.innerHTML=`<span class="qm">“</span>${esc(q.t)}<span class="qm">”</span>${q.by?`<span class="qby">— ${esc(q.by)}</span>`:''}`;el.classList.add('in')};
-  const next=()=>{const el=$('#quote');if(!el||route!=='overview')return;const q=Q[(quoteI)%Q.length];const ms=Math.min(18000,5000+q.t.length*35);quoteT=setTimeout(()=>{const e2=$('#quote');if(!e2||route!=='overview')return;e2.classList.add('out');setTimeout(()=>{show();next()},600)},ms)};
+  const next=()=>{const el=$('#quote');if(!el||route!=='overview')return;const q=Q[(quoteI)%Q.length];const ms=Math.min(18000,5000+q.t.length*35)+3000;quoteT=setTimeout(()=>{const e2=$('#quote');if(!e2||route!=='overview')return;e2.classList.add('out');setTimeout(()=>{show();next()},600)},ms)};
   clearTimeout(quoteT);show();quoteI--;next();quoteI++;
 }
 function editQuotes(){
@@ -1098,6 +1106,57 @@ function rWrapped(){
   <div class="note">Anime are counted by the date you last updated them on MAL, so a show finished earlier but updated this year shows up here.</div>`;
   document.querySelectorAll('[data-y]').forEach(b=>b.onclick=()=>{wrYear=+b.dataset.y;rWrapped()});
   document.querySelectorAll('[data-wr]').forEach(el=>el.onclick=()=>best[+el.dataset.wr].o());
+}
+
+/* ---------- MAL connection (through the Cloudflare helper) ---------- */
+const SITE_URL='https://satsugaideatsu.github.io/saturn-collections/';
+const MALA={get t(){return store.get('mal_auth',null)},set t(v){store.set('mal_auth',v)},get on(){return !!(this.t&&this.t.refresh_token)}};
+function malConnect(){
+  const v=Array.from(crypto.getRandomValues(new Uint8Array(48)),b=>('0'+b.toString(16)).slice(-2)).join('').slice(0,96);
+  const st=Math.random().toString(36).slice(2);store.set('mal_pkce',{v,st});
+  location.href=`https://myanimelist.net/v1/oauth2/authorize?response_type=code&client_id=${SET.malClientId}&code_challenge=${v}&code_challenge_method=plain&state=${st}&redirect_uri=${encodeURIComponent(SITE_URL)}`;
+}
+async function malFinish(){
+  const p=new URLSearchParams(location.search);const code=p.get('code'),st=p.get('state');if(!code)return;
+  history.replaceState(null,'',location.pathname+location.hash);
+  const pk=store.get('mal_pkce',null);if(!pk||pk.st!==st){toast('MAL sign-in expired. Try again.',true);return}
+  try{const r=await fetch(SET.workerUrl+'/token',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code,code_verifier:pk.v,redirect_uri:SITE_URL})});const j=await r.json();
+    if(!r.ok||!j.access_token)throw new Error(j.message||j.error||'MAL said no');MALA.t={...j,exp:Date.now()+(j.expires_in-60)*1000};toast('MyAnimeList connected')}
+  catch(e){toast('MAL sign-in failed: '+e.message,true)}
+}
+async function malToken(){const a=MALA.t;if(!a)throw new Error('Connect MAL first (pencil button).');if(Date.now()<a.exp)return a.access_token;
+  const r=await fetch(SET.workerUrl+'/token',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({refresh_token:a.refresh_token})});const j=await r.json();
+  if(!r.ok||!j.access_token){MALA.t=null;throw new Error('MAL sign-in expired. Connect again.')}MALA.t={...j,exp:Date.now()+(j.expires_in-60)*1000};return j.access_token}
+async function malSave(kind,id,body,del){
+  const tok=await malToken();
+  const r=await fetch(`${SET.workerUrl}/list/${kind}/${id}`,{method:del?'DELETE':'PATCH',headers:{'Content-Type':'application/json',Authorization:'Bearer '+tok},body:del?undefined:JSON.stringify(body)});
+  if(!r.ok){const j=await r.json().catch(()=>({}));throw new Error(j.message||j.error||('MAL error '+r.status))}
+  if(ED.token){ghSave('data/mal_touch.json',{t:Date.now()},'Refresh after MAL edit').catch(()=>{})}
+}
+const AS={1:'watching',2:'completed',3:'on_hold',4:'dropped',6:'plan_to_watch'},MS={1:'reading',2:'completed',3:'on_hold',4:'dropped',6:'plan_to_read'};
+function editMal(kind,x,fromSearch){
+  const isA=kind==='anime';const S=isA?AST:MST;const isNew=!x||!x.st;x=x||{};
+  const tot=isA?x.eps:x.chs;
+  modal(kind,(isNew?'Add to MAL · ':'Edit on MAL · ')+(isA?'Anime':'Manga'),`<div style="grid-column:1/-1"><h2>${esc(x.t||'')}</h2><div class="eform">
+  ${fld('m_st','Status',String(x.st||6),'select:'+[1,2,3,4,6].map(k=>k+'='+S[k][0]).join('|'))}
+  ${fld('m_sc','Your score (0 = none)',x.sc||0,'number','min="0" max="10" step="1"')}
+  ${isA?fld('m_ep','Episodes watched'+(tot?' (of '+tot+')':''),x.ep||0,'number','min="0"'):fld('m_ch','Chapters read'+(tot?' (of '+tot+')':''),x.ch||0,'number','min="0"')}
+  ${isA?'':fld('m_vol','Volumes read',x.vol||0,'number','min="0"')}
+  ${fld('m_tags','Your note (MAL tags)',x.tags||'','textarea')}
+  </div><div class="small" id="m_err" style="color:var(--s4)"></div>
+  <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="btn pri" id="m_save">${isNew?'Add to my list':'Save to MAL'}</button>${isNew?'':'<button class="btn" id="m_del" style="margin-left:auto;color:var(--s4)">Remove from list</button>'}</div></div>`);
+  const sel=$('#m_st');sel.onchange=()=>{if(sel.value==='2'&&tot){const f=$(isA?'#m_ep':'#m_ch');if(f)f.value=tot}};
+  $('#m_save').onclick=async()=>{
+    const st=+gv('m_st'),sc=+gv('m_sc')||0;const body={status:(isA?AS:MS)[st],score:sc,tags:gv('m_tags')};
+    if(isA)body.num_watched_episodes=+gv('m_ep')||0;else{body.num_chapters_read=+gv('m_ch')||0;body.num_volumes_read=+gv('m_vol')||0}
+    $('#m_save').textContent='Saving…';
+    try{await malSave(kind,x.id||x.malId,body);
+      if(!isNew){Object.assign(x,{st,sc,tags:body.tags},isA?{ep:body.num_watched_episodes,up:Math.floor(Date.now()/1000)}:{ch:body.num_chapters_read,vol:body.num_volumes_read})}
+      closeM();render();toast('Saved to MyAnimeList. The site catches up in a couple of minutes.')}
+    catch(e){$('#m_err').textContent=e.message;$('#m_save').textContent=isNew?'Add to my list':'Save to MAL'}
+  };
+  const d=$('#m_del');if(d)d.onclick=async()=>{if(d.dataset.sure!=='1'){d.dataset.sure='1';d.textContent='Tap again to remove';return}
+    try{await malSave(kind,x.id,null,true);const L=isA?anime:manga;const i=L.indexOf(x);if(i>=0)L.splice(i,1);closeM();render();toast('Removed from MyAnimeList')}catch(e){$('#m_err').textContent=e.message}};
 }
 
 /* ---------- generic list page ---------- */
@@ -1165,7 +1224,8 @@ function openAnime(a){
   <div class="bigscore"><div><b>${a.sc||'–'}</b><small>Your score</small></div><div><b>${a.mal?a.mal.toFixed(2):'–'}</b><small>MAL score</small></div><div><b style="color:${AST[a.st][1]}">■</b><small>${AST[a.st][0]}</small></div></div>
   <div class="kv"><div>Type</div><div>${esc(a.type)}</div><div>Episodes</div><div>${a.st===2&&a.eps?a.eps:a.ep} watched of ${a.eps||'?'}</div><div>Aired</div><div>${a.y||'–'}</div><div>Genres</div><div>${a.g.map(g=>`<span class="tag">${esc(g)}</span>`).join('')||'–'}</div>${a.up?`<div>Updated</div><div>${fdate(new Date(a.up*1000).toISOString())}</div>`:''}</div>
   ${a.tags?`<div class="review" style="--c:var(--anime)">${esc(a.tags)}</div>`:''}
-  <div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/anime/${a.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
+  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?'<button class="btn pri" id="m_edit">Edit</button>':''}<a class="btn${ED.on?'':' pri'}" href="https://myanimelist.net/anime/${a.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
+  const me=$('#m_edit');if(me)me.onclick=()=>editMal('anime',a);
 }
 
 /* ---------- films ---------- */
@@ -1293,6 +1353,10 @@ async function detectMode(){
 const OUT={manga:q=>`https://myanimelist.net/manga.php?q=${encodeURIComponent(q)}`,books:q=>`https://www.goodreads.com/search?q=${encodeURIComponent(q)}`,anime:q=>`https://myanimelist.net/anime.php?q=${encodeURIComponent(q)}`,films:q=>`https://letterboxd.com/search/films/${encodeURIComponent(q)}/`,games:q=>`https://www.grouvee.com/search/?q=${encodeURIComponent(q)}`};
 const OUTN={manga:'MyAnimeList',books:'Goodreads',anime:'MyAnimeList',films:'Letterboxd',games:'Grouvee'};
 async function viaApi(kind,q){
+  if((kind==='anime'||kind==='manga')&&SET.workerUrl){
+    const r=await fetch(`${SET.workerUrl}/search?type=${kind}&q=${encodeURIComponent(q)}`).then(r=>r.json());
+    return (r.data||[]).map(({node:n})=>({malId:n.id,t:(n.alternative_titles&&n.alternative_titles.en)||n.title,alt:(n.alternative_titles&&n.alternative_titles.en&&n.alternative_titles.en!==n.title)?n.title:'',y:(n.start_season&&n.start_season.year)||(n.start_date||'').slice(0,4),meta:[(n.media_type||'').toUpperCase().replace('_',' '),n.num_episodes?n.num_episodes+' eps':'',n.num_chapters?n.num_chapters+' ch':'',n.mean?'MAL '+n.mean:''].filter(Boolean).join(' · '),sum:n.synopsis||'',img:n.main_picture&&(n.main_picture.large||n.main_picture.medium),url:`https://myanimelist.net/${kind}/${n.id}`,g:(n.genres||[]).map(g=>g.name)}));
+  }
   if(kind==='manga'){
     const r=await fetch(`https://api.jikan.moe/v4/manga?q=${encodeURIComponent(q)}&limit=16&sfw=true`).then(r=>r.json());
     return (r.data||[]).map(a=>({t:a.title_english||a.title,alt:a.title_english&&a.title_english!==a.title?a.title:'',y:(a.published&&a.published.prop&&a.published.prop.from&&a.published.prop.from.year)||'',meta:[a.type,a.chapters?a.chapters+' ch':'',a.score?'MAL '+a.score:''].filter(Boolean).join(' · '),sum:a.synopsis||'',img:a.images&&a.images.jpg&&a.images.jpg.image_url,url:a.url,g:(a.genres||[]).map(g=>g.name)}));
@@ -1360,15 +1424,17 @@ function showExt(res,kind,q){
   box.querySelectorAll('[data-r]').forEach(el=>el.onclick=()=>{const r=res[+el.dataset.r];const own=ownMatch(kind,r.t,+r.y);if(own){({anime:openAnime,manga:openManga,books:openBook,films:openFilm,games:openGame})[kind](own);return}openExt(kind,r)});
 }
 function openExt(kind,r){
+  setTimeout(()=>{const b=$('#x_add');if(b)b.onclick=()=>editMal(kind,{malId:r.malId,t:r.t,eps:0,chs:0})},0);
   const label={anime:'Anime',manga:'Manga',books:'Book',films:'Film',games:'Game'}[kind];
   modal(kind,label+' · not in your list',`${cover(r.t,r.img)}<div><h2>${esc(r.t)} <span class="muted" style="font-weight:500">${esc(r.y)}</span></h2>${r.alt?`<div class="muted">${esc(r.alt)}</div>`:''}
   <div class="kv">${r.meta?`<div>Details</div><div>${esc(r.meta)}</div>`:''}${r.g&&r.g.length?`<div>Genres</div><div>${r.g.map(g=>`<span class="tag">${esc(g)}</span>`).join('')}</div>`:''}</div>
   ${r.sum?`<div class="review" style="--c:${MED[kind].c}">${esc(r.sum)}</div>`:''}
-  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap"><a class="btn pri" href="${OUT[kind](r.t)}" target="_blank" rel="noopener">Find on ${OUTN[kind]} ↗</a>${r.url?`<a class="btn" href="${esc(r.url)}" target="_blank" rel="noopener">Source ↗</a>`:''}</div></div>`);
+  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on&&r.malId&&(kind==='anime'||kind==='manga')?'<button class="btn pri" id="x_add">+ Add to my list</button>':''}<a class="btn${ED.on&&r.malId?'':' pri'}" href="${r.url&&r.malId?r.url:OUT[kind](r.t)}" target="_blank" rel="noopener">${r.malId?'Open on MyAnimeList':'Find on '+OUTN[kind]} ↗</a>${r.url?`<a class="btn" href="${esc(r.url)}" target="_blank" rel="noopener">Source ↗</a>`:''}</div></div>`);
 }
 
 $('#foot').innerHTML=`Saturn Collections · data from MyAnimeList, Letterboxd, Grouvee and Medium · last refreshed ${fdate(D.generated)}`;
 syncEditBtn();
+malFinish();
 go();
 })();
 </script>

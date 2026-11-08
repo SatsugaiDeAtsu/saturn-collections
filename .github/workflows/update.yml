@@ -7,6 +7,11 @@ on:
   push:
     paths:
       - 'data/imports/**'    # re-run whenever you upload a new export
+      - 'data/mal_touch.json' # re-run right after you edit MAL from the site
+
+concurrency:
+  group: daily-update
+  cancel-in-progress: false
 
 permissions:
   contents: write
