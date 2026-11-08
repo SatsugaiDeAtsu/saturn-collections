@@ -976,7 +976,6 @@ async function ghSave(path,obj,msg){
   }
   throw new Error('GitHub kept reporting a newer version. Try again in a minute.');
 }
-}
 function toast(msg,bad){let el=$('#toast');if(!el){el=document.createElement('div');el.id='toast';document.body.appendChild(el)}el.textContent=msg;el.className='show'+(bad?' bad':'');clearTimeout(toast.t);toast.t=setTimeout(()=>el.className='',bad?7000:3500)}
 function editSetup(){
   modal('overview','Edit mode',`<div style="grid-column:1/-1"><h2>Turn on editing</h2>
