@@ -409,8 +409,10 @@ def update_hof():
     def items(s):
         out = []
         for k, i, txt, img in s['items']:
-            c = info(k, i, img)
-            out.append(f'{k}{i}~{flip(k, c["n"] or txt or "?")}')
+            c = info(k, i, '')
+            name = flip(k, c["n"] or txt or "?").replace('~', ' ')
+            # each link keeps its own picture from the blog, so the same character can appear with different pictures
+            out.append(f'{k}{i}~{name}~{img}' if img else f'{k}{i}~{name}')
         return out
     hon_chr = blog_sections(804802)
     log('blog 804802 sections:', len(hon_chr))

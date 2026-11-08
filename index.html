@@ -794,14 +794,14 @@ const KLAB={a:'Anime',m:'Manga',c:'Character',p:'Person'};
 let hofSeg='home';
 const HOFITEMS=[];
 function hItem(code,extra){
-  const [kid,name]=code.split('~');const k=kid[0],id=+kid.slice(1);
+  const [kid,name,pic]=code.split('~');const k=kid[0],id=+kid.slice(1);
   const own=k==='a'?anime.find(x=>x.id===id):k==='m'?manga.find(x=>x.id===id):null;
-  const idx=HOFITEMS.push({k,id,name,own})-1;
-  return `<div class="card" data-h="${idx}">${cover(own?own.t:name,own&&own.img?own.img:HIMG(k,id),(own&&own.sc?`<span class="badge">${own.sc}</span>`:''))}<div class="meta"><div class="tt">${esc(name)}</div><div class="ss"><span>${esc(extra||KLAB[k])}</span></div></div></div>`;
+  const idx=HOFITEMS.push({k,id,name,own,pic})-1;
+  return `<div class="card" data-h="${idx}">${cover(own?own.t:name,pic||(own&&own.img?own.img:HIMG(k,id)),(own&&own.sc?`<span class="badge">${own.sc}</span>`:''))}<div class="meta"><div class="tt">${esc(name)}</div><div class="ss"><span>${esc(extra||KLAB[k])}</span></div></div></div>`;
 }
 const HIMG=(k,id)=>(D.hofImages||{})[k+id]||'';
 function coupleCards(list){
-  return `<div class="couples">${list.map(([n,show,cs])=>`<div class="couple"><div class="pair">${cs.map(c=>{const [kid,nm]=c.split('~');const idx=HOFITEMS.push({k:kid[0],id:+kid.slice(1),name:nm})-1;return `<div data-h="${idx}" style="cursor:pointer">${cover(nm,HIMG(kid[0],+kid.slice(1)))}</div>`}).join('')}</div><div class="meta"><b>${esc(n)}</b><span>${esc(show)}</span></div></div>`).join('')}</div>`;
+  return `<div class="couples">${list.map(([n,show,cs])=>`<div class="couple"><div class="pair">${cs.map(c=>{const [kid,nm,pic]=c.split('~');const idx=HOFITEMS.push({k:kid[0],id:+kid.slice(1),name:nm,pic})-1;return `<div data-h="${idx}" style="cursor:pointer">${cover(nm,pic||HIMG(kid[0],+kid.slice(1)))}</div>`}).join('')}</div><div class="meta"><b>${esc(n)}</b><span>${esc(show)}</span></div></div>`).join('')}</div>`;
 }
 function rHof(){
   HOFITEMS.length=0;
@@ -826,8 +826,6 @@ function rHof(){
     G('g-malc','MAL favourites','My official top characters and people on MyAnimeList.','star','#8a50e0','https://myanimelist.net/profile/SatsugaiDeAtsu',[
       sec('s-mal-c','Top characters','',grid(F.character.map(([id,t,sub])=>hItem('c'+id+'~'+t,sub)).join(''))),
       sec('s-mal-p','Top people','',grid(F.people.map(([id,t])=>hItem('p'+id+'~'+t,'Person')).join('')))]);
-    G('g-saw','Sawako Kuronuma','My favourite heroine, from Kimi ni Todoke.','star','#d42f5a','https://myanimelist.net/character/6977',[
-      sec('s-saw','Gallery','',`<div class="hgrid sawg">${[...[1,2,3,4,5,6].map(i=>`assets/sawako/${i}.jpg`),'https://cdn.myanimelist.net/images/characters/15/597996.jpg','https://cdn.myanimelist.net/images/characters/4/573345.jpg','https://cdn.myanimelist.net/images/characters/6/120945.jpg','https://cdn.myanimelist.net/images/characters/3/229029.jpg'].map(u=>`<div class="card"><div class="cover"><img src="${u}" alt="Sawako Kuronuma" loading="lazy" referrerpolicy="no-referrer"></div></div>`).join('')}</div>`)]);
     G('g-honc','Honorary favourites','Characters special to me beyond the top 10.','star','#d9a514',blogUrl(804802),
       fil(hon,/character/i).map(([t,d,it],i)=>sec('s-honc-'+i,t.replace(/^Honorary mentions: /,'Honorary mentions · '),d,grid(it.map(c=>hItem(c)).join('')))));
     G('g-chr','Character corner','Parents, battalions, villains, the ones I hate, and the people behind it all.','mask','#24a896',blogUrl(804802),
@@ -886,7 +884,7 @@ function rHof(){
 let tileT=null;
 const BIG=u=>u&&/cdn\.myanimelist\.net\/images\/(anime|manga)\/\d+\/\d+\.jpg$/.test(u)?u.replace(/\.jpg$/,'l.jpg'):u;
 function hofTiles(){
-  const H=D.hof,F=H.malFavs;const ci=c=>{const [kid]=c.split('~');return HIMG(kid[0],+kid.slice(1))};
+  const H=D.hof,F=H.malFavs;const ci=c=>{const [kid,,pic]=c.split('~');return pic||HIMG(kid[0],+kid.slice(1))};
   const imgsA=[...F.anime.map(([id])=>{const a=anime.find(x=>x.id===id);return a?a.img:HIMG('a',id)}),...anime.filter(a=>a.sc===10).map(a=>a.img)];
   const imgsM=[...F.manga.map(([id])=>{const m=manga.find(x=>x.id===id);return m?m.img:HIMG('m',id)}),...manga.filter(m=>m.sc===10).map(m=>m.img)];
   const favF=D.lbFavUris.map(u=>filmUri[u]).filter(Boolean);
@@ -925,7 +923,7 @@ function rHofHome(){
 let spotI=0,spotT=null;
 let SPOT=null;
 function spotList(){
-  if(SPOT)return SPOT;const H=D.hof,P=[];const add=(code,label)=>{const [kid,nm]=code.split('~');const k=kid[0],id=+kid.slice(1);P.push({k,id,t:nm,img:HIMG(k,id),label})};
+  if(SPOT)return SPOT;const H=D.hof,P=[];const add=(code,label)=>{const [kid,nm,pic]=code.split('~');const k=kid[0],id=+kid.slice(1);P.push({k,id,t:nm,img:pic||HIMG(k,id),label})};
   (H.malFavs.character||[]).forEach(([id,t,sub])=>P.push({k:'c',id,t,img:HIMG('c',id),label:'Top 10 characters on MAL',sub}));
   (H.malFavs.people||[]).forEach(([id,t])=>P.push({k:'p',id,t,img:HIMG('p',id),label:'Top 10 people on MAL'}));
   (H.blog[0].secs||[]).forEach(([s,d,it])=>it.forEach(c=>add(c,'Honorary favourites · '+s)));
@@ -947,7 +945,7 @@ function startSpot(){clearInterval(spotT);const bind=()=>{document.querySelector
   const swap=()=>{const el=$('#spot');if(!el)return clearInterval(spotT);const tmp=document.createElement('div');tmp.innerHTML=spotlight();el.replaceWith(tmp.firstElementChild);bind()};
   bind();spotT=setInterval(()=>{if(route!=='hof')return clearInterval(spotT);spotI++;swap()},6000)}
 function openMal(it){
-  modal(it.k==='m'?'manga':'anime',KLAB[it.k],`${cover(it.name,HIMG(it.k,it.id))}<div><h2>${esc(it.name)}</h2><div class="muted">${esc(KLAB[it.k])} on MyAnimeList</div>
+  modal(it.k==='m'?'manga':'anime',KLAB[it.k],`${cover(it.name,it.pic||HIMG(it.k,it.id))}<div><h2>${esc(it.name)}</h2><div class="muted">${esc(KLAB[it.k])} on MyAnimeList</div>
   <div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/${MALK[it.k]}/${it.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
 }
 
