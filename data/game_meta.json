@@ -32,7 +32,8 @@
 "The Assignment": "covers/d/104377_the-assignment.jpg",
 "The Consequence": "covers/d/104377_the-consequence.jpg",
 "The Executioner": "covers/d/104377_the-executioner.jpg"
-}
+},
+"chk": "2026-11-08"
 },
 "104386": {
 "avg": 9.9,
@@ -131,7 +132,8 @@
 "chk": "2026-11-08"
 },
 "108162": {
-"avg": 8
+"avg": 8,
+"chk": "2026-11-08"
 },
 "108496": {
 "avg": 15.9,
@@ -166,7 +168,8 @@
 "dimg": {
 "Hearts of Stone": "covers/d/109380_hearts-of-stone.jpg",
 "Blood and Wine": "covers/d/109380_blood-and-wine.jpg"
-}
+},
+"chk": "2026-11-08"
 },
 "109687": {
 "avg": 30.1,
@@ -199,7 +202,8 @@
 "Dawnguard": "covers/d/109835_dawnguard.jpg",
 "Hearthfire": "covers/d/109835_hearthfire.jpg",
 "Dragonborn": "covers/d/109835_dragonborn.jpg"
-}
+},
+"chk": "2026-11-08"
 },
 "110041": {
 "avg": 14.3,
@@ -208,7 +212,8 @@
 ],
 "dimg": {
 "Left Behind": "covers/d/110041_left-behind.jpg"
-}
+},
+"chk": "2026-11-08"
 },
 "110477": {
 "avg": 17,
@@ -363,7 +368,8 @@
 }
 },
 "120192": {
-"avg": 1.5
+"avg": 1.5,
+"chk": "2026-11-08"
 },
 "120722": {
 "avg": 26.2,
@@ -404,7 +410,8 @@
 }
 },
 "123796": {
-"avg": 61.2
+"avg": 61.2,
+"chk": "2026-11-08"
 },
 "124925": {
 "avg": 28.5,
@@ -547,7 +554,8 @@
 }
 },
 "149525": {
-"avg": 15.3
+"avg": 15.3,
+"chk": "2026-11-08"
 },
 "149672": {
 "avg": 60.1,
@@ -557,7 +565,8 @@
 ],
 "chk": "2026-11-08",
 "dimg": {
-"Shadow of the Erdtree": "covers/d/149672_shadow-of-the-erdtree.jpg"
+"Shadow of the Erdtree": "covers/d/149672_shadow-of-the-erdtree.jpg",
+"Tarnished Pack": "covers/d/149672_tarnished-pack.jpg"
 }
 },
 "152183": {
@@ -754,7 +763,8 @@
 "chk": "2026-11-08"
 },
 "130765": {
-"avg": 8
+"avg": 8,
+"chk": "2026-11-08"
 },
 "1794165211319": {
 "chk": "2026-11-08"
