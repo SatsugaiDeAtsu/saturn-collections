@@ -76,21 +76,22 @@ def mal_list(kind):
     return out
 
 
-def mal_rewatches():
-    """Times rewatched per anime, from the official MAL API (load.json doesn't carry it)."""
+def mal_rewatches(kind='anime'):
+    """Times rewatched/reread per entry, from the official MAL API (load.json doesn't carry it)."""
     cid = settings.get('malClientId')
     if not cid:
         return None
     out = {}
-    url = (f'https://api.myanimelist.net/v2/users/{MAL_USER}/animelist'
-           '?fields=list_status%7Bnum_times_rewatched,is_rewatching%7D&limit=1000&nsfw=true')
+    f1, f2 = ('num_times_rewatched', 'is_rewatching') if kind == 'anime' else ('num_times_reread', 'is_rereading')
+    url = (f'https://api.myanimelist.net/v2/users/{MAL_USER}/{kind}list'
+           f'?fields=list_status%7B{f1},{f2}%7D&limit=1000&nsfw=true')
     while url:
         req = urllib.request.Request(url, headers={'User-Agent': UA, 'X-MAL-CLIENT-ID': cid})
         with urllib.request.urlopen(req, timeout=40) as r:
             page = json.loads(r.read().decode('utf-8'))
         for it in page.get('data', []):
             ls = it.get('list_status') or {}
-            out[it['node']['id']] = (int(ls.get('num_times_rewatched') or 0), 1 if ls.get('is_rewatching') else 0)
+            out[it['node']['id']] = (int(ls.get(f1) or 0), 1 if ls.get(f2) else 0)
         url = (page.get('paging') or {}).get('next')
         time.sleep(1)
     return out
@@ -136,6 +137,14 @@ def update_anime():
 # ---------------- MAL manga ----------------
 def update_manga():
     rows = mal_list('manga')
+    old_rr = {m[0]: (m[14], m[15]) for m in site.get('manga', []) if len(m) > 15}
+    try:
+        rr = mal_rewatches('manga')
+    except Exception as e:
+        log('reread counts unavailable, keeping previous:', e)
+        rr = None
+    if rr is None:
+        rr = old_rr
     allow = set(settings.get('manga_allow', []))
     genres, M, mtags = [], [], {}
     for m in rows:
@@ -157,7 +166,8 @@ def update_manga():
         img = re.sub(r'^.*images/manga/', '', (m.get('manga_image_path') or '').split('?')[0]).replace('.jpg', '')
         M.append([m['manga_id'], title, alt, m['status'], m['score'], m['num_read_chapters'], m['manga_num_chapters'],
                   m['num_read_volumes'], m['manga_num_volumes'], m.get('manga_media_type_string') or '', img,
-                  year2(m.get('manga_start_date_string')), gi, float(m.get('manga_score_val') or 0)])
+                  year2(m.get('manga_start_date_string')), gi, float(m.get('manga_score_val') or 0),
+                  rr.get(m['manga_id'], (0, 0))[0], 1 if m.get('is_rereading') else rr.get(m['manga_id'], (0, 0))[1]])
         note = '\n'.join(x for x in [str(m.get('tags') or '').strip(), str(m.get('notes') or '').strip()] if x)
         if note:
             mtags[str(m['manga_id'])] = note
@@ -199,7 +209,7 @@ def letterboxd_import():
             if wd > F[k].get('wd', ''):
                 F[k]['wd'] = wd
             if e.get('Rewatch') == 'Yes':
-                F[k]['rw'] = 1
+                F[k].setdefault('rwd', []).append(wd)
     for e in rd('reviews.csv'):
         k = key(e['Name'], e['Year'])
         if k in F and e['Review'].strip():
@@ -212,6 +222,8 @@ def letterboxd_import():
         k = key(w['Name'], w['Year'])
         if k not in F:
             F[k] = blank(w, 'l')
+    for f in F.values():
+        f['rw'] = max(len(f.get('rwd', [])), f['n'] - 1, 0)
     site['films'] = list(F.values())
     L = []
     for p in sorted(glob.glob(os.path.join(base, 'lists', '*.csv'))):
@@ -248,6 +260,9 @@ def update_letterboxd():
             films.append(f); idx[k] = f; n += 1
         f['s'] = 'w'
         wd = it.findtext('letterboxd:watchedDate', '', LBNS)
+        if wd and it.findtext('letterboxd:rewatch', '', LBNS) == 'Yes' and wd not in f.setdefault('rwd', []):
+            f['rwd'].append(wd)
+            f['rw'] = max(f.get('rw', 0), len(f['rwd']))
         if wd:
             if wd > f.get('wd', ''):
                 f['wd'] = wd
