@@ -95,7 +95,8 @@
 "Mad Moxxi's Underdome Riot",
 "The Secret Armory of General Knoxx",
 "Claptrap's New Robot Revolution"
-]
+],
+"chk": "2026-11-08"
 },
 "109306": {
 "avg": 6.2,
@@ -105,7 +106,8 @@
 "Naval Strike",
 "Dragon's Teeth",
 "Final Stand"
-]
+],
+"chk": "2026-11-08"
 },
 "109380": {
 "avg": 51.7,
@@ -171,13 +173,15 @@
 "Collection 2",
 "Collection 3: Chaos Pack",
 "Collection 4: Final Assault"
-]
+],
+"chk": "2026-11-08"
 },
 "112932": {
 "avg": 6.9,
 "dlc": [
 "Variety Map Pack"
-]
+],
+"chk": "2026-11-08"
 },
 "112941": {
 "avg": 6,
@@ -185,8 +189,55 @@
 "Onslaught",
 "Devastation",
 "Invasion",
-"Nemesis"
-]
+"Nemesis",
+"Astronaut Special Character",
+"Legend Pack - CPT Price",
+"Legend Pack - Makarov",
+"Legend Pack - Soap",
+"Weapon - The Maverick",
+"Weapon - The Ripper",
+"Squad Pack - Extinction",
+"Squad Pack - Resistance",
+"Drill Instructor VO Pack",
+"Snoop Dogg VO Pack",
+"Extra Slots Pack",
+"Elias Special Character",
+"Hazmat Special Character",
+"Hesh Special Character",
+"Keegan Special Character",
+"Merrick Special Character",
+"Rorke Special Character",
+"Zakhaev Special Character",
+"Bling Character Pack",
+"Blunt Force Character Pack",
+"Inferno Character Pack",
+"1987 Pack",
+"Abstract Pack",
+"Bling Pack",
+"Blunt Force Pack",
+"Circuit Pack",
+"Classic Ghost Pack",
+"Ducky Pack",
+"Extinction Pack",
+"Eyeballs Pack",
+"Fitness Pack",
+"Flags of the World Pack",
+"Heartlands Pack",
+"Heavy Metal Pack",
+"Hex Pack",
+"Hydra Pack",
+"Inferno Pack",
+"Koi Pack",
+"Leopard Pack",
+"Molten Pack",
+"Nebula Pack",
+"Skulls Pack",
+"Space Cats Pack",
+"Spectrum Pack",
+"Tattoo Pack",
+"Unicorn Pack"
+],
+"chk": "2026-11-08"
 },
 "112948": {
 "avg": 7.1,
@@ -194,8 +245,10 @@
 "Revolution",
 "Uprising",
 "Vengeance",
-"Apocalypse"
-]
+"Apocalypse",
+"Nuketown Zombies Map"
+],
+"chk": "2026-11-08"
 },
 "112951": {
 "avg": 7.1,
@@ -203,8 +256,13 @@
 "First Strike",
 "Escalation",
 "Annihilation",
-"Rezurrection"
-]
+"Rezurrection",
+"Rezurrection Content Pack",
+"Annihilation Content Pack",
+"Escalation Content Pack",
+"First Strike Content Pack"
+],
+"chk": "2026-11-08"
 },
 "112979": {
 "avg": 7,
@@ -212,20 +270,24 @@
 "Map Pack 1",
 "Map Pack 2",
 "Map Pack 3"
-]
+],
+"chk": "2026-11-08"
 },
 "112981": {
-"avg": 8
+"avg": 8,
+"chk": "2026-11-08"
 },
 "112988": {
-"avg": 8
+"avg": 8,
+"chk": "2026-11-08"
 },
 "112999": {
 "avg": 6.6,
 "dlc": [
 "Stimulus Package",
 "Resurgence Package"
-]
+],
+"chk": "2026-11-08"
 },
 "114574": {
 "avg": 9.1
@@ -279,7 +341,8 @@
 "avg": 8,
 "dlc": [
 "Justine"
-]
+],
+"chk": "2026-11-08"
 },
 "120192": {
 "avg": 1.5
@@ -310,7 +373,8 @@
 "Safe Haven",
 "Lost Contact",
 "The Trigger"
-]
+],
+"chk": "2026-11-08"
 },
 "123796": {
 "avg": 61.2
@@ -341,7 +405,8 @@
 "dlc": [
 "The Signal",
 "The Writer"
-]
+],
+"chk": "2026-11-08"
 },
 "130796": {
 "avg": 12.8
@@ -354,7 +419,8 @@
 "Armored Kill",
 "Aftermath",
 "End Game"
-]
+],
+"chk": "2026-11-08"
 },
 "131649": {
 "avg": 3.6
@@ -399,8 +465,13 @@
 "dlc": [
 "Tunnels of Terror",
 "Children of the Worm",
-"River of Blood"
-]
+"River of Blood",
+"Annual Pass",
+"Expansion 2: Children of the Worm",
+"Expansion 1: Tunnels of Terror",
+"Expansion 3: River of Blood"
+],
+"chk": "2026-11-08"
 },
 "149525": {
 "avg": 15.3
@@ -423,7 +494,8 @@
 "159647": {
 "dlc": [
 "Part IV: Nirvana"
-]
+],
+"chk": "2026-11-08"
 },
 "165097": {
 "avg": 7.4,
@@ -466,5 +538,39 @@
 "416842": {
 "avg": 10
 },
-"130795": {}
+"130795": {
+"chk": "2026-11-08"
+},
+"341711": {
+"chk": "2026-11-08",
+"dlc": [
+"Season 5 Battlefield Pro - Battlefield 6 and REDSEC"
+]
+},
+"441755": {
+"chk": "2026-11-08"
+},
+"196272": {},
+"134386": {},
+"172182": {},
+"193464": {},
+"257360": {},
+"169913": {},
+"251937": {},
+"137864": {},
+"161501": {},
+"139939": {},
+"132055": {},
+"152184": {},
+"98523": {},
+"140733": {},
+"1794162993282": {},
+"421183": {},
+"142444": {},
+"167144": {},
+"146988": {},
+"140579": {},
+"195642": {},
+"197208": {},
+"130765": {}
 }
