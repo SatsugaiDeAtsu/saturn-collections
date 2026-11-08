@@ -679,56 +679,67 @@ def hltb_search(title, token):
         return json.loads(r.read().decode()).get('data', [])
 
 
+JUNK_DLC = re.compile(r'soundtrack|\bost\b|art ?book|wallpaper|avatar|costume|outfit|\bskins?\b|cosmetic|pre-?order|upgrade|deluxe|season pass|'
+                      r'bundle|currency|coins|points|booster|\bxp\b|sticker|emote|theme|weapon pack|bonus|digital|edition|demo|'
+                      r'starter|cheat|unlock|time saver|supporter|tracks?\b|music|poster|calling card|camo|reticle|operator|blueprint|'
+                      r'tracer|\bkit\b|\bset\b|paint|livery|sound pack|voice pack|horse|mount|pet\b', re.I)
+
+
+def steam_dlcs(title, year):
+    """Story/map DLC names for a game, from Steam (only when the store has the exact game)."""
+    res = json.loads(get('https://store.steampowered.com/api/storesearch/?l=english&cc=us&term=' + urllib.parse.quote(title), tries=2))
+    clean = lambda n: norm(re.sub(r'[™®©]', '', n or ''))
+    hit = next((it for it in res.get('items') or [] if clean(it.get('name')) == norm(title)), None)
+    if not hit:
+        return None
+    info = json.loads(get(f"https://store.steampowered.com/api/appdetails?l=english&appids={hit['id']}", tries=2)).get(str(hit['id']), {}).get('data') or {}
+    rel = (info.get('release_date') or {}).get('date') or ''
+    if year and re.search(r'(19|20)\d\d', rel) and abs(int(re.search(r'(19|20)\d\d', rel).group(0)) - int(year)) > 2:
+        return None  # a remake or a different game with the same name
+    ids = info.get('dlc') or []
+    names = []
+    for i in range(0, len(ids), 30):
+        q = json.dumps({'ids': [{'appid': x} for x in ids[i:i + 30]], 'context': {'language': 'english', 'country_code': 'US'},
+                        'data_request': {}}, separators=(',', ':'))
+        r = json.loads(get('https://api.steampowered.com/IStoreBrowseService/GetItems/v1/?input_json=' + urllib.parse.quote(q), tries=2))
+        for it in r.get('response', {}).get('store_items') or []:
+            n = re.sub(r'[™®©]', '', it.get('name') or '').strip()
+            if n.lower().startswith(title.lower()):
+                n = n[len(title):].strip(' :-–')
+            if n and not JUNK_DLC.search(n):
+                names.append(n)
+        time.sleep(0.5)
+    return names
+
+
 def update_game_meta():
-    """Average length and the DLC list for every game, from HowLongToBeat. Runs through a few games each day,
-    so each game is re-checked about once a week and new DLC shows up on its own. Kept in data/game_meta.json."""
+    """Average length and the DLC list for every game. Runs through a few games each day so each one is re-checked about
+    once a week; new DLC is added on its own (from Steam), nothing you ticked is ever removed. Kept in data/game_meta.json."""
     path = os.path.join(DATA, 'game_meta.json')
     meta = load_json(path, {})
     games = load_json(os.path.join(DATA, 'games.json'), {}).get('games', [])
-    try:
-        req = urllib.request.Request(f'https://howlongtobeat.com/api/search/site/init?t={int(time.time()*1000)}',
-                                     headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/140', 'Referer': 'https://howlongtobeat.com/'})
-        with urllib.request.urlopen(req, timeout=30) as r:
-            token = json.loads(r.read().decode()).get('token')
-    except Exception as e:
-        site['gameMeta'] = meta
-        raise RuntimeError(f'HowLongToBeat not reachable, kept the saved lists ({e})')
     today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
     week_ago = (datetime.now(timezone.utc) - timedelta(days=7)).strftime('%Y-%m-%d')
     order = sorted(games, key=lambda g: (meta.get(str(g['id']), {}).get('chk', ''), g['t']))
     done, added = 0, []
     for g in order:
         m = meta.setdefault(str(g['id']), {})
-        if m.get('chk', '') > week_ago or done >= 25:
+        if m.get('chk', '') > week_ago or done >= 20:
             continue
-        try:
-            res = hltb_search(g['t'], token)
-        except Exception as e:
-            log('hltb failed for', g['t'], e)
-            break
         done += 1
         m['chk'] = today
-        want = norm(g['t'])
-        year = (g.get('rel') or '')[:4]
-        base = [d for d in res if norm(d.get('game_name')) == want] or []
-        if year:
-            base = sorted(base, key=lambda d: abs((d.get('release_world') or 0) - int(year)))
-        if base and base[0].get('comp_main'):
-            m['avg'] = round(base[0]['comp_main'] / 3600, 1)
-        if done == 1 and res:
-            log('hltb fields:', sorted(res[0].keys())[:40])
-        for d in res:
-            name = d.get('game_name') or ''
-            typ = (d.get('game_type') or '').lower()
-            if typ != 'dlc' and not re.search(r'\bDLC\b', name):
-                continue
-            if not norm(name).startswith(want):
-                continue
-            short = re.sub(r'\s*\bDLC\b\s*$', '', name[len(g['t']):]).strip(' :-–')
-            if short and short.lower() not in [x.lower() for x in m.setdefault('dlc', [])]:
-                m['dlc'].append(short)
-                added.append(f"{g['t']}: {short}")
-        time.sleep(1)
+        try:
+            names = steam_dlcs(g['t'], (g.get('rel') or '')[:4])
+        except Exception as e:
+            log('steam dlc lookup failed for', g['t'], e)
+            continue
+        for n in names or []:
+            if n.lower() not in [x.lower() for x in m.setdefault('dlc', [])]:
+                m['dlc'].append(n)
+                added.append(f"{g['t']}: {n}")
+        if not m.get('dlc'):
+            m.pop('dlc', None)
+        time.sleep(0.7)
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(meta, f, ensure_ascii=False, indent=0)
     site['gameMeta'] = {k: {x: v[x] for x in ('avg', 'dlc') if v.get(x)} for k, v in meta.items()}
