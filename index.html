@@ -262,6 +262,16 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .book .cover{aspect-ratio:2/3}
 .urdu{font-family:"Noto Nastaliq Urdu",serif;direction:rtl;font-size:13px;color:var(--ink2);line-height:2}
 @media (max-width:640px){.banner .in{padding:18px 16px}.banner .bst{margin-left:0}.banner .bg{opacity:.3}.banner h1{font-size:24px}.banner .bico{width:48px;height:48px}.banner .bst{margin-left:0}.grp h2{font-size:17px}.grp a{display:none}}
+.note1{font-size:12.5px;color:var(--ink2);font-style:italic;margin-top:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:640px;white-space:pre-line}
+.eform{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px;margin-top:12px}
+.ef{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--ink3);font-weight:600}
+.ef input,.ef select,.ef textarea{font:inherit;font-size:14px;font-weight:400;color:var(--ink);background:var(--panel);border:1px solid var(--line2);padding:8px 10px;outline:none;width:100%}
+.ef input:focus,.ef select:focus,.ef textarea:focus{border-color:var(--accent)}
+.eform .ef:has(textarea){grid-column:1/-1}
+#editbtn.on{background:var(--accent);border-color:var(--accent)}
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,40px);opacity:0;background:var(--bar);color:#fff;padding:10px 16px;border-left:4px solid var(--s1);font-size:13px;z-index:99;transition:.25s;max-width:90vw}
+#toast.show{opacity:1;transform:translate(-50%,0)}#toast.bad{border-left-color:var(--s4)}
+@media (max-width:640px){.eform{grid-template-columns:1fr}}
 footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:var(--ink3)}
 
 @media (max-width:900px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}}
@@ -294,6 +304,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:v
       <input id="gq" type="search" placeholder="Search anime, films, games, stories…" autocomplete="off" aria-label="Search">
       <button type="submit" aria-label="Search">Search</button>
     </form>
+    <button class="iconbtn" id="editbtn" aria-label="Edit mode" title="Edit mode"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/></svg></button>
     <button class="iconbtn" id="theme" aria-label="Toggle dark mode" title="Toggle dark mode">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><rect x="2" y="2" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="2" y="2" width="6" height="12"/></svg>
     </button>
@@ -322,6 +333,7 @@ const root=document.documentElement;
 let theme=store.get('theme',null);
 if(!theme){try{theme=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}catch(e){theme='light'}}
 root.dataset.theme=theme;
+document.addEventListener('click',e=>{if(e.target.closest&&e.target.closest('#editbtn'))editSetup()});
 $('#theme').onclick=()=>{theme=theme==='dark'?'light':'dark';root.dataset.theme=theme;store.set('theme',theme)};
 
 
@@ -529,7 +541,8 @@ function favRow(title,k,items){
 
 /* ---------- manga ---------- */
 const MST={1:['Reading','var(--s1)'],2:['Completed','var(--s2)'],3:['On-Hold','var(--s3)'],4:['Dropped','var(--s4)'],6:['Plan to Read','var(--s6)']};
-const manga=D.manga.map(m=>({id:m[0],t:m[1],alt:m[2],st:m[3],sc:m[4],ch:m[5],chs:m[6],vol:m[7],vols:m[8],type:m[9],img:m[10]?`https://cdn.myanimelist.net/images/manga/${m[10]}.jpg`:'',y:m[11],g:m[12].map(i=>D.mangaGenres[i]),mal:m[13],n:norm(m[1]+' '+m[2])}));
+const MTAGS=D.mangaTags||{};
+const manga=D.manga.map(m=>({tags:MTAGS[m[0]]||'',id:m[0],t:m[1],alt:m[2],st:m[3],sc:m[4],ch:m[5],chs:m[6],vol:m[7],vols:m[8],type:m[9],img:m[10]?`https://cdn.myanimelist.net/images/manga/${m[10]}.jpg`:'',y:m[11],g:m[12].map(i=>D.mangaGenres[i]),mal:m[13],n:norm(m[1]+' '+m[2])}));
 function rManga(){
   const sc=manga.filter(m=>m.sc>0);
   const types=[...new Set(manga.map(m=>m.type))].sort();
@@ -544,13 +557,14 @@ function rManga(){
     sorter:k=>({score:(a,b)=>b.sc-a.sc||b.mal-a.mal,mal:(a,b)=>b.mal-a.mal,title:cmpT,year:(a,b)=>b.y-a.y,ch:(a,b)=>b.ch-a.ch})[k],
     card:(m,i)=>`<div class="card" data-i="${i}">${cover(m.t,m.img,(m.sc?`<span class="badge">${m.sc}</span>`:'')+`<span class="sline" style="--sc:${MST[m.st][1]}"></span>`)}<div class="meta"><div class="tt">${esc(m.t)}</div><div class="ss"><span>${esc(m.type)}${m.y?' · '+m.y:''}</span><span>${m.ch?m.ch+' ch':''}</span></div></div></div>`,
     thead:'<th style="width:5px;padding:0"></th><th class="hm">#</th><th></th><th>Title</th><th style="text-align:center">Score</th><th class="hm" style="text-align:center">Type</th><th style="text-align:center">Chapters</th><th class="hm" style="text-align:center">MAL</th>',
-    row:(m,i)=>`<tr data-i="${i}"><td class="st" style="--sc:${MST[m.st][1]}"></td><td class="num hm">${i+1}</td><td style="width:54px">${cover(m.t,m.img,'','mini')}</td><td><div class="ti">${esc(m.t)}</div>${m.alt?`<div class="alt">${esc(m.alt)}</div>`:''}</td><td class="sc">${m.sc||'<span class="muted">–</span>'}</td><td class="c hm">${esc(m.type)}</td><td class="c mono small">${m.ch}<span class="muted">/${m.chs||'?'}</span></td><td class="c mono small hm">${m.mal?m.mal.toFixed(2):'–'}</td></tr>`,
+    row:(m,i)=>`<tr data-i="${i}"><td class="st" style="--sc:${MST[m.st][1]}"></td><td class="num hm">${i+1}</td><td style="width:54px">${cover(m.t,m.img,'','mini')}</td><td><div class="ti">${esc(m.t)}</div>${m.alt?`<div class="alt">${esc(m.alt)}</div>`:''}${m.tags?`<div class="note1">${esc(m.tags)}</div>`:''}</td><td class="sc">${m.sc||'<span class="muted">–</span>'}</td><td class="c hm">${esc(m.type)}</td><td class="c mono small">${m.ch}<span class="muted">/${m.chs||'?'}</span></td><td class="c mono small hm">${m.mal?m.mal.toFixed(2):'–'}</td></tr>`,
     open:openManga});
 }
 function openManga(m){
   modal('manga','Manga',`${cover(m.t,m.img)}<div><h2>${esc(m.t)}</h2>${m.alt?`<div class="muted">${esc(m.alt)}</div>`:''}
   <div class="bigscore"><div><b>${m.sc||'–'}</b><small>Your score</small></div><div><b>${m.mal?m.mal.toFixed(2):'–'}</b><small>MAL score</small></div><div><b style="color:${MST[m.st][1]}">■</b><small>${MST[m.st][0]}</small></div></div>
   <div class="kv"><div>Type</div><div>${esc(m.type)}</div><div>Chapters</div><div>${m.ch} read of ${m.chs||'?'}</div>${m.vols||m.vol?`<div>Volumes</div><div>${m.vol} read of ${m.vols||'?'}</div>`:''}<div>Published</div><div>${m.y||'–'}</div><div>Genres</div><div>${m.g.map(g=>`<span class="tag">${esc(g)}</span>`).join('')||'–'}</div></div>
+  ${m.tags?`<div class="review" style="--c:var(--manga)">${esc(m.tags)}</div>`:''}
   <div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/manga/${m.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
 }
 
@@ -580,7 +594,8 @@ function openBook(b){
   <div class="bigscore"><div><b class="stars" style="color:var(--book)">${b.r?bstars(b.r):'–'}</b><small>${b.r?b.r+' / 5':'Not rated'}</small></div><div><b style="color:${BST[b.st][1]}">■</b><small>${BST[b.st][0]}</small></div></div>
   <div class="kv">${b.p?`<div>Pages</div><div>${b.p}</div>`:''}${b.y?`<div>First published</div><div>${b.y}</div>`:''}${b.sh.length?`<div>Shelves</div><div>${b.sh.map(s=>`<span class="tag">${esc(s)}</span>`).join('')}</div>`:''}</div>
   ${b.rv?`<div class="review" style="--c:var(--book)">${esc(b.rv)}</div>`:''}
-  <div style="margin-top:14px"><a class="btn pri" href="https://www.goodreads.com/book/show/${esc(b.id)}" target="_blank" rel="noopener">Open on Goodreads ↗</a></div></div>`);
+  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?`<button class="btn pri" id="m_edit">Edit</button>`:''}${/^\d+$/.test(String(b.id))?`<a class="btn${ED.on?'':' pri'}" href="https://www.goodreads.com/book/show/${esc(b.id)}" target="_blank" rel="noopener">Open on Goodreads ↗</a>`:''}</div></div>`);
+  const me=$('#m_edit');if(me)me.onclick=()=>editBook(b);
 }
 
 /* ---------- hall of fame ---------- */
@@ -592,10 +607,11 @@ function hItem(code,extra){
   const [kid,name]=code.split('~');const k=kid[0],id=+kid.slice(1);
   const own=k==='a'?anime.find(x=>x.id===id):k==='m'?manga.find(x=>x.id===id):null;
   const idx=HOFITEMS.push({k,id,name,own})-1;
-  return `<div class="card" data-h="${idx}">${cover(own?own.t:name,own?own.img:'',(own&&own.sc?`<span class="badge">${own.sc}</span>`:''))}<div class="meta"><div class="tt">${esc(name)}</div><div class="ss"><span>${esc(extra||KLAB[k])}</span></div></div></div>`;
+  return `<div class="card" data-h="${idx}">${cover(own?own.t:name,own&&own.img?own.img:HIMG(k,id),(own&&own.sc?`<span class="badge">${own.sc}</span>`:''))}<div class="meta"><div class="tt">${esc(name)}</div><div class="ss"><span>${esc(extra||KLAB[k])}</span></div></div></div>`;
 }
+const HIMG=(k,id)=>(D.hofImages||{})[k+id]||'';
 function coupleCards(list){
-  return `<div class="couples">${list.map(([n,show,cs])=>`<div class="couple"><div class="pair">${cs.map(c=>{const [kid,nm]=c.split('~');const idx=HOFITEMS.push({k:kid[0],id:+kid.slice(1),name:nm})-1;return `<div data-h="${idx}" style="cursor:pointer">${cover(nm,'')}</div>`}).join('')}</div><div class="meta"><b>${esc(n)}</b><span>${esc(show)}</span></div></div>`).join('')}</div>`;
+  return `<div class="couples">${list.map(([n,show,cs])=>`<div class="couple"><div class="pair">${cs.map(c=>{const [kid,nm]=c.split('~');const idx=HOFITEMS.push({k:kid[0],id:+kid.slice(1),name:nm})-1;return `<div data-h="${idx}" style="cursor:pointer">${cover(nm,HIMG(kid[0],+kid.slice(1)))}</div>`}).join('')}</div><div class="meta"><b>${esc(n)}</b><span>${esc(show)}</span></div></div>`).join('')}</div>`;
 }
 function rHof(){
   HOFITEMS.length=0;
@@ -669,8 +685,116 @@ function rHof(){
     openMal(it)});
 }
 function openMal(it){
-  modal(it.k==='m'?'manga':'anime',KLAB[it.k],`${cover(it.name,'')}<div><h2>${esc(it.name)}</h2><div class="muted">${esc(KLAB[it.k])} on MyAnimeList</div>
+  modal(it.k==='m'?'manga':'anime',KLAB[it.k],`${cover(it.name,HIMG(it.k,it.id))}<div><h2>${esc(it.name)}</h2><div class="muted">${esc(KLAB[it.k])} on MyAnimeList</div>
   <div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/${MALK[it.k]}/${it.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
+}
+
+/* ---------- editor (games & books, saved to GitHub) ---------- */
+const REPO='SatsugaiDeAtsu/saturn-collections';
+const ED={get token(){return store.get('gh_token','')},set token(v){store.set('gh_token',v)},get on(){return !!store.get('edit_on',false)&&!!this.token},set on(v){store.set('edit_on',!!v)}};
+const b64=s=>btoa(unescape(encodeURIComponent(s)));
+async function ghSave(path,obj,msg){
+  const api=`https://api.github.com/repos/${REPO}/contents/${path}`;
+  const h={Authorization:'Bearer '+ED.token,Accept:'application/vnd.github+json'};
+  const cur=await fetch(api+'?ref=main',{headers:h,cache:'no-store'});
+  if(cur.status===401||cur.status===403)throw new Error('GitHub refused the token. Check that it has Contents: read and write for saturn-collections.');
+  const sha=cur.ok?(await cur.json()).sha:undefined;
+  const r=await fetch(api,{method:'PUT',headers:h,body:JSON.stringify({message:msg,content:b64(JSON.stringify(obj,null,0)),sha,branch:'main'})});
+  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.message||('GitHub error '+r.status))}
+}
+function toast(msg,bad){let el=$('#toast');if(!el){el=document.createElement('div');el.id='toast';document.body.appendChild(el)}el.textContent=msg;el.className='show'+(bad?' bad':'');clearTimeout(toast.t);toast.t=setTimeout(()=>el.className='',bad?7000:3500)}
+function editSetup(){
+  modal('overview','Edit mode',`<div style="grid-column:1/-1"><h2>Turn on editing</h2>
+  <p class="muted" style="margin:6px 0 12px">Paste your GitHub access token. It's saved only in this browser on this device and is sent only to GitHub.</p>
+  <input id="tok" type="password" placeholder="github_pat_..." style="width:100%;padding:10px;border:1px solid var(--line2);background:var(--panel)" value="">
+  <div id="tokerr" class="small" style="color:var(--s4);margin-top:6px"></div>
+  <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn pri" id="toksave">Save and turn on</button>${ED.token?'<button class="btn" id="tokoff">Turn off editing</button><button class="btn" id="tokdel">Forget token</button>':''}</div></div>`);
+  $('#toksave').onclick=async()=>{const v=$('#tok').value.trim()||ED.token;if(!v){$('#tokerr').textContent='Paste a token first.';return}
+    $('#tokerr').textContent='Checking…';
+    const r=await fetch(`https://api.github.com/repos/${REPO}`,{headers:{Authorization:'Bearer '+v}}).catch(()=>null);
+    if(!r||!r.ok){$('#tokerr').textContent='That token did not work for saturn-collections.';return}
+    const j=await r.json();if(!j.permissions||!j.permissions.push){$('#tokerr').textContent='The token works but cannot save. Give it Contents: read and write.';return}
+    ED.token=v;ED.on=true;closeM();syncEditBtn();render();toast('Editing is on')};
+  const off=$('#tokoff');if(off)off.onclick=()=>{ED.on=false;closeM();syncEditBtn();render()};
+  const del=$('#tokdel');if(del)del.onclick=()=>{ED.token='';ED.on=false;closeM();syncEditBtn();render();toast('Token removed from this browser')};
+}
+function syncEditBtn(){const b=$('#editbtn');if(b){b.classList.toggle('on',ED.on);b.title=ED.on?'Editing is on':'Edit mode'}}
+const fld=(id,label,val,type,extra)=>`<label class="ef"><span>${label}</span>${type==='textarea'?`<textarea id="${id}" rows="4">${esc(val||'')}</textarea>`:type&&type.startsWith('select:')?`<select id="${id}">${type.slice(7).split('|').map(o=>{const [v,l]=o.split('=');return `<option value="${esc(v)}" ${String(val)===v?'selected':''}>${esc(l||v)}</option>`}).join('')}</select>`:`<input id="${id}" type="${type||'text'}" value="${esc(val==null?'':val)}" ${extra||''}>`}</label>`;
+const gv=id=>{const el=$('#'+id);return el?el.value.trim():''};
+const list=s=>s.split(',').map(x=>x.trim()).filter(Boolean);
+const today=()=>new Date().toISOString().slice(0,10);
+function rebuildGames(){games.length=0;D.games.forEach((g,i)=>games.push(Object.assign({i,n:norm(g.t+' '+(g.fr||[]).join(' '))},g)))}
+function rebuildBooks(){books.length=0;D.books.forEach((b,i)=>books.push(Object.assign({},b,{i,title:b.t,n:norm(b.t+' '+b.a+' '+(b.sh||[]).join(' '))})))}
+async function persist(kind,msg){
+  toast('Saving…');
+  try{
+    if(kind==='games')await ghSave('data/games.json',{games:D.games,gvFav:D.gvFav,gvProfile:D.gvProfile},msg);
+    else await ghSave('data/books.json',{books:D.books},msg);
+    toast('Saved. The live site updates in about a minute.');
+  }catch(e){toast('Not saved: '+e.message,true)}
+}
+function editGame(g){
+  const isNew=!g;g=g||{};
+  modal('games',isNew?'Add game':'Edit game',`<div style="grid-column:1/-1"><h2>${isNew?'Add a game':esc(g.t)}</h2><div class="eform">
+  ${fld('e_t','Title',g.t)}
+  ${fld('e_shelf','Shelf',g.shelf||'Backlog','select:Playing|Played|Backlog|Wish List|Retired')}
+  ${fld('e_r','Your rating (0 to 5)',g.r||0,'number','min="0" max="5" step="0.5"')}
+  ${fld('e_pf','Platforms (comma separated)',(g.pf||[]).join(', '))}
+  ${fld('e_g','Genres (comma separated)',(g.g||[]).join(', '))}
+  ${fld('e_dev','Developer',(g.dev||[]).join(', '))}
+  ${fld('e_rel','Release date',g.rel||'','date')}
+  ${fld('e_rvt','Review title',g.rvt)}
+  ${fld('e_rv','Review',g.rv,'textarea')}
+  <label class="ef"><span>Favourite</span><select id="e_fav"><option value="0">No</option><option value="1" ${D.gvFav.includes(g.t)?'selected':''}>Yes</option></select></label>
+  </div><div class="small" id="e_err" style="color:var(--s4)"></div>
+  <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="btn pri" id="e_save">${isNew?'Add game':'Save changes'}</button>${isNew?'':'<button class="btn" id="e_del" style="margin-left:auto;color:var(--s4)">Delete</button>'}</div></div>`);
+  $('#e_save').onclick=()=>{
+    const t=gv('e_t');if(!t){$('#e_err').textContent='Give it a title.';return}
+    const raw=isNew?{id:Date.now(),u:'',fr:[],pub:[],log:[],shelves:[],rvd:''}:D.games[g.i];
+    const oldT=raw.t;const shelf=gv('e_shelf');
+    if(isNew||raw.shelf!==shelf)raw.added=today();
+    Object.assign(raw,{t,shelf,shelves:[shelf],r:+gv('e_r')||0,pf:list(gv('e_pf')),g:list(gv('e_g')),dev:list(gv('e_dev')),rel:gv('e_rel'),rvt:gv('e_rvt'),rv:gv('e_rv')});
+    if(raw.rv&&!raw.rvd)raw.rvd=today();
+    if(isNew)D.games.unshift(raw);
+    D.gvFav=D.gvFav.filter(n=>n!==oldT&&n!==t);if(gv('e_fav')==='1')D.gvFav.push(t);
+    rebuildGames();closeM();render();persist('games',(isNew?'Add game: ':'Edit game: ')+t);
+  };
+  const d=$('#e_del');if(d)d.onclick=()=>{if(d.dataset.sure!=='1'){d.dataset.sure='1';d.textContent='Tap again to delete';return}
+    D.games.splice(g.i,1);D.gvFav=D.gvFav.filter(n=>n!==g.t);rebuildGames();closeM();render();persist('games','Delete game: '+g.t)};
+}
+function editBook(b){
+  const isNew=!b;b=b||{};
+  modal('books',isNew?'Add book':'Edit book',`<div style="grid-column:1/-1"><h2>${isNew?'Add a book':esc(b.t)}</h2>
+  ${isNew?`<div class="ef" style="margin-bottom:10px"><span>Find it (fills in the details)</span><div style="display:flex"><input id="e_q" placeholder="Title or author" style="flex:1"><button class="btn" id="e_find" style="border-radius:0">Find</button></div><div id="e_res" class="small"></div></div>`:''}
+  <div class="eform">
+  ${fld('e_t','Title',b.t)}
+  ${fld('e_ur','Urdu title (optional)',b.ur)}
+  ${fld('e_a','Author',b.a)}
+  ${fld('e_st','Status',b.st||'toread','select:read=Read|reading=Reading|toread=Want to read|dnf=Did not finish|hold=On hold')}
+  ${fld('e_r','Your rating (0 to 5)',b.r||0,'number','min="0" max="5" step="0.25"')}
+  ${fld('e_p','Pages',b.p||'','number','min="0"')}
+  ${fld('e_y','First published (year)',b.y||'','number')}
+  ${fld('e_dr','Date finished',b.dr||'','date')}
+  ${fld('e_sh','Shelves (comma separated, e.g. urdu, childhood)',(b.sh||[]).join(', '))}
+  ${fld('e_rv','Review',b.rv,'textarea')}
+  <input type="hidden" id="e_img" value="${esc(b.img||'')}"></div>
+  <div class="small" id="e_err" style="color:var(--s4)"></div>
+  <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="btn pri" id="e_save">${isNew?'Add book':'Save changes'}</button>${isNew?'':'<button class="btn" id="e_del" style="margin-left:auto;color:var(--s4)">Delete</button>'}</div></div>`);
+  const f=$('#e_find');if(f)f.onclick=async()=>{const q=gv('e_q');if(!q)return;$('#e_res').textContent='Searching…';
+    try{const r=await fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(q)}&limit=6&fields=title,author_name,first_publish_year,cover_i,number_of_pages_median`).then(r=>r.json());
+      const docs=r.docs||[];$('#e_res').innerHTML=docs.length?docs.map((d,i)=>`<a class="link" href="#books" data-pick="${i}" style="display:block;padding:4px 0">${esc(d.title)} · ${esc((d.author_name||[])[0]||'')} ${d.first_publish_year||''}</a>`).join(''):'Nothing found. Fill it in by hand.';
+      document.querySelectorAll('[data-pick]').forEach(a=>a.onclick=e=>{e.preventDefault();const d=docs[+a.dataset.pick];$('#e_t').value=d.title;$('#e_a').value=(d.author_name||[])[0]||'';$('#e_y').value=d.first_publish_year||'';$('#e_p').value=d.number_of_pages_median||'';$('#e_img').value=d.cover_i?`https://covers.openlibrary.org/b/id/${d.cover_i}-M.jpg`:'';$('#e_res').textContent='Filled in. Check it and save.'});
+    }catch(e){$('#e_res').textContent='Search failed. Fill it in by hand.'}};
+  $('#e_save').onclick=()=>{
+    const t=gv('e_t');if(!t){$('#e_err').textContent='Give it a title.';return}
+    const raw=isNew?{id:'s'+Date.now(),d:today()}:D.books[b.i];
+    const st=gv('e_st');
+    Object.assign(raw,{t,ur:gv('e_ur'),a:gv('e_a'),st,r:+gv('e_r')||0,p:+gv('e_p')||0,y:+gv('e_y')||0,dr:gv('e_dr')||(st==='read'&&raw.st!=='read'?today():raw.dr||''),sh:list(gv('e_sh')),rv:gv('e_rv'),img:gv('e_img')});
+    if(isNew)D.books.unshift(raw);
+    rebuildBooks();closeM();render();persist('books',(isNew?'Add book: ':'Edit book: ')+t);
+  };
+  const d=$('#e_del');if(d)d.onclick=()=>{if(d.dataset.sure!=='1'){d.dataset.sure='1';d.textContent='Tap again to delete';return}
+    D.books.splice(b.i,1);rebuildBooks();closeM();render();persist('books','Delete book: '+b.t)};
 }
 
 /* ---------- generic list page ---------- */
@@ -712,6 +836,7 @@ function listPage(cfg){
   $('#ls').onchange=e=>{S.sort=e.target.value;body()};
   app.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{S.view=b.dataset.v;store.set('view_'+cfg.key,S.view);app.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('on',x===b));body()});
   if(cfg.bindExtra)cfg.bindExtra(S,body);
+  if(ED.on&&(cfg.key==='games'||cfg.key==='books')){const b=document.createElement('button');b.className='btn pri';b.textContent=cfg.key==='games'?'+ Add game':'+ Add book';b.onclick=()=>cfg.key==='games'?editGame():editBook();app.querySelector('.toolbar').prepend(b)}
   body();
 }
 const cmpT=(a,b)=>a.t.localeCompare(b.t);
@@ -729,7 +854,7 @@ function rAnime(){
     sorter:k=>({updated:(a,b)=>b.up-a.up,score:(a,b)=>b.sc-a.sc||b.mal-a.mal,mal:(a,b)=>b.mal-a.mal,title:cmpT,year:(a,b)=>b.y-a.y,eps:(a,b)=>b.eps-a.eps})[k],
     card:(a,i)=>`<div class="card" data-i="${i}">${cover(a.t,a.img,(a.sc?`<span class="badge">${a.sc}</span>`:'')+`<span class="sline" style="--sc:${AST[a.st][1]}"></span>`)}<div class="meta"><div class="tt">${esc(a.t)}</div><div class="ss"><span>${esc(a.type)}${a.y?' · '+a.y:''}</span><span>${a.eps?a.ep+'/'+a.eps:a.ep||''}</span></div></div></div>`,
     thead:'<th style="width:5px;padding:0"></th><th class="hm">#</th><th></th><th>Title</th><th style="text-align:center">Score</th><th class="hm" style="text-align:center">Type</th><th style="text-align:center">Progress</th><th class="hm" style="text-align:center">MAL</th>',
-    row:(a,i)=>`<tr data-i="${i}"><td class="st" style="--sc:${AST[a.st][1]}"></td><td class="num hm">${i+1}</td><td style="width:54px">${cover(a.t,a.img,'','mini')}</td><td><div class="ti">${esc(a.t)}</div>${a.alt?`<div class="alt">${esc(a.alt)}</div>`:''}</td><td class="sc">${a.sc||'<span class="muted">–</span>'}</td><td class="c hm">${esc(a.type)}</td><td class="c mono small">${a.st===2&&a.eps?a.eps:a.ep}<span class="muted">/${a.eps||'?'}</span></td><td class="c mono small hm">${a.mal?a.mal.toFixed(2):'–'}</td></tr>`,
+    row:(a,i)=>`<tr data-i="${i}"><td class="st" style="--sc:${AST[a.st][1]}"></td><td class="num hm">${i+1}</td><td style="width:54px">${cover(a.t,a.img,'','mini')}</td><td><div class="ti">${esc(a.t)}</div>${a.alt?`<div class="alt">${esc(a.alt)}</div>`:''}${a.tags?`<div class="note1">${esc(a.tags)}</div>`:''}</td><td class="sc">${a.sc||'<span class="muted">–</span>'}</td><td class="c hm">${esc(a.type)}</td><td class="c mono small">${a.st===2&&a.eps?a.eps:a.ep}<span class="muted">/${a.eps||'?'}</span></td><td class="c mono small hm">${a.mal?a.mal.toFixed(2):'–'}</td></tr>`,
     open:openAnime});
 }
 function openAnime(a){
@@ -785,7 +910,8 @@ function openGame(g){
   <div class="kv">${g.pf.length?`<div>Platforms</div><div>${g.pf.map(p=>`<span class="tag">${esc(p)}</span>`).join('')}</div>`:''}${g.g.length?`<div>Genres</div><div>${g.g.map(p=>`<span class="tag">${esc(p)}</span>`).join('')}</div>`:''}${g.fr.length?`<div>Franchise</div><div>${esc(g.fr.join(', '))}</div>`:''}${g.pub.length?`<div>Publisher</div><div>${esc(g.pub.join(', '))}</div>`:''}<div>Released</div><div>${g.rel?fdate(g.rel):'–'}</div><div>Added</div><div>${g.added?fdate(g.added):'–'}</div>
   ${g.log.map(p=>`<div>Play log</div><div>${[p.date_started&&p.date_started!=='None'?'Started '+fdate(p.date_started):'',p.date_finished&&p.date_finished!=='None'?'Finished '+fdate(p.date_finished):'',p.level_of_completion||'',p.notes?esc(p.notes):''].filter(Boolean).join(' · ')||'–'}</div>`).join('')}</div>
   ${g.rv?`<div class="review" style="--c:var(--game)">${g.rvt?`<b>${esc(g.rvt)}</b>\n`:''}${esc(g.rv)}</div>`:''}
-  <div style="margin-top:14px"><a class="btn pri" href="${esc(g.u)}" target="_blank" rel="noopener">Open on Grouvee ↗</a></div></div>`);
+  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?`<button class="btn pri" id="m_edit">Edit</button>`:''}${g.u?`<a class="btn${ED.on?'':' pri'}" href="${esc(g.u)}" target="_blank" rel="noopener">Open on Grouvee ↗</a>`:''}</div></div>`);
+  const me=$('#m_edit');if(me)me.onclick=()=>editGame(g);
 }
 
 /* ---------- stories ---------- */
@@ -857,11 +983,7 @@ let mode=null; // 'api' | 'claude' | 'none'
 let sampleFn=null;
 async function detectMode(){
   if(mode)return mode;
-  try{
-    const ctl=new AbortController();const t=setTimeout(()=>ctl.abort(),4000);
-    const r=await fetch('https://api.jikan.moe/v4/anime?q=naruto&limit=1',{signal:ctl.signal});clearTimeout(t);
-    if(r.ok){mode='api';return mode}
-  }catch(e){}
+  if(!/claude\.(ai|site)|claudeusercontent/.test(location.hostname)){mode='api';return mode}
   try{if(window.claude&&window.claude.use){sampleFn=await window.claude.use('sample');}}catch(e){}
   mode=sampleFn?'claude':'none';return mode;
 }
@@ -943,6 +1065,7 @@ function openExt(kind,r){
 }
 
 $('#foot').innerHTML=`Saturn Collections · data from MyAnimeList, Letterboxd, Grouvee and Medium · last refreshed ${fdate(D.generated)}`;
+syncEditBtn();
 go();
 })();
 </script>

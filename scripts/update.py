@@ -108,7 +108,7 @@ def update_anime():
 def update_manga():
     rows = mal_list('manga')
     allow = set(settings.get('manga_allow', []))
-    genres, M = [], []
+    genres, M, mtags = [], [], {}
     for m in rows:
         gn = [g['name'] for g in (m.get('genres') or [])]
         if 'Hentai' in gn:
@@ -129,9 +129,12 @@ def update_manga():
         M.append([m['manga_id'], title, alt, m['status'], m['score'], m['num_read_chapters'], m['manga_num_chapters'],
                   m['num_read_volumes'], m['manga_num_volumes'], m.get('manga_media_type_string') or '', img,
                   year2(m.get('manga_start_date_string')), gi, float(m.get('manga_score_val') or 0)])
+        note = '\n'.join(x for x in [str(m.get('tags') or '').strip(), str(m.get('notes') or '').strip()] if x)
+        if note:
+            mtags[str(m['manga_id'])] = note
     if len(M) < 20:
         raise RuntimeError(f'only {len(M)} manga returned')
-    site['manga'], site['mangaGenres'] = M, genres
+    site['manga'], site['mangaGenres'], site['mangaTags'] = M, genres, mtags
 
 
 # ---------------- Letterboxd ----------------
@@ -264,6 +267,42 @@ def update_posters():
     log(f'tmdb: looked up {done} posters')
 
 
+def update_hof_images():
+    """Pictures for Hall of Fame characters, people, anime and manga (from Jikan, cached)."""
+    hof = site.get('hof', {})
+    codes = set()
+    def walk(x):
+        if isinstance(x, str) and re.match(r'^[acmp]\d+~', x):
+            codes.add(x.split('~')[0])
+        elif isinstance(x, list):
+            for y in x: walk(y)
+        elif isinstance(x, dict):
+            for y in x.values(): walk(y)
+    walk(hof)
+    favs = hof.get('malFavs', {})
+    for k, pre in (('anime', 'a'), ('manga', 'm'), ('character', 'c'), ('people', 'p')):
+        for e in favs.get(k, []):
+            codes.add(pre + str(e[0]))
+    path = os.path.join(DATA, 'hof_images.json')
+    cache = load_json(path, {})
+    kinds = {'a': 'anime', 'm': 'manga', 'c': 'characters', 'p': 'people'}
+    n = 0
+    for c in sorted(codes):
+        if c in cache or n >= 300:
+            continue
+        try:
+            j = json.loads(get(f'https://api.jikan.moe/v4/{kinds[c[0]]}/{c[1:]}', tries=2))
+            cache[c] = (((j.get('data') or {}).get('images') or {}).get('jpg') or {}).get('image_url') or ''
+        except Exception:
+            pass
+        n += 1
+        time.sleep(1.1)
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(cache, f, indent=0)
+    site['hofImages'] = {k: v for k, v in cache.items() if v}
+    log(f'hall of fame images: fetched {n}, have {len(site["hofImages"])}')
+
+
 # ---------------- Medium ----------------
 def update_medium():
     root = ET.fromstring(get(f'https://medium.com/feed/@{MEDIUM_USER}'))
@@ -369,7 +408,7 @@ def update_grouvee():
 
 
 for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd),
-                 ('posters', update_posters), ('medium', update_medium), ('grouvee', update_grouvee)]:
+                 ('posters', update_posters), ('hof images', update_hof_images), ('medium', update_medium), ('grouvee', update_grouvee)]:
     try:
         fn()
         status[name] = 'ok'
