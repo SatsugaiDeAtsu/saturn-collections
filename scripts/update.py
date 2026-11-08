@@ -344,6 +344,7 @@ def nice(t):
         t = t[:1].upper() + t[1:]
         t = re.sub(r"\bsaturn's\b", "Saturn's", t)
         t = re.sub(r'\b(va|mal)\b', lambda m: m.group(1).upper(), t)
+        t = re.sub(r'\bi\b', 'I', t)
     return t
 
 
@@ -392,7 +393,7 @@ def update_hof():
             if pic:
                 cache.setdefault(f'{k}{i}', {'n': title, 'img': ''})['img'] = pic
                 cache[f'{k}{i}']['n'] = cache[f'{k}{i}'].get('n') or title
-            favs[lm.group(1)].append([i, title, sub])
+            favs[{'a': 'anime', 'm': 'manga', 'c': 'character', 'p': 'people'}[k]].append([i, (title.split(', ')[1] + ' ' + title.split(', ')[0]) if k in 'cp' and title.count(', ') == 1 else title, sub])
     if len(favs['anime']) >= 3 and len(favs['character']) >= 3:
         for k in ('people', 'company', 'manga'):
             if not favs[k]:
@@ -400,11 +401,16 @@ def update_hof():
         hof['malFavs'] = favs
     log('favourites found:', {k: len(v) for k, v in favs.items()})
     # blog posts
+    def flip(k, n):
+        if k in 'cp' and n.count(', ') == 1:
+            a, b = n.split(', ')
+            return f'{b} {a}'
+        return n
     def items(s):
         out = []
         for k, i, txt, img in s['items']:
             c = info(k, i, img)
-            out.append(f'{k}{i}~{c["n"] or txt or "?"}')
+            out.append(f'{k}{i}~{flip(k, c["n"] or txt or "?")}')
         return out
     hon_chr = blog_sections(804802)
     log('blog 804802 sections:', len(hon_chr))
@@ -422,19 +428,32 @@ def update_hof():
     wai = [[nice(s['h']), nice(' '.join(s['d'])), items(s)] for s in blog_sections(804810)]
     cou = blog_sections(804809)
     couples, special, sdesc, in_special = [], [], '', False
+    def split_name(text):
+        """'some intro sentence. Name And Name ( Show )' -> ('intro', 'Name and Name', 'Show')"""
+        m = re.search(r'([^.!?]*?)\s*\(\s*([^()]*?)\s*\)\s*$', text)
+        if not m:
+            return text, '', ''
+        intro = text[:m.start()].strip()
+        name = m.group(1).strip()
+        return intro, re.sub(r'\s+And\s+', ' and ', name), m.group(2)
     for s in cou:
         h = s['h']; d = ' '.join(s['d'])
-        if re.match(r'(?i)favou?rite anime couples', h):
-            h, d = d, ''   # first couple's name sits in the description
-        if re.match(r'(?i)a special mention', h):
-            in_special = True
-            parts = re.split(r'(?<=\.)\s+(?=[A-Z][^.]*\()', d)
-            sdesc = ' '.join(parts[:-1]) if len(parts) > 1 else d
-            h = parts[-1] if len(parts) > 1 else ''
-        m = re.match(r'(.*?)\s*\(\s*(.*?)\s*\)\s*$', (h + ' ' + d).strip())
-        name, show = (m.group(1), m.group(2)) if m else (h, d)
-        name = re.sub(r'\s+And\s+', ' and ', name.strip())
-        (special if in_special else couples).append([name, show, items(s)])
+        intro = ''
+        if re.match(r'(?i)favou?rite anime couples|a special mention', h):
+            if re.match(r'(?i)a special mention', h):
+                in_special = True
+            intro, name, show = split_name(d)
+            if in_special and intro:
+                sdesc = intro
+        else:
+            _, name, show = split_name((h + ' ' + d).strip())
+            if not name:
+                name, show = h, d
+        pair = items(s)
+        for extra in settings.get('hof_add', {}).get(name, []):
+            if extra not in pair:
+                pair.insert(0, extra)
+        (special if in_special else couples).append([name, show, pair])
     if len(hon) >= 4 and len(chr_) >= 4 and len(wai) >= 4:
         hof['blog'] = [{'post': 804802, 'secs': hon}, {'post': 804802, 'secs': chr_}, {'post': 804810, 'secs': wai}]
         hof['people'] = []

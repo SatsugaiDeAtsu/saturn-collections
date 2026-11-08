@@ -5,7 +5,12 @@
   118807,
   122780
  ],
- "note": "manga_allow: MAL IDs of Erotica-tagged manga to show (Hentai is never shown). tmdbKey/rawgKey: public keys used for posters and live search.",
+ "note": "manga_allow: MAL IDs of Erotica-tagged manga to show (Hentai is never shown). tmdbKey/rawgKey: public keys used for posters and live search. hof_add: extra characters to add to a Hall of Fame couple, by couple name (for ones not linked in the MAL blog).",
  "tmdbKey": "09f862cbedfccb987aa9955017c3984b",
- "rawgKey": ""
+ "rawgKey": "",
+ "hof_add": {
+  "Meruem and Komugi": [
+   "c23277~Meruem"
+  ]
+ }
 }
