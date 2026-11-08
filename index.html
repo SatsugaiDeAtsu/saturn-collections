@@ -365,6 +365,8 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 @keyframes shine{0%,60%{transform:translateX(0) skewX(-20deg)}100%{transform:translateX(260px) skewX(-20deg)}}
 .banner .shine{animation:shine 3.5s ease-in-out infinite}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+/* the cover strip keeps moving even then: it's slow and gentle */
+@media (prefers-reduced-motion:reduce){.mq.l .mqt{animation:mql 140s linear infinite!important}.mq.r .mqt{animation:mqr 140s linear infinite!important}}
 @media (max-width:640px){.spot{grid-template-columns:110px 1fr}.spot h2{font-size:20px}.wall .track{grid-template-rows:repeat(4,130px);grid-auto-columns:88px}.wall .track .cover{height:130px}}
 
 .quote{display:flex;flex-direction:column;justify-content:center;height:150px;overflow:hidden;font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:17px;color:#f3e6f6;max-width:760px;line-height:1.45;opacity:0;transform:translateY(8px);filter:blur(4px);transition:opacity .6s,transform .6s,filter .6s}
