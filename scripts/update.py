@@ -900,7 +900,7 @@ def update_char_info():
         time.sleep(2.5)
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(info, f, ensure_ascii=False, indent=0)
-    site['charInfo'] = {k: {x: y for x, y in v.items() if x != 'chk'} for k, v in info.items()}
+    site.pop('charInfo', None)  # the site loads data/char_info.json only when a character is opened
     log(f'character details: +{n}, have {len(info)} of {len(ids)}')
 
 

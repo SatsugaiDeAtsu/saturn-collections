@@ -658,6 +658,7 @@ let route='overview';
 const state={anime:{tab:'all',q:'',sort:'updated',view:store.get('view_anime','table'),type:'',lim:60},films:{tab:'watched',q:'',sort:'watched',view:store.get('view_films','grid'),lim:60},games:{tab:'all',q:'',sort:'added',view:store.get('view_games','grid'),lim:60},manga:{tab:'all',q:'',sort:'score',view:store.get('view_manga','grid'),type:'',lim:60},books:{tab:'all',q:'',sort:'rating',view:store.get('view_books','grid'),shelf:'',lim:60},search:{q:'',ext:'anime',res:{},busy:false}};
 function go(){
   let h=(location.hash||'').replace('#','');
+  if(h==='edit'){store.set('owner',true);syncEditBtn();history.replaceState(null,'','#overview');h='overview';setTimeout(editSetup,300)}
   if(h==='hof'&&route!=='hof')hofSeg='home';
   if(!ROUTES.some(r=>r[0]===h))h='overview';
   route=h;
@@ -707,7 +708,7 @@ function rOverview(){
       out.push(pools[k].shift());last=k;if(i===0)first=k}
     return out};
   const rowA=mix(60),rowB=mix(60);const W=[...rowA,...rowB];
-  const row=(arr,dir)=>`<div class="mq ${dir}"><div class="mqt">${[...arr,...arr].map(x=>`<div class="mqi">${cover(x.t,x.img,'','eager')}</div>`).join('')}</div></div>`;
+  const row=(arr,dir)=>`<div class="mq ${dir}"><div class="mqt">${[...arr,...arr].map(x=>`<div class="mqi">${cover(x.t,x.img,'','')}</div>`).join('')}</div></div>`;
   const wallTop=W.length>8?`<section class="marquee" aria-label="Favourites">${row(rowA,'l')}</section>`:'';
   const wallBot=W.length>8?`<section class="marquee" aria-label="Favourites">${row(rowB,'r')}</section>`:'';
   const nowItems=[
@@ -994,7 +995,8 @@ function startSpot(){clearInterval(spotT);const bind=()=>{document.querySelector
     const n=$('#spotnext');if(n)n.onclick=()=>{spotI++;swap();startSpot()}};
   const swap=()=>{const el=$('#spot');if(!el)return clearInterval(spotT);const tmp=document.createElement('div');tmp.innerHTML=spotlight();el.replaceWith(tmp.firstElementChild);bind()};
   bind();spotT=setInterval(()=>{if(route!=='hof')return clearInterval(spotT);spotI++;swap()},6000)}
-function openMal(it){
+async function openMal(it){
+  if(it.k==='c'&&!D.charInfo){try{D.charInfo=await fetch('data/char_info.json',{cache:'no-cache'}).then(r=>r.json())}catch(e){D.charInfo={}}}
   const ci=it.k==='c'?(D.charInfo||{})[it.id]:null;
   if(ci){
     const link=(k,x)=>{const own=(k==='anime'?anime:manga).find(o=>o.id===x[0]);return `<a class="tag link" href="${own?'#':'https://myanimelist.net/'+k+'/'+x[0]}" ${own?`data-own="${k}:${x[0]}"`:'target="_blank" rel="noopener"'}>${esc(own?own.t:x[1])}${x[2]&&x[2]!=='Main'?` <span class="muted">· ${esc(x[2])}</span>`:''}</a>`};
@@ -1044,7 +1046,7 @@ function editSetup(){
   ${ED.token?`<div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--line)"><b>Approved manga</b><p class="muted small" style="margin:4px 0 8px">Manga that MAL tags as Erotica only show up once you approve them here. Paste a MAL manga link or ID.</p>
   <div style="display:flex"><input id="ma_in" placeholder="https://myanimelist.net/manga/12345" style="flex:1;padding:8px;border:1px solid var(--line2);background:var(--panel);color:var(--ink)"><button class="btn" id="ma_add" style="border-radius:0">Approve</button></div>
   <div id="ma_list" class="small" style="margin-top:8px">${(SET.manga_allow||[]).map(id=>`<span class="chip" style="margin:0 6px 6px 0">${id} <a href="#" data-ma="${id}" aria-label="Remove ${id}" style="color:var(--s4)">✕</a></span>`).join('')||'<span class="muted">None yet.</span>'}</div><div id="ma_msg" class="small muted"></div></div>`:''}
-  <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn pri" id="toksave">Save and turn on</button>${ED.token?'<button class="btn" id="tokoff">Turn off editing</button><button class="btn" id="tokdel">Forget token</button>':''}</div></div>`);
+  <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn pri" id="toksave">Save and turn on</button>${ED.token?'<button class="btn" id="tokoff">Turn off editing</button><button class="btn" id="tokdel">Forget token and hide editing on this device</button>':''}</div></div>`);
   const rn=$('#refnow');if(rn)rn.onclick=async()=>{rn.disabled=true;$('#refmsg').textContent='Starting…';try{await ghSave('data/mal_touch.json',{t:Date.now()},'Manual refresh');$('#refmsg').textContent='Started. Reload the site in about 5 minutes.'}catch(e){$('#refmsg').textContent='Could not start: '+e.message;rn.disabled=false}};
   $('#toksave').onclick=async()=>{const v=$('#tok').value.trim()||ED.token;if(!v){$('#tokerr').textContent='Paste a token first.';return}
     $('#tokerr').textContent='Checking…';
@@ -1052,16 +1054,17 @@ function editSetup(){
     if(!r||!r.ok){$('#tokerr').textContent='That token did not work for saturn-collections.';return}
     const j=await r.json();if(!j.permissions||!j.permissions.push){$('#tokerr').textContent='The token works but cannot save. Give it Contents: read and write.';return}
     ED.token=v;ED.on=true;closeM();syncEditBtn();render();toast('Editing is on')};
-  const saveAllow=async(list,msg)=>{SET.manga_allow=list;$('#ma_msg').textContent='Saving…';
-    try{await ghSave('data/settings.json',SET,msg);await ghSave('data/mal_touch.json',{t:Date.now()},'Refresh after approving manga');$('#ma_msg').textContent='Saved. The manga list refreshes in a couple of minutes.';editSetup()}catch(e){$('#ma_msg').textContent='Not saved: '+e.message}};
+  const saveAllow=async(list,msg)=>{$('#ma_msg').textContent='Saving…';
+    try{const cur=await ghLoad('data/settings.json');cur.manga_allow=list;Object.assign(SET,cur);await ghSave('data/settings.json',cur,msg);await ghSave('data/mal_touch.json',{t:Date.now()},'Refresh after approving manga');$('#ma_msg').textContent='Saved. The manga list refreshes in a couple of minutes.';editSetup()}catch(e){$('#ma_msg').textContent='Not saved: '+e.message}};
   const maa=$('#ma_add');if(maa)maa.onclick=()=>{const m=(gv('ma_in').match(/(?:manga\/)?(\d+)/)||[])[1];if(!m){$('#ma_msg').textContent='Paste a MAL manga link or its number.';return}
     const id=+m;const L=SET.manga_allow||[];if(L.includes(id)){$('#ma_msg').textContent='Already approved.';return}saveAllow([...L,id],'Approve manga '+id)};
   document.querySelectorAll('[data-ma]').forEach(a=>a.onclick=e=>{e.preventDefault();const id=+a.dataset.ma;saveAllow((SET.manga_allow||[]).filter(x=>x!==id),'Unapprove manga '+id)});
   $('#malc').onclick=malConnect;const mx=$('#malx');if(mx)mx.onclick=()=>{MALA.t=null;closeM();toast('MAL disconnected on this device')};
   const off=$('#tokoff');if(off)off.onclick=()=>{ED.on=false;closeM();syncEditBtn();render()};
-  const del=$('#tokdel');if(del)del.onclick=()=>{ED.token='';ED.on=false;closeM();syncEditBtn();render();toast('Token removed from this browser')};
+  const del=$('#tokdel');if(del)del.onclick=()=>{ED.token='';ED.on=false;store.set('owner',false);closeM();syncEditBtn();render();toast('Token removed from this browser')};
 }
-function syncEditBtn(){const b=$('#editbtn');if(b){b.classList.toggle('on',ED.on);b.title=ED.on?'Editing is on':'Edit mode'}}
+const OWNER=()=>!!store.get('owner',false)||!!ED.token;
+function syncEditBtn(){const b=$('#editbtn');if(b){b.style.display=OWNER()?'':'none';b.classList.toggle('on',ED.on);b.title=ED.on?'Editing is on':'Edit mode'}}
 const fld=(id,label,val,type,extra)=>`<label class="ef"><span>${label}</span>${type==='textarea'?`<textarea id="${id}" rows="4">${esc(val||'')}</textarea>`:type&&type.startsWith('select:')?`<select id="${id}">${type.slice(7).split('|').map(o=>{const [v,l]=o.split('=');return `<option value="${esc(v)}" ${String(val)===v?'selected':''}>${esc(l||v)}</option>`}).join('')}</select>`:`<input id="${id}" type="${type||'text'}" value="${esc(val==null?'':val)}" ${extra||''}>`}</label>`;
 const gv=id=>{const el=$('#'+id);return el?el.value.trim():''};
 const list=s=>s.split(',').map(x=>x.trim()).filter(Boolean);
@@ -1548,7 +1551,7 @@ function showExt(res,kind,q){
   box.querySelectorAll('[data-r]').forEach(el=>el.onclick=()=>{const r=res[+el.dataset.r];const own=ownMatch(kind,r.t,+r.y);if(own){({anime:openAnime,manga:openManga,books:openBook,films:openFilm,games:openGame})[kind](own);return}openExt(kind,r)});
 }
 function openExt(kind,r){
-  const canAdd=(kind==='anime'||kind==='manga')?!!r.malId:(kind==='books'||kind==='games');
+  const canAdd=OWNER()&&((kind==='anime'||kind==='manga')?!!r.malId:(kind==='books'||kind==='games'));
   setTimeout(()=>{const b=$('#x_add');if(!b)return;b.onclick=()=>{
     if(!ED.on){toast(ED.token?'Turn editing on first (pencil button at the top).':'Set up editing first (pencil button at the top).',true);editSetup();return}
     if(kind==='anime'||kind==='manga')return editMal(kind,{malId:r.malId,t:r.t,eps:0,chs:0});
@@ -1563,7 +1566,8 @@ function openExt(kind,r){
   <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${canAdd?'<button class="btn pri" id="x_add">+ Add to my list</button>':''}<a class="btn${canAdd?'':' pri'}" href="${r.url&&r.malId?r.url:OUT[kind](r.t)}" target="_blank" rel="noopener">${r.malId?'Open on MyAnimeList':'Find on '+OUTN[kind]} ↗</a>${r.url?`<a class="btn" href="${esc(r.url)}" target="_blank" rel="noopener">Source ↗</a>`:''}</div></div>`);
 }
 
-$('#foot').innerHTML=`Saturn Collections · data from MyAnimeList, Letterboxd, Grouvee and Medium · last refreshed ${fdate(D.generated)}`;
+{const US=D.updateStatus||{};const bad=Object.entries(US).filter(([k,v])=>v!=='ok');
+$('#foot').innerHTML=`Saturn Collections · data from MyAnimeList, Letterboxd, Grouvee and Medium · last refreshed ${fdate(D.generated)}${OWNER()&&bad.length?`<div style="margin-top:6px;color:var(--s4)">Last update had trouble with: ${bad.map(([k,v])=>`<b>${esc(k)}</b> <span class="muted">(${esc(String(v).slice(0,90))})</span>`).join(' · ')}. The previous data is still shown.</div>`:''}`;}
 syncEditBtn();
 malFinish();
 go();
