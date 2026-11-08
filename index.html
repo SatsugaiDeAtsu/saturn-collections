@@ -583,7 +583,9 @@ let imgOK=true; // flips to false if remote images are blocked
 const PAL=['#7a3fd1','#c8324f','#e2672b','#1f8a7c','#a12f31','#8e2f6e','#8a5a14','#5b3c88','#3f2a63','#b03a6e','#6b2440','#6b4d2e'];
 const hash=s=>{let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return Math.abs(h)};
 const initials=t=>{const w=String(t).replace(/[^\p{L}\p{N} ]/gu,' ').trim().split(/\s+/).filter(x=>!/^(the|a|an|of|and|no|to|wa|ga)$/i.test(x));return ((w[0]||'?')[0]+((w[1]||'')[0]||'')).toUpperCase()};
+const MIRU=new Set();const LOC=u=>{const m=u&&/myanimelist\.net\/images\/(.+?\.(?:jpe?g|png|webp|gif))$/i.exec(u);return m&&MIRU.has(m[1])?'covers/u/'+m[1].replace(/\//g,'_'):u};
 function cover(title,img,extra,cls){
+  img=LOC(img);
   const c=PAL[hash(title)%PAL.length];
   const im=(img&&imgOK)?(cls==='eager'?`<img src="${esc(img)}" alt="" referrerpolicy="no-referrer" onerror="window.__imgFail&&window.__imgFail(this)">`:`<img data-src="${esc(img)}" alt="" referrerpolicy="no-referrer" onerror="window.__imgFail&&window.__imgFail(this)">`):'';
   const gold=/class="badge">(10|5★|5\/5|5)</.test(extra||'');
@@ -600,6 +602,7 @@ new MutationObserver(lazyScan).observe(document.documentElement,{childList:true,
 /* ---------- data model ---------- */
 const AST={1:['Watching','var(--s1)'],2:['Completed','var(--s2)'],3:['On-Hold','var(--s3)'],4:['Dropped','var(--s4)'],6:['Plan to Watch','var(--s6)']};
 const TAGS=D.animeTags||{};
+((D.mir||{}).u||[]).forEach(x=>MIRU.add(x));
 const MIRA=new Set((D.mir||{}).a||[]),MIRM=new Set((D.mir||{}).m||[]);
 const anime=D.anime.map(a=>({tags:TAGS[a[0]]||'',id:a[0],t:a[1],alt:a[2],st:a[3],sc:a[4],ep:a[5],eps:a[6],type:a[7],img:MIRA.has(a[0])?`covers/a/${a[0]}.jpg`:a[8]?`https://cdn.myanimelist.net/images/anime/${a[8]}.jpg`:'',y:a[9],g:a[10].map(i=>D.animeGenres[i]),mal:a[11],up:a[12],rw:a[13]||0,rwing:a[14]||0,n:norm(a[1]+' '+a[2])}));
 const filmByKey={};
@@ -924,13 +927,13 @@ function rHofHome(){
   <section class="box hof-hero" style="grid-template-columns:1fr;padding:16px 20px"><div><p style="margin:0">${esc(A.paras[1])}</p>
     <details style="margin-top:8px"><summary class="link" style="cursor:pointer">Read the full introduction</summary><div style="margin-top:10px">${A.paras.map(p=>`<p>${esc(p)}</p>`).join('')}<a class="link" href="https://myanimelist.net/blog.php?eid=${A.post}" target="_blank" rel="noopener">Continue on MAL ↗</a></div></details></div></section>
   ${spotlight()}
-  <div class="htiles">${T.map((x,i)=>`<button class="htile" data-wing="${x.k}" style="--c:${x.c}"><div class="hbg">${x.imgs.slice(0,2).map((im,j)=>`<img class="${j?'':'on'}" src="${esc(im)}" alt="" referrerpolicy="no-referrer">`).join('')||artBg(HEX.hof,i*9,'')}</div><div class="hshade"></div><div class="hlab"><span class="hic">${ico(x.ic)}</span><b>${esc(x.l)}</b><small>${esc(x.sub)}</small></div></button>`).join('')}</div>`;
+  <div class="htiles">${T.map((x,i)=>`<button class="htile" data-wing="${x.k}" style="--c:${x.c}"><div class="hbg">${x.imgs.slice(0,2).map((im,j)=>`<img class="${j?'':'on'}" src="${esc(LOC(im))}" alt="" referrerpolicy="no-referrer">`).join('')||artBg(HEX.hof,i*9,'')}</div><div class="hshade"></div><div class="hlab"><span class="hic">${ico(x.ic)}</span><b>${esc(x.l)}</b><small>${esc(x.sub)}</small></div></button>`).join('')}</div>`;
   document.querySelectorAll('[data-wing]').forEach(b=>b.onclick=()=>{hofSeg=b.dataset.wing;rHof();window.scrollTo(0,0)});
   startSpot();
   clearInterval(tileT);let step=1;
   tileT=setInterval(()=>{if(route!=='hof'||hofSeg!=='home')return clearInterval(tileT);
     document.querySelectorAll('.htile').forEach((el,i)=>{const L=T[i].imgs;if(L.length<2)return;if((step+i)%3)return;const imgs=el.querySelectorAll('.hbg img');const cur=[...imgs].find(im=>im.classList.contains('on'));const other=[...imgs].find(im=>im!==cur);
-      const idx=(+(el.dataset.idx||1)+1)%L.length;el.dataset.idx=idx;other.src=L[idx];other.onload=()=>{cur.classList.remove('on');other.classList.add('on')}});step++},1400);
+      const idx=(+(el.dataset.idx||1)+1)%L.length;el.dataset.idx=idx;other.src=LOC(L[idx]);other.onload=()=>{cur.classList.remove('on');other.classList.add('on')}});step++},1400);
 }
 let spotI=0,spotT=null;
 let SPOT=null;
@@ -950,7 +953,7 @@ function spotList(){
 }
 function spotlight(){const L=spotList();if(!L.length)return'';const c=L[spotI%L.length];
   const href=c.k&&!c.own?`https://myanimelist.net/${MALK[c.k]}/${c.id}`:'';
-  return `<section class="box spot" id="spot">${c.img?`<div class="blur" style="background-image:url('${esc(c.img)}')"></div>`:''}<div class="pic">${c.img?`<img src="${esc(BIG(c.img))}" alt="" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${esc(c.img)}'">`:cover(c.t,'')}</div><div><div class="kick small" style="text-transform:uppercase;letter-spacing:.12em;font-weight:800;color:var(--gold)">Spotlight · ${esc(c.label)}</div><h2>${esc(c.t)}</h2>${c.sub?`<div class="muted">${esc(c.sub)}</div>`:''}${c.note?`<p class="spotnote">${esc(c.note.length>220?c.note.slice(0,220)+'…':c.note)}</p>`:''}<div class="dots">${L.map((_,i)=>`<button aria-label="Show ${esc(L[i].t)}" data-spot="${i}" class="${i===spotI%L.length?'on':''}"></button>`).join('')}</div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn" id="spotopen">Open</button><button class="btn" id="spotnext">Next →</button>${href?`<a class="btn" href="${href}" target="_blank" rel="noopener">MAL ↗</a>`:''}</div></div></section>`}
+  return `<section class="box spot" id="spot">${c.img?`<div class="blur" style="background-image:url('${esc(LOC(c.img))}')"></div>`:''}<div class="pic">${c.img?`<img src="${esc(BIG(LOC(c.img)))}" alt="" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${esc(c.img)}'">`:cover(c.t,'')}</div><div><div class="kick small" style="text-transform:uppercase;letter-spacing:.12em;font-weight:800;color:var(--gold)">Spotlight · ${esc(c.label)}</div><h2>${esc(c.t)}</h2>${c.sub?`<div class="muted">${esc(c.sub)}</div>`:''}${c.note?`<p class="spotnote">${esc(c.note.length>220?c.note.slice(0,220)+'…':c.note)}</p>`:''}<div class="dots">${L.map((_,i)=>`<button aria-label="Show ${esc(L[i].t)}" data-spot="${i}" class="${i===spotI%L.length?'on':''}"></button>`).join('')}</div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn" id="spotopen">Open</button><button class="btn" id="spotnext">Next →</button>${href?`<a class="btn" href="${href}" target="_blank" rel="noopener">MAL ↗</a>`:''}</div></div></section>`}
 function startSpot(){clearInterval(spotT);const bind=()=>{document.querySelectorAll('[data-spot]').forEach(b=>b.onclick=()=>{spotI=+b.dataset.spot;swap();startSpot()});
     const L=spotList(),c=L[spotI%L.length];const o=$('#spotopen');if(o)o.onclick=()=>{if(c.own)return c.k==='a'?openAnime(c.own):openManga(c.own);if(c.film)return openFilm(c.film);if(c.book)return openBook(c.book);if(c.game)return openGame(c.game);openMal({k:c.k,id:c.id,name:c.t})};
     const n=$('#spotnext');if(n)n.onclick=()=>{spotI++;swap();startSpot()}};

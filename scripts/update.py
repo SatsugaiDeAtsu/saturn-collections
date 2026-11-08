@@ -695,8 +695,34 @@ def update_cover_mirror():
             except Exception:
                 fails += 1
             time.sleep(0.15)
+    # Hall of Fame pictures (blog images, favourites): mirrored by their MAL path, so a changed blog picture gets a new copy
+    want = set()
+    blob = json.dumps(load_json(os.path.join(DATA, 'hof.json'), {})) + json.dumps(site.get('hofImages', {})) + json.dumps(site.get('hof', {}))
+    for m in re.finditer(r'myanimelist\.net/images/([^"~\s?]+?\.(?:jpe?g|png|webp|gif))', blob, re.I):
+        want.add(m.group(1))
+    ud = os.path.join(root, 'u')
+    os.makedirs(ud, exist_ok=True)
+    for path in sorted(want):
+        fp = os.path.join(ud, path.replace('/', '_'))
+        if os.path.exists(fp) or time.time() - t0 > 1200 or fails > 60:
+            continue
+        try:
+            req = urllib.request.Request('https://cdn.myanimelist.net/images/' + path, headers={'User-Agent': UA})
+            with urllib.request.urlopen(req, timeout=30) as r:
+                b = r.read()
+            if len(b) > 1500:
+                open(fp, 'wb').write(b)
+                got += 1
+        except Exception:
+            fails += 1
+        time.sleep(0.15)
+    keep = {p.replace('/', '_') for p in want}
+    for f in os.listdir(ud):
+        if f not in keep:
+            os.remove(os.path.join(ud, f))  # picture no longer used anywhere
     site['mir'] = {k: sorted(int(f[:-4]) for f in os.listdir(os.path.join(root, k)) if f.endswith('.jpg')) for k in ('a', 'm')}
-    log(f'cover mirror: +{got} new, {len(site["mir"]["a"])} anime / {len(site["mir"]["m"])} manga stored, {fails} failed')
+    site['mir']['u'] = sorted(p for p in want if os.path.exists(os.path.join(ud, p.replace('/', '_'))))
+    log(f'cover mirror: +{got} new, {len(site["mir"]["a"])} anime / {len(site["mir"]["m"])} manga / {len(site["mir"]["u"])} hall of fame stored, {fails} failed')
 
 
 for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd),
