@@ -469,6 +469,33 @@ def update_hof():
     log(f'hall of fame: refreshed from MAL, looked up {fetched[0]} new names')
 
 
+def update_book_covers():
+    """Fill in missing book covers from Open Library (only touches the cover field)."""
+    path = os.path.join(DATA, 'books.json')
+    data = load_json(path, None)
+    if not data:
+        return
+    n = 0
+    for b in data['books']:
+        if b.get('img') or b.get('coverTried') or n >= 80:
+            continue
+        q = urllib.parse.urlencode({'title': re.sub(r'\s*\(.*?\)\s*', ' ', b['t']).split(':')[0].strip(), 'author': b.get('a', ''), 'limit': 3, 'fields': 'cover_i,title'})
+        try:
+            docs = json.loads(get(f'https://openlibrary.org/search.json?{q}', tries=2)).get('docs') or []
+            cov = next((d['cover_i'] for d in docs if d.get('cover_i')), None)
+            if cov:
+                b['img'] = f'https://covers.openlibrary.org/b/id/{cov}-M.jpg'
+            else:
+                b['coverTried'] = 1
+        except Exception:
+            pass
+        n += 1
+        time.sleep(0.6)
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=0)
+    log(f'book covers: looked up {n}')
+
+
 # ---------------- Medium ----------------
 def update_medium():
     root = ET.fromstring(get(f'https://medium.com/feed/@{MEDIUM_USER}'))
@@ -574,7 +601,7 @@ def update_grouvee():
 
 
 for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd),
-                 ('posters', update_posters), ('hall of fame', update_hof), ('medium', update_medium), ('grouvee', update_grouvee)]:
+                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('medium', update_medium), ('grouvee', update_grouvee)]:
     try:
         fn()
         status[name] = 'ok'
