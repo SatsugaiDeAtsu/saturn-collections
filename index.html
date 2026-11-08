@@ -973,6 +973,20 @@ function startSpot(){clearInterval(spotT);const bind=()=>{document.querySelector
   const swap=()=>{const el=$('#spot');if(!el)return clearInterval(spotT);const tmp=document.createElement('div');tmp.innerHTML=spotlight();el.replaceWith(tmp.firstElementChild);bind()};
   bind();spotT=setInterval(()=>{if(route!=='hof')return clearInterval(spotT);spotI++;swap()},6000)}
 function openMal(it){
+  const ci=it.k==='c'?(D.charInfo||{})[it.id]:null;
+  if(ci){
+    const link=(k,x)=>{const own=(k==='anime'?anime:manga).find(o=>o.id===x[0]);return `<a class="tag link" href="${own?'#':'https://myanimelist.net/'+k+'/'+x[0]}" ${own?`data-own="${k}:${x[0]}"`:'target="_blank" rel="noopener"'}>${esc(own?own.t:x[1])}${x[2]&&x[2]!=='Main'?` <span class="muted">· ${esc(x[2])}</span>`:''}</a>`};
+    modal('anime','Character',`${cover(it.name,it.pic||HIMG(it.k,it.id))}<div><h2>${esc(ci.name||it.name)}</h2>${ci.jp?`<div class="muted">${esc(ci.jp)}</div>`:''}
+    ${ci.fav?`<div class="bigscore"><div><b>${fmt(ci.fav)}</b><small>MAL favourites</small></div></div>`:''}
+    <div class="kv">${(ci.facts||[]).map(([k,v])=>`<div>${esc(k)}</div><div>${esc(v)}</div>`).join('')}
+    ${ci.anime&&ci.anime.length?`<div>Anime</div><div>${ci.anime.slice(0,6).map(x=>link('anime',x)).join('')}</div>`:''}
+    ${ci.manga&&ci.manga.length?`<div>Manga</div><div>${ci.manga.slice(0,4).map(x=>link('manga',x)).join('')}</div>`:''}
+    ${ci.va&&ci.va.length?`<div>Voiced by</div><div>${ci.va.map(v=>`<a class="tag link" href="https://myanimelist.net/people/${v[0]}" target="_blank" rel="noopener">${esc(v[1])} <span class="muted">· ${esc(v[2])}</span></a>`).join('')}</div>`:''}</div>
+    ${ci.about?`<div class="review" style="--c:var(--anime)">${esc(ci.about)}</div>`:''}
+    <div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/character/${it.id}" target="_blank" rel="noopener">Full profile on MyAnimeList ↗</a></div></div>`);
+    document.querySelectorAll('[data-own]').forEach(a=>a.onclick=e=>{e.preventDefault();const [k,id]=a.dataset.own.split(':');const o=(k==='anime'?anime:manga).find(x=>x.id===+id);if(o)(k==='anime'?openAnime:openManga)(o)});
+    return;
+  }
   modal(it.k==='m'?'manga':'anime',KLAB[it.k],`${cover(it.name,it.pic||HIMG(it.k,it.id))}<div><h2>${esc(it.name)}</h2><div class="muted">${esc(KLAB[it.k])} on MyAnimeList</div>
   <div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/${MALK[it.k]}/${it.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
 }

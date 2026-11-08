@@ -751,6 +751,79 @@ def update_game_meta():
     log(f'game meta: checked {done}, new DLC: {added}')
 
 
+def char_page(cid):
+    """Basic details of a MAL character, read from its page."""
+    h = re.sub(r'\s+', ' ', get(f'https://myanimelist.net/character/{cid}'))
+    txt = lambda x: html.unescape(re.sub(r'<[^>]+>', '', x)).strip()
+    o = {}
+    m = re.search(r'<h2 class="normal_header"[^>]*>(.*?)</h2>(.*?)(?:<div|<table|Voice Actors)', h)
+    if m:
+        jp = re.search(r'<small>\((.*?)\)</small>', m.group(1))
+        if jp:
+            o['jp'] = html.unescape(jp.group(1))
+        o['name'] = txt(re.sub(r'<span.*', '', m.group(1)))
+        lines = [txt(x) for x in re.split(r'<br\s*/?>', m.group(2))]
+        facts, about = [], []
+        for ln in lines:
+            fm = re.match(r"^([A-Z][\w .'/()-]{0,28}):\s*(.{1,80})$", ln)
+            if fm and not about:
+                facts.append([fm.group(1), fm.group(2)])
+            elif ln:
+                about.append(ln)
+        if facts:
+            o['facts'] = facts[:10]
+        ab = ' '.join(x for x in about if not x.startswith('(Source'))
+        if ab:
+            cut = ab[:320]
+            o['about'] = (cut[:cut.rfind('. ') + 1] if '. ' in cut else cut) or cut
+    f = re.search(r'Member Favorites:\s*([\d,]+)', h)
+    if f:
+        o['fav'] = int(f.group(1).replace(',', ''))
+    for key, a1, a2, kind in (('anime', 'Animeography', 'Mangaography', 'anime'), ('manga', 'Mangaography', 'Member Favorites', 'manga')):
+        i, j = h.find(a1), h.find(a2)
+        if i < 0:
+            continue
+        part = h[i:j if j > i else i + 20000]
+        rows = re.findall(r'<a href="https://myanimelist\.net/' + kind + r'/(\d+)/[^"]*">([^<]+)</a>.*?<small>([^<]+)</small>', part)
+        if rows:
+            o[key] = [[int(a), html.unescape(t), r] for a, t, r in rows[:12]]
+    v = h.find('Voice Actors')
+    if v > 0:
+        vas = re.findall(r'<a href="https://myanimelist\.net/people/(\d+)/[^"]*">([^<]+)</a> <div[^>]*><small>([^<]+)</small>', h[v:v + 30000])
+        if vas:
+            o['va'] = [[int(a), html.unescape(n), l] for a, n, l in vas if l in ('Japanese', 'English')][:4]
+    return o
+
+
+def update_char_info():
+    """Basic MAL details for every character in the Hall of Fame. A few new ones each run; each is refreshed every two months."""
+    path = os.path.join(DATA, 'char_info.json')
+    info = load_json(path, {})
+    hof = load_json(os.path.join(DATA, 'hof.json'), {})
+    ids = set(re.findall(r'"c(\d+)~', json.dumps(hof)))
+    ids |= {str(c[0]) for c in (site.get('hof', {}).get('malFavs', {}).get('character') or [])}
+    old = (datetime.now(timezone.utc) - timedelta(days=60)).strftime('%Y-%m-%d')
+    today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+    t0, n, fails = time.time(), 0, 0
+    for cid in sorted(ids, key=lambda c: info.get(c, {}).get('chk', '')):
+        if info.get(cid, {}).get('chk', '') > old or time.time() - t0 > 420 or fails > 5:
+            continue
+        try:
+            d = char_page(cid)
+            if d.get('name'):
+                d['chk'] = today
+                info[cid] = d
+                n += 1
+        except Exception as e:
+            fails += 1
+            log('character page failed', cid, e)
+        time.sleep(2.5)
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(info, f, ensure_ascii=False, indent=0)
+    site['charInfo'] = {k: {x: y for x, y in v.items() if x != 'chk'} for k, v in info.items()}
+    log(f'character details: +{n}, have {len(info)} of {len(ids)}')
+
+
 def get_bytes(u):
     req = urllib.request.Request(u, headers={'User-Agent': UA})
     with urllib.request.urlopen(req, timeout=30) as r:
@@ -920,7 +993,7 @@ def update_cover_mirror():
 
 
 for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd),
-                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('grouvee', update_grouvee), ('game meta', update_game_meta), ('cover mirror', update_cover_mirror)]:
+                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('grouvee', update_grouvee), ('game meta', update_game_meta), ('characters', update_char_info), ('cover mirror', update_cover_mirror)]:
     try:
         fn()
         status[name] = 'ok'
