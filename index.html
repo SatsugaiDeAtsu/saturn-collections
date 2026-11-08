@@ -274,6 +274,62 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 @media (max-width:640px){.eform{grid-template-columns:1fr}}
 .banner .emb{flex:none;filter:drop-shadow(0 6px 14px rgba(0,0,0,.45))}
 @media (max-width:640px){.banner .emb svg{width:84px;height:84px}}
+
+@keyframes fall{0%{transform:translate(0,0) rotate(0)}100%{transform:translate(-120px,230px) rotate(540deg)}}
+.banner .petal{animation:fall 9s linear infinite}
+@keyframes bloom{0%,100%{transform-box:fill-box}50%{opacity:.75}}
+@keyframes strip{to{transform:translateX(-350px)}}
+.banner .strip{animation:strip 14s linear infinite}
+@keyframes beat{0%,100%{transform-box:fill-box;transform-origin:center;scale:1}50%{scale:1.18}}
+.banner .beat{transform-box:fill-box;transform-origin:center;animation:beat 1.4s ease-in-out infinite}
+@keyframes blink{50%{opacity:.15}}
+.banner .blink{animation:blink 1.6s steps(1) infinite}
+@keyframes quill{0%,100%{transform:rotate(0)}50%{transform:rotate(-4deg) translate(-4px,2px)}}
+.banner .quill{transform-box:fill-box;transform-origin:0% 100%;animation:quill 2.4s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:rotate(0)}50%{transform:rotate(4deg)}}
+.banner .sway{transform-box:fill-box;transform-origin:top;animation:sway 3s ease-in-out infinite}
+@keyframes pop{0%,80%,100%{transform:scale(1)}88%{transform:scale(1.15)}}
+.banner .pop{transform-box:fill-box;transform-origin:center;animation:pop 3.2s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:1}50%{opacity:.4}}
+.banner .twinkle,.banner .star{animation:twinkle 3s ease-in-out infinite}
+@keyframes flame{0%,100%{transform:scaleY(1) translateY(0)}50%{transform:scaleY(1.06) translateY(-1px)}}
+.crest .flame{transform-box:fill-box;transform-origin:bottom center;animation:flame 1.8s ease-in-out infinite}
+.crest .spark{animation:twinkle 2.6s ease-in-out infinite}
+.card{transition:transform .18s ease,box-shadow .18s ease,border-color .18s}
+.card:hover{transform:translateY(-3px) rotate(-.4deg);box-shadow:0 10px 24px -10px var(--tc,rgba(0,0,0,.5)),0 0 0 1px var(--accent)}
+.cover.gold{outline:2px solid #e3b44a;outline-offset:-2px;box-shadow:inset 0 0 0 4px rgba(227,180,74,.25)}
+.cover.gold .badge{background:linear-gradient(135deg,#fff0c4,#e3b44a 55%,#9a6a1c);color:#2b1700;font-weight:700}
+.now{display:grid;grid-auto-flow:column;grid-auto-columns:120px;gap:10px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory;scrollbar-width:thin}
+.now .card{scroll-snap-align:start}
+.now .card .meta .tt{font-size:11.5px}
+.now .card .meta .ss{flex-direction:column;gap:3px}
+.prog{height:4px;background:var(--panel2);margin-top:4px}.prog i{display:block;height:100%;background:var(--c)}
+.wallwrap{position:relative}
+.wall{position:absolute;left:-16px;right:-16px;top:0;height:760px;overflow:hidden;pointer-events:none;z-index:0;-webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.9),transparent 92%);mask-image:linear-gradient(180deg,rgba(0,0,0,.9),transparent 92%)}
+.wall .track{display:grid;grid-auto-flow:column;grid-template-rows:repeat(4,180px);grid-auto-columns:120px;gap:10px;opacity:.16;filter:saturate(1.2);animation:wall 120s linear infinite}
+.wall .track .cover{aspect-ratio:auto;height:180px}
+.wall .track .cover .ct,.wall .track .cover .ini{display:none}
+@keyframes wall{to{transform:translateX(-50%)}}
+.wallwrap>*:not(.wall){position:relative;z-index:1}
+.stat .art{height:70px;margin:-14px -14px 10px;overflow:hidden;background:var(--bar);border-bottom:1px solid #000;position:relative}
+.stat .art .bg{position:absolute;inset:0;width:100%;height:100%}
+.spot{display:grid;grid-template-columns:180px 1fr;gap:18px;align-items:center;padding:16px 20px;border-top:3px solid var(--gold)}
+.spot .pic{aspect-ratio:3/4;position:relative;overflow:hidden;background:var(--bar)}
+.spot .pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:kb 6s ease-in-out}
+@keyframes kb{from{transform:scale(1.08)}to{transform:scale(1)}}
+.spot h2{font-size:28px}
+.spot .dots{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.spot .dots button{width:22px;height:6px;border:0;background:var(--line2);cursor:pointer;padding:0}
+.spot .dots button.on{background:var(--gold)}
+.wr-hero{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-top:14px}
+.wr-num{padding:16px;border-top:4px solid var(--c)}
+.wr-num b{display:block;font-family:"Space Grotesk";font-size:40px;line-height:1}
+.wr-num span{font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.wr-years{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}
+.wr-years button{border:1px solid var(--line2);background:var(--panel);padding:6px 14px;font-weight:700;cursor:pointer}
+.wr-years button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media (max-width:640px){.spot{grid-template-columns:110px 1fr}.spot h2{font-size:20px}.wall .track{grid-template-rows:repeat(4,130px);grid-auto-columns:88px}.wall .track .cover{height:130px}}
 footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:var(--ink3)}
 
 @media (max-width:900px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}}
@@ -341,6 +397,7 @@ $('#theme').onclick=()=>{theme=theme==='dark'?'light':'dark';root.dataset.theme=
 
 /* ---------- icons & art ---------- */
 const IC={
+ wrapped:'<rect x="3" y="8" width="18" height="13"/><path d="M3 12h18M12 8v13M12 8c-2-5-7-5-7-2s5 2 7 2c2 0 7 1 7-2s-5-3-7 2"/>',
  overview:'<rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/>',
  hof:'<path d="M3 7l4.5 4L12 4l4.5 7L21 7v11H3z"/><path d="M3 21h18"/>',
  anime:'<rect x="2.5" y="6" width="19" height="13"/><path d="M8 2.5l4 3.5 4-3.5"/><path d="M6 21.5h12"/>',
@@ -362,42 +419,42 @@ const ico=(k,cls)=>`<svg class="ico ${cls||''}" viewBox="0 0 24 24" fill="none" 
 const RING='<svg class="ring" viewBox="0 0 64 64" aria-hidden="true"><path d="M6 37c-4 6 10 6 26-1s28-17 26-22" fill="none" stroke="#fff" stroke-width="3"/><circle cx="32" cy="32" r="14" fill="#fff"/></svg>';
 /* ---------- artwork ---------- */
 const LOGO=(s)=>`<svg width="${s}" height="${s}" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lgP" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff5c86"/><stop offset=".55" stop-color="#b8264a"/><stop offset="1" stop-color="#6a2fc4"/></linearGradient><linearGradient id="lgR" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f6d27a" stop-opacity="0"/><stop offset=".3" stop-color="#f6d27a"/><stop offset=".7" stop-color="#fff2c9"/><stop offset="1" stop-color="#f6d27a" stop-opacity="0"/></linearGradient></defs><path d="M6 37c-4 6 10 6 26-1s28-17 26-22" fill="none" stroke="url(#lgR)" stroke-width="2.4" opacity=".55"/><circle cx="32" cy="32" r="15" fill="url(#lgP)"/><path d="M19 27c5-2 18-2 26 2" stroke="#fff" stroke-opacity=".25" stroke-width="2" fill="none"/><path d="M6 37c-4 6 10 6 26-1s28-17 26-22" fill="none" stroke="url(#lgR)" stroke-width="2.4" stroke-dasharray="0 23 60" /><circle cx="51" cy="14" r="1.6" fill="#fff"/><circle cx="12" cy="18" r="1" fill="#fff" opacity=".7"/></svg>`;
-const STARS=(n,x0,x1,seed)=>{let h=seed||3,s='';const r=()=>{h=(h*9301+49297)%233280;return h/233280};for(let i=0;i<n;i++){const x=x0+r()*(x1-x0),y=r()*200,o=.25+r()*.6,z=r()<.15?1.8:.9;s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${z}" fill="#fff" opacity="${o.toFixed(2)}"/>`}return s};
+const STARS=(n,x0,x1,seed)=>{let h=seed||3,s='';const r=()=>{h=(h*9301+49297)%233280;return h/233280};for(let i=0;i<n;i++){const x=x0+r()*(x1-x0),y=r()*200,o=.25+r()*.6,z=r()<.15?1.8:.9;s+=`<circle class="${z>1?'star':''}" style="animation-delay:-${(r()*4).toFixed(1)}s" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${z}" fill="#fff" opacity="${o.toFixed(2)}"/>`}return s};
 const ART={
  anime:c=>`<circle cx="700" cy="70" r="46" fill="#ffe7ef" opacity=".92"/><circle cx="700" cy="70" r="62" fill="#ffe7ef" opacity=".08"/>
   <g fill="#14081a" opacity=".95"><rect x="560" y="96" width="210" height="9"/><rect x="548" y="88" width="234" height="9"/><rect x="580" y="112" width="170" height="7"/><rect x="590" y="105" width="10" height="95"/><rect x="730" y="105" width="10" height="95"/></g>
   <g fill="${c}"><rect x="548" y="88" width="234" height="3" opacity=".9"/></g>
   <path d="M820 20 C760 30 720 60 690 40 M780 24 c-8 10-6 22 4 30" stroke="#3a1a2e" stroke-width="5" fill="none"/>
-  ${[[760,40],[742,52],[790,58],[722,30],[800,30],[770,70]].map(([x,y],i)=>`<g transform="translate(${x} ${y}) rotate(${i*31})"><ellipse rx="9" ry="5" fill="#ffb3c8"/><ellipse rx="5" ry="9" fill="#ff9fbb" opacity=".85"/><circle r="2" fill="#fff4f7"/></g>`).join('')}
-  ${[[520,40,20],[600,150,60],[660,170,120],[470,120,200],[640,30,250],[540,180,320],[700,150,40]].map(([x,y,r])=>`<ellipse cx="${x}" cy="${y}" rx="5" ry="3" fill="#ffb3c8" opacity=".7" transform="rotate(${r} ${x} ${y})"/>`).join('')}
+  ${[[760,40],[742,52],[790,58],[722,30],[800,30],[770,70]].map(([x,y],i)=>`<g class="bloom" style="animation-delay:${i*.4}s" transform="translate(${x} ${y}) rotate(${i*31})"><ellipse rx="9" ry="5" fill="#ffb3c8"/><ellipse rx="5" ry="9" fill="#ff9fbb" opacity=".85"/><circle r="2" fill="#fff4f7"/></g>`).join('')}
+  ${Array.from({length:14},(_,i)=>{const x=430+((i*53)%390),d=(i*0.83)%7,dur=7+(i%5);return `<g class="petal" style="animation-delay:-${d}s;animation-duration:${dur}s"><ellipse cx="${x}" cy="-10" rx="5" ry="3" fill="#ffb3c8" opacity=".8"/></g>`}).join('')}
   <g stroke="#fff" stroke-opacity=".12" stroke-width="2">${[0,1,2,3,4,5].map(i=>`<line x1="${430+i*8}" y1="${200-i*30}" x2="${380+i*8}" y2="${210-i*30}"/>`).join('')}</g>`,
  manga:c=>`<g transform="translate(470 18) rotate(-4)"><rect width="150" height="100" fill="#fff"/><rect x="158" width="170" height="60" fill="#fff"/><rect x="158" y="68" width="170" height="110" fill="#fff"/><rect y="108" width="150" height="70" fill="#fff"/>
   <g fill="#1c0e22" opacity=".85">${Array.from({length:60},(_,i)=>`<circle cx="${8+(i%10)*14+(Math.floor(i/10)%2)*7}" cy="${8+Math.floor(i/10)*15}" r="${(1.2+(i%10)*.32).toFixed(1)}"/>`).join('')}</g>
   <g stroke="#1c0e22" stroke-width="2">${Array.from({length:14},(_,i)=>`<line x1="243" y1="123" x2="${158+(i/13)*170}" y2="${i%2?68:178}"/>`).join('')}</g><circle cx="243" cy="123" r="22" fill="#fff"/>
   <path d="M175 10 h90 v34 h-50 l-14 12 v-12 h-26 z" fill="#fff" stroke="#1c0e22" stroke-width="2.5"/><text x="220" y="34" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-weight="700" font-size="18" fill="#1c0e22">!?</text>
-  <text x="20" y="160" font-family="sans-serif" font-weight="900" font-size="40" fill="${c}" transform="rotate(-8 20 160)">ドン!</text></g>`,
+  <g transform="rotate(-8 20 160)"><text class="pop" x="20" y="160" font-family="sans-serif" font-weight="900" font-size="40" fill="${c}">ドン!</text></g></g>`,
  films:c=>`<g transform="translate(520 0)"><path d="M150 0 L300 200 L40 200 Z" fill="#fff" opacity=".06"/><circle cx="150" cy="-6" r="16" fill="#fff" opacity=".4"/>
   <g transform="translate(150 105) rotate(-12)"><rect x="-90" y="-10" width="180" height="70" fill="#f2e9f5"/><rect x="-90" y="-36" width="180" height="22" fill="#1c0e22" transform="rotate(-10 -90 -14)"/>
   ${[0,1,2,3,4].map(i=>`<rect x="${-80+i*36}" y="-34" width="16" height="22" fill="#f2e9f5" transform="rotate(-10 -90 -14) skewX(-25)"/>`).join('')}
   <rect x="-90" y="-10" width="180" height="10" fill="${c}"/><text x="-78" y="30" font-family="JetBrains Mono,monospace" font-size="12" fill="#1c0e22">SCENE 01  TAKE 3</text><text x="-78" y="50" font-family="JetBrains Mono,monospace" font-size="12" fill="#1c0e22">ROLL A</text></g></g>
-  <g transform="translate(470 150)"><rect x="0" y="0" width="360" height="34" fill="#0c060f"/>${Array.from({length:17},(_,i)=>`<rect x="${6+i*21}" y="4" width="11" height="6" fill="#f2e9f5" opacity=".75"/><rect x="${6+i*21}" y="24" width="11" height="6" fill="#f2e9f5" opacity=".75"/>`).join('')}${[0,1,2,3,4].map(i=>`<rect x="${10+i*70}" y="12" width="60" height="10" fill="${c}" opacity="${.35+i*.12}"/>`).join('')}</g>`,
+  <g transform="translate(470 150)"><rect x="0" y="0" width="360" height="34" fill="#0c060f"/><g class="strip">${Array.from({length:34},(_,i)=>`<rect x="${6+i*21}" y="4" width="11" height="6" fill="#f2e9f5" opacity=".75"/><rect x="${6+i*21}" y="24" width="11" height="6" fill="#f2e9f5" opacity=".75"/>`).join('')}${[0,1,2,3,4,5,6,7,8,9].map(i=>`<rect x="${10+i*70}" y="12" width="60" height="10" fill="${c}" opacity="${.35+(i%5)*.12}"/>`).join('')}</g></g>`,
  games:c=>`<g transform="translate(560 40)"><path d="M20 20 h140 a28 28 0 0 1 28 28 l12 58 a20 20 0 0 1 -36 14 l-24 -30 h-80 l-24 30 a20 20 0 0 1 -36 -14 l12 -58 a28 28 0 0 1 28 -28z" fill="#f2e9f5"/>
   <rect x="38" y="46" width="12" height="36" fill="#1c0e22"/><rect x="26" y="58" width="36" height="12" fill="#1c0e22"/>
   <circle cx="140" cy="52" r="8" fill="${c}"/><circle cx="158" cy="68" r="8" fill="#ff5c86"/><circle cx="122" cy="68" r="8" fill="#6a2fc4"/><circle cx="140" cy="84" r="8" fill="#f0c43c"/>
   <rect x="80" y="40" width="16" height="6" fill="#93879a"/><rect x="100" y="40" width="16" height="6" fill="#93879a"/></g>
-  <g transform="translate(470 20)">${[0,1,2,3,4].map(i=>`<path transform="translate(${i*20} 0)" d="M2 4h4v-2h4v2h4v6h-2v2h-2v2h-2v2h-2v-2h-2v-2h-2v-2h-2z" fill="${i<4?'#ff5c86':'#45334f'}"/>`).join('')}</g>
-  <text x="472" y="186" font-family="JetBrains Mono,monospace" font-size="13" letter-spacing="3" fill="#fff" opacity=".7">PRESS START ▶</text>`,
+  <g transform="translate(470 20)">${[0,1,2,3,4].map(i=>`<path class="${i<4?'beat':''}" style="animation-delay:${i*.15}s" transform="translate(${i*20} 0)" d="M2 4h4v-2h4v2h4v6h-2v2h-2v2h-2v2h-2v-2h-2v-2h-2v-2h-2z" fill="${i<4?'#ff5c86':'#45334f'}"/>`).join('')}</g>
+  <text class="blink" x="472" y="186" font-family="JetBrains Mono,monospace" font-size="13" letter-spacing="3" fill="#fff" opacity=".7">PRESS START ▶</text>`,
  books:c=>`<g transform="translate(560 30)"><path d="M120 40 C90 22 40 20 0 30 v120 c40-10 90-8 120 10z" fill="#f7eedf"/><path d="M120 40 C150 22 200 20 240 30 v120 c-40-10-90-8-120 10z" fill="#fff8ec"/><path d="M120 40v120" stroke="#c9b48e" stroke-width="2"/>
   ${[0,1,2,3,4,5,6].map(i=>`<line x1="18" y1="${52+i*13}" x2="${100-(i%3)*8}" y2="${50+i*13}" stroke="#c9b48e" stroke-width="2"/><line x1="140" y1="${50+i*13}" x2="${222-(i%2)*14}" y2="${52+i*13}" stroke="#c9b48e" stroke-width="2"/>`).join('')}
-  <path d="M170 30 v48 l10-8 10 8 v-48" fill="${c}"/></g>
+  <path class="sway" d="M170 30 v48 l10-8 10 8 v-48" fill="${c}"/></g>
   <g transform="translate(460 120)">${[['#c8324f',70],['#6a2fc4',60],['#d9a514',80],['#24a896',66]].map(([col,w],i)=>`<rect x="${i*6}" y="${60-i*18}" width="${w}" height="16" fill="${col}"/><rect x="${i*6+6}" y="${64-i*18}" width="${w-20}" height="2" fill="#fff" opacity=".5"/>`).join('')}</g>
   <text x="520" y="40" font-family="Noto Nastaliq Urdu,serif" font-size="22" fill="#fff" opacity=".35">کتاب</text>`,
  stories:c=>`<g transform="translate(560 24)"><rect x="0" y="10" width="160" height="150" fill="#fff8ec" transform="rotate(-6)"/>${[0,1,2,3,4,5,6,7].map(i=>`<line x1="16" y1="${40+i*14}" x2="${140-(i%3)*18}" y2="${40+i*14}" stroke="#c9b48e" stroke-width="2" transform="rotate(-6)"/>`).join('')}
-  <path d="M150 150 C190 90 230 40 250 0 C235 50 210 100 165 160 Z" fill="#f2e9f5"/><path d="M150 150 L240 10" stroke="${c}" stroke-width="2"/><path d="M150 150 l-8 16 l14-8z" fill="#1c0e22"/>
+  <g class="quill"><path d="M150 150 C190 90 230 40 250 0 C235 50 210 100 165 160 Z" fill="#f2e9f5"/><path d="M150 150 L240 10" stroke="${c}" stroke-width="2"/><path d="M150 150 l-8 16 l14-8z" fill="#1c0e22"/></g>
   <rect x="200" y="120" width="44" height="40" fill="#1c0e22"/><rect x="208" y="110" width="28" height="12" fill="#1c0e22"/><rect x="200" y="130" width="44" height="6" fill="${c}"/>
   <circle cx="120" cy="170" r="6" fill="#1c0e22"/><circle cx="132" cy="178" r="3" fill="#1c0e22"/></g>`,
  hof:c=>`<g transform="translate(600 30)"><path d="M10 120 L0 30 L45 70 L80 0 L115 70 L160 30 L150 120 Z" fill="${c}"/><path d="M10 120 L0 30 L45 70 L80 0 L80 120Z" fill="#fff" opacity=".18"/><rect x="10" y="120" width="140" height="18" fill="#f0c43c"/>
-  <circle cx="80" cy="84" r="10" fill="#c8324f"/><circle cx="35" cy="98" r="6" fill="#6a2fc4"/><circle cx="125" cy="98" r="6" fill="#6a2fc4"/><circle cx="0" cy="30" r="6" fill="#fff2c9"/><circle cx="80" cy="0" r="7" fill="#fff2c9"/><circle cx="160" cy="30" r="6" fill="#fff2c9"/></g>
+  <circle class="twinkle" cx="80" cy="84" r="10" fill="#c8324f"/><circle cx="35" cy="98" r="6" fill="#6a2fc4"/><circle cx="125" cy="98" r="6" fill="#6a2fc4"/><circle cx="0" cy="30" r="6" fill="#fff2c9"/><circle cx="80" cy="0" r="7" fill="#fff2c9"/><circle cx="160" cy="30" r="6" fill="#fff2c9"/></g>
   ${[0,1,2,3,4,5].map(i=>`<ellipse cx="${560-i*2}" cy="${160-i*22}" rx="12" ry="5" fill="#f0c43c" opacity=".55" transform="rotate(${-40+i*8} ${560-i*2} ${160-i*22})"/><ellipse cx="${800+i*2}" cy="${160-i*22}" rx="12" ry="5" fill="#f0c43c" opacity=".55" transform="rotate(${40-i*8} ${800+i*2} ${160-i*22})"/>`).join('')}`,
  overview:c=>`<g transform="translate(560 -20) scale(3.6)">${LOGO(64).replace(/<svg[^>]*>|<\/svg>/g,'').replace(/lg([PR])/g,'lgO$1')}</g>`,
  search:c=>`<g transform="translate(620 30)"><circle cx="60" cy="60" r="48" fill="none" stroke="#f2e9f5" stroke-width="12"/><circle cx="60" cy="60" r="40" fill="#fff" opacity=".06"/><rect x="96" y="104" width="22" height="70" fill="${c}" transform="rotate(-45 107 139)"/><path d="M36 44 a30 30 0 0 1 22 -14" stroke="#fff" stroke-width="5" fill="none" opacity=".6"/></g>`
@@ -407,22 +464,30 @@ function artBg(c,seed,k){
   return `<svg class="bg" viewBox="0 0 820 200" preserveAspectRatio="xMaxYMid ${k?'meet':'slice'}" aria-hidden="true"><defs>${glow}</defs><rect width="820" height="200" fill="url(#gw${seed})"/>${STARS(40,340,820,seed)}${k&&ART[k]?ART[k](c):''}</svg>`;
 }
 
-const HEX={anime:'#8a50e0',manga:'#d23d5c',films:'#e8733a',games:'#24a896',books:'#b07a38',stories:'#d0508c',hof:'#e3b11c',search:'#c8325a',overview:'#c8325a'};
-const EMBLEM=(s)=>`<svg width="${s}" height="${s}" viewBox="0 0 200 200" aria-hidden="true"><defs>
-<linearGradient id="emP" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff6d93"/><stop offset=".5" stop-color="#c0274f"/><stop offset="1" stop-color="#5b2bb5"/></linearGradient>
-<linearGradient id="emG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b8862a"/><stop offset=".5" stop-color="#ffe7a3"/><stop offset="1" stop-color="#b8862a"/></linearGradient>
-<path id="emArcT" d="M 24 100 A 76 76 0 0 1 176 100"/><path id="emArcB" d="M 30 100 A 70 70 0 0 0 170 100"/>
-<clipPath id="emFront"><rect x="-90" y="0" width="180" height="40"/></clipPath></defs>
-<circle cx="100" cy="100" r="98" fill="#1c0e22"/><circle cx="100" cy="100" r="97" fill="none" stroke="url(#emG)" stroke-width="3"/><circle cx="100" cy="100" r="62" fill="none" stroke="url(#emG)" stroke-width="1" opacity=".35"/>
-<text font-family="Space Grotesk,sans-serif" font-weight="700" font-size="14" letter-spacing="2.5" fill="#ffe7a3"><textPath href="#emArcT" startOffset="50%" text-anchor="middle">SATSUGAI DE ATSU</textPath></text>
-<text font-family="Space Grotesk,sans-serif" font-weight="600" font-size="10" letter-spacing="2.5" fill="#cdb9d4"><textPath href="#emArcB" startOffset="50%" text-anchor="middle">SATURN COLLECTIONS</textPath></text>
-<circle cx="22" cy="100" r="2.5" fill="#ffe7a3"/><circle cx="178" cy="100" r="2.5" fill="#ffe7a3"/>
-<g transform="translate(100 100) rotate(-18)"><ellipse rx="58" ry="12" fill="none" stroke="url(#emG)" stroke-width="4.5" opacity=".9"/></g>
-<circle cx="100" cy="100" r="34" fill="url(#emP)"/><path d="M73 89c12-8 40-8 54 0" stroke="#fff" stroke-opacity=".22" stroke-width="4" fill="none"/>
-<text x="100" y="115" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-weight="700" font-size="40" fill="#fff">S</text>
-<g transform="translate(100 100) rotate(-18)"><ellipse rx="58" ry="12" fill="none" stroke="url(#emG)" stroke-width="4.5" clip-path="url(#emFront)"/></g></svg>`;
+const HEX={wrapped:'#d0508c',anime:'#8a50e0',manga:'#d23d5c',films:'#e8733a',games:'#24a896',books:'#b07a38',stories:'#d0508c',hof:'#e3b11c',search:'#c8325a',overview:'#c8325a'};
+const EMBLEM=(s)=>`<svg class="crest" width="${s}" height="${s}" viewBox="0 0 200 200" aria-hidden="true"><defs>
+<radialGradient id="cP" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#ff8fab"/><stop offset=".45" stop-color="#c8284f"/><stop offset="1" stop-color="#3b1670"/></radialGradient>
+<linearGradient id="cG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff0c4"/><stop offset=".45" stop-color="#e3b44a"/><stop offset="1" stop-color="#9a6a1c"/></linearGradient>
+<linearGradient id="cF" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#ff3b5c"/><stop offset=".55" stop-color="#ff8a3d"/><stop offset="1" stop-color="#ffe08a"/></linearGradient>
+<linearGradient id="cB" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e3b44a" stop-opacity="0"/><stop offset=".2" stop-color="#fff6dc"/><stop offset=".8" stop-color="#e3b44a"/><stop offset="1" stop-color="#e3b44a" stop-opacity=".2"/></linearGradient>
+<clipPath id="cFront"><rect x="-120" y="0" width="240" height="60"/></clipPath>
+<path id="cArc" d="M 22 100 A 78 78 0 0 1 178 100"/></defs>
+<circle cx="100" cy="100" r="98" fill="#160a1b"/>
+<g fill="none" stroke="url(#cG)"><circle cx="100" cy="100" r="96" stroke-width="2.5"/><circle cx="100" cy="100" r="89" stroke-width="1" opacity=".5"/></g>
+<g fill="url(#cG)" opacity=".9">${Array.from({length:24},(_,i)=>`<rect x="99" y="6" width="2" height="${i%2?5:9}" transform="rotate(${i*15} 100 100)"/>`).join('')}</g>
+<g class="flame"><path d="M100 18 C110 38 124 44 118 66 C114 56 108 54 106 48 C106 60 100 66 100 70 C100 66 94 60 94 48 C92 54 86 56 82 66 C76 44 90 38 100 18Z" fill="url(#cF)"/>
+<path d="M100 40 C104 50 110 54 107 64 C104 60 102 58 100 56 C98 58 96 60 93 64 C90 54 96 50 100 40Z" fill="#fff3c2" opacity=".85"/></g>
+<g transform="translate(100 112) rotate(-20)"><ellipse rx="74" ry="17" fill="none" stroke="url(#cB)" stroke-width="5"/></g>
+<circle cx="100" cy="112" r="40" fill="url(#cP)"/>
+<path d="M70 100c16-12 44-12 60 0" stroke="#fff" stroke-opacity=".18" stroke-width="5" fill="none"/>
+<text x="100" y="127" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-weight="700" font-size="40" fill="#fff" opacity=".96">S</text>
+<g transform="translate(100 112) rotate(-20)" clip-path="url(#cFront)"><ellipse rx="74" ry="17" fill="none" stroke="url(#cB)" stroke-width="5"/>
+<path d="M60 9 L84 2 L80 10 Z" fill="#fff6dc"/></g>
+<g class="spark"><path d="M152 60l2 6 6 2-6 2-2 6-2-6-6-2 6-2z" fill="#ffe7a3"/><path d="M44 150l1.5 4 4 1.5-4 1.5-1.5 4-1.5-4-4-1.5 4-1.5z" fill="#ffe7a3"/></g>
+<text font-family="Space Grotesk,sans-serif" font-weight="700" font-size="10" letter-spacing="3" fill="#e9cf8a" opacity=".9"><textPath href="#cArc" startOffset="50%" text-anchor="middle" dy="0">· DE ATSU ·</textPath></text>
+<text x="100" y="178" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-weight="600" font-size="8.5" letter-spacing="3" fill="#cdb9d4">REBORN ANEW</text></svg>`;
 function banner(k,title,sub,stats,kicker){
-  return `<section class="banner" style="--c:${HEX[k]}">${artBg(HEX[k],title.length*13,k)}<div class="in">${k==='overview'?`<div class="emb">${EMBLEM(124)}</div>`:`<div class="bico">${ico(k)}</div>`}<div><div class="kick">${esc(kicker||'Saturn Collections')}</div><h1>${esc(title)}</h1>${sub?`<div class="sub">${sub}</div>`:''}</div>${stats&&stats.length?`<div class="bst">${stats.map(([n,l])=>`<span><b>${n}</b>${esc(l)}</span>`).join('')}</div>`:''}</div></section>`;
+  return `<section class="banner" style="--c:${HEX[k]}">${artBg(HEX[k],title.length*13,k)}<div class="in">${k==='overview'?`<div class="emb">${EMBLEM(140)}</div>`:`<div class="bico">${ico(k)}</div>`}<div><div class="kick">${esc(kicker||'Saturn Collections')}</div><h1>${esc(title)}</h1>${sub?`<div class="sub">${sub}</div>`:''}</div>${stats&&stats.length?`<div class="bst">${stats.map(([n,l])=>`<span><b>${n}</b>${esc(l)}</span>`).join('')}</div>`:''}</div></section>`;
 }
 
 /* ---------- covers ---------- */
@@ -433,7 +498,8 @@ const initials=t=>{const w=String(t).replace(/[^\p{L}\p{N} ]/gu,' ').trim().spli
 function cover(title,img,extra,cls){
   const c=PAL[hash(title)%PAL.length];
   const im=(img&&imgOK)?`<img src="${esc(img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="window.__imgFail&&window.__imgFail(this)">`:'';
-  return `<div class="cover ${cls||''}" style="--tc:${c}">${RING}<div class="ini">${esc(initials(title))}</div><div class="ct">${esc(title)}</div>${im}${extra||''}</div>`;
+  const gold=/class="badge">(10|5★|5\/5|5)</.test(extra||'');
+  return `<div class="cover ${cls||''}${gold?' gold':''}" style="--tc:${c}">${RING}<div class="ini">${esc(initials(title))}</div><div class="ct">${esc(title)}</div>${im}${extra||''}</div>`;
 }
 let imgFails=0,imgLoads=0;
 window.__imgFail=el=>{el.remove();imgFails++;if(imgFails>=3&&imgLoads===0)imgOK=false};
@@ -455,7 +521,7 @@ const stars=r=>{if(!r)return'';const f=Math.floor(r);return '★'.repeat(f)+(r%1
 const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
 
 /* ---------- nav / routing ---------- */
-const ROUTES=[['overview','Overview','#e9ecf5'],['hof','Hall of Fame','#f0c43c'],['anime','Anime','#a77ef0'],['manga','Manga','#f06f88'],['films','Films','#f08a50'],['games','Games','#3cc5b2'],['books','Books','#d4a062'],['stories','Stories','#ec7ab0'],['search','Search','#e9ecf5']];
+const ROUTES=[['overview','Overview','#e9ecf5'],['wrapped','Wrapped','#ff6d93'],['hof','Hall of Fame','#f0c43c'],['anime','Anime','#a77ef0'],['manga','Manga','#f06f88'],['films','Films','#f08a50'],['games','Games','#3cc5b2'],['books','Books','#d4a062'],['stories','Stories','#ec7ab0'],['search','Search','#e9ecf5']];
 $('#logo').innerHTML=LOGO(34);
 $('#nav').innerHTML=ROUTES.map(([k,l,c])=>`<a href="#${k}" data-r="${k}" style="--c:${c}">${ico(k)}${l}</a>`).join('');
 let route='overview';
@@ -468,7 +534,7 @@ function go(){
   render();window.scrollTo(0,0);
 }
 window.addEventListener('hashchange',go);
-function render(){({manga:rManga,books:rBooks,hof:rHof,overview:rOverview,anime:rAnime,films:rFilms,games:rGames,stories:rStories,search:rSearch})[route]()}
+function render(){({wrapped:rWrapped,manga:rManga,books:rBooks,hof:rHof,overview:rOverview,anime:rAnime,films:rFilms,games:rGames,stories:rStories,search:rSearch})[route]()}
 
 /* ---------- overview ---------- */
 function statusBar(parts){const tot=parts.reduce((s,p)=>s+p[1],0)||1;return `<div class="sbar">${parts.map(p=>`<i style="width:${p[1]/tot*100}%;background:${p[2]}" title="${esc(p[0])}: ${p[1]}"></i>`).join('')}</div><div class="legend">${parts.map(p=>`<span><b style="background:${p[2]}"></b>${esc(p[0])} ${fmt(p[1])}</span>`).join('')}</div>`}
@@ -500,8 +566,18 @@ function rOverview(){
   const ad=Array.from({length:10},(_,i)=>scored.filter(a=>a.sc===i+1).length);
   const fd=[.5,1,1.5,2,2.5,3,3.5,4,4.5,5].map(v=>fr.filter(f=>f.r===v).length);
   const gd=[1,2,3,4,5].map(v=>gr.filter(g=>g.r===v).length);
-  $('#app').innerHTML=`
-  ${banner('overview','SatsugaiDeAtsu','Anime, manga, films, games, books and stories in one place.',[],'Saturn Collections')}
+  const wallItems=[...anime.filter(a=>a.sc===10&&a.img),...manga.filter(m=>m.sc===10&&m.img),...films.filter(f=>f.r===5&&f.img),...books.filter(b=>b.r>=5&&b.img)];
+  const wallHtml=wallItems.length>8?`<div class="wall" aria-hidden="true"><div class="track">${[...wallItems,...wallItems].map(x=>cover(x.t,x.img)).join('')}</div></div>`:'';
+  const nowItems=[
+    ...anime.filter(a=>a.st===1).map(a=>({k:'anime',t:a.t,img:a.img,sub:'Watching',p:a.eps?a.ep/a.eps:0,pl:a.eps?`ep ${a.ep}/${a.eps}`:`ep ${a.ep}`,o:()=>openAnime(a)})),
+    ...manga.filter(m=>m.st===1).map(m=>({k:'manga',t:m.t,img:m.img,sub:'Reading',p:m.chs?m.ch/m.chs:0,pl:`ch ${m.ch}${m.chs?'/'+m.chs:''}`,o:()=>openManga(m)})),
+    ...games.filter(g=>g.shelf==='Playing').map(g=>({k:'games',t:g.t,img:g.img||'',sub:'Playing',p:0,pl:(g.pf||[])[0]||'',o:()=>openGame(g)})),
+    ...books.filter(b=>b.st==='reading').map(b=>({k:'books',t:b.t,img:b.img||'',sub:'Reading',p:0,pl:b.a,o:()=>openBook(b)})),
+    ...films.filter(f=>f.wd).sort((a,b)=>b.wd.localeCompare(a.wd)).slice(0,1).map(f=>({k:'films',t:f.t,img:f.img||'',sub:'Last watched',p:0,pl:f.r?stars(f.r):fdate(f.wd),o:()=>openFilm(f)}))];
+  window.__now=nowItems;
+  const art=k=>`<div class="art">${artBg(HEX[k],k.length*17,k)}</div>`;
+  $('#app').innerHTML=`<div class="wallwrap">${wallHtml}
+  ${banner('overview','SatsugaiDeAtsu','One who dies and is reborn anew, a better version of himself.',[],'House of DeAtsu')}
   <section class="box prof" style="grid-template-columns:1fr;padding:12px 16px">
     <div>
       <div class="muted">${esc(D.lbProfile.bio||'')} · ${esc(D.gvProfile.about||'')}</div>
@@ -513,18 +589,19 @@ function rOverview(){
       </div>
     </div>
   </section>
+  ${nowItems.length?`<section class="box" style="margin-top:16px"><div class="box-h" style="border-top:3px solid var(--accent)"><h2>Currently</h2><span class="small muted">what's on right now</span></div><div class="box-b"><div class="now">${nowItems.map((x,i)=>`<div class="card" data-now="${i}" style="--c:${MED[x.k].c}">${cover(x.t,x.img,'')}<div class="meta"><div class="tt">${esc(x.t)}</div><div class="ss"><span>${esc(MED[x.k].name)} · ${esc(x.sub)}</span><span>${esc(x.pl)}</span>${x.p?`<div class="prog"><i style="width:${Math.round(x.p*100)}%"></i></div>`:''}</div></div></div>`).join('')}</div></div></section>`:''}
   <section class="grid stats" style="margin-top:16px">
-    <a class="box stat" href="#anime" style="--c:var(--anime)"><span class="ic">${ico('anime')}</span><div class="lab"><span>Anime</span><span>${scored.length?avg(scored.map(a=>a.sc)).toFixed(2)+' avg':''}</span></div><div class="num">${fmt(anime.length)}</div><div class="sub">${fmt(epsW)} episodes watched</div>
+    <a class="box stat" href="#anime" style="--c:var(--anime)">${art('anime')}<span class="ic">${ico('anime')}</span><div class="lab"><span>Anime</span><span>${scored.length?avg(scored.map(a=>a.sc)).toFixed(2)+' avg':''}</span></div><div class="num">${fmt(anime.length)}</div><div class="sub">${fmt(epsW)} episodes watched</div>
       ${statusBar([1,2,3,4,6].map(s=>[AST[s][0],ac(s),AST[s][1]]))}</a>
-    <a class="box stat" href="#manga" style="--c:var(--manga)"><span class="ic">${ico('manga')}</span><div class="lab"><span>Manga</span><span>${(()=>{const s=manga.filter(m=>m.sc);return s.length?avg(s.map(m=>m.sc)).toFixed(2)+' avg':''})()}</span></div><div class="num">${fmt(manga.length)}</div><div class="sub">${fmt(manga.reduce((s,m)=>s+m.ch,0))} chapters read</div>
+    <a class="box stat" href="#manga" style="--c:var(--manga)">${art('manga')}<span class="ic">${ico('manga')}</span><div class="lab"><span>Manga</span><span>${(()=>{const s=manga.filter(m=>m.sc);return s.length?avg(s.map(m=>m.sc)).toFixed(2)+' avg':''})()}</span></div><div class="num">${fmt(manga.length)}</div><div class="sub">${fmt(manga.reduce((s,m)=>s+m.ch,0))} chapters read</div>
       ${statusBar([1,2,3,4,6].map(s=>[MST[s][0],manga.filter(m=>m.st===s).length,MST[s][1]]))}</a>
-    <a class="box stat" href="#films" style="--c:var(--film)"><span class="ic">${ico('films')}</span><div class="lab"><span>Films</span><span>${fr.length?avg(fr.map(f=>f.r)).toFixed(2)+'★ avg':''}</span></div><div class="num">${fmt(fw.length)}</div><div class="sub">${fmt(fr.length)} rated · ${fmt(frv.length)} reviews</div>
+    <a class="box stat" href="#films" style="--c:var(--film)">${art('films')}<span class="ic">${ico('films')}</span><div class="lab"><span>Films</span><span>${fr.length?avg(fr.map(f=>f.r)).toFixed(2)+'★ avg':''}</span></div><div class="num">${fmt(fw.length)}</div><div class="sub">${fmt(fr.length)} rated · ${fmt(frv.length)} reviews</div>
       ${statusBar([['Rated',fr.length,'var(--film)'],['Unrated',fw.length-fr.length,'var(--s3)'],['Watchlist',films.length-fw.length,'var(--s6)']])}</a>
-    <a class="box stat" href="#games" style="--c:var(--game)"><span class="ic">${ico('games')}</span><div class="lab"><span>Games</span><span>${gr.length?avg(gr.map(g=>g.r)).toFixed(2)+'/5 avg':''}</span></div><div class="num">${fmt(games.length)}</div><div class="sub">${gs('Played')} played · ${gs('Playing')} playing</div>
+    <a class="box stat" href="#games" style="--c:var(--game)">${art('games')}<span class="ic">${ico('games')}</span><div class="lab"><span>Games</span><span>${gr.length?avg(gr.map(g=>g.r)).toFixed(2)+'/5 avg':''}</span></div><div class="num">${fmt(games.length)}</div><div class="sub">${gs('Played')} played · ${gs('Playing')} playing</div>
       ${statusBar(Object.keys(GSH).map(k=>[k,gs(k),GSH[k]]))}</a>
-    <a class="box stat" href="#books" style="--c:var(--book)"><span class="ic">${ico('books')}</span><div class="lab"><span>Books</span><span>${(()=>{const s=books.filter(b=>b.r);return s.length?avg(s.map(b=>b.r)).toFixed(2)+'★ avg':''})()}</span></div><div class="num">${books.length}</div><div class="sub">${books.filter(b=>b.st==='read').length} read · ${books.filter(b=>b.ur).length} in Urdu</div>
+    <a class="box stat" href="#books" style="--c:var(--book)">${art('books')}<span class="ic">${ico('books')}</span><div class="lab"><span>Books</span><span>${(()=>{const s=books.filter(b=>b.r);return s.length?avg(s.map(b=>b.r)).toFixed(2)+'★ avg':''})()}</span></div><div class="num">${books.length}</div><div class="sub">${books.filter(b=>b.st==='read').length} read · ${books.filter(b=>b.ur).length} in Urdu</div>
       ${statusBar(Object.keys(BST).map(k=>[BST[k][0],books.filter(b=>b.st===k).length,BST[k][1]]).filter(p=>p[1]))}</a>
-    <a class="box stat" href="#stories" style="--c:var(--story)"><span class="ic">${ico('stories')}</span><div class="lab"><span>Stories</span><span>Medium</span></div><div class="num">${stories.length}</div><div class="sub">${fmt(words)} words written</div>
+    <a class="box stat" href="#stories" style="--c:var(--story)">${art('stories')}<span class="ic">${ico('stories')}</span><div class="lab"><span>Stories</span><span>Medium</span></div><div class="num">${stories.length}</div><div class="sub">${fmt(words)} words written</div>
       ${statusBar([['Stories',stories.filter(s=>!s.tags.includes('articles')).length,'var(--story)'],['Articles',stories.filter(s=>s.tags.includes('articles')).length,'var(--s3)']])}</a>
   </section>
   <section class="grid two" style="margin-top:16px">
@@ -537,12 +614,13 @@ function rOverview(){
       <div class="box"><div class="box-h"><h3>Top anime genres</h3><span class="small muted">completed</span></div><div class="box-b">${topG.map(([g,n])=>`<div class="hbar" style="--c:var(--anime)"><span>${esc(g)}</span><div class="tr"><i style="width:${n/gmx*100}%"></i></div><span class="mono muted">${n}</span></div>`).join('')}</div></div>
     </div>
   </section>
-  ${favRow('Favorite films','films',favF.map(f=>({t:f.t,img:'',sub:f.y,b:f.r?stars(f.r):'',o:()=>openFilm(f)})))}
-  ${favRow('Favorite games','games',favG.map(g=>({t:g.t,img:'',sub:g.pf[0]||'',b:g.r?g.r+'/5':'',o:()=>openGame(g)})))}
+  ${favRow('Favorite films','films',favF.map(f=>({t:f.t,img:f.img||'',sub:f.y,b:f.r?stars(f.r):'',o:()=>openFilm(f)})))}
+  ${favRow('Favorite games','games',favG.map(g=>({t:g.t,img:g.img||'',sub:g.pf[0]||'',b:g.r?g.r+'/5':'',o:()=>openGame(g)})))}
   ${favRow('Favorite anime','anime',D.hof.malFavs.anime.map(([id,t,sub])=>{const a=anime.find(x=>x.id===id);return {t:a?a.t:t,img:a?a.img:'',sub,b:a&&a.sc?String(a.sc):'',o:()=>a?openAnime(a):window.open('https://myanimelist.net/anime/'+id,'_blank')}}))}
   ${favRow('Favorite manga','manga',D.hof.malFavs.manga.map(([id,t,sub])=>{const m=manga.find(x=>x.id===id);return {t:m?m.t:t,img:m?m.img:'',sub,b:m&&m.sc?String(m.sc):'',o:()=>m?openManga(m):window.open('https://myanimelist.net/manga/'+id,'_blank')}}))}
-  <div class="more"><a class="btn" href="#hof">Open the Hall of Fame →</a></div>
+  <div class="more"><a class="btn" href="#hof">Open the Hall of Fame →</a> <a class="btn" href="#wrapped">See your Wrapped →</a></div></div>
   `;
+  document.querySelectorAll('[data-now]').forEach(el=>el.onclick=()=>nowItems[+el.dataset.now].o());
   document.querySelectorAll('.act').forEach(el=>el.onclick=()=>acts[+el.dataset.a].o());
 }
 const FAVS={};
@@ -687,11 +765,13 @@ function rHof(){
   ${banner('hof',"Saturn's throne room",'',[[groups.length,'collections'],[groups.reduce((s,g)=>s+g.secs.length,0),'sections']],'Hall of Fame')}
   <section class="box hof-hero" style="grid-template-columns:1fr;padding:16px 20px"><div><p style="margin:0">${esc(A.paras[1])}</p>
     <details style="margin-top:8px"><summary class="link" style="cursor:pointer">Read the full introduction</summary><div style="margin-top:10px">${A.paras.map(p=>`<p>${esc(p)}</p>`).join('')}<a class="link" href="https://myanimelist.net/blog.php?eid=${A.post}" target="_blank" rel="noopener">Continue on MAL ↗</a></div></details></div></section>
+  ${spotlight()}
   <div class="segtabs">${segs.map(([k,l,c])=>`<button data-seg="${k}" class="${hofSeg===k?'on':''}" style="--c:${c}">${ico(k)} ${l}</button>`).join('')}</div>
   <div class="jgroups">${groups.map(g=>`<div class="jg" style="--c:${g.c}"><span class="jl" data-j="${g.id}">${ico(g.icon)}${esc(g.title)}</span>${g.secs.length>1?g.secs.map(s=>`<a href="#hof" data-j="${s.id}">${esc(s.title)}</a>`).join(''):''}</div>`).join('')}</div>
   ${groups.map(g=>`<div class="grp" id="${g.id}" style="--c:${g.c}">${artBg(g.c,g.title.length*7,'')}<div class="gi">${ico(g.icon)}</div><div><h2>${esc(g.title)}</h2>${g.desc?`<p>${esc(g.desc)}</p>`:''}</div>${g.src?`<a href="${g.src}" target="_blank" rel="noopener">Source ↗</a>`:''}</div>
     ${g.secs.map(s=>`<section class="box hsec ${s.cls||''}" id="${s.id}" style="--c:${/hate/i.test(s.title)?'var(--s4)':g.c}"><div class="box-h"><h2>${esc(s.title)}</h2></div>${s.desc?`<div class="desc">${esc(s.desc)}</div>`:''}<div class="box-b">${s.inner}</div></section>`).join('')}`).join('')}`;
   document.querySelectorAll('[data-seg]').forEach(b=>b.onclick=()=>{hofSeg=b.dataset.seg;rHof()});
+  startSpot();
   document.querySelectorAll('[data-j]').forEach(a=>a.onclick=e=>{e.preventDefault();const el=document.getElementById(a.dataset.j);if(el)el.scrollIntoView({behavior:'smooth'})});
   document.querySelectorAll('[data-h]').forEach(el=>el.onclick=()=>{const it=HOFITEMS[+el.dataset.h];
     if('film' in it){if(it.film)return openFilm(it.film);return window.open('https://letterboxd.com/search/films/'+encodeURIComponent(it.t)+'/','_blank')}
@@ -700,6 +780,13 @@ function rHof(){
     if(it.own)return it.k==='a'?openAnime(it.own):openManga(it.own);
     openMal(it)});
 }
+let spotI=0,spotT=null;
+function spotList(){return (D.hof.malFavs.character||[]).map(([id,t,sub])=>({id,t,sub,img:HIMG('c',id)}))}
+function spotlight(){const L=spotList();if(!L.length)return'';const c=L[spotI%L.length];
+  return `<section class="box spot" id="spot"><div class="pic">${c.img?`<img src="${esc(c.img)}" alt="" referrerpolicy="no-referrer">`:cover(c.t,'')}</div><div><div class="kick small" style="text-transform:uppercase;letter-spacing:.12em;font-weight:800;color:var(--gold)">Character spotlight · ${spotI%L.length+1} of ${L.length}</div><h2>${esc(c.t)}</h2><div class="muted">${esc(c.sub)}</div><p class="muted small" style="margin-top:10px">One of my top 10 characters on MAL.</p><div class="dots">${L.map((_,i)=>`<button aria-label="Show ${esc(L[i].t)}" data-spot="${i}" class="${i===spotI%L.length?'on':''}"></button>`).join('')}</div><a class="link small" style="display:inline-block;margin-top:10px" href="https://myanimelist.net/character/${c.id}" target="_blank" rel="noopener">Open on MAL ↗</a></div></section>`}
+function startSpot(){clearInterval(spotT);const bind=()=>document.querySelectorAll('[data-spot]').forEach(b=>b.onclick=()=>{spotI=+b.dataset.spot;swap();startSpot()});
+  const swap=()=>{const el=$('#spot');if(!el)return clearInterval(spotT);const tmp=document.createElement('div');tmp.innerHTML=spotlight();el.replaceWith(tmp.firstElementChild);bind()};
+  bind();spotT=setInterval(()=>{if(route!=='hof')return clearInterval(spotT);spotI++;swap()},5000)}
 function openMal(it){
   modal(it.k==='m'?'manga':'anime',KLAB[it.k],`${cover(it.name,HIMG(it.k,it.id))}<div><h2>${esc(it.name)}</h2><div class="muted">${esc(KLAB[it.k])} on MyAnimeList</div>
   <div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/${MALK[it.k]}/${it.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
@@ -812,6 +899,40 @@ function editBook(b){
   };
   const d=$('#e_del');if(d)d.onclick=()=>{if(d.dataset.sure!=='1'){d.dataset.sure='1';d.textContent='Tap again to delete';return}
     D.books.splice(b.i,1);rebuildBooks();closeM();render();persist('books','Delete book: '+b.t)};
+}
+
+/* ---------- wrapped ---------- */
+let wrYear=null;
+function rWrapped(){
+  const yOf=d=>d?+String(d).slice(0,4):0;
+  const aY=a=>a.up?new Date(a.up*1000).getUTCFullYear():0;
+  const years=[...new Set([...films.map(f=>yOf(f.wd)),...books.map(b=>yOf(b.dr)),...games.map(g=>yOf(g.added)),...anime.filter(a=>a.st===2).map(aY)])].filter(y=>y>2000).sort((a,b)=>b-a);
+  if(!wrYear||!years.includes(wrYear))wrYear=years[0];
+  const Y=wrYear;
+  const fa=anime.filter(a=>a.st===2&&aY(a)===Y), ff=films.filter(f=>yOf(f.wd)===Y), fb=books.filter(b=>b.st==='read'&&yOf(b.dr)===Y), fg=games.filter(g=>yOf(g.added)===Y&&g.shelf==='Played');
+  const eps=fa.reduce((s,a)=>s+(a.eps||a.ep),0);
+  const gc={};fa.forEach(a=>a.g.forEach(g=>gc[g]=(gc[g]||0)+1));const topG=Object.entries(gc).sort((a,b)=>b[1]-a[1]).slice(0,5);const gm=topG[0]?topG[0][1]:1;
+  const months=Array(12).fill(0);ff.forEach(f=>months[+f.wd.slice(5,7)-1]++);fa.forEach(a=>months[new Date(a.up*1000).getUTCMonth()]++);
+  const bm=months.indexOf(Math.max(...months));
+  const best=[...fa.map(a=>({t:a.t,img:a.img,s:a.sc/2,b:String(a.sc),o:()=>openAnime(a)})),...ff.map(f=>({t:f.t,img:f.img||'',s:f.r,b:f.r+'★',o:()=>openFilm(f)})),...fb.map(b=>({t:b.t,img:b.img||'',s:b.r,b:b.r+'★',o:()=>openBook(b)}))].filter(x=>x.s).sort((a,b)=>b.s-a.s).slice(0,10);
+  window.__wr=best;
+  $('#app').innerHTML=`${banner('wrapped','Your '+Y+' Wrapped','Everything you finished this year, in one place.',[],'Saturn Collections')}
+  <div class="wr-years">${years.map(y=>`<button data-y="${y}" class="${y===Y?'on':''}">${y}</button>`).join('')}</div>
+  <div class="wr-hero">
+    <div class="box wr-num" style="--c:var(--anime)"><b>${fa.length}</b><span>anime completed</span><div class="small muted">${fmt(eps)} episodes</div></div>
+    <div class="box wr-num" style="--c:var(--film)"><b>${ff.length}</b><span>films watched</span><div class="small muted">${ff.filter(f=>f.r).length} rated</div></div>
+    <div class="box wr-num" style="--c:var(--book)"><b>${fb.length}</b><span>books finished</span><div class="small muted">${fmt(fb.reduce((s,b)=>s+b.p,0))} pages</div></div>
+    <div class="box wr-num" style="--c:var(--game)"><b>${fg.length}</b><span>games played</span><div class="small muted">added to Played</div></div>
+    <div class="box wr-num" style="--c:var(--accent)"><b>${MON[bm]}</b><span>busiest month</span><div class="small muted">${months[bm]} things finished</div></div>
+  </div>
+  ${best.length?`<section class="box" style="margin-top:16px"><div class="box-h" style="border-top:3px solid var(--gold)"><h2>Top of ${Y}</h2><span class="small muted">your highest scores this year</span></div><div class="box-b"><div class="grid favs">${best.map((x,i)=>`<div class="card" data-wr="${i}">${cover(x.t,x.img,`<span class="badge">${esc(x.b)}</span>`)}<div class="meta"><div class="tt">${esc(x.t)}</div></div></div>`).join('')}</div></div></section>`:''}
+  <section class="grid two" style="margin-top:16px">
+    <div class="box"><div class="box-h"><h3>Month by month</h3><span class="small muted">anime and films finished</span></div><div class="box-b">${dist(months,MON.map(m=>m[0]),'var(--accent)')}</div></div>
+    <div class="box"><div class="box-h"><h3>Top genres</h3><span class="small muted">anime completed in ${Y}</span></div><div class="box-b">${topG.length?topG.map(([g,n])=>`<div class="hbar" style="--c:var(--anime)"><span>${esc(g)}</span><div class="tr"><i style="width:${n/gm*100}%"></i></div><span class="mono muted">${n}</span></div>`).join(''):'<div class="muted">No anime completed this year.</div>'}</div></div>
+  </section>
+  <div class="note">Anime are counted by the date you last updated them on MAL, so a show finished earlier but updated this year shows up here.</div>`;
+  document.querySelectorAll('[data-y]').forEach(b=>b.onclick=()=>{wrYear=+b.dataset.y;rWrapped()});
+  document.querySelectorAll('[data-wr]').forEach(el=>el.onclick=()=>best[+el.dataset.wr].o());
 }
 
 /* ---------- generic list page ---------- */
