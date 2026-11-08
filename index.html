@@ -366,13 +366,14 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 @media (max-width:640px){.spot{grid-template-columns:110px 1fr}.spot h2{font-size:20px}.wall .track{grid-template-rows:repeat(4,130px);grid-auto-columns:88px}.wall .track .cover{height:130px}}
 
-.quote{display:block;font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:19px;color:#f3e6f6;max-width:760px;line-height:1.5;opacity:0;transform:translateY(8px);filter:blur(4px);transition:opacity .6s,transform .6s,filter .6s;min-height:3em}
+.quote{display:flex;flex-direction:column;justify-content:center;height:150px;overflow:hidden;font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:17px;color:#f3e6f6;max-width:760px;line-height:1.45;opacity:0;transform:translateY(8px);filter:blur(4px);transition:opacity .6s,transform .6s,filter .6s}
+.quote .nw{white-space:nowrap}
 .quote.in{opacity:1;transform:none;filter:none}.quote.out{opacity:0;transform:translateY(-8px);filter:blur(4px)}
-.quote.q-m{font-size:16px}.quote.q-l{font-size:13.5px;line-height:1.45}
+.quote.q-m{font-size:16px}.quote.q-l{font-size:14.5px;line-height:1.4}
 .banner.ovb .in{padding-right:200px}
-@media (max-width:640px){.quote{font-size:15px}.quote.q-m{font-size:13.5px}.quote.q-l{font-size:12px}}
-.quote .qm{color:#ffb3c8;font-size:1.4em;line-height:0;vertical-align:-.15em;margin:0 2px}
-.quote .qby{display:block;font-style:normal;font-family:Inter,sans-serif;font-size:12px;color:#cdb9d4;margin-top:4px;letter-spacing:.04em}
+@media (max-width:640px){.quote{font-size:14px;height:230px}.quote.q-m{font-size:13.5px}.quote.q-l{font-size:12.5px}}
+.quote .qm{color:#ffb3c8;font-size:1.25em;line-height:0;vertical-align:-.1em;margin:0 1px}
+.quote .qby{display:block;font-style:normal;font-family:Inter,sans-serif;font-size:12px;color:#cdb9d4;margin-top:6px;letter-spacing:.03em}
 .marquee{margin:-4px 0 14px;overflow:hidden;background:var(--bar);border:1px solid #000;padding:10px 0;display:grid;gap:10px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
 .mq{overflow:hidden}.mqt{display:flex;gap:10px;width:max-content}
 .mq.l .mqt{animation:mql 90s linear infinite}.mq.r .mqt{animation:mqr 90s linear infinite}
@@ -412,6 +413,8 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .htile .hic{width:34px;height:34px;background:var(--c);display:grid;place-items:center;margin-bottom:6px}
 .htile .hic .ico{width:20px;height:20px;color:#fff}
 @media (max-width:640px){.htiles{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.htile .hlab{padding:8px}.htile .hlab b{font-size:13px}.htile .hlab small{display:none}.htile .hic{width:24px;height:24px}.htile .hic .ico{width:14px;height:14px}}
+.sawg .cover::before{display:none}
+.sawg .cover .ring{display:none}
 footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:var(--ink3)}
 
 @media (max-width:900px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}}
@@ -437,7 +440,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:v
 <header class="top">
   <div class="top-in">
     <a class="brand" href="#overview" aria-label="Saturn Collections home">
-      <img src="assets/logo.png" alt="" width="36" height="36" style="border-radius:50%;border:2px solid #d42f5a;display:block">
+      <img src="assets/logo.png" alt="" width="40" height="40" style="display:block;filter:drop-shadow(0 0 6px rgba(255,31,75,.55))">
       <span class="bt">Saturn Collections</span>
     </a>
     <form class="gsearch" id="gform" role="search">
@@ -821,6 +824,8 @@ function rHof(){
     G('g-malc','MAL favourites','My official top characters and people on MyAnimeList.','star','#8a50e0','https://myanimelist.net/profile/SatsugaiDeAtsu',[
       sec('s-mal-c','Top characters','',grid(F.character.map(([id,t,sub])=>hItem('c'+id+'~'+t,sub)).join(''))),
       sec('s-mal-p','Top people','',grid(F.people.map(([id,t])=>hItem('p'+id+'~'+t,'Person')).join('')))]);
+    G('g-saw','Sawako Kuronuma','My favourite heroine, from Kimi ni Todoke.','star','#d42f5a','https://myanimelist.net/character/6977',[
+      sec('s-saw','Gallery','',`<div class="hgrid sawg">${[1,2,3,4,5,6].map(i=>`<div class="card"><div class="cover"><img src="assets/sawako/${i}.jpg" alt="Sawako Kuronuma" loading="lazy"></div></div>`).join('')}</div>`)]);
     G('g-honc','Honorary favourites','Characters special to me beyond the top 10.','star','#d9a514',blogUrl(804802),
       fil(hon,/character/i).map(([t,d,it],i)=>sec('s-honc-'+i,t.replace(/^Honorary mentions: /,'Honorary mentions · '),d,grid(it.map(c=>hItem(c)).join('')))));
     G('g-chr','Character corner','Parents, battalions, villains, the ones I hate, and the people behind it all.','mask','#24a896',blogUrl(804802),
@@ -1061,7 +1066,8 @@ function startQuotes(){
   clearInterval(quoteT);if(!window.__QS)window.__QS=(D.quotes||[]).filter(q=>q&&q.t).map(q=>[Math.random(),q]).sort((a,b)=>a[0]-b[0]).map(p=>p[1]);const Q=window.__QS;if(!Q.length)return;
   const show=()=>{const el=$('#quote');if(!el)return clearInterval(quoteT);const q=Q[quoteI%Q.length];quoteI++;
     el.classList.remove('in','out','q-m','q-l');void el.offsetWidth;const L=q.t.length;if(L>260)el.classList.add('q-l');else if(L>120)el.classList.add('q-m');
-    el.innerHTML=`<span class="qm">“</span>${esc(q.t)}<span class="qm">”</span>${q.by?`<span class="qby">— ${esc(q.by)}</span>`:''}`;el.classList.add('in')};
+    const w=q.t.split(' ');const first=w.shift()||'',last=w.length?w.pop():'';
+    el.innerHTML=`<span class="qt"><span class="nw"><span class="qm">“</span>${esc(first)}</span>${w.length?' '+esc(w.join(' ')):''}${last?` <span class="nw">${esc(last)}<span class="qm">”</span></span>`:'<span class="qm">”</span>'}</span><span class="qby">(${esc(q.by||'Unknown')})</span>`;el.classList.add('in')};
   const next=()=>{const el=$('#quote');if(!el||route!=='overview')return;const q=Q[(quoteI)%Q.length];const ms=Math.min(18000,5000+q.t.length*35)+3000;quoteT=setTimeout(()=>{const e2=$('#quote');if(!e2||route!=='overview')return;e2.classList.add('out');setTimeout(()=>{show();next()},600)},ms)};
   clearTimeout(quoteT);show();quoteI--;next();quoteI++;
 }
