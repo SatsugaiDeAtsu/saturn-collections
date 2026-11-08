@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Saturn Collections</title>
+<link rel="icon" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500&family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
@@ -297,8 +298,8 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .crest .spark{animation:twinkle 2.6s ease-in-out infinite}
 .card{transition:transform .18s ease,box-shadow .18s ease,border-color .18s}
 .card:hover{transform:translateY(-3px) rotate(-.4deg);box-shadow:0 10px 24px -10px var(--tc,rgba(0,0,0,.5)),0 0 0 1px var(--accent)}
-.cover.gold{outline:2px solid #d42f5a;outline-offset:-2px;box-shadow:inset 0 0 0 4px rgba(212,47,90,.25)}
-.cover.gold .badge{background:linear-gradient(135deg,#ff7a9c,#d42f5a 55%,#8a1f3d);color:#fff;font-weight:700}
+.cover.gold{outline:0}
+.cover.gold .badge{background:linear-gradient(135deg,#ff4d6d,#e0002b 55%,#8a0020);color:#fff;font-weight:700;box-shadow:0 0 10px rgba(255,31,75,.7)}
 .now{display:grid;grid-auto-flow:column;grid-auto-columns:120px;gap:10px;overflow-x:auto;padding-bottom:6px;scroll-snap-type:x mandatory;scrollbar-width:thin}
 .now .card{scroll-snap-align:start}
 .now .card .meta .tt{font-size:11.5px}
@@ -361,8 +362,11 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 @media (max-width:640px){.spot{grid-template-columns:110px 1fr}.spot h2{font-size:20px}.wall .track{grid-template-rows:repeat(4,130px);grid-auto-columns:88px}.wall .track .cover{height:130px}}
 
-.quote{display:block;font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:17px;color:#f3e6f6;max-width:640px;line-height:1.5;opacity:0;transform:translateY(8px);filter:blur(4px);transition:opacity .6s,transform .6s,filter .6s;min-height:3em}
+.quote{display:block;font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:19px;color:#f3e6f6;max-width:760px;line-height:1.5;opacity:0;transform:translateY(8px);filter:blur(4px);transition:opacity .6s,transform .6s,filter .6s;min-height:3em}
 .quote.in{opacity:1;transform:none;filter:none}.quote.out{opacity:0;transform:translateY(-8px);filter:blur(4px)}
+.quote.q-m{font-size:16px}.quote.q-l{font-size:13.5px;line-height:1.45}
+.banner.ovb .in{padding-right:200px}
+@media (max-width:640px){.quote{font-size:15px}.quote.q-m{font-size:13.5px}.quote.q-l{font-size:12px}}
 .quote .qm{color:#ffb3c8;font-size:1.4em;line-height:0;vertical-align:-.15em;margin:0 2px}
 .quote .qby{display:block;font-style:normal;font-family:Inter,sans-serif;font-size:12px;color:#cdb9d4;margin-top:4px;letter-spacing:.04em}
 .marquee{margin:-4px 0 14px;overflow:hidden;background:var(--bar);border:1px solid #000;padding:10px 0;display:grid;gap:10px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent)}
@@ -371,7 +375,8 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 @keyframes mql{to{transform:translateX(-50%)}}@keyframes mqr{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 .mqi{width:92px;flex:none}.mqi .cover{aspect-ratio:2/3}.mqi .cover .ct{display:none}
 .athumb{width:34px;flex:none}.athumb .cover{padding:3px}
-.card:has(.cover.gold){border-color:#d42f5a;box-shadow:0 0 0 1px #d42f5a,0 6px 18px -8px rgba(212,47,90,.65)}
+.card:has(.cover.gold){border:2px solid transparent;background:linear-gradient(var(--panel),var(--panel)) padding-box,linear-gradient(115deg,#7a0a24,#ff1f4b 25%,#ffc2d0 40%,#ff1f4b 55%,#9b0f30 75%,#ff1f4b) border-box;background-size:100% 100%,300% 100%;animation:redshine 3.5s linear infinite;box-shadow:0 0 14px -2px rgba(255,31,75,.55)}
+@keyframes redshine{from{background-position:0 0,0% 0}to{background-position:0 0,300% 0}}
 .cover.gold .badge{font-size:15px;padding:5px 9px;font-family:"Space Grotesk",sans-serif}
 .cover.gold::after{border:0;background:linear-gradient(115deg,transparent 30%,rgba(255,240,196,.55) 45%,transparent 60%);background-size:250% 100%;background-position:120% 0;opacity:0;transition:opacity .2s}
 @keyframes cshine{from{background-position:120% 0}to{background-position:-60% 0}}
@@ -381,15 +386,28 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .card.tap,.couple.tap{animation:tapn .35s ease}
 .banner .ava img{width:132px;height:132px;object-fit:cover;object-position:center 20%;border-radius:50%;border:3px solid #d42f5a;box-shadow:0 0 0 6px rgba(212,47,90,.18),0 0 34px rgba(212,47,90,.45);display:block}
 @media (max-width:640px){.banner .ava img{width:96px;height:96px}}
-.spot{position:relative;overflow:hidden;grid-template-columns:300px 1fr;min-height:300px;color:#fff;background:var(--bar)}
+.spot{position:relative;overflow:hidden;grid-template-columns:190px 1fr;min-height:300px;color:#fff;background:var(--bar)}
 .spot .blur{position:absolute;inset:-30px;background-size:cover;background-position:center;filter:blur(28px) saturate(1.3);opacity:.55;transform:scale(1.1)}
 .spot::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(28,14,34,.15),rgba(28,14,34,.85) 55%)}
 .spot>*:not(.blur){position:relative;z-index:1}
-.spot .pic{aspect-ratio:16/10;box-shadow:0 14px 40px rgba(0,0,0,.5)}
+.spot .pic{aspect-ratio:3/4;box-shadow:0 14px 40px rgba(0,0,0,.5)}
 .spot .pic img{object-position:center 25%}
 .spot h2{color:#fff}.spot .muted{color:#e6d6ec}.spotnote{color:#f0e2f4}
 .spot .btn{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.3)}
-@media (max-width:640px){.spot{grid-template-columns:1fr}.spot .pic{aspect-ratio:16/9}}
+@media (max-width:640px){.spot{grid-template-columns:120px 1fr}}
+.htiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:16px}
+.htile{position:relative;aspect-ratio:4/5;border:0;padding:0;cursor:pointer;overflow:hidden;background:var(--bar);text-align:left;border-bottom:4px solid var(--c);transition:transform .2s}
+.htile:hover{transform:translateY(-4px)}
+.htile .hbg{position:absolute;inset:0}
+.htile .hbg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 25%;opacity:0;transform:scale(1.08);transition:opacity 1.2s ease,transform 6s ease}
+.htile .hbg img.on{opacity:1;transform:scale(1)}
+.htile .hshade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(12,6,15,.05) 30%,rgba(12,6,15,.92))}
+.htile .hlab{position:absolute;left:0;right:0;bottom:0;padding:14px;color:#fff;display:flex;flex-direction:column;gap:2px}
+.htile .hlab b{font-family:"Space Grotesk";font-size:22px}
+.htile .hlab small{font-size:11.5px;color:#e3d2ea}
+.htile .hic{width:34px;height:34px;background:var(--c);display:grid;place-items:center;margin-bottom:6px}
+.htile .hic .ico{width:20px;height:20px;color:#fff}
+@media (max-width:900px){.htiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
 footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:var(--ink3)}
 
 @media (max-width:900px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}}
@@ -415,7 +433,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:v
 <header class="top">
   <div class="top-in">
     <a class="brand" href="#overview" aria-label="Saturn Collections home">
-      <span id="logo"></span>
+      <img src="assets/logo.png" alt="" width="36" height="36" style="border-radius:50%;border:2px solid #d42f5a;display:block">
       <span class="bt">Saturn Collections</span>
     </a>
     <form class="gsearch" id="gform" role="search">
@@ -549,7 +567,7 @@ const EMBLEM=(s)=>`<svg class="crest" width="${s}" height="${s}" viewBox="0 0 20
 <text font-family="Space Grotesk,sans-serif" font-weight="700" font-size="10" letter-spacing="3" fill="#e9cf8a" opacity=".9"><textPath href="#cArc" startOffset="50%" text-anchor="middle" dy="0">· DE ATSU ·</textPath></text>
 </svg>`;
 function banner(k,title,sub,stats,kicker){
-  return `<section class="banner" style="--c:${HEX[k]}">${artBg(HEX[k],title.length*13,k)}<div class="in">${k==='overview'?`<div class="emb ava">${(()=>{const im=(D.hofImages||{}).c118735;return im?`<img src="${esc(im)}" alt="Subaru Natsuki" referrerpolicy="no-referrer">`:EMBLEM(140)})()}</div>`:`<div class="bico">${ico(k)}</div>`}<div><div class="kick">${esc(kicker||'Saturn Collections')}</div><h1>${esc(title)}</h1>${sub?`<div class="sub">${sub}</div>`:''}</div>${stats&&stats.length?`<div class="bst">${stats.map(([n,l])=>`<span><b>${n}</b>${esc(l)}</span>`).join('')}</div>`:''}</div></section>`;
+  return `<section class="banner${k==='overview'?' ovb':''}" style="--c:${HEX[k]}">${artBg(HEX[k],title.length*13,k)}<div class="in">${k==='overview'?`<div class="emb ava"><img src="assets/logo.png" alt=""></div>`:`<div class="bico">${ico(k)}</div>`}<div><div class="kick">${esc(kicker||'Saturn Collections')}</div><h1>${esc(title)}</h1>${sub?`<div class="sub">${sub}</div>`:''}</div>${stats&&stats.length?`<div class="bst">${stats.map(([n,l])=>`<span><b>${n}</b>${esc(l)}</span>`).join('')}</div>`:''}</div></section>`;
 }
 
 /* ---------- covers ---------- */
@@ -584,7 +602,6 @@ const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
 
 /* ---------- nav / routing ---------- */
 const ROUTES=[['overview','Overview','#e9ecf5'],['hof','Hall of Fame','#f0c43c'],['anime','Anime','#a77ef0'],['manga','Manga','#f06f88'],['films','Films','#f08a50'],['games','Games','#3cc5b2'],['books','Books','#d4a062'],['stories','Stories','#ec7ab0'],['search','Search','#e9ecf5'],['wrapped','Wrapped','#ff6d93']];
-$('#logo').innerHTML=LOGO(34);
 $('#nav').innerHTML=ROUTES.map(([k,l,c])=>`<a href="#${k}" data-r="${k}" style="--c:${c}">${ico(k)}${l}</a>`).join('');
 let route='overview';
 const state={anime:{tab:'all',q:'',sort:'updated',view:store.get('view_anime','table'),type:'',lim:60},films:{tab:'watched',q:'',sort:'watched',view:store.get('view_films','grid'),lim:60},games:{tab:'all',q:'',sort:'added',view:store.get('view_games','grid'),lim:60},manga:{tab:'all',q:'',sort:'score',view:store.get('view_manga','grid'),type:'',lim:60},books:{tab:'all',q:'',sort:'rating',view:store.get('view_books','grid'),shelf:'',lim:60},search:{q:'',ext:'anime',res:{},busy:false}};
@@ -632,7 +649,8 @@ function rOverview(){
   const shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
   const W=shuf(wallItems);const half=Math.ceil(W.length/2);
   const row=(arr,dir)=>`<div class="mq ${dir}"><div class="mqt">${[...arr,...arr].map(x=>`<div class="mqi">${cover(x.t,x.img,'','eager')}</div>`).join('')}</div></div>`;
-  const wallHtml=W.length>8?`<section class="marquee" aria-label="Favourites wall">${row(W.slice(0,half),'l')}${row(W.slice(half),'r')}</section>`:'';
+  const wallTop=W.length>8?`<section class="marquee" aria-label="Favourites">${row(W.slice(0,half),'l')}</section>`:'';
+  const wallBot=W.length>8?`<section class="marquee" aria-label="Favourites">${row(W.slice(half),'r')}</section>`:'';
   const nowItems=[
     ...anime.filter(a=>a.st===1).map(a=>({k:'anime',t:a.t,img:a.img,sub:'Watching',p:a.eps?a.ep/a.eps:0,pl:a.eps?`ep ${a.ep}/${a.eps}`:`ep ${a.ep}`,o:()=>openAnime(a)})),
     ...manga.filter(m=>m.st===1).map(m=>({k:'manga',t:m.t,img:m.img,sub:'Reading',p:m.chs?m.ch/m.chs:0,pl:`ch ${m.ch}${m.chs?'/'+m.chs:''}`,o:()=>openManga(m)})),
@@ -654,7 +672,8 @@ function rOverview(){
       </div>
     </div>
   </section>
-  <section class="grid stats" style="margin-top:16px">
+  <div style="margin-top:16px">${wallTop}</div>
+  <section class="grid stats" style="margin-top:2px">
     <a class="box stat" href="#anime" style="--c:var(--anime)">${art('anime')}<span class="ic">${ico('anime')}</span><div class="lab"><span>Anime</span><span>${scored.length?avg(scored.map(a=>a.sc)).toFixed(2)+' avg':''}</span></div><div class="num">${fmt(anime.length)}</div><div class="sub">${fmt(epsW)} episodes watched</div>
       ${statusBar([1,2,3,4,6].map(s=>[AST[s][0],ac(s),AST[s][1]]))}</a>
     <a class="box stat" href="#manga" style="--c:var(--manga)">${art('manga')}<span class="ic">${ico('manga')}</span><div class="lab"><span>Manga</span><span>${(()=>{const s=manga.filter(m=>m.sc);return s.length?avg(s.map(m=>m.sc)).toFixed(2)+' avg':''})()}</span></div><div class="num">${fmt(manga.length)}</div><div class="sub">${fmt(manga.reduce((s,m)=>s+m.ch,0))} chapters read</div>
@@ -668,7 +687,7 @@ function rOverview(){
     <a class="box stat" href="#stories" style="--c:var(--story)">${art('stories')}<span class="ic">${ico('stories')}</span><div class="lab"><span>Stories</span><span>Medium</span></div><div class="num">${stories.length}</div><div class="sub">${fmt(words)} words written</div>
       ${statusBar([['Stories',stories.filter(s=>!s.tags.includes('articles')).length,'var(--story)'],['Articles',stories.filter(s=>s.tags.includes('articles')).length,'var(--s3)']])}</a>
   </section>
-  <div style="margin-top:16px">${wallHtml}</div>
+  <div style="margin-top:14px">${wallBot}</div>
   <section class="grid two" style="margin-top:16px">
     <div class="box"><div class="box-h"><h2>Recent activity</h2><span class="small muted">across everything</span></div>
       <div>${acts.map((a,i)=>`<div class="act" data-a="${i}" style="--c:${MED[a.k].c}"><span class="k"></span><div class="athumb">${cover(a.t,a.img||'','','mini')}</div><div class="t"><div>${esc(a.t)}</div><div class="small muted">${esc(MED[a.k].name)} · ${esc(a.w)}</div></div><div class="w">${ago(a.d)}</div></div>`).join('')}</div></div>
@@ -762,7 +781,7 @@ function openBook(b){
 /* ---------- hall of fame ---------- */
 const MALK={a:'anime',m:'manga',c:'character',p:'people'};
 const KLAB={a:'Anime',m:'Manga',c:'Character',p:'Person'};
-let hofSeg='anime';
+let hofSeg='home';
 const HOFITEMS=[];
 function hItem(code,extra){
   const [kid,name]=code.split('~');const k=kid[0],id=+kid.slice(1);
@@ -776,6 +795,7 @@ function coupleCards(list){
 }
 function rHof(){
   HOFITEMS.length=0;
+  if(hofSeg==='home')return rHofHome();
   const H=D.hof,F=H.malFavs;
   const grid=items=>`<div class="hgrid">${items}</div>`;
   const groups=[];
@@ -785,22 +805,28 @@ function rHof(){
   const fil=(arr,re)=>arr.filter(s=>re.test(s[0]));
   const hon=H.blog[0].secs, chr=H.blog[1].secs, wai=H.blog[2].secs;
   if(hofSeg==='anime'){
-    G('g-mal','MAL favourites','My official top picks on MyAnimeList.','star','#8a50e0','https://myanimelist.net/profile/SatsugaiDeAtsu',[
+    G('g-mal','MAL favourites','My official top anime and studios on MyAnimeList.','star','#8a50e0','https://myanimelist.net/profile/SatsugaiDeAtsu',[
       sec('s-mal-a','Top anime','',grid(F.anime.map(([id,t,sub])=>hItem('a'+id+'~'+t,sub)).join(''))),
-      sec('s-mal-c','Top characters','',grid(F.character.map(([id,t,sub])=>hItem('c'+id+'~'+t,sub)).join(''))),
-      sec('s-mal-p','Top people','',grid(F.people.map(([id,t])=>hItem('p'+id+'~'+t,'Person')).join(''))),
       sec('s-mal-s','Top studios','',`<div style="display:flex;flex-wrap:wrap;gap:6px">${F.company.map(c=>`<span class="chip">${esc(c)}</span>`).join('')}</div>`)]);
-    G('g-hon','Honorary favourites','Shows and characters special to me beyond the top 10, plus my nurturing legacy.','star','#d9a514',blogUrl(804802),
-      fil(hon,/anime|character/i).map(([t,d,it],i)=>sec('s-hon-'+i,t.replace(/^Honorary mentions: /,'Honorary mentions · '),d,grid(it.map(c=>hItem(c)).join('')))));
+    G('g-hon','Honorary favourites','Shows special to me beyond the top 10, plus my nurturing legacy.','star','#d9a514',blogUrl(804802),
+      fil(hon,/anime/i).map(([t,d,it],i)=>sec('s-hon-'+i,t.replace(/^Honorary mentions: /,'Honorary mentions · '),d,grid(it.map(c=>hItem(c)).join('')))));
+    const p10=anime.filter(a=>a.sc===10).sort((a,b)=>b.mal-a.mal);
+    G('g-a10','Perfect 10s','Every anime I scored 10 out of 10 on MAL.','ten','#8a50e0','',[sec('s-a10','Scored 10','',grid(p10.map(a=>hItem('a'+a.id+'~'+a.t,a.type+(a.y?' · '+a.y:''))).join('')))]);
+  }else if(hofSeg==='chars'){
+    G('g-malc','MAL favourites','My official top characters and people on MyAnimeList.','star','#8a50e0','https://myanimelist.net/profile/SatsugaiDeAtsu',[
+      sec('s-mal-c','Top characters','',grid(F.character.map(([id,t,sub])=>hItem('c'+id+'~'+t,sub)).join(''))),
+      sec('s-mal-p','Top people','',grid(F.people.map(([id,t])=>hItem('p'+id+'~'+t,'Person')).join('')))]);
+    G('g-honc','Honorary favourites','Characters special to me beyond the top 10.','star','#d9a514',blogUrl(804802),
+      fil(hon,/character/i).map(([t,d,it],i)=>sec('s-honc-'+i,t.replace(/^Honorary mentions: /,'Honorary mentions · '),d,grid(it.map(c=>hItem(c)).join('')))));
     G('g-chr','Character corner','Parents, battalions, villains, the ones I hate, and the people behind it all.','mask','#24a896',blogUrl(804802),
-      chr.map(([t,d,it],i)=>sec('s-chr-'+i,t,d,grid(it.map(c=>hItem(c)).join('')),/hate/i.test(t)?'hated':'')).concat(H.people.map(([t,d,it],i)=>sec('s-ppl-'+i,t,d,grid(it.map(c=>hItem(c,'Person')).join(''))))));
-    G('g-wai','Waifus','A blog of its own: the goddess, the waifus, the battalion and the imoutos.','heart','#d24a7a',blogUrl(804810),
+      chr.map(([t,d,it],i)=>sec('s-chr-'+i,t,d,grid(it.map(c=>hItem(c)).join('')),/hate/i.test(t)?'hated':'')).concat((H.people||[]).map(([t,d,it],i)=>sec('s-ppl-'+i,t,d,grid(it.map(c=>hItem(c,'Person')).join(''))))));
+  }else if(hofSeg==='waifus'){
+    G('g-wai','Waifus','A blog of its own: the goddess, the waifus, the battalion and more.','heart','#d24a7a',blogUrl(804810),
       wai.map(([t,d,it],i)=>sec('s-wai-'+i,t,d,grid(it.map(c=>hItem(c)).join('')))));
+  }else if(hofSeg==='couples'){
     G('g-cou','Couples','Favourite anime couples, and two special cases.','couple','#e8733a',blogUrl(804809),[
       sec('s-cou','Favourite anime couples','The name says it all.',coupleCards(H.couples)),
       sec('s-cou-sp','A special mention',H.specialCouples.desc,coupleCards(H.specialCouples.pairs))]);
-    const p10=anime.filter(a=>a.sc===10).sort((a,b)=>b.mal-a.mal);
-    G('g-a10','Perfect 10s','Every anime I scored 10 out of 10 on MAL.','ten','#8a50e0','',[sec('s-a10','Scored 10','',grid(p10.map(a=>hItem('a'+a.id+'~'+a.t,a.type+(a.y?' · '+a.y:''))).join('')))]);
   }else if(hofSeg==='manga'){
     G('g-mmal','MAL favourites','My official top manga on MyAnimeList.','star','#d24a5f','https://myanimelist.net/profile/SatsugaiDeAtsu',[sec('s-mm','Top manga','',grid(F.manga.map(([id,t,sub])=>hItem('m'+id+'~'+t,sub)).join('')))]);
     G('g-mhon','Honorary favourites','Manga special to me like my favs, even outside the top 10.','star','#d9a514',blogUrl(804802),
@@ -827,18 +853,16 @@ function rHof(){
     G('g-bsh','My shelves','Goodreads shelves I keep.','books','#b07a38','https://www.goodreads.com/',Object.keys(shelfNames).filter(k=>books.some(b=>b.sh.includes(k))).map(k=>sec('s-bsh-'+k,shelfNames[k],'',grid(books.filter(b=>b.sh.includes(k)).map(bc).join('')))));
   }
   const A=D.hof.about;
-  const segs=[['anime','Anime','var(--anime)'],['manga','Manga','var(--manga)'],['films','Films','var(--film)'],['games','Games','var(--game)'],['books','Books','var(--book)']];
+  const segs=[['anime','Anime','var(--anime)'],['manga','Manga','var(--manga)'],['films','Films','var(--film)'],['games','Games','var(--game)'],['books','Books','var(--book)'],['chars','Characters','#24a896'],['waifus','Waifus','#d24a7a'],['couples','Couples','#e8733a']];
   $('#app').innerHTML=`
   ${banner('hof',"Saturn's throne room",'',[[groups.length,'collections'],[groups.reduce((s,g)=>s+g.secs.length,0),'sections']],'Hall of Fame')}
   <section class="box hof-hero" style="grid-template-columns:1fr;padding:16px 20px"><div><p style="margin:0">${esc(A.paras[1])}</p>
     <details style="margin-top:8px"><summary class="link" style="cursor:pointer">Read the full introduction</summary><div style="margin-top:10px">${A.paras.map(p=>`<p>${esc(p)}</p>`).join('')}<a class="link" href="https://myanimelist.net/blog.php?eid=${A.post}" target="_blank" rel="noopener">Continue on MAL ↗</a></div></details></div></section>
-  ${spotlight()}
-  <div class="segtabs">${segs.map(([k,l,c])=>`<button data-seg="${k}" class="${hofSeg===k?'on':''}" style="--c:${c}">${ico(k)} ${l}</button>`).join('')}</div>
+  <div class="segtabs"><button data-seg="home" style="--c:var(--gold)">← Hall</button>${segs.map(([k,l,c])=>`<button data-seg="${k}" class="${hofSeg===k?'on':''}" style="--c:${c}">${ico({chars:'mask',waifus:'heart',couples:'couple'}[k]||k)} ${l}</button>`).join('')}</div>
   <div class="jgroups">${groups.map(g=>`<div class="jg" style="--c:${g.c}"><span class="jl" data-j="${g.id}">${ico(g.icon)}${esc(g.title)}</span>${g.secs.length>1?g.secs.map(s=>`<a href="#hof" data-j="${s.id}">${esc(s.title)}</a>`).join(''):''}</div>`).join('')}</div>
   ${groups.map(g=>`<div class="grp" id="${g.id}" style="--c:${g.c}">${artBg(g.c,g.title.length*7,'')}<div class="gi">${ico(g.icon)}</div><div><h2>${esc(g.title)}</h2>${g.desc?`<p>${esc(g.desc)}</p>`:''}</div>${g.src?`<a href="${g.src}" target="_blank" rel="noopener">Source ↗</a>`:''}</div>
     ${g.secs.map(s=>`<section class="box hsec ${s.cls||''}" id="${s.id}" style="--c:${/hate/i.test(s.title)?'var(--s4)':g.c}"><div class="box-h"><h2>${esc(s.title)}</h2></div>${s.desc?`<div class="desc">${esc(s.desc)}</div>`:''}<div class="box-b">${s.inner}</div></section>`).join('')}`).join('')}`;
-  document.querySelectorAll('[data-seg]').forEach(b=>b.onclick=()=>{hofSeg=b.dataset.seg;rHof()});
-  startSpot();
+  document.querySelectorAll('[data-seg]').forEach(b=>b.onclick=()=>{hofSeg=b.dataset.seg;rHof();window.scrollTo(0,0)});
   document.querySelectorAll('[data-j]').forEach(a=>a.onclick=e=>{e.preventDefault();const el=document.getElementById(a.dataset.j);if(el)el.scrollIntoView({behavior:'smooth'})});
   document.querySelectorAll('[data-h]').forEach(el=>el.onclick=()=>{const it=HOFITEMS[+el.dataset.h];
     if('film' in it){if(it.film)return openFilm(it.film);return window.open('https://letterboxd.com/search/films/'+encodeURIComponent(it.t)+'/','_blank')}
@@ -846,6 +870,44 @@ function rHof(){
     if(it.book)return openBook(it.book);
     if(it.own)return it.k==='a'?openAnime(it.own):openManga(it.own);
     openMal(it)});
+}
+let tileT=null;
+function hofTiles(){
+  const H=D.hof,F=H.malFavs;const ci=c=>{const [kid]=c.split('~');return HIMG(kid[0],+kid.slice(1))};
+  const imgsA=[...F.anime.map(([id])=>{const a=anime.find(x=>x.id===id);return a?a.img:HIMG('a',id)}),...anime.filter(a=>a.sc===10).map(a=>a.img)];
+  const imgsM=[...F.manga.map(([id])=>{const m=manga.find(x=>x.id===id);return m?m.img:HIMG('m',id)}),...manga.filter(m=>m.sc===10).map(m=>m.img)];
+  const favF=D.lbFavUris.map(u=>filmUri[u]).filter(Boolean);
+  const imgsF=[...favF,...films.filter(f=>f.r===5)].map(f=>f.img);
+  const imgsG=games.filter(g=>g.r===5||D.gvFav.includes(g.t)).map(g=>g.img);
+  const imgsB=books.filter(b=>b.r>=5).map(b=>b.img);
+  const imgsC=[...F.character.map(([id])=>HIMG('c',id)),...H.blog[0].secs.filter(s=>/character/i.test(s[0])).flatMap(s=>s[2].map(ci)),...H.blog[1].secs.flatMap(s=>s[2].map(ci))];
+  const imgsW=H.blog[2].secs.flatMap(s=>s[2].map(ci));
+  const imgsCo=H.couples.flatMap(c=>c[2].map(ci));
+  const cnt=a=>a.filter(Boolean).length;
+  return [
+    ['anime','Anime','var(--anime)','anime',imgsA,`${F.anime.length} favourites · ${anime.filter(a=>a.sc===10).length} perfect 10s`],
+    ['manga','Manga','var(--manga)','manga',imgsM,`${F.manga.length} favourites · ${manga.filter(m=>m.sc===10).length} perfect 10s`],
+    ['chars','Characters','#24a896','mask',imgsC,`Top 10, honorary and character corner`],
+    ['waifus','Waifus','#d24a7a','heart',imgsW,`${H.blog[2].secs.length} sections`],
+    ['couples','Couples','#e8733a','couple',imgsCo,`${H.couples.length} couples`],
+    ['films','Films','var(--film)','films',imgsF,`Top 4 · ${D.filmLists.length} lists · ${films.filter(f=>f.r===5).length} five stars`],
+    ['games','Games','var(--game)','games',imgsG,`${D.gvFav.length} favourites`],
+    ['books','Books','var(--book)','books',imgsB,`${books.filter(b=>b.r>=5).length} five stars`]
+  ].map(([k,l,c,ic,imgs,sub])=>({k,l,c,ic,imgs:[...new Set(imgs.filter(Boolean))].map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(p=>p[1]).slice(0,12),sub}));
+}
+function rHofHome(){
+  const A=D.hof.about;const T=hofTiles();
+  $('#app').innerHTML=`${banner('hof',"Saturn's throne room",'Pick a wing.',[],'Hall of Fame')}
+  <section class="box hof-hero" style="grid-template-columns:1fr;padding:16px 20px"><div><p style="margin:0">${esc(A.paras[1])}</p>
+    <details style="margin-top:8px"><summary class="link" style="cursor:pointer">Read the full introduction</summary><div style="margin-top:10px">${A.paras.map(p=>`<p>${esc(p)}</p>`).join('')}<a class="link" href="https://myanimelist.net/blog.php?eid=${A.post}" target="_blank" rel="noopener">Continue on MAL ↗</a></div></details></div></section>
+  ${spotlight()}
+  <div class="htiles">${T.map((x,i)=>`<button class="htile" data-wing="${x.k}" style="--c:${x.c}"><div class="hbg">${x.imgs.slice(0,2).map((im,j)=>`<img class="${j?'':'on'}" src="${esc(im)}" alt="" referrerpolicy="no-referrer">`).join('')||artBg(HEX.hof,i*9,'')}</div><div class="hshade"></div><div class="hlab"><span class="hic">${ico(x.ic)}</span><b>${esc(x.l)}</b><small>${esc(x.sub)}</small></div></button>`).join('')}</div>`;
+  document.querySelectorAll('[data-wing]').forEach(b=>b.onclick=()=>{hofSeg=b.dataset.wing;rHof();window.scrollTo(0,0)});
+  startSpot();
+  clearInterval(tileT);let step=1;
+  tileT=setInterval(()=>{if(route!=='hof'||hofSeg!=='home')return clearInterval(tileT);
+    document.querySelectorAll('.htile').forEach((el,i)=>{const L=T[i].imgs;if(L.length<2)return;if((step+i)%3)return;const imgs=el.querySelectorAll('.hbg img');const cur=[...imgs].find(im=>im.classList.contains('on'));const other=[...imgs].find(im=>im!==cur);
+      const idx=(+(el.dataset.idx||1)+1)%L.length;el.dataset.idx=idx;other.src=L[idx];other.onload=()=>{cur.classList.remove('on');other.classList.add('on')}});step++},1400);
 }
 let spotI=0,spotT=null;
 let SPOT=null;
@@ -988,11 +1050,12 @@ function editBook(b){
 /* ---------- rotating quotes ---------- */
 let quoteT=null,quoteI=Math.floor(Math.random()*1000);
 function startQuotes(){
-  clearInterval(quoteT);const Q=(D.quotes||[]).filter(q=>q&&q.t);if(!Q.length)return;
+  clearInterval(quoteT);if(!window.__QS)window.__QS=(D.quotes||[]).filter(q=>q&&q.t).map(q=>[Math.random(),q]).sort((a,b)=>a[0]-b[0]).map(p=>p[1]);const Q=window.__QS;if(!Q.length)return;
   const show=()=>{const el=$('#quote');if(!el)return clearInterval(quoteT);const q=Q[quoteI%Q.length];quoteI++;
-    el.classList.remove('in');void el.offsetWidth;
+    el.classList.remove('in','out','q-m','q-l');void el.offsetWidth;const L=q.t.length;if(L>260)el.classList.add('q-l');else if(L>120)el.classList.add('q-m');
     el.innerHTML=`<span class="qm">“</span>${esc(q.t)}<span class="qm">”</span>${q.by?`<span class="qby">— ${esc(q.by)}</span>`:''}`;el.classList.add('in')};
-  show();quoteT=setInterval(()=>{if(route!=='overview')return clearInterval(quoteT);const el=$('#quote');if(el){el.classList.add('out');setTimeout(show,600)}},7000);
+  const next=()=>{const el=$('#quote');if(!el||route!=='overview')return;const q=Q[(quoteI)%Q.length];const ms=Math.min(18000,5000+q.t.length*35);quoteT=setTimeout(()=>{const e2=$('#quote');if(!e2||route!=='overview')return;e2.classList.add('out');setTimeout(()=>{show();next()},600)},ms)};
+  clearTimeout(quoteT);show();quoteI--;next();quoteI++;
 }
 function editQuotes(){
   modal('overview','Quotes',`<div style="grid-column:1/-1"><h2>Your quotes</h2><p class="muted small" style="margin:6px 0 10px">One quote per line. To add who said it, end the line with — Name. They rotate on the Overview every few seconds.</p>
