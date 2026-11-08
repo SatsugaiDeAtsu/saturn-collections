@@ -1,0 +1,9 @@
+{
+ "manga_allow": [
+  21419,
+  116350,
+  118807,
+  122780
+ ],
+ "note": "MAL IDs of manga to show even though MAL tags them Erotica. Hentai-tagged anime and manga are never shown."
+}

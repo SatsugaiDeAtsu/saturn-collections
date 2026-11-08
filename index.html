@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Saturn Collections</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500&family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f2f6;--panel:#ffffff;--panel2:#faf7fa;--line:#e6dee8;--line2:#d2c6d6;
+  --ink:#1d1420;--ink2:#54485a;--ink3:#93879a;
+  --bar:#1c0e22;--bar2:#2d1638;--barInk:#f2e9f5;
+  --accent:#b8264a;--accentSoft:#f8e6ec;
+  --anime:#7a3fd1;--manga:#c8324f;--film:#e2672b;--game:#1f9a8a;--book:#a8722f;--story:#c2457e;--gold:#d9a514;
+  --s1:#2db039;--s2:#6a35c2;--s3:#e8b923;--s4:#a12f31;--s6:#b4b8c2;
+  --gap:16px;
+}
+:root[data-theme=dark]{
+  --bg:#120b15;--panel:#1b1220;--panel2:#22172a;--line:#33253b;--line2:#45334f;
+  --ink:#f0e9f2;--ink2:#b9abc0;--ink3:#7e6f88;
+  --bar:#0c060f;--bar2:#1a0e20;--barInk:#f2e9f5;
+  --accent:#ee5a7e;--accentSoft:#3a1424;
+  --anime:#a77ef0;--manga:#f06f88;--film:#f08a50;--game:#3cc5b2;--book:#d4a062;--story:#ec7ab0;--gold:#f0c43c;
+  --s2:#9a6ae6;--s6:#6a5a72;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.5}
+a{color:inherit;text-decoration:none}
+button,input,select{font:inherit;color:inherit}
+.mono{font-family:"JetBrains Mono",ui-monospace,monospace}
+h1,h2,h3,.brand{font-family:"Space Grotesk",Inter,sans-serif;letter-spacing:-.01em}
+
+/* top bar */
+.top{background:var(--bar);color:var(--barInk);position:sticky;top:0;z-index:20;border-bottom:1px solid #000}
+.top-in{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:10px 16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:18px;white-space:nowrap;letter-spacing:.02em}
+.brand span:last-child{background:linear-gradient(90deg,#fff,#ffc2d2 60%,#c9a8ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+#logo{display:grid;place-items:center}
+.brand svg{flex:none}
+.gsearch{flex:1;display:flex;max-width:520px;margin-left:auto;min-width:0}
+.gsearch input{flex:1;min-width:0;background:var(--bar2);border:1px solid #4a2a58;border-right:0;color:#fff;padding:8px 12px;outline:none}
+.gsearch input::placeholder{color:#a58fb0}
+.gsearch input:focus{border-color:#ee5a7e}
+.gsearch button{background:#b8264a;border:1px solid #b8264a;color:#fff;padding:0 14px;cursor:pointer;font-weight:600}
+.iconbtn{background:transparent;border:1px solid #4a2a58;color:var(--barInk);width:36px;height:36px;display:grid;place-items:center;cursor:pointer;flex:none}
+.iconbtn:hover,.gsearch button:hover{filter:brightness(1.15)}
+.nav{background:var(--bar2);border-top:1px solid #000}
+.nav-in{max-width:1240px;margin:0 auto;display:flex;overflow-x:auto;scrollbar-width:none}
+.nav-in::-webkit-scrollbar{display:none}
+.nav a{padding:10px 18px;color:#c3aecb;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.06em;border-bottom:3px solid transparent;white-space:nowrap;display:flex;gap:8px;align-items:center}
+.nav a:hover{color:#fff;background:rgba(255,255,255,.04)}
+.nav a.on{color:#fff;border-bottom-color:var(--c,#6f8fe0);background:rgba(255,255,255,.06)}
+.nav .dot{width:8px;height:8px;background:var(--c)}
+
+main{max-width:1240px;margin:0 auto;padding:20px 16px 60px}
+.box{background:var(--panel);border:1px solid var(--line)}
+.box-h{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--panel2)}
+.box-h h2,.box-h h3{font-size:13px;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:var(--ink2)}
+.box-b{padding:14px}
+.grid{display:grid;gap:var(--gap)}
+.muted{color:var(--ink3)}
+.small{font-size:12px}
+.link{color:var(--accent);font-weight:600}
+.link:hover{text-decoration:underline}
+.btn{background:var(--panel);border:1px solid var(--line2);padding:7px 12px;cursor:pointer;font-weight:600;font-size:13px}
+.btn:hover{border-color:var(--ink3)}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);padding:3px 8px;font-size:12px;font-weight:500;color:var(--ink2);background:var(--panel)}
+.tag{display:inline-block;background:var(--panel2);border:1px solid var(--line);padding:1px 6px;font-size:11px;color:var(--ink2);margin:0 4px 4px 0}
+
+/* profile */
+.prof{display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:center;padding:18px}
+.avatar{width:84px;height:84px;background:var(--bar);display:grid;place-items:center;border:1px solid var(--line)}
+.prof h1{font-size:26px;line-height:1.1}
+.prof .links{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.prof .links a:hover{border-color:var(--ink3);color:var(--ink)}
+
+/* stats */
+.stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+.stat{border-top:3px solid var(--c);padding:14px;cursor:pointer;transition:border-color .15s}
+.stat:hover{background:var(--panel2)}
+.stat .lab{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);font-weight:700;display:flex;justify-content:space-between}
+.stat .num{font-family:"Space Grotesk";font-size:34px;font-weight:700;line-height:1.1;margin:6px 0 2px}
+.stat .sub{font-size:12px;color:var(--ink2)}
+.sbar{display:flex;height:10px;margin:12px 0 8px;background:var(--panel2)}
+.sbar i{display:block;height:100%}
+.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11px;color:var(--ink2)}
+.legend span{display:inline-flex;align-items:center;gap:5px}
+.legend b{width:8px;height:8px;display:inline-block}
+
+.two{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}
+.act{display:flex;gap:12px;align-items:center;padding:9px 14px;border-bottom:1px solid var(--line);cursor:pointer}
+.act:last-child{border-bottom:0}
+.act:hover{background:var(--panel2)}
+.act .k{width:4px;align-self:stretch;background:var(--c)}
+.act .t{flex:1;min-width:0}
+.act .t div:first-child{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.act .w{font-size:12px;color:var(--ink3);white-space:nowrap}
+
+.dist{display:grid;grid-template-columns:repeat(var(--n),1fr);gap:3px;align-items:end;height:90px}
+.dist div{background:var(--c);opacity:.85;position:relative;min-height:2px}
+.dist div:hover{opacity:1}
+.distl{display:grid;grid-template-columns:repeat(var(--n),1fr);gap:3px;font-size:10px;color:var(--ink3);text-align:center;margin-top:4px}
+.hbar{display:grid;grid-template-columns:110px 1fr 40px;gap:8px;align-items:center;font-size:12px;margin-bottom:6px}
+.hbar .tr{height:12px;background:var(--panel2)}
+.hbar .tr i{display:block;height:100%;background:var(--c)}
+
+/* covers / tiles */
+.cover{position:relative;aspect-ratio:2/3;background:var(--tc,#334);overflow:hidden;color:#fff;display:flex;flex-direction:column;justify-content:space-between;padding:8px}
+.cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cover .ini{font-family:"Space Grotesk";font-weight:700;font-size:30px;line-height:1;opacity:.9}
+.cover .ct{font-size:11px;font-weight:600;line-height:1.25;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;opacity:.92}
+.cover::after{content:"";position:absolute;inset:0;border:1px solid rgba(0,0,0,.15);pointer-events:none}
+.mini{width:42px;flex:none;padding:4px}
+.mini .ini{font-size:15px}.mini .ct{display:none}
+
+.favs{grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
+.card{cursor:pointer;background:var(--panel);border:1px solid var(--line);display:flex;flex-direction:column}
+.card:hover{border-color:var(--ink3)}
+.card .meta{padding:7px 8px;border-top:1px solid var(--line)}
+.card .meta .tt{font-weight:600;font-size:12.5px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.6em}
+.card .meta .ss{font-size:11px;color:var(--ink3);margin-top:2px;display:flex;justify-content:space-between;gap:6px}
+.badge{position:absolute;top:0;right:0;background:var(--bar);color:#fff;font-family:"JetBrains Mono";font-size:12px;padding:3px 7px;z-index:2}
+.sline{position:absolute;left:0;bottom:0;right:0;height:4px;background:var(--sc);z-index:2}
+
+/* list page */
+.ph{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.ph h1{font-size:28px;display:flex;align-items:center;gap:10px}
+.ph h1 i{width:14px;height:14px;background:var(--c);display:inline-block}
+.tabs{display:flex;border:1px solid var(--line);background:var(--panel);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{border:0;background:none;padding:10px 14px;cursor:pointer;font-weight:600;font-size:13px;color:var(--ink2);border-bottom:3px solid transparent;white-space:nowrap;display:flex;gap:6px;align-items:center}
+.tabs button .n{font-family:"JetBrains Mono";font-size:11px;color:var(--ink3)}
+.tabs button.on{color:var(--ink);border-bottom-color:var(--c);background:var(--panel2)}
+.tabs button:hover{color:var(--ink)}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:10px;border:1px solid var(--line);border-top:0;background:var(--panel2)}
+.toolbar input,.toolbar select{background:var(--panel);border:1px solid var(--line2);padding:7px 10px;outline:none}
+.toolbar input{flex:1;min-width:160px}
+.toolbar input:focus,.toolbar select:focus{border-color:var(--accent)}
+.seg{display:flex;border:1px solid var(--line2)}
+.seg button{border:0;background:var(--panel);padding:7px 10px;cursor:pointer;color:var(--ink3);display:grid;place-items:center}
+.seg button.on{background:var(--ink);color:var(--panel)}
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-top:14px}
+table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px solid var(--line);margin-top:14px}
+.lt th{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink3);text-align:left;padding:9px 10px;background:var(--panel2);border-bottom:1px solid var(--line);font-weight:700;white-space:nowrap}
+.lt td{padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:middle}
+.lt tr{cursor:pointer}
+.lt tbody tr:hover{background:var(--panel2)}
+.lt td.st{width:5px;padding:0;background:var(--sc)}
+.lt td.num{font-family:"JetBrains Mono";font-size:12px;color:var(--ink3);width:40px}
+.lt td.sc{font-family:"JetBrains Mono";font-weight:500;text-align:center;width:64px}
+.lt .ti{font-weight:600}
+.lt .alt{font-size:12px;color:var(--ink3)}
+.lt td.c{text-align:center;white-space:nowrap}
+.more{display:flex;justify-content:center;margin-top:16px}
+.empty{padding:40px;text-align:center;color:var(--ink3);border:1px dashed var(--line2);margin-top:14px}
+.stars{color:var(--film);letter-spacing:1px;white-space:nowrap}
+
+/* stories */
+.story{display:grid;grid-template-columns:6px 1fr;border:1px solid var(--line);background:var(--panel)}
+.story .k{background:var(--story)}
+.story .in{padding:16px 18px}
+.story h3{font-size:19px;margin-bottom:6px}
+.story p{color:var(--ink2);margin-bottom:10px}
+.story .row{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;font-size:12px;color:var(--ink3)}
+
+/* modal */
+.ov{position:fixed;inset:0;background:rgba(5,8,15,.6);z-index:50;display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto}
+.ov.show{display:flex}
+.modal{background:var(--panel);border:1px solid var(--line2);width:100%;max-width:760px;position:relative}
+.modal .mh{display:flex;justify-content:space-between;align-items:center;background:var(--bar);color:#fff;padding:10px 14px}
+.modal .mh span{font-size:11px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;display:flex;gap:8px;align-items:center}
+.modal .mh button{background:none;border:1px solid #4a2a58;color:#fff;width:30px;height:30px;cursor:pointer}
+.mb{display:grid;grid-template-columns:180px 1fr;gap:20px;padding:18px}
+.mb h2{font-size:24px;line-height:1.15}
+.kv{display:grid;grid-template-columns:110px 1fr;border-top:1px solid var(--line);margin-top:12px}
+.kv div{padding:6px 0;border-bottom:1px solid var(--line);font-size:13px}
+.kv div:nth-child(odd){color:var(--ink3);font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;padding-top:8px}
+.review{margin-top:14px;border-left:3px solid var(--c);padding:10px 14px;background:var(--panel2);white-space:pre-wrap;font-size:13.5px;color:var(--ink2)}
+.bigscore{display:flex;gap:8px;margin-top:12px}
+.bigscore div{border:1px solid var(--line);padding:8px 12px;text-align:center;min-width:90px}
+.bigscore b{display:block;font-family:"Space Grotesk";font-size:24px}
+.bigscore small{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);font-weight:700}
+
+/* search */
+.sres{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;margin-top:12px}
+.xr{display:grid;grid-template-columns:72px 1fr;gap:12px;background:var(--panel);border:1px solid var(--line);padding:10px;cursor:pointer}
+.xr:hover{border-color:var(--ink3)}
+.xr .tt{font-weight:600;line-height:1.3}
+.xr p{font-size:12px;color:var(--ink2);margin-top:4px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.own{display:inline-block;background:var(--s1);color:#fff;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:1px 6px;margin-left:4px}
+.note{font-size:12px;color:var(--ink3);margin-top:10px;border:1px solid var(--line);padding:8px 10px;background:var(--panel2)}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--line2);border-top-color:var(--accent);animation:sp 1s linear infinite;vertical-align:-2px;margin-right:8px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.sect{margin-top:22px}
+.sect>h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink2);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.sect>h2 i{width:10px;height:10px;background:var(--c);display:inline-block}
+
+.hof-hero{display:grid;grid-template-columns:120px 1fr;gap:20px;padding:20px;border-top:3px solid #e8b923}
+.hof-hero h1{font-size:30px;margin-bottom:8px}
+.hof-hero p{color:var(--ink2);margin-bottom:10px;max-width:820px}
+.jump{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 4px}
+.jump a{border:1px solid var(--line2);padding:4px 10px;font-size:12px;font-weight:600;color:var(--ink2);background:var(--panel)}
+.jump a:hover{border-color:var(--ink3);color:var(--ink)}
+.hsec{margin-top:16px;scroll-margin-top:110px}
+.hsec .box-h{border-top:3px solid var(--c)}
+.hsec .desc{color:var(--ink2);font-size:13px;padding:10px 14px 0}
+.hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
+.hgrid .card .meta .tt{font-size:12px}
+.couples{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.couple{border:1px solid var(--line);background:var(--panel);display:flex;flex-direction:column}
+.couple .pair{display:grid;grid-template-columns:1fr 1fr}
+.couple .pair .cover{aspect-ratio:3/4}
+.couple .meta{padding:8px 10px;border-top:1px solid var(--line)}
+.couple .meta b{display:block;font-size:13px}
+.couple .meta span{font-size:11px;color:var(--ink3)}
+.moments{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.moment{border:1px solid var(--line);border-left:4px solid var(--anime);background:var(--panel);padding:10px 12px}
+.moment b{display:block;margin-bottom:4px}
+.moment li{font-size:13px;color:var(--ink2);margin-left:16px}
+.segtabs{display:flex;border:1px solid var(--line);background:var(--panel);margin-top:16px}
+.segtabs button{flex:1;border:0;background:none;padding:12px;font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink2);border-bottom:3px solid transparent;cursor:pointer;display:flex;gap:8px;justify-content:center;align-items:center}
+.segtabs button i{width:9px;height:9px;background:var(--c);display:inline-block}
+.segtabs button.on{color:var(--ink);border-bottom-color:var(--c);background:var(--panel2)}
+.hated .card{border-color:color-mix(in srgb,var(--s4) 40%,var(--line))}
+@media (max-width:640px){.hof-hero{grid-template-columns:1fr}.hgrid{grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}.segtabs button{padding:10px 4px;font-size:11px}}
+
+.ico{display:inline-block;width:1em;height:1em;vertical-align:-.15em;flex:none}
+.nav a .ico{width:15px;height:15px;color:var(--c)}
+.banner{position:relative;overflow:hidden;background:var(--bar);color:#fff;border:1px solid #000;margin-bottom:14px;min-height:200px;display:flex;align-items:center}
+.banner .bg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.banner .in{position:relative;padding:22px 360px 22px 24px;display:flex;gap:18px;align-items:center;width:100%;flex-wrap:wrap}
+.banner .bico{width:64px;height:64px;background:var(--c);display:grid;place-items:center;flex:none;box-shadow:6px 6px 0 rgba(0,0,0,.35)}
+.banner .bico .ico{width:36px;height:36px;color:#fff}
+.banner h1{font-size:32px;line-height:1.05;color:#fff}
+.banner .kick{font-size:11px;text-transform:uppercase;letter-spacing:.14em;font-weight:700;color:var(--c2,#c9d3ee);opacity:.9}
+.banner .sub{font-size:13px;color:#cdb9d4;margin-top:4px}
+.banner .bst{flex-basis:100%;display:flex;gap:6px;flex-wrap:wrap;margin-left:82px}
+.banner .bst span{background:rgba(12,6,15,.55);border:1px solid rgba(255,255,255,.18);padding:6px 10px;font-size:12px;color:#dfe5f5}
+.banner .bst b{font-family:"Space Grotesk";font-size:16px;margin-right:4px;color:#fff}
+.cover::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.07) 0 6px,transparent 6px 14px);pointer-events:none}
+.cover .ring{position:absolute;right:-18%;bottom:-8%;width:78%;opacity:.22;pointer-events:none}
+.mini .ring{display:none}
+.stat .ic{width:30px;height:30px;background:var(--c);display:grid;place-items:center;float:right;margin:-2px 0 0 8px}
+.stat .ic .ico{width:18px;height:18px;color:#fff}
+.grp{margin-top:26px;position:relative;background:var(--bar);color:#fff;padding:16px 18px;display:flex;gap:14px;align-items:center;border-left:6px solid var(--c);overflow:hidden;scroll-margin-top:110px}
+.grp .gi{width:44px;height:44px;background:var(--c);display:grid;place-items:center;flex:none}
+.grp .gi .ico{width:26px;height:26px;color:#fff}
+.grp h2{font-size:21px;color:#fff}
+.grp p{font-size:12.5px;color:#cdb9d4;margin-top:2px}
+.grp a{margin-left:auto;font-size:12px;color:#fff;border:1px solid rgba(255,255,255,.3);padding:5px 10px;white-space:nowrap}
+.grp .bg{position:absolute;right:0;top:0;bottom:0;width:260px;opacity:.5;pointer-events:none}
+.jgroups{display:grid;gap:6px;margin:14px 0 4px}
+.jg{display:flex;gap:6px;flex-wrap:wrap;align-items:center;border:1px solid var(--line);background:var(--panel);padding:6px;border-left:5px solid var(--c)}
+.jg .jl{font-size:11px;text-transform:uppercase;letter-spacing:.08em;font-weight:800;color:var(--ink);padding:4px 8px;background:var(--panel2);display:flex;gap:6px;align-items:center;cursor:pointer;border:1px solid var(--line)}
+.jg .jl .ico{width:13px;height:13px;color:var(--c)}
+.jg a{border:1px solid var(--line2);padding:3px 9px;font-size:12px;font-weight:600;color:var(--ink2);background:var(--panel)}
+.jg a:hover{border-color:var(--c);color:var(--ink)}
+.book .cover{aspect-ratio:2/3}
+.urdu{font-family:"Noto Nastaliq Urdu",serif;direction:rtl;font-size:13px;color:var(--ink2);line-height:2}
+@media (max-width:640px){.banner .in{padding:18px 16px}.banner .bst{margin-left:0}.banner .bg{opacity:.3}.banner h1{font-size:24px}.banner .bico{width:48px;height:48px}.banner .bst{margin-left:0}.grp h2{font-size:17px}.grp a{display:none}}
+footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:var(--ink3)}
+
+@media (max-width:900px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}}
+@media (max-width:640px){
+  .brand .bt{display:none}
+  .top-in{gap:8px;padding:8px 10px}
+  .gsearch button{padding:0 10px}
+  main{padding:14px 10px 50px}
+  .stat .num{font-size:26px}
+  .mb{grid-template-columns:1fr}
+  .mb .cover{max-width:150px}
+  .ov{padding:0}
+  .modal{min-height:100%;border:0}
+  .lt .hm{display:none}
+  .cgrid{grid-template-columns:repeat(auto-fill,minmax(105px,1fr));gap:8px}
+  .prof{grid-template-columns:1fr}
+  .hbar{grid-template-columns:90px 1fr 34px}
+  .sres{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <a class="brand" href="#overview" aria-label="Saturn Collections home">
+      <span id="logo"></span>
+      <span class="bt">Saturn Collections</span>
+    </a>
+    <form class="gsearch" id="gform" role="search">
+      <input id="gq" type="search" placeholder="Search anime, films, games, stories…" autocomplete="off" aria-label="Search">
+      <button type="submit" aria-label="Search">Search</button>
+    </form>
+    <button class="iconbtn" id="theme" aria-label="Toggle dark mode" title="Toggle dark mode">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><rect x="2" y="2" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="2" y="2" width="6" height="12"/></svg>
+    </button>
+  </div>
+  <nav class="nav"><div class="nav-in" id="nav"></div></nav>
+</header>
+<main id="app"></main>
+<footer id="foot"></footer>
+<div class="ov" id="ov" role="dialog" aria-modal="true"><div class="modal" id="modal"></div></div>
+
+<script>
+(async function(){
+"use strict";
+let D;try{D=await fetch('data/site.json',{cache:'no-cache'}).then(r=>r.json())}catch(e){document.getElementById('app').innerHTML='<div class="empty">Could not load data/site.json.</div>';return}
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm=s=>String(s||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+const fmt=n=>Number(n).toLocaleString('en-US');
+const MON=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const fdate=s=>{if(!s)return'';const d=new Date(s.length<=10?s+'T00:00:00Z':s);if(isNaN(d))return'';return d.getUTCDate()+' '+MON[d.getUTCMonth()]+' '+d.getUTCFullYear()};
+const ago=s=>{const d=new Date(s.length<=10?s+'T00:00:00Z':s);const days=Math.floor((Date.now()-d)/864e5);if(days<1)return'today';if(days<2)return'yesterday';if(days<31)return days+'d ago';if(days<365)return Math.floor(days/30)+'mo ago';return Math.floor(days/365)+'y ago'};
+const store={get(k,d){try{const v=localStorage.getItem('sc_'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('sc_'+k,JSON.stringify(v))}catch(e){}}};
+
+/* ---------- theme ---------- */
+const root=document.documentElement;
+let theme=store.get('theme',null);
+if(!theme){try{theme=matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}catch(e){theme='light'}}
+root.dataset.theme=theme;
+$('#theme').onclick=()=>{theme=theme==='dark'?'light':'dark';root.dataset.theme=theme;store.set('theme',theme)};
+
+
+/* ---------- icons & art ---------- */
+const IC={
+ overview:'<rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/>',
+ hof:'<path d="M3 7l4.5 4L12 4l4.5 7L21 7v11H3z"/><path d="M3 21h18"/>',
+ anime:'<rect x="2.5" y="6" width="19" height="13"/><path d="M8 2.5l4 3.5 4-3.5"/><path d="M6 21.5h12"/>',
+ manga:'<rect x="2.5" y="3" width="19" height="18"/><path d="M12 3v18M2.5 11h9.5M12 14h9.5"/>',
+ films:'<rect x="2.5" y="4" width="19" height="16"/><path d="M6.5 4v16M17.5 4v16M2.5 9h4M2.5 15h4M17.5 9h4M17.5 15h4"/>',
+ games:'<rect x="2.5" y="7" width="19" height="11"/><path d="M8 10v5M5.5 12.5h5"/><rect x="14.5" y="10" width="2" height="2"/><rect x="17" y="13" width="2" height="2"/>',
+ books:'<rect x="3" y="15" width="18" height="5"/><rect x="5" y="9.5" width="15" height="5.5"/><rect x="4" y="4" width="13" height="5.5"/>',
+ stories:'<path d="M12 2.5l6 7-6 12-6-12z"/><path d="M12 9.5v6"/>',
+ search:'<rect x="3" y="3" width="12" height="12"/><path d="M15 15l6 6"/>',
+ star:'<path d="M12 2.5l2.8 6.3 6.7.5-5.1 4.4 1.6 6.6L12 16.8l-6 3.5 1.6-6.6-5.1-4.4 6.7-.5z"/>',
+ mask:'<path d="M3 5h18v6c0 5-4 9-9 9s-9-4-9-9z"/><rect x="6.5" y="9" width="4" height="3"/><rect x="13.5" y="9" width="4" height="3"/>',
+ heart:'<path d="M12 21L3 12V6l3-3h3l3 3 3-3h3l3 3v6z"/>',
+ couple:'<rect x="2.5" y="7" width="11" height="11"/><rect x="10.5" y="4" width="11" height="11"/>',
+ bolt:'<path d="M13.5 2.5L4.5 13.5h6l-1 8 9-11h-6z"/>',
+ ten:'<rect x="2.5" y="4" width="19" height="16"/><path d="M7 8.5v7M10.5 8.5h6v7h-6z"/>',
+ user:'<rect x="8" y="3" width="8" height="8"/><path d="M3.5 21v-6h17v6"/>'
+};
+const ico=(k,cls)=>`<svg class="ico ${cls||''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="miter" stroke-linecap="square" aria-hidden="true">${IC[k]||IC.star}</svg>`;
+const RING='<svg class="ring" viewBox="0 0 64 64" aria-hidden="true"><path d="M6 37c-4 6 10 6 26-1s28-17 26-22" fill="none" stroke="#fff" stroke-width="3"/><circle cx="32" cy="32" r="14" fill="#fff"/></svg>';
+/* ---------- artwork ---------- */
+const LOGO=(s)=>`<svg width="${s}" height="${s}" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lgP" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff5c86"/><stop offset=".55" stop-color="#b8264a"/><stop offset="1" stop-color="#6a2fc4"/></linearGradient><linearGradient id="lgR" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f6d27a" stop-opacity="0"/><stop offset=".3" stop-color="#f6d27a"/><stop offset=".7" stop-color="#fff2c9"/><stop offset="1" stop-color="#f6d27a" stop-opacity="0"/></linearGradient></defs><path d="M6 37c-4 6 10 6 26-1s28-17 26-22" fill="none" stroke="url(#lgR)" stroke-width="2.4" opacity=".55"/><circle cx="32" cy="32" r="15" fill="url(#lgP)"/><path d="M19 27c5-2 18-2 26 2" stroke="#fff" stroke-opacity=".25" stroke-width="2" fill="none"/><path d="M6 37c-4 6 10 6 26-1s28-17 26-22" fill="none" stroke="url(#lgR)" stroke-width="2.4" stroke-dasharray="0 23 60" /><circle cx="51" cy="14" r="1.6" fill="#fff"/><circle cx="12" cy="18" r="1" fill="#fff" opacity=".7"/></svg>`;
+const STARS=(n,x0,x1,seed)=>{let h=seed||3,s='';const r=()=>{h=(h*9301+49297)%233280;return h/233280};for(let i=0;i<n;i++){const x=x0+r()*(x1-x0),y=r()*200,o=.25+r()*.6,z=r()<.15?1.8:.9;s+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${z}" fill="#fff" opacity="${o.toFixed(2)}"/>`}return s};
+const ART={
+ anime:c=>`<circle cx="700" cy="70" r="46" fill="#ffe7ef" opacity=".92"/><circle cx="700" cy="70" r="62" fill="#ffe7ef" opacity=".08"/>
+  <g fill="#14081a" opacity=".95"><rect x="560" y="96" width="210" height="9"/><rect x="548" y="88" width="234" height="9"/><rect x="580" y="112" width="170" height="7"/><rect x="590" y="105" width="10" height="95"/><rect x="730" y="105" width="10" height="95"/></g>
+  <g fill="${c}"><rect x="548" y="88" width="234" height="3" opacity=".9"/></g>
+  <path d="M820 20 C760 30 720 60 690 40 M780 24 c-8 10-6 22 4 30" stroke="#3a1a2e" stroke-width="5" fill="none"/>
+  ${[[760,40],[742,52],[790,58],[722,30],[800,30],[770,70]].map(([x,y],i)=>`<g transform="translate(${x} ${y}) rotate(${i*31})"><ellipse rx="9" ry="5" fill="#ffb3c8"/><ellipse rx="5" ry="9" fill="#ff9fbb" opacity=".85"/><circle r="2" fill="#fff4f7"/></g>`).join('')}
+  ${[[520,40,20],[600,150,60],[660,170,120],[470,120,200],[640,30,250],[540,180,320],[700,150,40]].map(([x,y,r])=>`<ellipse cx="${x}" cy="${y}" rx="5" ry="3" fill="#ffb3c8" opacity=".7" transform="rotate(${r} ${x} ${y})"/>`).join('')}
+  <g stroke="#fff" stroke-opacity=".12" stroke-width="2">${[0,1,2,3,4,5].map(i=>`<line x1="${430+i*8}" y1="${200-i*30}" x2="${380+i*8}" y2="${210-i*30}"/>`).join('')}</g>`,
+ manga:c=>`<g transform="translate(470 18) rotate(-4)"><rect width="150" height="100" fill="#fff"/><rect x="158" width="170" height="60" fill="#fff"/><rect x="158" y="68" width="170" height="110" fill="#fff"/><rect y="108" width="150" height="70" fill="#fff"/>
+  <g fill="#1c0e22" opacity=".85">${Array.from({length:60},(_,i)=>`<circle cx="${8+(i%10)*14+(Math.floor(i/10)%2)*7}" cy="${8+Math.floor(i/10)*15}" r="${(1.2+(i%10)*.32).toFixed(1)}"/>`).join('')}</g>
+  <g stroke="#1c0e22" stroke-width="2">${Array.from({length:14},(_,i)=>`<line x1="243" y1="123" x2="${158+(i/13)*170}" y2="${i%2?68:178}"/>`).join('')}</g><circle cx="243" cy="123" r="22" fill="#fff"/>
+  <path d="M175 10 h90 v34 h-50 l-14 12 v-12 h-26 z" fill="#fff" stroke="#1c0e22" stroke-width="2.5"/><text x="220" y="34" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-weight="700" font-size="18" fill="#1c0e22">!?</text>
+  <text x="20" y="160" font-family="sans-serif" font-weight="900" font-size="40" fill="${c}" transform="rotate(-8 20 160)">ドン!</text></g>`,
+ films:c=>`<g transform="translate(520 0)"><path d="M150 0 L300 200 L40 200 Z" fill="#fff" opacity=".06"/><circle cx="150" cy="-6" r="16" fill="#fff" opacity=".4"/>
+  <g transform="translate(150 105) rotate(-12)"><rect x="-90" y="-10" width="180" height="70" fill="#f2e9f5"/><rect x="-90" y="-36" width="180" height="22" fill="#1c0e22" transform="rotate(-10 -90 -14)"/>
+  ${[0,1,2,3,4].map(i=>`<rect x="${-80+i*36}" y="-34" width="16" height="22" fill="#f2e9f5" transform="rotate(-10 -90 -14) skewX(-25)"/>`).join('')}
+  <rect x="-90" y="-10" width="180" height="10" fill="${c}"/><text x="-78" y="30" font-family="JetBrains Mono,monospace" font-size="12" fill="#1c0e22">SCENE 01  TAKE 3</text><text x="-78" y="50" font-family="JetBrains Mono,monospace" font-size="12" fill="#1c0e22">ROLL A</text></g></g>
+  <g transform="translate(470 150)"><rect x="0" y="0" width="360" height="34" fill="#0c060f"/>${Array.from({length:17},(_,i)=>`<rect x="${6+i*21}" y="4" width="11" height="6" fill="#f2e9f5" opacity=".75"/><rect x="${6+i*21}" y="24" width="11" height="6" fill="#f2e9f5" opacity=".75"/>`).join('')}${[0,1,2,3,4].map(i=>`<rect x="${10+i*70}" y="12" width="60" height="10" fill="${c}" opacity="${.35+i*.12}"/>`).join('')}</g>`,
+ games:c=>`<g transform="translate(560 40)"><path d="M20 20 h140 a28 28 0 0 1 28 28 l12 58 a20 20 0 0 1 -36 14 l-24 -30 h-80 l-24 30 a20 20 0 0 1 -36 -14 l12 -58 a28 28 0 0 1 28 -28z" fill="#f2e9f5"/>
+  <rect x="38" y="46" width="12" height="36" fill="#1c0e22"/><rect x="26" y="58" width="36" height="12" fill="#1c0e22"/>
+  <circle cx="140" cy="52" r="8" fill="${c}"/><circle cx="158" cy="68" r="8" fill="#ff5c86"/><circle cx="122" cy="68" r="8" fill="#6a2fc4"/><circle cx="140" cy="84" r="8" fill="#f0c43c"/>
+  <rect x="80" y="40" width="16" height="6" fill="#93879a"/><rect x="100" y="40" width="16" height="6" fill="#93879a"/></g>
+  <g transform="translate(470 20)">${[0,1,2,3,4].map(i=>`<path transform="translate(${i*20} 0)" d="M2 4h4v-2h4v2h4v6h-2v2h-2v2h-2v2h-2v-2h-2v-2h-2v-2h-2z" fill="${i<4?'#ff5c86':'#45334f'}"/>`).join('')}</g>
+  <text x="472" y="186" font-family="JetBrains Mono,monospace" font-size="13" letter-spacing="3" fill="#fff" opacity=".7">PRESS START ▶</text>`,
+ books:c=>`<g transform="translate(560 30)"><path d="M120 40 C90 22 40 20 0 30 v120 c40-10 90-8 120 10z" fill="#f7eedf"/><path d="M120 40 C150 22 200 20 240 30 v120 c-40-10-90-8-120 10z" fill="#fff8ec"/><path d="M120 40v120" stroke="#c9b48e" stroke-width="2"/>
+  ${[0,1,2,3,4,5,6].map(i=>`<line x1="18" y1="${52+i*13}" x2="${100-(i%3)*8}" y2="${50+i*13}" stroke="#c9b48e" stroke-width="2"/><line x1="140" y1="${50+i*13}" x2="${222-(i%2)*14}" y2="${52+i*13}" stroke="#c9b48e" stroke-width="2"/>`).join('')}
+  <path d="M170 30 v48 l10-8 10 8 v-48" fill="${c}"/></g>
+  <g transform="translate(460 120)">${[['#c8324f',70],['#6a2fc4',60],['#d9a514',80],['#24a896',66]].map(([col,w],i)=>`<rect x="${i*6}" y="${60-i*18}" width="${w}" height="16" fill="${col}"/><rect x="${i*6+6}" y="${64-i*18}" width="${w-20}" height="2" fill="#fff" opacity=".5"/>`).join('')}</g>
+  <text x="520" y="40" font-family="Noto Nastaliq Urdu,serif" font-size="22" fill="#fff" opacity=".35">کتاب</text>`,
+ stories:c=>`<g transform="translate(560 24)"><rect x="0" y="10" width="160" height="150" fill="#fff8ec" transform="rotate(-6)"/>${[0,1,2,3,4,5,6,7].map(i=>`<line x1="16" y1="${40+i*14}" x2="${140-(i%3)*18}" y2="${40+i*14}" stroke="#c9b48e" stroke-width="2" transform="rotate(-6)"/>`).join('')}
+  <path d="M150 150 C190 90 230 40 250 0 C235 50 210 100 165 160 Z" fill="#f2e9f5"/><path d="M150 150 L240 10" stroke="${c}" stroke-width="2"/><path d="M150 150 l-8 16 l14-8z" fill="#1c0e22"/>
+  <rect x="200" y="120" width="44" height="40" fill="#1c0e22"/><rect x="208" y="110" width="28" height="12" fill="#1c0e22"/><rect x="200" y="130" width="44" height="6" fill="${c}"/>
+  <circle cx="120" cy="170" r="6" fill="#1c0e22"/><circle cx="132" cy="178" r="3" fill="#1c0e22"/></g>`,
+ hof:c=>`<g transform="translate(600 30)"><path d="M10 120 L0 30 L45 70 L80 0 L115 70 L160 30 L150 120 Z" fill="${c}"/><path d="M10 120 L0 30 L45 70 L80 0 L80 120Z" fill="#fff" opacity=".18"/><rect x="10" y="120" width="140" height="18" fill="#f0c43c"/>
+  <circle cx="80" cy="84" r="10" fill="#c8324f"/><circle cx="35" cy="98" r="6" fill="#6a2fc4"/><circle cx="125" cy="98" r="6" fill="#6a2fc4"/><circle cx="0" cy="30" r="6" fill="#fff2c9"/><circle cx="80" cy="0" r="7" fill="#fff2c9"/><circle cx="160" cy="30" r="6" fill="#fff2c9"/></g>
+  ${[0,1,2,3,4,5].map(i=>`<ellipse cx="${560-i*2}" cy="${160-i*22}" rx="12" ry="5" fill="#f0c43c" opacity=".55" transform="rotate(${-40+i*8} ${560-i*2} ${160-i*22})"/><ellipse cx="${800+i*2}" cy="${160-i*22}" rx="12" ry="5" fill="#f0c43c" opacity=".55" transform="rotate(${40-i*8} ${800+i*2} ${160-i*22})"/>`).join('')}`,
+ overview:c=>`<g transform="translate(560 -20) scale(3.6)">${LOGO(64).replace(/<svg[^>]*>|<\/svg>/g,'').replace(/lg([PR])/g,'lgO$1')}</g>`,
+ search:c=>`<g transform="translate(620 30)"><circle cx="60" cy="60" r="48" fill="none" stroke="#f2e9f5" stroke-width="12"/><circle cx="60" cy="60" r="40" fill="#fff" opacity=".06"/><rect x="96" y="104" width="22" height="70" fill="${c}" transform="rotate(-45 107 139)"/><path d="M36 44 a30 30 0 0 1 22 -14" stroke="#fff" stroke-width="5" fill="none" opacity=".6"/></g>`
+};
+function artBg(c,seed,k){
+  const glow=`<radialGradient id="gw${seed}" cx="85%" cy="40%" r="60%"><stop offset="0" stop-color="${c}" stop-opacity=".55"/><stop offset="1" stop-color="${c}" stop-opacity="0"/></radialGradient>`;
+  return `<svg class="bg" viewBox="0 0 820 200" preserveAspectRatio="xMaxYMid ${k?'meet':'slice'}" aria-hidden="true"><defs>${glow}</defs><rect width="820" height="200" fill="url(#gw${seed})"/>${STARS(40,340,820,seed)}${k&&ART[k]?ART[k](c):''}</svg>`;
+}
+
+const HEX={anime:'#8a50e0',manga:'#d23d5c',films:'#e8733a',games:'#24a896',books:'#b07a38',stories:'#d0508c',hof:'#e3b11c',search:'#c8325a',overview:'#c8325a'};
+function banner(k,title,sub,stats,kicker){
+  return `<section class="banner" style="--c:${HEX[k]}">${artBg(HEX[k],title.length*13,k)}<div class="in"><div class="bico">${ico(k)}</div><div><div class="kick">${esc(kicker||'Saturn Collections')}</div><h1>${esc(title)}</h1>${sub?`<div class="sub">${sub}</div>`:''}</div>${stats&&stats.length?`<div class="bst">${stats.map(([n,l])=>`<span><b>${n}</b>${esc(l)}</span>`).join('')}</div>`:''}</div></section>`;
+}
+
+/* ---------- covers ---------- */
+let imgOK=true; // flips to false if remote images are blocked
+const PAL=['#7a3fd1','#c8324f','#e2672b','#1f8a7c','#a12f31','#8e2f6e','#8a5a14','#5b3c88','#3f2a63','#b03a6e','#6b2440','#6b4d2e'];
+const hash=s=>{let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return Math.abs(h)};
+const initials=t=>{const w=String(t).replace(/[^\p{L}\p{N} ]/gu,' ').trim().split(/\s+/).filter(x=>!/^(the|a|an|of|and|no|to|wa|ga)$/i.test(x));return ((w[0]||'?')[0]+((w[1]||'')[0]||'')).toUpperCase()};
+function cover(title,img,extra,cls){
+  const c=PAL[hash(title)%PAL.length];
+  const im=(img&&imgOK)?`<img src="${esc(img)}" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="window.__imgFail&&window.__imgFail(this)">`:'';
+  return `<div class="cover ${cls||''}" style="--tc:${c}">${RING}<div class="ini">${esc(initials(title))}</div><div class="ct">${esc(title)}</div>${im}${extra||''}</div>`;
+}
+let imgFails=0,imgLoads=0;
+window.__imgFail=el=>{el.remove();imgFails++;if(imgFails>=3&&imgLoads===0)imgOK=false};
+document.addEventListener('load',e=>{if(e.target.tagName==='IMG')imgLoads++},true);
+
+/* ---------- data model ---------- */
+const AST={1:['Watching','var(--s1)'],2:['Completed','var(--s2)'],3:['On-Hold','var(--s3)'],4:['Dropped','var(--s4)'],6:['Plan to Watch','var(--s6)']};
+const TAGS=D.animeTags||{};
+const anime=D.anime.map(a=>({tags:TAGS[a[0]]||'',id:a[0],t:a[1],alt:a[2],st:a[3],sc:a[4],ep:a[5],eps:a[6],type:a[7],img:a[8]?`https://cdn.myanimelist.net/images/anime/${a[8]}.jpg`:'',y:a[9],g:a[10].map(i=>D.animeGenres[i]),mal:a[11],up:a[12],n:norm(a[1]+' '+a[2])}));
+const filmByKey={};
+const films=D.films.map((f,i)=>{const o=Object.assign({},f,{i,logs:f.n,n:norm(f.t)});filmByKey[norm(f.t)+'|'+f.y]=o;return o});
+const filmUri={};films.forEach(f=>filmUri[f.u]=f);
+const listsFor=f=>D.filmLists.filter(l=>l.items.some(([t,y])=>norm(t)===f.n&&y===f.y)).map(l=>l.name);
+const GSH={'Playing':'var(--s1)','Played':'var(--s2)','Backlog':'var(--s3)','Retired':'var(--s4)','Wish List':'var(--s6)'};
+const games=D.games.map((g,i)=>Object.assign({i,n:norm(g.t+' '+g.fr.join(' '))},g));
+const stories=D.stories;
+const MED={hof:{c:'var(--gold)',name:'Hall of Fame'},manga:{c:'var(--manga)',name:'Manga'},books:{c:'var(--book)',name:'Books'},anime:{c:'var(--anime)',name:'Anime'},films:{c:'var(--film)',name:'Films'},games:{c:'var(--game)',name:'Games'},stories:{c:'var(--story)',name:'Stories'}};
+const stars=r=>{if(!r)return'';const f=Math.floor(r);return '★'.repeat(f)+(r%1?'½':'')};
+const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
+
+/* ---------- nav / routing ---------- */
+const ROUTES=[['overview','Overview','#e9ecf5'],['hof','Hall of Fame','#f0c43c'],['anime','Anime','#a77ef0'],['manga','Manga','#f06f88'],['films','Films','#f08a50'],['games','Games','#3cc5b2'],['books','Books','#d4a062'],['stories','Stories','#ec7ab0'],['search','Search','#e9ecf5']];
+$('#logo').innerHTML=LOGO(34);
+$('#nav').innerHTML=ROUTES.map(([k,l,c])=>`<a href="#${k}" data-r="${k}" style="--c:${c}">${ico(k)}${l}</a>`).join('');
+let route='overview';
+const state={anime:{tab:'all',q:'',sort:'updated',view:store.get('view_anime','table'),type:'',lim:60},films:{tab:'watched',q:'',sort:'watched',view:store.get('view_films','grid'),lim:60},games:{tab:'all',q:'',sort:'added',view:store.get('view_games','grid'),lim:60},manga:{tab:'all',q:'',sort:'score',view:store.get('view_manga','grid'),type:'',lim:60},books:{tab:'all',q:'',sort:'rating',view:store.get('view_books','grid'),shelf:'',lim:60},search:{q:'',ext:'anime',res:{},busy:false}};
+function go(){
+  let h=(location.hash||'').replace('#','');
+  if(!ROUTES.some(r=>r[0]===h))h='overview';
+  route=h;
+  document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('on',a.dataset.r===h));
+  render();window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',go);
+function render(){({manga:rManga,books:rBooks,hof:rHof,overview:rOverview,anime:rAnime,films:rFilms,games:rGames,stories:rStories,search:rSearch})[route]()}
+
+/* ---------- overview ---------- */
+function statusBar(parts){const tot=parts.reduce((s,p)=>s+p[1],0)||1;return `<div class="sbar">${parts.map(p=>`<i style="width:${p[1]/tot*100}%;background:${p[2]}" title="${esc(p[0])}: ${p[1]}"></i>`).join('')}</div><div class="legend">${parts.map(p=>`<span><b style="background:${p[2]}"></b>${esc(p[0])} ${fmt(p[1])}</span>`).join('')}</div>`}
+function dist(vals,labels,c){const mx=Math.max(...vals,1);return `<div style="--n:${vals.length};--c:${c}"><div class="dist">${vals.map((v,i)=>`<div style="height:${v/mx*100}%" title="${labels[i]}: ${v}"></div>`).join('')}</div><div class="distl">${labels.map(l=>`<span>${l}</span>`).join('')}</div></div>`}
+function rOverview(){
+  const ac=s=>anime.filter(a=>a.st===s).length;
+  const scored=anime.filter(a=>a.sc>0);
+  const epsW=anime.reduce((s,a)=>s+(a.st===2?(a.eps||a.ep):a.ep),0);
+  const fw=films.filter(f=>f.s==='w'),fr=fw.filter(f=>f.r>0),frv=fw.filter(f=>f.rv);
+  const gs=k=>games.filter(g=>g.shelf===k).length;
+  const gr=games.filter(g=>g.r>0);
+  const words=stories.reduce((s,x)=>s+x.words,0);
+  // activity
+  const act=[];
+  anime.filter(a=>a.up).sort((a,b)=>b.up-a.up).slice(0,12).forEach(a=>act.push({d:new Date(a.up*1000).toISOString(),k:'anime',t:a.t,w:`${AST[a.st][0]}${a.sc?` · scored ${a.sc}`:''}${a.st===1&&a.eps?` · ep ${a.ep}/${a.eps}`:''}`,o:()=>openAnime(a)}));
+  films.filter(f=>f.wd).sort((a,b)=>b.wd.localeCompare(a.wd)).slice(0,12).forEach(f=>act.push({d:f.wd,k:'films',t:`${f.t} (${f.y})`,w:`Watched${f.r?` · ${stars(f.r)}`:''}`,o:()=>openFilm(f)}));
+  games.filter(g=>g.added).sort((a,b)=>b.added.localeCompare(a.added)).slice(0,10).forEach(g=>act.push({d:g.added,k:'games',t:g.t,w:`Added to ${g.shelf}${g.r?` · ${g.r}/5`:''}`,o:()=>openGame(g)}));
+  stories.forEach((s,i)=>act.push({d:s.date,k:'stories',t:s.title,w:'Published on Medium',o:()=>{location.hash='stories'}}));
+  act.sort((a,b)=>b.d.localeCompare(a.d));
+  const acts=act.slice(0,14);
+  window.__acts=acts;
+  // genres
+  const gc={};anime.filter(a=>a.st===2).forEach(a=>a.g.forEach(g=>gc[g]=(gc[g]||0)+1));
+  const topG=Object.entries(gc).sort((a,b)=>b[1]-a[1]).slice(0,8);const gmx=topG[0]?topG[0][1]:1;
+  // favorites
+  const favF=D.lbFavUris.map(u=>filmUri[u]).filter(Boolean);
+  const favG=D.gvFav.map(n=>games.find(g=>g.t===n)).filter(Boolean);
+  const favA=anime.filter(a=>a.sc===10).sort((a,b)=>b.mal-a.mal).slice(0,12);
+  const ad=Array.from({length:10},(_,i)=>scored.filter(a=>a.sc===i+1).length);
+  const fd=[.5,1,1.5,2,2.5,3,3.5,4,4.5,5].map(v=>fr.filter(f=>f.r===v).length);
+  const gd=[1,2,3,4,5].map(v=>gr.filter(g=>g.r===v).length);
+  $('#app').innerHTML=`
+  ${banner('overview','SatsugaiDeAtsu','Anime, manga, films, games, books and stories in one place.',[],'Saturn Collections')}
+  <section class="box prof" style="grid-template-columns:1fr;padding:12px 16px">
+    <div>
+      <div class="muted">${esc(D.lbProfile.bio||'')} · ${esc(D.gvProfile.about||'')}</div>
+      <div class="links" style="margin-top:8px">
+        <a class="chip" href="https://myanimelist.net/profile/SatsugaiDeAtsu" target="_blank" rel="noopener"><b style="width:8px;height:8px;background:var(--anime)"></b>MyAnimeList</a>
+        <a class="chip" href="https://letterboxd.com/SatsugaiDeAtsu/" target="_blank" rel="noopener"><b style="width:8px;height:8px;background:var(--film)"></b>Letterboxd</a>
+        <a class="chip" href="https://www.grouvee.com/user/186222-SatsugaiDeAtsu/" target="_blank" rel="noopener"><b style="width:8px;height:8px;background:var(--game)"></b>Grouvee</a>
+        <a class="chip" href="https://medium.com/@rajeeljaved" target="_blank" rel="noopener"><b style="width:8px;height:8px;background:var(--story)"></b>Medium</a><a class="chip" href="https://www.goodreads.com/" target="_blank" rel="noopener"><b style="width:8px;height:8px;background:var(--book)"></b>Goodreads</a>
+      </div>
+    </div>
+  </section>
+  <section class="grid stats" style="margin-top:16px">
+    <a class="box stat" href="#anime" style="--c:var(--anime)"><span class="ic">${ico('anime')}</span><div class="lab"><span>Anime</span><span>${scored.length?avg(scored.map(a=>a.sc)).toFixed(2)+' avg':''}</span></div><div class="num">${fmt(anime.length)}</div><div class="sub">${fmt(epsW)} episodes watched</div>
+      ${statusBar([1,2,3,4,6].map(s=>[AST[s][0],ac(s),AST[s][1]]))}</a>
+    <a class="box stat" href="#manga" style="--c:var(--manga)"><span class="ic">${ico('manga')}</span><div class="lab"><span>Manga</span><span>${(()=>{const s=manga.filter(m=>m.sc);return s.length?avg(s.map(m=>m.sc)).toFixed(2)+' avg':''})()}</span></div><div class="num">${fmt(manga.length)}</div><div class="sub">${fmt(manga.reduce((s,m)=>s+m.ch,0))} chapters read</div>
+      ${statusBar([1,2,3,4,6].map(s=>[MST[s][0],manga.filter(m=>m.st===s).length,MST[s][1]]))}</a>
+    <a class="box stat" href="#films" style="--c:var(--film)"><span class="ic">${ico('films')}</span><div class="lab"><span>Films</span><span>${fr.length?avg(fr.map(f=>f.r)).toFixed(2)+'★ avg':''}</span></div><div class="num">${fmt(fw.length)}</div><div class="sub">${fmt(fr.length)} rated · ${fmt(frv.length)} reviews</div>
+      ${statusBar([['Rated',fr.length,'var(--film)'],['Unrated',fw.length-fr.length,'var(--s3)'],['Watchlist',films.length-fw.length,'var(--s6)']])}</a>
+    <a class="box stat" href="#games" style="--c:var(--game)"><span class="ic">${ico('games')}</span><div class="lab"><span>Games</span><span>${gr.length?avg(gr.map(g=>g.r)).toFixed(2)+'/5 avg':''}</span></div><div class="num">${fmt(games.length)}</div><div class="sub">${gs('Played')} played · ${gs('Playing')} playing</div>
+      ${statusBar(Object.keys(GSH).map(k=>[k,gs(k),GSH[k]]))}</a>
+    <a class="box stat" href="#books" style="--c:var(--book)"><span class="ic">${ico('books')}</span><div class="lab"><span>Books</span><span>${(()=>{const s=books.filter(b=>b.r);return s.length?avg(s.map(b=>b.r)).toFixed(2)+'★ avg':''})()}</span></div><div class="num">${books.length}</div><div class="sub">${books.filter(b=>b.st==='read').length} read · ${books.filter(b=>b.ur).length} in Urdu</div>
+      ${statusBar(Object.keys(BST).map(k=>[BST[k][0],books.filter(b=>b.st===k).length,BST[k][1]]).filter(p=>p[1]))}</a>
+    <a class="box stat" href="#stories" style="--c:var(--story)"><span class="ic">${ico('stories')}</span><div class="lab"><span>Stories</span><span>Medium</span></div><div class="num">${stories.length}</div><div class="sub">${fmt(words)} words written</div>
+      ${statusBar([['Stories',stories.filter(s=>!s.tags.includes('articles')).length,'var(--story)'],['Articles',stories.filter(s=>s.tags.includes('articles')).length,'var(--s3)']])}</a>
+  </section>
+  <section class="grid two" style="margin-top:16px">
+    <div class="box"><div class="box-h"><h2>Recent activity</h2><span class="small muted">across everything</span></div>
+      <div>${acts.map((a,i)=>`<div class="act" data-a="${i}" style="--c:${MED[a.k].c}"><span class="k"></span><div class="t"><div>${esc(a.t)}</div><div class="small muted">${esc(MED[a.k].name)} · ${esc(a.w)}</div></div><div class="w">${ago(a.d)}</div></div>`).join('')}</div></div>
+    <div class="grid" style="align-content:start">
+      <div class="box"><div class="box-h"><h3>Anime scores</h3><span class="small muted">${scored.length} scored</span></div><div class="box-b">${dist(ad,ad.map((_,i)=>i+1),'var(--anime)')}</div></div>
+      <div class="box"><div class="box-h"><h3>Film ratings</h3><span class="small muted">${fr.length} rated</span></div><div class="box-b">${dist(fd,['½','1','','2','','3','','4','','5'],'var(--film)')}</div></div>
+      <div class="box"><div class="box-h"><h3>Game ratings</h3><span class="small muted">${gr.length} rated</span></div><div class="box-b">${dist(gd,[1,2,3,4,5],'var(--game)')}</div></div>
+      <div class="box"><div class="box-h"><h3>Top anime genres</h3><span class="small muted">completed</span></div><div class="box-b">${topG.map(([g,n])=>`<div class="hbar" style="--c:var(--anime)"><span>${esc(g)}</span><div class="tr"><i style="width:${n/gmx*100}%"></i></div><span class="mono muted">${n}</span></div>`).join('')}</div></div>
+    </div>
+  </section>
+  ${favRow('Favorite films','films',favF.map(f=>({t:f.t,img:'',sub:f.y,b:f.r?stars(f.r):'',o:()=>openFilm(f)})))}
+  ${favRow('Favorite games','games',favG.map(g=>({t:g.t,img:'',sub:g.pf[0]||'',b:g.r?g.r+'/5':'',o:()=>openGame(g)})))}
+  ${favRow('Favorite anime','anime',D.hof.malFavs.anime.map(([id,t,sub])=>{const a=anime.find(x=>x.id===id);return {t:a?a.t:t,img:a?a.img:'',sub,b:a&&a.sc?String(a.sc):'',o:()=>a?openAnime(a):window.open('https://myanimelist.net/anime/'+id,'_blank')}}))}
+  ${favRow('Favorite manga','manga',D.hof.malFavs.manga.map(([id,t,sub])=>{const m=manga.find(x=>x.id===id);return {t:m?m.t:t,img:m?m.img:'',sub,b:m&&m.sc?String(m.sc):'',o:()=>m?openManga(m):window.open('https://myanimelist.net/manga/'+id,'_blank')}}))}
+  <div class="more"><a class="btn" href="#hof">Open the Hall of Fame →</a></div>
+  `;
+  document.querySelectorAll('.act').forEach(el=>el.onclick=()=>acts[+el.dataset.a].o());
+}
+const FAVS={};
+function favRow(title,k,items){
+  FAVS[k]=items;
+  setTimeout(()=>document.querySelectorAll(`[data-fk="${k}"]`).forEach(el=>el.onclick=()=>items[+el.dataset.i].o()));
+  if(!items.length)return'';
+  return `<section class="box" style="margin-top:16px"><div class="box-h" style="border-top:3px solid ${MED[k].c}"><h2>${esc(title)}</h2><a class="link small" href="#${k}">View all</a></div><div class="box-b"><div class="grid favs">${items.map((it,i)=>`<div class="card" data-fk="${k}" data-i="${i}">${cover(it.t,it.img,it.b?`<span class="badge">${esc(it.b)}</span>`:'')}<div class="meta"><div class="tt">${esc(it.t)}</div><div class="ss"><span>${esc(it.sub)}</span></div></div></div>`).join('')}</div></div></section>`;
+}
+
+
+/* ---------- manga ---------- */
+const MST={1:['Reading','var(--s1)'],2:['Completed','var(--s2)'],3:['On-Hold','var(--s3)'],4:['Dropped','var(--s4)'],6:['Plan to Read','var(--s6)']};
+const manga=D.manga.map(m=>({id:m[0],t:m[1],alt:m[2],st:m[3],sc:m[4],ch:m[5],chs:m[6],vol:m[7],vols:m[8],type:m[9],img:m[10]?`https://cdn.myanimelist.net/images/manga/${m[10]}.jpg`:'',y:m[11],g:m[12].map(i=>D.mangaGenres[i]),mal:m[13],n:norm(m[1]+' '+m[2])}));
+function rManga(){
+  const sc=manga.filter(m=>m.sc>0);
+  const types=[...new Set(manga.map(m=>m.type))].sort();
+  listPage({key:'manga',title:'Manga list',sub:`From MyAnimeList · updated ${fdate(D.generated)}`,
+    bst:()=>[[fmt(manga.length),'entries'],[fmt(manga.reduce((s,m)=>s+m.ch,0)),'chapters read'],[avg(sc.map(m=>m.sc)).toFixed(2),'mean score']],
+    items:()=>manga,
+    tabs:[['all','All manga',()=>true],['1','Reading',m=>m.st===1],['2','Completed',m=>m.st===2],['3','On-Hold',m=>m.st===3],['4','Dropped',m=>m.st===4],['6','Plan to Read',m=>m.st===6]],
+    sorts:[['score','Your score'],['mal','MAL score'],['title','Title'],['year','Year (newest)'],['ch','Chapters read']],
+    extra:S=>`<select id="ltype" aria-label="Type"><option value="">All types</option>${types.map(t=>`<option ${S.type===t?'selected':''}>${esc(t)}</option>`).join('')}</select>`,
+    bindExtra:(S,body)=>{$('#ltype').onchange=e=>{S.type=e.target.value;body()}},
+    xfilter:(m,S)=>!S.type||m.type===S.type,
+    sorter:k=>({score:(a,b)=>b.sc-a.sc||b.mal-a.mal,mal:(a,b)=>b.mal-a.mal,title:cmpT,year:(a,b)=>b.y-a.y,ch:(a,b)=>b.ch-a.ch})[k],
+    card:(m,i)=>`<div class="card" data-i="${i}">${cover(m.t,m.img,(m.sc?`<span class="badge">${m.sc}</span>`:'')+`<span class="sline" style="--sc:${MST[m.st][1]}"></span>`)}<div class="meta"><div class="tt">${esc(m.t)}</div><div class="ss"><span>${esc(m.type)}${m.y?' · '+m.y:''}</span><span>${m.ch?m.ch+' ch':''}</span></div></div></div>`,
+    thead:'<th style="width:5px;padding:0"></th><th class="hm">#</th><th></th><th>Title</th><th style="text-align:center">Score</th><th class="hm" style="text-align:center">Type</th><th style="text-align:center">Chapters</th><th class="hm" style="text-align:center">MAL</th>',
+    row:(m,i)=>`<tr data-i="${i}"><td class="st" style="--sc:${MST[m.st][1]}"></td><td class="num hm">${i+1}</td><td style="width:54px">${cover(m.t,m.img,'','mini')}</td><td><div class="ti">${esc(m.t)}</div>${m.alt?`<div class="alt">${esc(m.alt)}</div>`:''}</td><td class="sc">${m.sc||'<span class="muted">–</span>'}</td><td class="c hm">${esc(m.type)}</td><td class="c mono small">${m.ch}<span class="muted">/${m.chs||'?'}</span></td><td class="c mono small hm">${m.mal?m.mal.toFixed(2):'–'}</td></tr>`,
+    open:openManga});
+}
+function openManga(m){
+  modal('manga','Manga',`${cover(m.t,m.img)}<div><h2>${esc(m.t)}</h2>${m.alt?`<div class="muted">${esc(m.alt)}</div>`:''}
+  <div class="bigscore"><div><b>${m.sc||'–'}</b><small>Your score</small></div><div><b>${m.mal?m.mal.toFixed(2):'–'}</b><small>MAL score</small></div><div><b style="color:${MST[m.st][1]}">■</b><small>${MST[m.st][0]}</small></div></div>
+  <div class="kv"><div>Type</div><div>${esc(m.type)}</div><div>Chapters</div><div>${m.ch} read of ${m.chs||'?'}</div>${m.vols||m.vol?`<div>Volumes</div><div>${m.vol} read of ${m.vols||'?'}</div>`:''}<div>Published</div><div>${m.y||'–'}</div><div>Genres</div><div>${m.g.map(g=>`<span class="tag">${esc(g)}</span>`).join('')||'–'}</div></div>
+  <div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/manga/${m.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
+}
+
+/* ---------- books ---------- */
+const BST={read:['Read','var(--s2)'],reading:['Reading','var(--s1)'],toread:['Want to read','var(--s6)'],dnf:['Did not finish','var(--s4)'],hold:['On hold','var(--s3)']};
+const books=D.books.map((b,i)=>Object.assign({},b,{i,title:b.t,n:norm(b.t+' '+b.a+' '+b.sh.join(' '))}));
+const bstars=r=>{if(!r)return'';const full=Math.floor(r),part=r-full;return '★'.repeat(full)+(part>=.5?'½':'')};
+function rBooks(){
+  const shelves=[...new Set(books.flatMap(b=>b.sh))].sort();
+  const rd=books.filter(b=>b.st==='read');
+  listPage({key:'books',title:'Books',sub:`From Goodreads · exported ${fdate(D.generated)}`,
+    bst:()=>[[rd.length,'read'],[fmt(rd.reduce((s,b)=>s+b.p,0)),'pages'],[books.filter(b=>b.ur).length,'Urdu']],
+    items:()=>books,
+    tabs:[['all','All books',()=>true],['read','Read',b=>b.st==='read'],['reading','Reading',b=>b.st==='reading'],['toread','Want to read',b=>b.st==='toread'],['dnf','Did not finish',b=>b.st==='dnf'],['hold','On hold',b=>b.st==='hold']],
+    sorts:[['rating','Your rating'],['title','Title'],['author','Author'],['year','Year (newest)'],['pages','Pages']],
+    extra:S=>`<select id="lshelf" aria-label="Shelf"><option value="">All shelves</option>${shelves.map(t=>`<option ${S.shelf===t?'selected':''}>${esc(t)}</option>`).join('')}</select>`,
+    bindExtra:(S,body)=>{$('#lshelf').onchange=e=>{S.shelf=e.target.value;body()}},
+    xfilter:(b,S)=>!S.shelf||b.sh.includes(S.shelf),
+    sorter:k=>({rating:(a,b)=>b.r-a.r,title:cmpT,author:(a,b)=>a.a.localeCompare(b.a),year:(a,b)=>b.y-a.y,pages:(a,b)=>b.p-a.p})[k],
+    card:(b,i)=>`<div class="card book" data-i="${i}">${cover(b.t,b.img||'',(b.r?`<span class="badge">${b.r}★</span>`:'')+`<span class="sline" style="--sc:${BST[b.st][1]}"></span>`)}<div class="meta"><div class="tt">${esc(b.t)}</div><div class="ss"><span>${esc(b.a)}</span></div></div></div>`,
+    thead:'<th style="width:5px;padding:0"></th><th class="hm">#</th><th></th><th>Book</th><th>Rating</th><th>Status</th><th class="hm" style="text-align:center">Pages</th>',
+    row:(b,i)=>`<tr data-i="${i}"><td class="st" style="--sc:${BST[b.st][1]}"></td><td class="num hm">${i+1}</td><td style="width:54px">${cover(b.t,'','','mini')}</td><td><div class="ti">${esc(b.t)}</div><div class="alt">${esc(b.a)}${b.ur?` · <span class="urdu">${esc(b.ur)}</span>`:''}</div></td><td><span class="stars" style="color:var(--book)">${bstars(b.r)}</span></td><td class="small">${BST[b.st][0]}</td><td class="c mono small hm">${b.p||''}</td></tr>`,
+    open:openBook});
+}
+function openBook(b){
+  modal('books','Book',`${cover(b.t,b.img||'')}<div><h2>${esc(b.t)}</h2>${b.ur?`<div class="urdu" style="font-size:18px">${esc(b.ur)}</div>`:''}<div class="muted">${esc(b.a)}</div>
+  <div class="bigscore"><div><b class="stars" style="color:var(--book)">${b.r?bstars(b.r):'–'}</b><small>${b.r?b.r+' / 5':'Not rated'}</small></div><div><b style="color:${BST[b.st][1]}">■</b><small>${BST[b.st][0]}</small></div></div>
+  <div class="kv">${b.p?`<div>Pages</div><div>${b.p}</div>`:''}${b.y?`<div>First published</div><div>${b.y}</div>`:''}${b.sh.length?`<div>Shelves</div><div>${b.sh.map(s=>`<span class="tag">${esc(s)}</span>`).join('')}</div>`:''}</div>
+  ${b.rv?`<div class="review" style="--c:var(--book)">${esc(b.rv)}</div>`:''}
+  <div style="margin-top:14px"><a class="btn pri" href="https://www.goodreads.com/book/show/${esc(b.id)}" target="_blank" rel="noopener">Open on Goodreads ↗</a></div></div>`);
+}
+
+/* ---------- hall of fame ---------- */
+const MALK={a:'anime',m:'manga',c:'character',p:'people'};
+const KLAB={a:'Anime',m:'Manga',c:'Character',p:'Person'};
+let hofSeg='anime';
+const HOFITEMS=[];
+function hItem(code,extra){
+  const [kid,name]=code.split('~');const k=kid[0],id=+kid.slice(1);
+  const own=k==='a'?anime.find(x=>x.id===id):k==='m'?manga.find(x=>x.id===id):null;
+  const idx=HOFITEMS.push({k,id,name,own})-1;
+  return `<div class="card" data-h="${idx}">${cover(own?own.t:name,own?own.img:'',(own&&own.sc?`<span class="badge">${own.sc}</span>`:''))}<div class="meta"><div class="tt">${esc(name)}</div><div class="ss"><span>${esc(extra||KLAB[k])}</span></div></div></div>`;
+}
+function coupleCards(list){
+  return `<div class="couples">${list.map(([n,show,cs])=>`<div class="couple"><div class="pair">${cs.map(c=>{const [kid,nm]=c.split('~');const idx=HOFITEMS.push({k:kid[0],id:+kid.slice(1),name:nm})-1;return `<div data-h="${idx}" style="cursor:pointer">${cover(nm,'')}</div>`}).join('')}</div><div class="meta"><b>${esc(n)}</b><span>${esc(show)}</span></div></div>`).join('')}</div>`;
+}
+function rHof(){
+  HOFITEMS.length=0;
+  const H=D.hof,F=H.malFavs;
+  const grid=items=>`<div class="hgrid">${items}</div>`;
+  const groups=[];
+  const G=(id,title,desc,icon,c,src,secs)=>groups.push({id,title,desc,icon,c,src,secs});
+  const sec=(id,title,desc,inner,cls)=>({id,title,desc,inner,cls});
+  const blogUrl=e=>`https://myanimelist.net/blog.php?eid=${e}`;
+  const fil=(arr,re)=>arr.filter(s=>re.test(s[0]));
+  const hon=H.blog[0].secs, chr=H.blog[1].secs, wai=H.blog[2].secs;
+  if(hofSeg==='anime'){
+    G('g-mal','MAL favourites','My official top picks on MyAnimeList.','star','#8a50e0','https://myanimelist.net/profile/SatsugaiDeAtsu',[
+      sec('s-mal-a','Top anime','',grid(F.anime.map(([id,t,sub])=>hItem('a'+id+'~'+t,sub)).join(''))),
+      sec('s-mal-c','Top characters','',grid(F.character.map(([id,t,sub])=>hItem('c'+id+'~'+t,sub)).join(''))),
+      sec('s-mal-p','Top people','',grid(F.people.map(([id,t])=>hItem('p'+id+'~'+t,'Person')).join(''))),
+      sec('s-mal-s','Top studios','',`<div style="display:flex;flex-wrap:wrap;gap:6px">${F.company.map(c=>`<span class="chip">${esc(c)}</span>`).join('')}</div>`)]);
+    G('g-hon','Honorary favourites','Shows and characters special to me beyond the top 10, plus my nurturing legacy.','star','#d9a514',blogUrl(804802),
+      fil(hon,/anime|character/i).map(([t,d,it],i)=>sec('s-hon-'+i,t.replace(/^Honorary mentions: /,'Honorary mentions · '),d,grid(it.map(c=>hItem(c)).join('')))));
+    G('g-chr','Character corner','Parents, battalions, villains, the ones I hate, and the people behind it all.','mask','#24a896',blogUrl(804802),
+      chr.map(([t,d,it],i)=>sec('s-chr-'+i,t,d,grid(it.map(c=>hItem(c)).join('')),/hate/i.test(t)?'hated':'')).concat(H.people.map(([t,d,it],i)=>sec('s-ppl-'+i,t,d,grid(it.map(c=>hItem(c,'Person')).join(''))))));
+    G('g-wai','Waifus','A blog of its own: the goddess, the waifus, the battalion and the imoutos.','heart','#d24a7a',blogUrl(804810),
+      wai.map(([t,d,it],i)=>sec('s-wai-'+i,t,d,grid(it.map(c=>hItem(c)).join('')))));
+    G('g-cou','Couples','Favourite anime couples, and two special cases.','couple','#e8733a',blogUrl(804809),[
+      sec('s-cou','Favourite anime couples','The name says it all.',coupleCards(H.couples)),
+      sec('s-cou-sp','A special mention',H.specialCouples.desc,coupleCards(H.specialCouples.pairs))]);
+    const p10=anime.filter(a=>a.sc===10).sort((a,b)=>b.mal-a.mal);
+    G('g-a10','Perfect 10s','Every anime I scored 10 out of 10 on MAL.','ten','#8a50e0','',[sec('s-a10','Scored 10','',grid(p10.map(a=>hItem('a'+a.id+'~'+a.t,a.type+(a.y?' · '+a.y:''))).join('')))]);
+  }else if(hofSeg==='manga'){
+    G('g-mmal','MAL favourites','My official top manga on MyAnimeList.','star','#d24a5f','https://myanimelist.net/profile/SatsugaiDeAtsu',[sec('s-mm','Top manga','',grid(F.manga.map(([id,t,sub])=>hItem('m'+id+'~'+t,sub)).join('')))]);
+    G('g-mhon','Honorary favourites','Manga special to me like my favs, even outside the top 10.','star','#d9a514',blogUrl(804802),
+      fil(hon,/manga/i).map(([t,d,it],i)=>sec('s-mhon-'+i,t.replace(/^Honorary mentions: /,'Honorary mentions · '),d,grid(it.map(c=>hItem(c)).join('')))));
+    const p10=manga.filter(m=>m.sc===10).sort((a,b)=>b.mal-a.mal);
+    G('g-m10','Perfect 10s','Every manga I scored 10 out of 10.','ten','#d24a5f','',[sec('s-m10','Scored 10','',grid(p10.map(m=>hItem('m'+m.id+'~'+m.t,m.type+(m.y?' · '+m.y:''))).join('')))]);
+  }else if(hofSeg==='films'){
+    const fc=(t,y)=>{const f=filmByKey[norm(t)+'|'+y];const idx=HOFITEMS.push({film:f||null,t,y})-1;return `<div class="card" data-h="${idx}">${cover(t,'',f&&f.r?`<span class="badge">${f.r}★</span>`:'')}<div class="meta"><div class="tt">${esc(t)}</div><div class="ss"><span>${y||''}</span><span>${f&&f.lk?'♥':''}</span></div></div></div>`};
+    const favF=D.lbFavUris.map(u=>filmUri[u]).filter(Boolean);
+    G('g-ftop','Letterboxd top 4','The four films on my Letterboxd profile.','star','#e8733a','https://letterboxd.com/SatsugaiDeAtsu/',[sec('s-ftop','Top 4','',grid(favF.map(f=>fc(f.t,f.y)).join('')))]);
+    G('g-flist','My lists','Lists I made on Letterboxd.','films','#e8733a','https://letterboxd.com/SatsugaiDeAtsu/lists/',D.filmLists.map((l,i)=>sec('s-fl'+i,l.name,l.desc,grid(l.items.map(([t,y])=>fc(t,y)).join('')))));
+    const five=films.filter(f=>f.r===5);
+    G('g-f5','Five stars','Every film I rated ★★★★★.','ten','#e8733a','',[sec('s-f5','Rated five stars','',grid(five.map(f=>fc(f.t,f.y)).join('')))]);
+  }else if(hofSeg==='games'){
+    const gc=g=>{const idx=HOFITEMS.push({game:g})-1;return `<div class="card" data-h="${idx}">${cover(g.t,'',g.r?`<span class="badge">${g.r}/5</span>`:'')}<div class="meta"><div class="tt">${esc(g.t)}</div><div class="ss"><span>${esc(g.shelf)}</span></div></div></div>`};
+    const favG=D.gvFav.map(n=>games.find(g=>g.t===n)).filter(Boolean);
+    G('g-gtop','Grouvee favourites','My favourite games, in order.','star','#8a55e6','https://www.grouvee.com/user/186222-SatsugaiDeAtsu/',[sec('s-gtop','Favourites','',grid(favG.map(gc).join('')))]);
+    G('g-g5','Also rated 5/5','','ten','#8a55e6','',[sec('s-g5','Five out of five','',grid(games.filter(g=>g.r===5&&!D.gvFav.includes(g.t)).map(gc).join('')))]);
+    G('g-grv','Games I wrote about','Reviews from Grouvee.','stories','#8a55e6','',[sec('s-grv','Reviewed','',grid(games.filter(g=>g.rv).sort((a,b)=>b.r-a.r).map(gc).join('')))]);
+  }else{
+    const bc=b=>{const idx=HOFITEMS.push({book:b})-1;return `<div class="card book" data-h="${idx}">${cover(b.t,'',b.r?`<span class="badge">${b.r}★</span>`:'')}<div class="meta"><div class="tt">${esc(b.t)}</div><div class="ss"><span>${esc(b.a)}</span></div></div></div>`};
+    G('g-b5','Five stars','Books I rated 5 out of 5.','ten','#b07a38','',[sec('s-b5','Five stars','',grid(books.filter(b=>b.r>=5).map(bc).join('')))]);
+    const shelfNames={childhood:'Childhood',memoire:'Memoire',urdu:'Urdu',spiritual:'Spiritual',philosophy:'Philosophy',psychology:'Psychology'};
+    G('g-bsh','My shelves','Goodreads shelves I keep.','books','#b07a38','https://www.goodreads.com/',Object.keys(shelfNames).filter(k=>books.some(b=>b.sh.includes(k))).map(k=>sec('s-bsh-'+k,shelfNames[k],'',grid(books.filter(b=>b.sh.includes(k)).map(bc).join('')))));
+  }
+  const A=D.hof.about;
+  const segs=[['anime','Anime','var(--anime)'],['manga','Manga','var(--manga)'],['films','Films','var(--film)'],['games','Games','var(--game)'],['books','Books','var(--book)']];
+  $('#app').innerHTML=`
+  ${banner('hof',"Saturn's throne room",'',[[groups.length,'collections'],[groups.reduce((s,g)=>s+g.secs.length,0),'sections']],'Hall of Fame')}
+  <section class="box hof-hero" style="grid-template-columns:1fr;padding:16px 20px"><div><p style="margin:0">${esc(A.paras[1])}</p>
+    <details style="margin-top:8px"><summary class="link" style="cursor:pointer">Read the full introduction</summary><div style="margin-top:10px">${A.paras.map(p=>`<p>${esc(p)}</p>`).join('')}<a class="link" href="https://myanimelist.net/blog.php?eid=${A.post}" target="_blank" rel="noopener">Continue on MAL ↗</a></div></details></div></section>
+  <div class="segtabs">${segs.map(([k,l,c])=>`<button data-seg="${k}" class="${hofSeg===k?'on':''}" style="--c:${c}">${ico(k)} ${l}</button>`).join('')}</div>
+  <div class="jgroups">${groups.map(g=>`<div class="jg" style="--c:${g.c}"><span class="jl" data-j="${g.id}">${ico(g.icon)}${esc(g.title)}</span>${g.secs.length>1?g.secs.map(s=>`<a href="#hof" data-j="${s.id}">${esc(s.title)}</a>`).join(''):''}</div>`).join('')}</div>
+  ${groups.map(g=>`<div class="grp" id="${g.id}" style="--c:${g.c}">${artBg(g.c,g.title.length*7,'')}<div class="gi">${ico(g.icon)}</div><div><h2>${esc(g.title)}</h2>${g.desc?`<p>${esc(g.desc)}</p>`:''}</div>${g.src?`<a href="${g.src}" target="_blank" rel="noopener">Source ↗</a>`:''}</div>
+    ${g.secs.map(s=>`<section class="box hsec ${s.cls||''}" id="${s.id}" style="--c:${/hate/i.test(s.title)?'var(--s4)':g.c}"><div class="box-h"><h2>${esc(s.title)}</h2></div>${s.desc?`<div class="desc">${esc(s.desc)}</div>`:''}<div class="box-b">${s.inner}</div></section>`).join('')}`).join('')}`;
+  document.querySelectorAll('[data-seg]').forEach(b=>b.onclick=()=>{hofSeg=b.dataset.seg;rHof()});
+  document.querySelectorAll('[data-j]').forEach(a=>a.onclick=e=>{e.preventDefault();const el=document.getElementById(a.dataset.j);if(el)el.scrollIntoView({behavior:'smooth'})});
+  document.querySelectorAll('[data-h]').forEach(el=>el.onclick=()=>{const it=HOFITEMS[+el.dataset.h];
+    if('film' in it){if(it.film)return openFilm(it.film);return window.open('https://letterboxd.com/search/films/'+encodeURIComponent(it.t)+'/','_blank')}
+    if(it.game)return openGame(it.game);
+    if(it.book)return openBook(it.book);
+    if(it.own)return it.k==='a'?openAnime(it.own):openManga(it.own);
+    openMal(it)});
+}
+function openMal(it){
+  modal(it.k==='m'?'manga':'anime',KLAB[it.k],`${cover(it.name,'')}<div><h2>${esc(it.name)}</h2><div class="muted">${esc(KLAB[it.k])} on MyAnimeList</div>
+  <div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/${MALK[it.k]}/${it.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
+}
+
+/* ---------- generic list page ---------- */
+const ICON_GRID='<svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="0" y="0" width="6" height="6"/><rect x="8" y="0" width="6" height="6"/><rect x="0" y="8" width="6" height="6"/><rect x="8" y="8" width="6" height="6"/></svg>';
+const ICON_LIST='<svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="0" y="0" width="14" height="3"/><rect x="0" y="5.5" width="14" height="3"/><rect x="0" y="11" width="14" height="3"/></svg>';
+function listPage(cfg){
+  const S=state[cfg.key];
+  const all=cfg.items();
+  const counts={};cfg.tabs.forEach(([k,,f])=>counts[k]=all.filter(f).length);
+  const app=$('#app');
+  app.innerHTML=`${banner(cfg.key,cfg.title,cfg.sub,cfg.bst?cfg.bst():[],cfg.kicker)}
+  <div class="tabs" style="--c:${MED[cfg.key].c}">${cfg.tabs.map(([k,l])=>`<button data-t="${k}" class="${S.tab===k?'on':''}">${l}<span class="n">${counts[k]}</span></button>`).join('')}</div>
+  <div class="toolbar">
+    <input id="lq" type="search" placeholder="Filter this list…" value="${esc(S.q)}">
+    ${cfg.extra?cfg.extra(S):''}
+    <select id="ls" aria-label="Sort">${cfg.sorts.map(([k,l])=>`<option value="${k}" ${S.sort===k?'selected':''}>${l}</option>`).join('')}</select>
+    <div class="seg"><button data-v="grid" class="${S.view==='grid'?'on':''}" aria-label="Grid view">${ICON_GRID}</button><button data-v="table" class="${S.view==='table'?'on':''}" aria-label="Table view">${ICON_LIST}</button></div>
+  </div>
+  <div id="lbody"></div>`;
+  const body=()=>{
+    const tf=cfg.tabs.find(t=>t[0]===S.tab)[2];
+    const q=norm(S.q);
+    let rows=all.filter(tf).filter(x=>!q||x.n.includes(q)).filter(x=>!cfg.xfilter||cfg.xfilter(x,S));
+    rows.sort(cfg.sorter(S.sort));
+    const shown=rows.slice(0,S.lim);
+    let h='';
+    if(cfg.special&&cfg.special(S)){h=cfg.special(S)}
+    else if(!rows.length)h='<div class="empty">Nothing here yet.</div>';
+    else if(S.view==='grid')h=`<div class="cgrid">${shown.map((x,i)=>cfg.card(x,i)).join('')}</div>`;
+    else h=`<table class="lt"><thead><tr>${cfg.thead}</tr></thead><tbody>${shown.map((x,i)=>cfg.row(x,i)).join('')}</tbody></table>`;
+    if(!(cfg.special&&cfg.special(S))&&rows.length>S.lim)h+=`<div class="more"><button class="btn" id="lmore">Show more (${fmt(rows.length-S.lim)} left)</button></div>`;
+    $('#lbody').innerHTML=h;
+    $('#lbody').querySelectorAll('[data-i]').forEach(el=>el.onclick=()=>cfg.open(shown[+el.dataset.i]));
+    if(cfg.bind)cfg.bind();
+    const m=$('#lmore');if(m)m.onclick=()=>{S.lim+=120;body()};
+  };
+  app.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{S.tab=b.dataset.t;S.lim=60;app.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));body()});
+  $('#lq').oninput=e=>{S.q=e.target.value;S.lim=60;body()};
+  $('#ls').onchange=e=>{S.sort=e.target.value;body()};
+  app.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{S.view=b.dataset.v;store.set('view_'+cfg.key,S.view);app.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('on',x===b));body()});
+  if(cfg.bindExtra)cfg.bindExtra(S,body);
+  body();
+}
+const cmpT=(a,b)=>a.t.localeCompare(b.t);
+
+/* ---------- anime ---------- */
+function rAnime(){
+  const types=[...new Set(anime.map(a=>a.type))].sort();
+  listPage({key:'anime',title:'Anime list',bst:()=>[[fmt(anime.length),'entries'],[fmt(anime.reduce((s,a)=>s+(a.st===2?(a.eps||a.ep):a.ep),0)),'episodes'],[avg(anime.filter(a=>a.sc).map(a=>a.sc)).toFixed(2),'mean score']],sub:`${fmt(anime.length)} entries · from MyAnimeList · updated ${fdate(D.generated)}`,
+    items:()=>anime,
+    tabs:[['all','All anime',()=>true],['1','Watching',a=>a.st===1],['2','Completed',a=>a.st===2],['3','On-Hold',a=>a.st===3],['4','Dropped',a=>a.st===4],['6','Plan to Watch',a=>a.st===6]],
+    sorts:[['updated','Last updated'],['score','Your score'],['mal','MAL score'],['title','Title'],['year','Year (newest)'],['eps','Episodes']],
+    extra:S=>`<select id="ltype" aria-label="Type"><option value="">All types</option>${types.map(t=>`<option ${S.type===t?'selected':''}>${esc(t)}</option>`).join('')}</select>`,
+    bindExtra:(S,body)=>{$('#ltype').onchange=e=>{S.type=e.target.value;body()}},
+    xfilter:(a,S)=>!S.type||a.type===S.type,
+    sorter:k=>({updated:(a,b)=>b.up-a.up,score:(a,b)=>b.sc-a.sc||b.mal-a.mal,mal:(a,b)=>b.mal-a.mal,title:cmpT,year:(a,b)=>b.y-a.y,eps:(a,b)=>b.eps-a.eps})[k],
+    card:(a,i)=>`<div class="card" data-i="${i}">${cover(a.t,a.img,(a.sc?`<span class="badge">${a.sc}</span>`:'')+`<span class="sline" style="--sc:${AST[a.st][1]}"></span>`)}<div class="meta"><div class="tt">${esc(a.t)}</div><div class="ss"><span>${esc(a.type)}${a.y?' · '+a.y:''}</span><span>${a.eps?a.ep+'/'+a.eps:a.ep||''}</span></div></div></div>`,
+    thead:'<th style="width:5px;padding:0"></th><th class="hm">#</th><th></th><th>Title</th><th style="text-align:center">Score</th><th class="hm" style="text-align:center">Type</th><th style="text-align:center">Progress</th><th class="hm" style="text-align:center">MAL</th>',
+    row:(a,i)=>`<tr data-i="${i}"><td class="st" style="--sc:${AST[a.st][1]}"></td><td class="num hm">${i+1}</td><td style="width:54px">${cover(a.t,a.img,'','mini')}</td><td><div class="ti">${esc(a.t)}</div>${a.alt?`<div class="alt">${esc(a.alt)}</div>`:''}</td><td class="sc">${a.sc||'<span class="muted">–</span>'}</td><td class="c hm">${esc(a.type)}</td><td class="c mono small">${a.st===2&&a.eps?a.eps:a.ep}<span class="muted">/${a.eps||'?'}</span></td><td class="c mono small hm">${a.mal?a.mal.toFixed(2):'–'}</td></tr>`,
+    open:openAnime});
+}
+function openAnime(a){
+  modal('anime','Anime',`${cover(a.t,a.img)}<div><h2>${esc(a.t)}</h2>${a.alt?`<div class="muted">${esc(a.alt)}</div>`:''}
+  <div class="bigscore"><div><b>${a.sc||'–'}</b><small>Your score</small></div><div><b>${a.mal?a.mal.toFixed(2):'–'}</b><small>MAL score</small></div><div><b style="color:${AST[a.st][1]}">■</b><small>${AST[a.st][0]}</small></div></div>
+  <div class="kv"><div>Type</div><div>${esc(a.type)}</div><div>Episodes</div><div>${a.st===2&&a.eps?a.eps:a.ep} watched of ${a.eps||'?'}</div><div>Aired</div><div>${a.y||'–'}</div><div>Genres</div><div>${a.g.map(g=>`<span class="tag">${esc(g)}</span>`).join('')||'–'}</div>${a.up?`<div>Updated</div><div>${fdate(new Date(a.up*1000).toISOString())}</div>`:''}</div>
+  ${a.tags?`<div class="review" style="--c:var(--anime)">${esc(a.tags)}</div>`:''}
+  <div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/anime/${a.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
+}
+
+/* ---------- films ---------- */
+function rFilms(){
+  listPage({key:'films',title:'Films',bst:()=>[[films.filter(f=>f.s==='w').length,'watched'],[films.filter(f=>f.rv).length,'reviews'],[avg(films.filter(f=>f.r).map(f=>f.r)).toFixed(2)+'★','average']],sub:`${fmt(films.filter(f=>f.s==='w').length)} watched · from Letterboxd · exported ${fdate(D.generated)}`,
+    items:()=>films,
+    tabs:[['watched','Watched',f=>f.s==='w'],['rated','Rated',f=>f.r>0],['reviewed','Reviewed',f=>!!f.rv],['diary','Diary',f=>!!f.wd],['liked','Liked',f=>!!f.lk],['watchlist','Watchlist',f=>f.s==='l'],['lists','Lists',()=>false]],
+    sorts:[['watched','Recently watched'],['added','Date added'],['rating','Your rating'],['year','Release year'],['title','Title']],
+    sorter:k=>({watched:(a,b)=>(b.wd||b.d).localeCompare(a.wd||a.d),added:(a,b)=>b.d.localeCompare(a.d),rating:(a,b)=>b.r-a.r||(b.wd||'').localeCompare(a.wd||''),year:(a,b)=>b.y-a.y,title:cmpT})[k],
+    card:(f,i)=>`<div class="card" data-i="${i}">${cover(f.t,f.img||'',(f.r?`<span class="badge">${f.r}★</span>`:'')+(f.s==='l'?`<span class="sline" style="--sc:var(--s6)"></span>`:''))}<div class="meta"><div class="tt">${esc(f.t)}</div><div class="ss"><span>${f.y||''}</span><span>${f.lk?'♥':''}${f.rv?' ✎':''}</span></div></div></div>`,
+    thead:'<th class="hm">#</th><th></th><th>Film</th><th style="text-align:center">Year</th><th>Rating</th><th class="hm" style="text-align:center">Watched</th>',
+    row:(f,i)=>`<tr data-i="${i}"><td class="num hm">${i+1}</td><td style="width:54px">${cover(f.t,f.img||'','','mini')}</td><td><div class="ti">${esc(f.t)} ${f.lk?'<span style="color:var(--film)">♥</span>':''}</div>${f.rv?'<div class="alt">Reviewed</div>':''}</td><td class="c mono small">${f.y||''}</td><td><span class="stars">${stars(f.r)}</span></td><td class="c small hm">${f.wd?fdate(f.wd):f.s==='l'?'<span class="muted">Watchlist</span>':''}</td></tr>`,
+    special:S=>S.tab==='lists'?filmLists():null,
+    bind:()=>{document.querySelectorAll('[data-lf]').forEach(el=>el.onclick=()=>{const f=filmByKey[el.dataset.lf];if(f)openFilm(f);else window.open('https://letterboxd.com/search/films/'+encodeURIComponent(el.dataset.t)+'/','_blank')})},
+    open:openFilm});
+}
+function filmLists(){
+  return D.filmLists.map(l=>`<section class="box" style="margin-top:14px"><div class="box-h" style="border-top:3px solid var(--film)"><h2>${esc(l.name)}</h2><span class="small muted">${l.items.length} films${l.desc?' · '+esc(l.desc):''}</span></div><div class="box-b"><div class="grid favs">${l.items.map(([t,y],i)=>{const f=filmByKey[norm(t)+'|'+y];return `<div class="card" data-lf="${esc(norm(t)+'|'+y)}" data-t="${esc(t)}">${cover(t,'',f&&f.r?`<span class="badge">${f.r}★</span>`:`<span class="badge">${i+1}</span>`)}<div class="meta"><div class="tt">${esc(t)}</div><div class="ss"><span>${y}</span></div></div></div>`}).join('')}</div></div></section>`).join('');
+}
+function openFilm(f){
+  const ls=listsFor(f);
+  modal('films','Film',`${cover(f.t,f.img||'')}<div><h2>${esc(f.t)} <span class="muted" style="font-weight:500">${f.y||''}</span></h2>
+  <div class="bigscore"><div><b class="stars">${f.r?stars(f.r):'–'}</b><small>Your rating</small></div><div><b>${f.logs||(f.s==='w'?1:0)}</b><small>Times logged</small></div><div><b>${f.lk?'♥':'–'}</b><small>Liked</small></div></div>
+  <div class="kv"><div>Status</div><div>${f.s==='w'?'Watched':'On watchlist'}</div>${f.wd?`<div>Last watched</div><div>${fdate(f.wd)}${f.rw?' (rewatch)':''}</div>`:''}<div>Added</div><div>${fdate(f.d)}</div>${ls.length?`<div>In lists</div><div>${ls.map(l=>`<span class="tag">${esc(l)}</span>`).join('')}</div>`:''}</div>
+  ${f.rv?`<div class="review" style="--c:var(--film)">${esc(f.rv)}</div>`:''}
+  <div style="margin-top:14px"><a class="btn pri" href="${esc(f.u)}" target="_blank" rel="noopener">Open on Letterboxd ↗</a></div></div>`);
+}
+
+/* ---------- games ---------- */
+function rGames(){
+  listPage({key:'games',title:'Games',bst:()=>[[games.length,'games'],[games.filter(g=>g.shelf==='Played').length,'played'],[games.filter(g=>g.shelf==='Playing').length,'playing now']],sub:`${games.length} games · from Grouvee · exported ${fdate(D.generated)}`,
+    items:()=>games,
+    tabs:[['all','All',()=>true],...Object.keys(GSH).map(k=>[k,k,g=>g.shelf===k]),['reviewed','Reviewed',g=>!!g.rv]],
+    sorts:[['added','Date added'],['rating','Your rating'],['release','Release date'],['title','Title']],
+    sorter:k=>({added:(a,b)=>b.added.localeCompare(a.added),rating:(a,b)=>b.r-a.r||b.added.localeCompare(a.added),release:(a,b)=>(b.rel||'').localeCompare(a.rel||''),title:cmpT})[k],
+    card:(g,i)=>`<div class="card" data-i="${i}">${cover(g.t,'',(g.r?`<span class="badge">${g.r}/5</span>`:'')+`<span class="sline" style="--sc:${GSH[g.shelf]||'var(--s6)'}"></span>`)}<div class="meta"><div class="tt">${esc(g.t)}</div><div class="ss"><span>${esc(g.shelf)}</span><span>${g.rel?g.rel.slice(0,4):''}</span></div></div></div>`,
+    thead:'<th style="width:5px;padding:0"></th><th class="hm">#</th><th></th><th>Game</th><th style="text-align:center">Rating</th><th>Shelf</th><th class="hm">Platform</th><th class="hm" style="text-align:center">Released</th>',
+    row:(g,i)=>`<tr data-i="${i}"><td class="st" style="--sc:${GSH[g.shelf]||'var(--s6)'}"></td><td class="num hm">${i+1}</td><td style="width:54px">${cover(g.t,'','','mini')}</td><td><div class="ti">${esc(g.t)}</div><div class="alt">${esc(g.dev[0]||'')}</div></td><td class="sc">${g.r?g.r+'/5':'<span class="muted">–</span>'}</td><td class="small">${esc(g.shelf)}</td><td class="small hm">${esc(g.pf.join(', '))}</td><td class="c mono small hm">${g.rel?g.rel.slice(0,4):''}</td></tr>`,
+    open:openGame});
+}
+function openGame(g){
+  const hrs=g.log.reduce((s,p)=>s+(p.seconds_played||0),0)/3600;
+  modal('games','Game',`${cover(g.t,'')}<div><h2>${esc(g.t)}</h2>${g.dev.length?`<div class="muted">${esc(g.dev.join(', '))}</div>`:''}
+  <div class="bigscore"><div><b>${g.r?g.r+'/5':'–'}</b><small>Your rating</small></div><div><b style="color:${GSH[g.shelf]||'var(--s6)'}">■</b><small>${esc(g.shelf)}</small></div>${hrs?`<div><b>${Math.round(hrs*10)/10}h</b><small>Logged</small></div>`:''}</div>
+  <div class="kv">${g.pf.length?`<div>Platforms</div><div>${g.pf.map(p=>`<span class="tag">${esc(p)}</span>`).join('')}</div>`:''}${g.g.length?`<div>Genres</div><div>${g.g.map(p=>`<span class="tag">${esc(p)}</span>`).join('')}</div>`:''}${g.fr.length?`<div>Franchise</div><div>${esc(g.fr.join(', '))}</div>`:''}${g.pub.length?`<div>Publisher</div><div>${esc(g.pub.join(', '))}</div>`:''}<div>Released</div><div>${g.rel?fdate(g.rel):'–'}</div><div>Added</div><div>${g.added?fdate(g.added):'–'}</div>
+  ${g.log.map(p=>`<div>Play log</div><div>${[p.date_started&&p.date_started!=='None'?'Started '+fdate(p.date_started):'',p.date_finished&&p.date_finished!=='None'?'Finished '+fdate(p.date_finished):'',p.level_of_completion||'',p.notes?esc(p.notes):''].filter(Boolean).join(' · ')||'–'}</div>`).join('')}</div>
+  ${g.rv?`<div class="review" style="--c:var(--game)">${g.rvt?`<b>${esc(g.rvt)}</b>\n`:''}${esc(g.rv)}</div>`:''}
+  <div style="margin-top:14px"><a class="btn pri" href="${esc(g.u)}" target="_blank" rel="noopener">Open on Grouvee ↗</a></div></div>`);
+}
+
+/* ---------- stories ---------- */
+function rStories(){
+  $('#app').innerHTML=`${banner('stories','Stories','Written by me, published on Medium.',[[stories.length,'pieces'],[fmt(stories.reduce((s,x)=>s+x.words,0)),'words']])}
+  <div class="grid">${stories.map(s=>`<article class="story"><span class="k"></span><div class="in">
+    <div class="small muted" style="text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:4px">${fdate(s.date)}</div>
+    <h3><a href="${esc(s.link)}" target="_blank" rel="noopener">${esc(s.title)}</a></h3>
+    <p>${esc(s.blurb)}…</p>
+    <div class="row"><span class="mono">${fmt(s.words)} words</span><span>${Math.max(1,Math.round(s.words/230))} min read</span><span>${s.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</span><a class="link" href="${esc(s.link)}" target="_blank" rel="noopener">Read on Medium ↗</a></div>
+  </div></article>`).join('')}</div>
+  <div class="note">New stories you publish on Medium show up here when the site is refreshed.</div>`;
+}
+
+/* ---------- modal ---------- */
+function modal(k,label,inner){
+  $('#modal').innerHTML=`<div class="mh" style="border-bottom:3px solid ${MED[k].c}"><span><i style="width:8px;height:8px;background:${MED[k].c};display:inline-block"></i>${esc(label)}</span><button id="mx" aria-label="Close">✕</button></div><div class="mb">${inner}</div>`;
+  $('#ov').classList.add('show');$('#mx').onclick=closeM;
+}
+function closeM(){$('#ov').classList.remove('show')}
+$('#ov').onclick=e=>{if(e.target.id==='ov')closeM()};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
+
+/* ---------- search ---------- */
+$('#gform').onsubmit=e=>{e.preventDefault();const q=$('#gq').value.trim();if(!q)return;state.search.q=q;state.search.res={};if(location.hash!=='#search')location.hash='search';else render()};
+function localHits(q){
+  const n=norm(q);if(!n)return{anime:[],manga:[],films:[],games:[],books:[],stories:[]};
+  const words=n.split(' ');
+  const m=s=>words.every(w=>s.includes(w));
+  return{anime:anime.filter(a=>m(a.n)),manga:manga.filter(x=>m(x.n)),films:films.filter(f=>m(f.n)),games:games.filter(g=>m(g.n)),books:books.filter(b=>m(b.n)),stories:stories.filter(s=>m(norm(s.title+' '+s.tags.join(' ')+' '+s.blurb)))};
+}
+function ownMatch(kind,title,year){
+  const n=norm(title);
+  if(kind==='anime')return anime.find(a=>norm(a.t)===n||(a.alt&&norm(a.alt)===n));
+  if(kind==='films')return films.find(f=>f.n===n&&(!year||!f.y||Math.abs(f.y-year)<=1));
+  if(kind==='games')return games.find(g=>norm(g.t)===n);
+  if(kind==='manga')return manga.find(x=>norm(x.t)===n||(x.alt&&norm(x.alt)===n));
+  if(kind==='books')return books.find(b=>norm(b.t)===n||norm(b.t).startsWith(n+' '));
+}
+function rSearch(){
+  const S=state.search;
+  $('#gq').value=S.q;
+  if(!S.q){$('#app').innerHTML=`${banner('search','Search everything','Your collection, plus the whole catalog of anime, manga, films, games and books.',[],'Search')}<div class="box box-b"><p style="margin-bottom:10px">Search your own collection and the whole catalog of anime, films and games.</p><form id="sform" style="display:flex;gap:0"><input id="sq" type="search" placeholder="Try “Vinland Saga”, “Inception” or “Elden Ring”" style="flex:1;border:1px solid var(--line2);padding:10px 12px;background:var(--panel);outline:none"><button class="btn pri" style="border-radius:0">Search</button></form></div>`;
+    $('#sform').onsubmit=e=>{e.preventDefault();const q=$('#sq').value.trim();if(q){S.q=q;S.res={};render()}};$('#sq').focus();return}
+  const L=localHits(S.q);
+  const tot=L.anime.length+L.manga.length+L.films.length+L.games.length+L.books.length+L.stories.length;
+  const sec=(k,items,mk)=>items.length?`<div class="sect" style="--c:${MED[k].c}"><h2><i></i>${MED[k].name} <span class="muted mono">${items.length}</span></h2><div class="cgrid" style="margin-top:0">${items.slice(0,12).map(mk).join('')}</div></div>`:'';
+  window.__L=L;
+  $('#app').innerHTML=`${banner('search','“'+S.q+'”','',[[tot,'in your collection']],'Search')}
+  <div class="box"><div class="box-h"><h2>In your collection</h2></div><div class="box-b" style="padding-top:0">
+  ${tot?'':'<div class="muted" style="padding-top:14px">Nothing in your lists matches that.</div>'}
+  ${sec('anime',L.anime,(a,i)=>`<div class="card" data-l="anime:${i}">${cover(a.t,a.img,(a.sc?`<span class="badge">${a.sc}</span>`:'')+`<span class="sline" style="--sc:${AST[a.st][1]}"></span>`)}<div class="meta"><div class="tt">${esc(a.t)}</div><div class="ss"><span>${AST[a.st][0]}</span></div></div></div>`)}
+  ${sec('manga',L.manga,(x,i)=>`<div class="card" data-l="manga:${i}">${cover(x.t,x.img,(x.sc?`<span class="badge">${x.sc}</span>`:'')+`<span class="sline" style="--sc:${MST[x.st][1]}"></span>`)}<div class="meta"><div class="tt">${esc(x.t)}</div><div class="ss"><span>${MST[x.st][0]}</span></div></div></div>`)}
+  ${sec('books',L.books,(b,i)=>`<div class="card" data-l="books:${i}">${cover(b.t,'',b.r?`<span class="badge">${b.r}★</span>`:'')}<div class="meta"><div class="tt">${esc(b.t)}</div><div class="ss"><span>${esc(b.a)}</span></div></div></div>`)}
+  ${sec('films',L.films,(f,i)=>`<div class="card" data-l="films:${i}">${cover(f.t,'',f.r?`<span class="badge">${f.r}★</span>`:'')}<div class="meta"><div class="tt">${esc(f.t)}</div><div class="ss"><span>${f.y}</span><span>${f.s==='l'?'Watchlist':'Watched'}</span></div></div></div>`)}
+  ${sec('games',L.games,(g,i)=>`<div class="card" data-l="games:${i}">${cover(g.t,'',g.r?`<span class="badge">${g.r}/5</span>`:'')}<div class="meta"><div class="tt">${esc(g.t)}</div><div class="ss"><span>${esc(g.shelf)}</span></div></div></div>`)}
+  ${L.stories.length?`<div class="sect" style="--c:var(--story)"><h2><i></i>Stories</h2>${L.stories.map(s=>`<div><a class="link" href="${esc(s.link)}" target="_blank" rel="noopener">${esc(s.title)} ↗</a></div>`).join('')}</div>`:''}
+  </div></div>
+  <div class="box" style="margin-top:16px"><div class="box-h"><h2>Search everywhere</h2><span class="small muted" id="xmode"></span></div>
+  <div class="tabs" style="border:0;border-bottom:1px solid var(--line)">${['anime','manga','films','games','books'].map(k=>`<button data-x="${k}" class="${S.ext===k?'on':''}" style="--c:${MED[k].c}">${MED[k].name}</button>`).join('')}</div>
+  <div class="box-b" id="xbody"></div></div>`;
+  document.querySelectorAll('[data-l]').forEach(el=>el.onclick=()=>{const [k,i]=el.dataset.l.split(':');const x=L[k][+i];({anime:openAnime,manga:openManga,books:openBook,films:openFilm,games:openGame})[k](x)});
+  document.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{S.ext=b.dataset.x;document.querySelectorAll('[data-x]').forEach(x=>x.classList.toggle('on',x===b));extSearch()});
+  extSearch();
+}
+
+/* external search: direct APIs when the page can reach them, Claude otherwise */
+let mode=null; // 'api' | 'claude' | 'none'
+let sampleFn=null;
+async function detectMode(){
+  if(mode)return mode;
+  try{
+    const ctl=new AbortController();const t=setTimeout(()=>ctl.abort(),4000);
+    const r=await fetch('https://api.jikan.moe/v4/anime?q=naruto&limit=1',{signal:ctl.signal});clearTimeout(t);
+    if(r.ok){mode='api';return mode}
+  }catch(e){}
+  try{if(window.claude&&window.claude.use){sampleFn=await window.claude.use('sample');}}catch(e){}
+  mode=sampleFn?'claude':'none';return mode;
+}
+const OUT={manga:q=>`https://myanimelist.net/manga.php?q=${encodeURIComponent(q)}`,books:q=>`https://www.goodreads.com/search?q=${encodeURIComponent(q)}`,anime:q=>`https://myanimelist.net/anime.php?q=${encodeURIComponent(q)}`,films:q=>`https://letterboxd.com/search/films/${encodeURIComponent(q)}/`,games:q=>`https://www.grouvee.com/search/?q=${encodeURIComponent(q)}`};
+const OUTN={manga:'MyAnimeList',books:'Goodreads',anime:'MyAnimeList',films:'Letterboxd',games:'Grouvee'};
+async function viaApi(kind,q){
+  if(kind==='manga'){
+    const r=await fetch(`https://api.jikan.moe/v4/manga?q=${encodeURIComponent(q)}&limit=16&sfw=true`).then(r=>r.json());
+    return (r.data||[]).map(a=>({t:a.title_english||a.title,alt:a.title_english&&a.title_english!==a.title?a.title:'',y:(a.published&&a.published.prop&&a.published.prop.from&&a.published.prop.from.year)||'',meta:[a.type,a.chapters?a.chapters+' ch':'',a.score?'MAL '+a.score:''].filter(Boolean).join(' · '),sum:a.synopsis||'',img:a.images&&a.images.jpg&&a.images.jpg.image_url,url:a.url,g:(a.genres||[]).map(g=>g.name)}));
+  }
+  if(kind==='books'){
+    const r=await fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(q)}&limit=16&fields=title,author_name,first_publish_year,cover_i,key,number_of_pages_median,subject`).then(r=>r.json());
+    return (r.docs||[]).map(b=>({t:b.title,alt:'',y:b.first_publish_year||'',meta:[(b.author_name||[]).slice(0,2).join(', '),b.number_of_pages_median?b.number_of_pages_median+' pages':''].filter(Boolean).join(' · '),sum:'',img:b.cover_i?`https://covers.openlibrary.org/b/id/${b.cover_i}-M.jpg`:'',url:'https://openlibrary.org'+b.key,g:(b.subject||[]).slice(0,4)}));
+  }
+  if(kind==='anime'){
+    const r=await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(q)}&limit=16&sfw=true`).then(r=>r.json());
+    return (r.data||[]).map(a=>({t:a.title_english||a.title,alt:a.title_english&&a.title_english!==a.title?a.title:'',y:a.year||(a.aired&&a.aired.prop&&a.aired.prop.from&&a.aired.prop.from.year)||'',meta:[a.type,a.episodes?a.episodes+' eps':'',a.score?'MAL '+a.score:''].filter(Boolean).join(' · '),sum:a.synopsis||'',img:a.images&&a.images.jpg&&a.images.jpg.image_url,url:a.url,g:(a.genres||[]).map(g=>g.name)}));
+  }
+  const hint=kind==='films'?'film':'video game';
+  const u=`https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch=${encodeURIComponent(q+' '+hint)}&gsrlimit=20&prop=pageimages|description|extracts&exintro=1&explaintext=1&exsentences=2&piprop=thumbnail&pithumbsize=300`;
+  const r=await fetch(u).then(r=>r.json());
+  const pages=Object.values((r.query&&r.query.pages)||{}).sort((a,b)=>a.index-b.index);
+  const re=kind==='films'?/film|movie/i:/video game|game/i;
+  return pages.filter(p=>re.test(p.description||'')).map(p=>{const ym=(p.description||'').match(/\b(19|20)\d\d\b/);return{t:p.title.replace(/ \((\d{4} )?(film|video game|American film|.*film)\)$/i,''),y:ym?ym[0]:'',meta:p.description||'',sum:p.extract||'',img:p.thumbnail&&p.thumbnail.source,url:'https://en.wikipedia.org/wiki/'+encodeURIComponent(p.title.replace(/ /g,'_'))}});
+}
+async function viaClaude(kind,q){
+  const what={anime:'anime titles (series, films or OVAs)',manga:'manga, manhwa or light novels',books:'books (any language, including Urdu)',films:'films (movies)',games:'video games'}[kind];
+  const prompt=`You are a catalog search engine. Find up to 10 real ${what} that best match the search query: "${q}". Include the exact title if it exists, then related entries (sequels, same franchise, close matches). Reply with ONLY a JSON array, no prose. Each item: {"title":string,"alt":string (original or romaji title, or ""),"year":number,"meta":string (for anime: type and episode count; for manga: author and chapter count; for books: author; for films: director; for games: developer and main platforms),"summary":string (max 30 words),"genres":[string]}. If nothing matches, reply [].`;
+  let val;
+  try{val=await sampleFn.json(prompt,{modelTier:'quick'})}
+  catch(e){
+    if(e&&e.code)throw e;
+    const r=await sampleFn(prompt,{modelTier:'quick'});const m=(r.text||'').match(/\[[\s\S]*\]/);val=m?JSON.parse(m[0]):[];
+  }
+  if(!Array.isArray(val))val=(val&&(val.results||val.items))||[];
+  return val.map(x=>({t:x.title,alt:x.alt||'',y:x.year||'',meta:x.meta||'',sum:x.summary||'',img:'',url:'',g:x.genres||[]}));
+}
+async function extSearch(){
+  const S=state.search,kind=S.ext,q=S.q,box=$('#xbody');
+  const key=kind+'|'+q;
+  if(S.res[key]){showExt(S.res[key],kind,q);return}
+  box.innerHTML=`<div class="muted"><span class="spin"></span>Searching ${MED[kind].name.toLowerCase()}…</div>`;
+  const m=await detectMode();
+  $('#xmode').textContent=m==='api'?'Live from Jikan and Wikipedia':m==='claude'?'Answered by Claude':'';
+  if(m==='none'){box.innerHTML=`<div class="muted">Live search isn't available here.</div>${outLinks(kind,q)}`;return}
+  try{
+    const res=m==='api'?await viaApi(kind,q):await viaClaude(kind,q);
+    S.res[key]=res;if(state.search.ext===kind&&state.search.q===q)showExt(res,kind,q);
+  }catch(e){
+    const msg=e&&e.code==='not_granted'?'Search with Claude was not allowed on this page.':e&&e.code==='rate_limited'?'Too many searches for now. Try again in a minute.':'Search failed. Try again.';
+    box.innerHTML=`<div class="muted">${esc(msg)}</div><div style="margin-top:10px"><button class="btn" id="xretry">Retry</button></div>${outLinks(kind,q)}`;
+    const b=$('#xretry');if(b)b.onclick=extSearch;
+  }
+}
+function outLinks(kind,q){return `<div class="note">Also search on <a class="link" href="${OUT[kind](q)}" target="_blank" rel="noopener">${OUTN[kind]} ↗</a></div>`}
+function showExt(res,kind,q){
+  const box=$('#xbody');
+  if(!res.length){box.innerHTML=`<div class="muted">No ${MED[kind].name.toLowerCase()} found for “${esc(q)}”.</div>${outLinks(kind,q)}`;return}
+  box.innerHTML=`<div class="sres" style="margin-top:0">${res.map((r,i)=>{const own=ownMatch(kind,r.t,+r.y);return `<div class="xr" data-r="${i}">${cover(r.t,r.img)}<div><div class="tt">${esc(r.t)}${own?'<span class="own">In your list</span>':''}</div>${r.alt?`<div class="small muted">${esc(r.alt)}</div>`:''}<div class="small muted">${esc([r.y,r.meta].filter(Boolean).join(' · '))}</div><p>${esc(r.sum)}</p></div></div>`}).join('')}</div>
+  ${mode==='claude'?'<div class="note">These results come from Claude\'s knowledge, so very new releases may be missing. Open one to jump to it on '+OUTN[kind]+'.</div>':''}${outLinks(kind,q)}`;
+  box.querySelectorAll('[data-r]').forEach(el=>el.onclick=()=>{const r=res[+el.dataset.r];const own=ownMatch(kind,r.t,+r.y);if(own){({anime:openAnime,manga:openManga,books:openBook,films:openFilm,games:openGame})[kind](own);return}openExt(kind,r)});
+}
+function openExt(kind,r){
+  const label={anime:'Anime',manga:'Manga',books:'Book',films:'Film',games:'Game'}[kind];
+  modal(kind,label+' · not in your list',`${cover(r.t,r.img)}<div><h2>${esc(r.t)} <span class="muted" style="font-weight:500">${esc(r.y)}</span></h2>${r.alt?`<div class="muted">${esc(r.alt)}</div>`:''}
+  <div class="kv">${r.meta?`<div>Details</div><div>${esc(r.meta)}</div>`:''}${r.g&&r.g.length?`<div>Genres</div><div>${r.g.map(g=>`<span class="tag">${esc(g)}</span>`).join('')}</div>`:''}</div>
+  ${r.sum?`<div class="review" style="--c:${MED[kind].c}">${esc(r.sum)}</div>`:''}
+  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap"><a class="btn pri" href="${OUT[kind](r.t)}" target="_blank" rel="noopener">Find on ${OUTN[kind]} ↗</a>${r.url?`<a class="btn" href="${esc(r.url)}" target="_blank" rel="noopener">Source ↗</a>`:''}</div></div>`);
+}
+
+$('#foot').innerHTML=`Saturn Collections · data from MyAnimeList, Letterboxd, Grouvee and Medium · last refreshed ${fdate(D.generated)}`;
+go();
+})();
+</script>
+</body>
+</html>
