@@ -496,6 +496,32 @@ def update_book_covers():
     log(f'book covers: looked up {n}, have {len(site["bookCovers"])}')
 
 
+def update_game_covers():
+    """Find covers for games that have none, through your Cloudflare helper (IGDB). Kept in data/game_covers.json."""
+    if not settings.get('igdb') or not settings.get('workerUrl'):
+        return
+    games = load_json(os.path.join(DATA, 'games.json'), {}).get('games', [])
+    path = os.path.join(DATA, 'game_covers.json')
+    covers = load_json(path, {})
+    n = 0
+    for g in games:
+        gid = str(g.get('id'))
+        if g.get('img') or gid in covers or n >= 120:
+            continue
+        try:
+            res = json.loads(get(settings['workerUrl'] + '/games?q=' + urllib.parse.quote(g['t']), tries=2))
+            hit = next((x for x in res if x.get('cover') and norm(x['name']) == norm(g['t'])), None) or next((x for x in res if x.get('cover')), None)
+            covers[gid] = f"https://images.igdb.com/igdb/image/upload/t_cover_big/{hit['cover']['image_id']}.jpg" if hit else ''
+        except Exception:
+            pass
+        n += 1
+        time.sleep(0.4)
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(covers, f, indent=0)
+    site['gameCovers'] = {k: v for k, v in covers.items() if v}
+    log(f'game covers: looked up {n}, have {len(site["gameCovers"])}')
+
+
 # ---------------- Medium ----------------
 def update_medium():
     root = ET.fromstring(get(f'https://medium.com/feed/@{MEDIUM_USER}'))
@@ -601,7 +627,7 @@ def update_grouvee():
 
 
 for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd),
-                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('medium', update_medium), ('grouvee', update_grouvee)]:
+                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('grouvee', update_grouvee)]:
     try:
         fn()
         status[name] = 'ok'

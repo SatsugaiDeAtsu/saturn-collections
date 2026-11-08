@@ -10,5 +10,6 @@
  "rawgKey": "",
  "hof_add": {},
  "malClientId": "275a1a9de61e66ca6bb2e3fbf9f5a067",
- "workerUrl": "https://saturn-mal.vananimestia.workers.dev"
+ "workerUrl": "https://saturn-mal.vananimestia.workers.dev",
+ "igdb": false
 }

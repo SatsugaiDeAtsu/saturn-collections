@@ -401,7 +401,7 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .spot h2{color:#fff}.spot .muted{color:#e6d6ec}.spotnote{color:#f0e2f4}
 .spot .btn{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.3)}
 @media (max-width:640px){.spot{grid-template-columns:120px 1fr}}
-.htiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:16px}
+.htiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-top:16px}
 .htile{position:relative;aspect-ratio:3/4;border:0;padding:0;cursor:pointer;overflow:hidden;background:var(--bar);text-align:left;border-bottom:4px solid var(--c);transition:transform .2s}
 .htile:hover{transform:translateY(-4px)}
 .htile .hbg{position:absolute;inset:0}
@@ -413,7 +413,7 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .htile .hlab small{font-size:11.5px;color:#e3d2ea}
 .htile .hic{width:34px;height:34px;background:var(--c);display:grid;place-items:center;margin-bottom:6px}
 .htile .hic .ico{width:20px;height:20px;color:#fff}
-@media (max-width:640px){.htiles{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}.htile .hlab{padding:8px}.htile .hlab b{font-size:13px}.htile .hlab small{display:none}.htile .hic{width:24px;height:24px}.htile .hic .ico{width:14px;height:14px}}
+@media (max-width:640px){.htiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.htile .hlab{padding:8px}.htile .hlab b{font-size:13px}.htile .hlab small{font-size:10.5px}.htile .hic{width:24px;height:24px}.htile .hic .ico{width:14px;height:14px}}
 .sawg .cover::before{display:none}
 .sawg .cover .ring{display:none}
 footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:var(--ink3)}
@@ -602,7 +602,7 @@ const films=D.films.map((f,i)=>{const o=Object.assign({},f,{i,logs:f.n,n:norm(f.
 const filmUri={};films.forEach(f=>filmUri[f.u]=f);
 const listsFor=f=>D.filmLists.filter(l=>l.items.some(([t,y])=>norm(t)===f.n&&y===f.y)).map(l=>l.name);
 const GSH={'Playing':'var(--s1)','Played':'var(--s2)','Backlog':'var(--s3)','Retired':'var(--s4)','Wish List':'var(--s6)'};
-const games=D.games.map((g,i)=>Object.assign({i,n:norm(g.t+' '+g.fr.join(' '))},g));
+const games=D.games.map((g,i)=>Object.assign({i,n:norm(g.t+' '+(g.fr||[]).join(' '))},g,{img:g.img||(D.gameCovers||{})[g.id]||''}));
 const stories=D.stories;
 const MED={overview:{c:'var(--accent)',name:'Edit mode'},hof:{c:'var(--gold)',name:'Hall of Fame'},manga:{c:'var(--manga)',name:'Manga'},books:{c:'var(--book)',name:'Books'},anime:{c:'var(--anime)',name:'Anime'},films:{c:'var(--film)',name:'Films'},games:{c:'var(--game)',name:'Games'},stories:{c:'var(--story)',name:'Stories'}};
 const stars=r=>{if(!r)return'';const f=Math.floor(r);return '★'.repeat(f)+(r%1?'½':'')};
@@ -615,6 +615,7 @@ let route='overview';
 const state={anime:{tab:'all',q:'',sort:'updated',view:store.get('view_anime','table'),type:'',lim:60},films:{tab:'watched',q:'',sort:'watched',view:store.get('view_films','grid'),lim:60},games:{tab:'all',q:'',sort:'added',view:store.get('view_games','grid'),lim:60},manga:{tab:'all',q:'',sort:'score',view:store.get('view_manga','grid'),type:'',lim:60},books:{tab:'all',q:'',sort:'rating',view:store.get('view_books','grid'),shelf:'',lim:60},search:{q:'',ext:'anime',res:{},busy:false}};
 function go(){
   let h=(location.hash||'').replace('#','');
+  if(h==='hof'&&route!=='hof')hofSeg='home';
   if(!ROUTES.some(r=>r[0]===h))h='overview';
   route=h;
   document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('on',a.dataset.r===h));
@@ -653,7 +654,7 @@ function rOverview(){
   const ad=Array.from({length:10},(_,i)=>scored.filter(a=>a.sc===i+1).length);
   const fd=[.5,1,1.5,2,2.5,3,3.5,4,4.5,5].map(v=>fr.filter(f=>f.r===v).length);
   const gd=[1,2,3,4,5].map(v=>gr.filter(g=>g.r===v).length);
-  const wallItems=[...anime.filter(a=>a.sc===10&&a.img),...manga.filter(m=>m.sc===10&&m.img),...films.filter(f=>f.r===5&&f.img),...books.filter(b=>b.r>=5&&b.img)];
+  const wallItems=[...anime.filter(a=>a.st!==6&&a.img),...manga.filter(m=>m.st!==6&&m.img),...films.filter(f=>f.s==='w'&&f.img),...books.filter(b=>b.st!=='toread'&&b.img),...games.filter(g=>g.shelf!=='Backlog'&&g.shelf!=='Wish List'&&g.img)].map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]).slice(0,120);
   const shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
   const W=shuf(wallItems);const half=Math.ceil(W.length/2);
   const row=(arr,dir)=>`<div class="mq ${dir}"><div class="mqt">${[...arr,...arr].map(x=>`<div class="mqi">${cover(x.t,x.img,'','eager')}</div>`).join('')}</div></div>`;
@@ -899,7 +900,7 @@ function hofTiles(){
   return [
     ['anime','Anime','var(--anime)','anime',imgsA,`${F.anime.length} favourites · ${anime.filter(a=>a.sc===10).length} perfect 10s`],
     ['manga','Manga','var(--manga)','manga',imgsM,`${F.manga.length} favourites · ${manga.filter(m=>m.sc===10).length} perfect 10s`],
-    ['chars','Characters','#24a896','mask',imgsC,`Top 10, honorary and character corner`],
+    ['chars','Characters and People','#24a896','mask',imgsC,`Top 10, honorary and character corner`],
     ['waifus','Waifus','#d24a7a','heart',imgsW,`${H.blog[2].secs.length} sections`],
     ['couples','Couples','#e8733a','couple',imgsCo,`${H.couples.length} couples`],
     ['films','Films','var(--film)','films',imgsF,`Top 4 · ${D.filmLists.length} lists · ${films.filter(f=>f.r===5).length} five stars`],
@@ -986,7 +987,7 @@ const fld=(id,label,val,type,extra)=>`<label class="ef"><span>${label}</span>${t
 const gv=id=>{const el=$('#'+id);return el?el.value.trim():''};
 const list=s=>s.split(',').map(x=>x.trim()).filter(Boolean);
 const today=()=>new Date().toISOString().slice(0,10);
-function rebuildGames(){games.length=0;D.games.forEach((g,i)=>games.push(Object.assign({i,n:norm(g.t+' '+(g.fr||[]).join(' '))},g)))}
+function rebuildGames(){games.length=0;D.games.forEach((g,i)=>games.push(Object.assign({i,n:norm(g.t+' '+(g.fr||[]).join(' '))},g,{img:g.img||(D.gameCovers||{})[g.id]||''})))}
 function rebuildBooks(){books.length=0;D.books.forEach((b,i)=>books.push(Object.assign({},b,{img:b.img||BCOV[b.id]||'',i,title:b.t,n:norm(b.t+' '+b.a+' '+(b.sh||[]).join(' '))})))}
 async function persist(kind,msg){
   toast('Saving…');
@@ -998,7 +999,8 @@ async function persist(kind,msg){
 }
 function editGame(g){
   const isNew=!g;g=g||{};
-  modal('games',isNew?'Add game':'Edit game',`<div style="grid-column:1/-1"><h2>${isNew?'Add a game':esc(g.t)}</h2><div class="eform">
+  modal('games',isNew?'Add game':'Edit game',`<div style="grid-column:1/-1"><h2>${isNew?'Add a game':esc(g.t)}</h2>
+  ${SET.igdb?`<div class="ef" style="margin-bottom:10px"><span>Find it (fills in the details)</span><div style="display:flex"><input id="g_q" placeholder="Game title" value="${esc(g.t||'')}" style="flex:1"><button class="btn" id="g_find" style="border-radius:0">Find</button></div><div id="g_res" class="small"></div></div>`:''}<div class="eform">
   ${fld('e_t','Title',g.t)}
   ${fld('e_shelf','Shelf',g.shelf||'Backlog','select:Playing|Played|Backlog|Wish List|Retired')}
   ${fld('e_r','Your rating (0 to 5)',g.r||0,'number','min="0" max="5" step="0.5"')}
@@ -1012,6 +1014,10 @@ function editGame(g){
   <label class="ef"><span>Favourite</span><select id="e_fav"><option value="0">No</option><option value="1" ${D.gvFav.includes(g.t)?'selected':''}>Yes</option></select></label>
   </div><div class="small" id="e_err" style="color:var(--s4)"></div>
   <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="btn pri" id="e_save">${isNew?'Add game':'Save changes'}</button>${isNew?'':'<button class="btn" id="e_del" style="margin-left:auto;color:var(--s4)">Delete</button>'}</div></div>`);
+  const gf=$('#g_find');if(gf)gf.onclick=async()=>{const q=gv('g_q');if(!q)return;$('#g_res').textContent='Searching…';
+    try{const L=await viaApi('games',q);$('#g_res').innerHTML=L&&L.length?L.slice(0,6).map((x,i)=>`<a class="link" href="#games" data-gp="${i}" style="display:block;padding:4px 0">${esc(x.t)} ${x.y?'('+x.y+')':''} · ${esc(x.meta)}</a>`).join(''):'Nothing found. Fill it in by hand.';
+      document.querySelectorAll('[data-gp]').forEach(a=>a.onclick=e=>{e.preventDefault();const x=L[+a.dataset.gp];$('#e_t').value=x.t;$('#e_pf').value=(x.pf||[]).join(', ');$('#e_g').value=(x.g||[]).join(', ');$('#e_dev').value=(x.dev||[]).join(', ');if(x.rel)$('#e_rel').value=x.rel;$('#e_img').value=x.img||'';$('#g_res').textContent='Filled in. Check it and save.'})}
+    catch(e){$('#g_res').textContent='Search failed. Fill it in by hand.'}};
   $('#e_save').onclick=()=>{
     const t=gv('e_t');if(!t){$('#e_err').textContent='Give it a title.';return}
     const raw=isNew?{id:Date.now(),u:'',fr:[],pub:[],log:[],shelves:[],rvd:''}:D.games[g.i];
@@ -1379,6 +1385,10 @@ async function viaApi(kind,q){
   if(kind==='films'&&SET.tmdbKey){
     const r=await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${SET.tmdbKey}&query=${encodeURIComponent(q)}&include_adult=false`).then(r=>r.json());
     return (r.results||[]).slice(0,16).map(m=>({t:m.title,alt:m.original_title!==m.title?m.original_title:'',y:(m.release_date||'').slice(0,4),meta:m.vote_average?'TMDB '+m.vote_average.toFixed(1):'',sum:m.overview||'',img:m.poster_path?'https://image.tmdb.org/t/p/w342'+m.poster_path:'',url:'https://www.themoviedb.org/movie/'+m.id}));
+  }
+  if(kind==='games'&&SET.workerUrl&&SET.igdb){
+    const r=await fetch(`${SET.workerUrl}/games?q=${encodeURIComponent(q)}`).then(r=>r.json());
+    return (Array.isArray(r)?r:[]).map(g=>({igdb:g.id,t:g.name,alt:'',y:g.first_release_date?new Date(g.first_release_date*1000).getUTCFullYear():'',meta:[(g.involved_companies||[]).filter(c=>c.developer).map(c=>c.company&&c.company.name).filter(Boolean)[0],(g.platforms||[]).map(p=>p.abbreviation||p.name).slice(0,3).join(', ')].filter(Boolean).join(' · '),sum:g.summary||'',img:g.cover?`https://images.igdb.com/igdb/image/upload/t_cover_big/${g.cover.image_id}.jpg`:'',url:g.url||'',g:(g.genres||[]).map(x=>x.name),pf:(g.platforms||[]).map(p=>p.abbreviation||p.name),dev:(g.involved_companies||[]).filter(c=>c.developer).map(c=>c.company&&c.company.name).filter(Boolean),rel:g.first_release_date?new Date(g.first_release_date*1000).toISOString().slice(0,10):''}));
   }
   if(kind==='games'&&SET.rawgKey){
     const r=await fetch(`https://api.rawg.io/api/games?key=${SET.rawgKey}&search=${encodeURIComponent(q)}&page_size=16`).then(r=>r.json());

@@ -2,8 +2,21 @@
 // Needs two settings in Cloudflare (Worker -> Settings -> Variables and Secrets):
 //   MAL_CLIENT_ID      (text)    your MAL Client ID
 //   MAL_CLIENT_SECRET  (secret)  your MAL Client Secret
-const ORIGIN = 'https://satsugaideatsu.github.io';
+//   TWITCH_CLIENT_ID     (text)    for the IGDB game database
+//   TWITCH_CLIENT_SECRET (secret)  for the IGDB game database
+const ORIGIN = 'https://satsugaideatsu.github.io';  // only your site may use this helper
 const MAL = 'https://api.myanimelist.net/v2';
+let igdbToken = null, igdbExp = 0;
+async function igdb(env, body) {
+  if (!igdbToken || Date.now() > igdbExp) {
+    const r = await fetch(`https://id.twitch.tv/oauth2/token?client_id=${env.TWITCH_CLIENT_ID}&client_secret=${env.TWITCH_CLIENT_SECRET}&grant_type=client_credentials`, { method: 'POST' });
+    const j = await r.json();
+    if (!j.access_token) throw new Error('Twitch login failed: ' + JSON.stringify(j));
+    igdbToken = j.access_token; igdbExp = Date.now() + (j.expires_in - 300) * 1000;
+  }
+  const r = await fetch('https://api.igdb.com/v4/games', { method: 'POST', headers: { 'Client-ID': env.TWITCH_CLIENT_ID, Authorization: 'Bearer ' + igdbToken, Accept: 'application/json' }, body });
+  return r.json();
+}
 
 export default {
   async fetch(req, env) {
@@ -26,6 +39,12 @@ export default {
           : 'alternative_titles,start_date,num_chapters,mean,media_type,synopsis,genres';
         const r = await fetch(`${MAL}/${type}?q=${encodeURIComponent(q)}&limit=16&nsfw=false&fields=${fields}`, { headers: { 'X-MAL-CLIENT-ID': env.MAL_CLIENT_ID } });
         return json(await r.json(), r.status);
+      }
+      // game search (IGDB)
+      if (url.pathname === '/games') {
+        const q = (url.searchParams.get('q') || '').replace(/"/g, '').slice(0, 80);
+        const data = await igdb(env, `search "${q}"; fields name,url,summary,first_release_date,cover.image_id,platforms.name,platforms.abbreviation,genres.name,involved_companies.developer,involved_companies.company.name; limit 16;`);
+        return json(data);
       }
       // sign-in: swap the code (or refresh token) for an access token
       if (url.pathname === '/token' && req.method === 'POST') {
