@@ -590,7 +590,7 @@ function cover(title,img,extra,cls){
   return `<div class="cover ${cls||''}${gold?' gold':''}" style="--tc:${c}">${RING}<div class="ini">${esc(initials(title))}</div><div class="ct">${esc(title)}</div>${im}${extra||''}</div>`;
 }
 let imgFails=0,imgLoads=0;
-window.__imgFail=el=>{el.remove();imgFails++;if(imgFails>=3&&imgLoads===0)imgOK=false};
+window.__imgFail=el=>{const n=+(el.dataset.try||0);if(n<2){el.dataset.try=n+1;const u=el.src.split('?')[0];setTimeout(()=>{el.src=u+'?r='+(n+1)},1200*(n+1));return}el.remove();imgFails++};
 document.addEventListener('load',e=>{if(e.target.tagName==='IMG')imgLoads++},true);
 
 /* ---------- data model ---------- */
