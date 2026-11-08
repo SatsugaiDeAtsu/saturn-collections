@@ -585,13 +585,17 @@ const hash=s=>{let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;ret
 const initials=t=>{const w=String(t).replace(/[^\p{L}\p{N} ]/gu,' ').trim().split(/\s+/).filter(x=>!/^(the|a|an|of|and|no|to|wa|ga)$/i.test(x));return ((w[0]||'?')[0]+((w[1]||'')[0]||'')).toUpperCase()};
 function cover(title,img,extra,cls){
   const c=PAL[hash(title)%PAL.length];
-  const im=(img&&imgOK)?`<img src="${esc(img)}" alt="" loading="${cls==='eager'?'eager':'lazy'}" referrerpolicy="no-referrer" onerror="window.__imgFail&&window.__imgFail(this)">`:'';
+  const im=(img&&imgOK)?(cls==='eager'?`<img src="${esc(img)}" alt="" referrerpolicy="no-referrer" onerror="window.__imgFail&&window.__imgFail(this)">`:`<img data-src="${esc(img)}" alt="" referrerpolicy="no-referrer" onerror="window.__imgFail&&window.__imgFail(this)">`):'';
   const gold=/class="badge">(10|5★|5\/5|5)</.test(extra||'');
   return `<div class="cover ${cls||''}${gold?' gold':''}" style="--tc:${c}">${RING}<div class="ini">${esc(initials(title))}</div><div class="ct">${esc(title)}</div>${im}${extra||''}</div>`;
 }
 let imgFails=0,imgLoads=0;
 window.__imgFail=el=>{const n=+(el.dataset.try||0);if(n<2){el.dataset.try=n+1;const u=el.src.split('?')[0];setTimeout(()=>{el.src=u+'?r='+(n+1)},1200*(n+1));return}el.remove();imgFails++};
 document.addEventListener('load',e=>{if(e.target.tagName==='IMG')imgLoads++},true);
+/* our own lazy loader: native loading="lazy" was stalling on some devices */
+const lazyIO='IntersectionObserver' in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const i=e.target;lazyIO.unobserve(i);if(i.dataset.src){i.src=i.dataset.src;i.removeAttribute('data-src')}}}),{rootMargin:'800px 400px'}):null;
+const lazyScan=()=>document.querySelectorAll('img[data-src]').forEach(i=>{if(i.__lz)return;i.__lz=1;if(lazyIO)lazyIO.observe(i);else{i.src=i.dataset.src;i.removeAttribute('data-src')}});
+new MutationObserver(lazyScan).observe(document.documentElement,{childList:true,subtree:true});
 
 /* ---------- data model ---------- */
 const AST={1:['Watching','var(--s1)'],2:['Completed','var(--s2)'],3:['On-Hold','var(--s3)'],4:['Dropped','var(--s4)'],6:['Plan to Watch','var(--s6)']};
