@@ -789,6 +789,11 @@ def update_cover_mirror():
     blob = json.dumps(load_json(os.path.join(DATA, 'hof.json'), {})) + json.dumps(site.get('hofImages', {})) + json.dumps(site.get('hof', {}))
     for m in re.finditer(r'myanimelist\.net/images/([^"~\s?]+?\.(?:jpe?g|png|webp|gif))', blob, re.I):
         want.add(m.group(1))
+    src = {p: 'https://cdn.myanimelist.net/images/' + p for p in want}
+    for m in re.finditer(r'image\.myanimelist\.net/ui/([\w-]+)', blob):
+        k = 'ui/' + m.group(1) + '.jpg'
+        want.add(k)
+        src[k] = 'https://image.myanimelist.net/ui/' + m.group(1)
     ud = os.path.join(root, 'u')
     os.makedirs(ud, exist_ok=True)
     for path in sorted(want):
@@ -796,7 +801,7 @@ def update_cover_mirror():
         if os.path.exists(fp) or time.time() - t0 > 1200 or fails > 60:
             continue
         try:
-            req = urllib.request.Request('https://cdn.myanimelist.net/images/' + path, headers={'User-Agent': UA})
+            req = urllib.request.Request(src[path], headers={'User-Agent': UA})
             with urllib.request.urlopen(req, timeout=30) as r:
                 b = r.read()
             if len(b) > 1500:
