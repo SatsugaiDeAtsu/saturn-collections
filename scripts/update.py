@@ -657,8 +657,35 @@ def update_grouvee():
     log(f'grouvee: {len(G)} games imported into data/games.json (one-time)')
 
 
+def update_cover_mirror():
+    """Keep a copy of every MAL anime/manga cover on GitHub Pages, so the site doesn't depend on MAL's image server."""
+    root = os.path.join(os.path.dirname(DATA), 'covers')
+    t0, got, fails = time.time(), 0, 0
+    for kind, key, ix in (('anime', 'a', 8), ('manga', 'm', 10)):
+        d = os.path.join(root, key)
+        os.makedirs(d, exist_ok=True)
+        for row in site.get(kind, []):
+            if time.time() - t0 > 900 or fails > 40:
+                break
+            img, fp = row[ix], os.path.join(d, f'{row[0]}.jpg')
+            if not img or os.path.exists(fp):
+                continue
+            try:
+                req = urllib.request.Request(f'https://cdn.myanimelist.net/images/{kind}/{img}.jpg', headers={'User-Agent': UA})
+                with urllib.request.urlopen(req, timeout=30) as r:
+                    b = r.read()
+                if len(b) > 1500:
+                    open(fp, 'wb').write(b)
+                    got += 1
+            except Exception:
+                fails += 1
+            time.sleep(0.15)
+    site['mir'] = {k: sorted(int(f[:-4]) for f in os.listdir(os.path.join(root, k)) if f.endswith('.jpg')) for k in ('a', 'm')}
+    log(f'cover mirror: +{got} new, {len(site["mir"]["a"])} anime / {len(site["mir"]["m"])} manga stored, {fails} failed')
+
+
 for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd),
-                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('grouvee', update_grouvee)]:
+                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('grouvee', update_grouvee), ('cover mirror', update_cover_mirror)]:
     try:
         fn()
         status[name] = 'ok'

@@ -596,7 +596,8 @@ document.addEventListener('load',e=>{if(e.target.tagName==='IMG')imgLoads++},tru
 /* ---------- data model ---------- */
 const AST={1:['Watching','var(--s1)'],2:['Completed','var(--s2)'],3:['On-Hold','var(--s3)'],4:['Dropped','var(--s4)'],6:['Plan to Watch','var(--s6)']};
 const TAGS=D.animeTags||{};
-const anime=D.anime.map(a=>({tags:TAGS[a[0]]||'',id:a[0],t:a[1],alt:a[2],st:a[3],sc:a[4],ep:a[5],eps:a[6],type:a[7],img:a[8]?`https://cdn.myanimelist.net/images/anime/${a[8]}.jpg`:'',y:a[9],g:a[10].map(i=>D.animeGenres[i]),mal:a[11],up:a[12],rw:a[13]||0,rwing:a[14]||0,n:norm(a[1]+' '+a[2])}));
+const MIRA=new Set((D.mir||{}).a||[]),MIRM=new Set((D.mir||{}).m||[]);
+const anime=D.anime.map(a=>({tags:TAGS[a[0]]||'',id:a[0],t:a[1],alt:a[2],st:a[3],sc:a[4],ep:a[5],eps:a[6],type:a[7],img:MIRA.has(a[0])?`covers/a/${a[0]}.jpg`:a[8]?`https://cdn.myanimelist.net/images/anime/${a[8]}.jpg`:'',y:a[9],g:a[10].map(i=>D.animeGenres[i]),mal:a[11],up:a[12],rw:a[13]||0,rwing:a[14]||0,n:norm(a[1]+' '+a[2])}));
 const filmByKey={};
 const films=D.films.map((f,i)=>{const o=Object.assign({},f,{i,logs:f.n,n:norm(f.t)});filmByKey[norm(f.t)+'|'+f.y]=o;return o});
 const filmUri={};films.forEach(f=>filmUri[f.u]=f);
@@ -737,7 +738,7 @@ function favRow(title,k,items){
 /* ---------- manga ---------- */
 const MST={1:['Reading','var(--s1)'],2:['Completed','var(--s2)'],3:['On-Hold','var(--s3)'],4:['Dropped','var(--s4)'],6:['Plan to Read','var(--s6)']};
 const MTAGS=D.mangaTags||{};
-const manga=D.manga.map(m=>({tags:MTAGS[m[0]]||'',id:m[0],t:m[1],alt:m[2],st:m[3],sc:m[4],ch:m[5],chs:m[6],vol:m[7],vols:m[8],type:m[9],img:m[10]?`https://cdn.myanimelist.net/images/manga/${m[10]}.jpg`:'',y:m[11],g:m[12].map(i=>D.mangaGenres[i]),mal:m[13],n:norm(m[1]+' '+m[2])}));
+const manga=D.manga.map(m=>({tags:MTAGS[m[0]]||'',id:m[0],t:m[1],alt:m[2],st:m[3],sc:m[4],ch:m[5],chs:m[6],vol:m[7],vols:m[8],type:m[9],img:MIRM.has(m[0])?`covers/m/${m[0]}.jpg`:m[10]?`https://cdn.myanimelist.net/images/manga/${m[10]}.jpg`:'',y:m[11],g:m[12].map(i=>D.mangaGenres[i]),mal:m[13],n:norm(m[1]+' '+m[2])}));
 function rManga(){
   const sc=manga.filter(m=>m.sc>0);
   const types=[...new Set(manga.map(m=>m.type))].sort();
