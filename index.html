@@ -96,6 +96,7 @@ main{max-width:1240px;margin:0 auto;padding:20px 16px 60px}
 .legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:11px;color:var(--ink2)}
 .legend span{display:inline-flex;align-items:center;gap:5px}
 .legend b{width:8px;height:8px;display:inline-block}
+.legend .lx b{background:none;border:2px solid;width:9px;height:9px}
 
 .two{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr)}
 .act{display:flex;gap:12px;align-items:center;padding:9px 14px;border-bottom:1px solid var(--line);cursor:pointer}
@@ -673,7 +674,7 @@ window.addEventListener('hashchange',go);
 function render(){({wrapped:rWrapped,manga:rManga,books:rBooks,hof:rHof,overview:rOverview,anime:rAnime,films:rFilms,games:rGames,stories:rStories,search:rSearch})[route]()}
 
 /* ---------- overview ---------- */
-function statusBar(parts){const tot=parts.reduce((s,p)=>s+p[1],0)||1;return `<div class="sbar">${parts.map(p=>`<i style="width:${p[1]/tot*100}%;background:${p[2]}" title="${esc(p[0])}: ${p[1]}"></i>`).join('')}</div><div class="legend">${parts.map(p=>`<span><b style="background:${p[2]}"></b>${esc(p[0])} ${fmt(p[1])}</span>`).join('')}</div>`}
+function statusBar(parts,extra){const tot=parts.reduce((s,p)=>s+p[1],0)||1;return `<div class="sbar">${parts.map(p=>`<i style="width:${p[1]/tot*100}%;background:${p[2]}" title="${esc(p[0])}: ${p[1]}"></i>`).join('')}</div><div class="legend">${parts.map(p=>`<span><b style="background:${p[2]}"></b>${esc(p[0])} ${fmt(p[1])}</span>`).join('')}${(extra||[]).map(p=>`<span class="lx"><b style="border-color:${p[2]}"></b>${esc(p[0])} ${fmt(p[1])}</span>`).join('')}</div>`}
 function dist(vals,labels,c){const mx=Math.max(...vals,1);return `<div style="--n:${vals.length};--c:${c}"><div class="dist">${vals.map((v,i)=>`<div style="height:${v/mx*100}%" title="${labels[i]}: ${v}"></div>`).join('')}</div><div class="distl">${labels.map(l=>`<span>${l}</span>`).join('')}</div></div>`}
 function rOverview(){
   const ac=s=>anime.filter(a=>a.st===s).length;
@@ -739,13 +740,13 @@ function rOverview(){
   <div style="margin-top:16px">${wallTop}</div>
   <section class="grid stats" style="margin-top:2px">
     <a class="box stat" href="#anime" style="--c:var(--anime)">${art('anime')}<span class="ic">${ico('anime')}</span><div class="lab"><span>Anime</span><span>${scored.length?avg(scored.map(a=>a.sc)).toFixed(2)+' avg':''}</span></div><div class="num">${fmt(anime.length)}</div><div class="sub">${fmt(epsW)} episodes watched · ${fmt(anime.reduce((s,a)=>s+a.rw,0))} rewatches</div>
-      ${statusBar([1,2,3,4,6].map(s=>[AST[s][0],ac(s),AST[s][1]]))}</a>
+      ${statusBar([1,2,3,4,6].map(s=>[AST[s][0],ac(s),AST[s][1]]),[['Rewatched',anime.filter(a=>a.rw>0).length,'#b48cff']])}</a>
     <a class="box stat" href="#manga" style="--c:var(--manga)">${art('manga')}<span class="ic">${ico('manga')}</span><div class="lab"><span>Manga</span><span>${(()=>{const s=manga.filter(m=>m.sc);return s.length?avg(s.map(m=>m.sc)).toFixed(2)+' avg':''})()}</span></div><div class="num">${fmt(manga.length)}</div><div class="sub">${fmt(manga.reduce((s,m)=>s+m.ch,0))} chapters read · ${fmt(manga.reduce((s,m)=>s+m.rw,0))} rereads</div>
-      ${statusBar([1,2,3,4,6].map(s=>[MST[s][0],manga.filter(m=>m.st===s).length,MST[s][1]]))}</a>
+      ${statusBar([1,2,3,4,6].map(s=>[MST[s][0],manga.filter(m=>m.st===s).length,MST[s][1]]),[['Reread',manga.filter(m=>m.rw>0).length,'#b48cff']])}</a>
     <a class="box stat" href="#films" style="--c:var(--film)">${art('films')}<span class="ic">${ico('films')}</span><div class="lab"><span>Films</span><span>${fr.length?avg(fr.map(f=>f.r)).toFixed(2)+'★ avg':''}</span></div><div class="num">${fmt(fw.length)}</div><div class="sub">${fmt(fr.length)} rated · ${fmt(frv.length)} reviews · ${fmt(films.reduce((s,f)=>s+f.rw,0))} rewatches</div>
-      ${statusBar([['Rated',fr.length,'var(--film)'],['Unrated',fw.length-fr.length,'var(--s3)'],['Watchlist',films.length-fw.length,'var(--s6)']])}</a>
+      ${statusBar([['Watched',fw.length,'var(--film)'],['Watchlist',films.length-fw.length,'var(--s6)']],[['Rated',fr.length,'var(--film)'],['Rewatched',films.filter(f=>f.rw>0).length,'#b48cff']])}</a>
     <a class="box stat" href="#games" style="--c:var(--game)">${art('games')}<span class="ic">${ico('games')}</span><div class="lab"><span>Games</span><span>${gr.length?avg(gr.map(g=>g.r)).toFixed(2)+'/5 avg':''}</span></div><div class="num">${fmt(games.length)}</div><div class="sub">${gs('Played')} played · ${gs('Playing')} playing · ${fmt(Math.round(games.reduce((s,g)=>s+g.hrs,0)))}h · ${games.reduce((s,g)=>s+g.rp,0)} replays</div>
-      ${statusBar(Object.keys(GSH).map(k=>[k,gs(k),GSH[k]]))}</a>
+      ${statusBar(Object.keys(GSH).map(k=>[k,gs(k),GSH[k]]),[['Replayed',games.filter(g=>g.rp>0||g.shelf==='Replaying').length,'#b48cff']])}</a>
     <a class="box stat" href="#books" style="--c:var(--book)">${art('books')}<span class="ic">${ico('books')}</span><div class="lab"><span>Books</span><span>${(()=>{const s=books.filter(b=>b.r);return s.length?avg(s.map(b=>b.r)).toFixed(2)+'★ avg':''})()}</span></div><div class="num">${books.length}</div><div class="sub">${books.filter(b=>b.st==='read').length} read · ${books.filter(b=>b.ur).length} in Urdu</div>
       ${statusBar(Object.keys(BST).map(k=>[BST[k][0],books.filter(b=>b.st===k).length,BST[k][1]]).filter(p=>p[1]))}</a>
     <a class="box stat" href="#stories" style="--c:var(--story)">${art('stories')}<span class="ic">${ico('stories')}</span><div class="lab"><span>Stories</span><span>Medium</span></div><div class="num">${stories.length}</div><div class="sub">${fmt(words)} words written</div>
