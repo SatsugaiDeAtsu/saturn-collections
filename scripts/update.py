@@ -543,23 +543,34 @@ def update_book_covers():
 
 
 def steam_cover(title):
-    """Portrait cover from Steam's store search (no key needed)."""
+    """Portrait cover from Steam (no key needed): store search, then the app's library artwork."""
     import difflib
     res = json.loads(get('https://store.steampowered.com/api/storesearch/?l=english&cc=us&term=' + urllib.parse.quote(title), tries=2))
-    items = res.get('items') or []
     best, score = None, 0
-    for it in items:
+    for it in res.get('items') or []:
         r = difflib.SequenceMatcher(None, norm(it.get('name')), norm(title)).ratio()
         if r > score:
             best, score = it, r
     if not best or score < 0.82:
         return None
-    for u in (f"https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/{best['id']}/library_600x900.jpg",
-              f"https://cdn.cloudflare.steamstatic.com/steam/apps/{best['id']}/library_600x900.jpg"):
+    appid = best['id']
+    q = json.dumps({'ids': [{'appid': appid}], 'context': {'language': 'english', 'country_code': 'US'},
+                    'data_request': {'include_assets': True}}, separators=(',', ':'))
+    urls = []
+    try:
+        it = json.loads(get('https://api.steampowered.com/IStoreBrowseService/GetItems/v1/?input_json=' + urllib.parse.quote(q), tries=2))
+        item = (it.get('response', {}).get('store_items') or [{}])[0]
+        a = item.get('assets') or {}
+        fmt = a.get('asset_url_format') or ''
+        for k in ('library_capsule_2x', 'library_capsule'):
+            if a.get(k) and fmt:
+                urls.append('https://shared.cloudflare.steamstatic.com/store_item_assets/' + fmt.replace('${FILENAME}', a[k]))
+    except Exception as e:
+        log('steam assets failed for', title, e)
+    urls += [f'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/{appid}/library_600x900.jpg']
+    for u in urls:
         try:
-            req = urllib.request.Request(u, headers={'User-Agent': UA})
-            with urllib.request.urlopen(req, timeout=30) as r:
-                b = r.read()
+            b = get_bytes(u)
             if len(b) > 3000:
                 return b
         except Exception:
@@ -568,17 +579,24 @@ def steam_cover(title):
 
 
 def wiki_cover(title):
-    """Box art from the game's Wikipedia article."""
-    u = ('https://en.wikipedia.org/w/api.php?action=query&format=json&generator=search&gsrlimit=5&prop=pageimages|description'
-         '&piprop=thumbnail&pithumbsize=500&gsrsearch=' + urllib.parse.quote(title + ' video game'))
+    """Box art from the game's Wikipedia article (the infobox image, which is usually the cover)."""
+    u = ('https://en.wikipedia.org/w/api.php?action=query&format=json&generator=search&gsrlimit=5&prop=pageprops|description'
+         '&ppprop=page_image&gsrsearch=' + urllib.parse.quote(title + ' video game'))
     pages = sorted(json.loads(get(u, tries=2)).get('query', {}).get('pages', {}).values(), key=lambda p: p.get('index', 99))
     for p in pages:
-        if 'game' in (p.get('description') or '').lower() and p.get('thumbnail'):
-            t = norm(re.sub(r'\s*\(.*?\)$', '', p['title']))
-            if t == norm(title) or norm(title) in t or t in norm(title):
-                req = urllib.request.Request(p['thumbnail']['source'], headers={'User-Agent': UA})
-                with urllib.request.urlopen(req, timeout=30) as r:
-                    return r.read()
+        img = (p.get('pageprops') or {}).get('page_image')
+        if not img or 'game' not in (p.get('description') or '').lower():
+            continue
+        t, want = norm(re.sub(r'\s*\(.*?\)$', '', p['title'])), norm(title)
+        if not (t == want or want in t or t in want):
+            continue
+        ii = json.loads(get('https://en.wikipedia.org/w/api.php?action=query&format=json&prop=imageinfo&iiprop=url&iiurlwidth=500&titles='
+                            + urllib.parse.quote('File:' + img), tries=2))
+        for pg in ii.get('query', {}).get('pages', {}).values():
+            info = (pg.get('imageinfo') or [{}])[0]
+            src = info.get('thumburl') or info.get('url')
+            if src:
+                return get_bytes(src)
     return None
 
 
