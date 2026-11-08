@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-cache">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Saturn Collections</title>
 <link rel="icon" href="assets/favicon.png">
@@ -825,7 +826,7 @@ function rHof(){
       sec('s-mal-c','Top characters','',grid(F.character.map(([id,t,sub])=>hItem('c'+id+'~'+t,sub)).join(''))),
       sec('s-mal-p','Top people','',grid(F.people.map(([id,t])=>hItem('p'+id+'~'+t,'Person')).join('')))]);
     G('g-saw','Sawako Kuronuma','My favourite heroine, from Kimi ni Todoke.','star','#d42f5a','https://myanimelist.net/character/6977',[
-      sec('s-saw','Gallery','',`<div class="hgrid sawg">${[1,2,3,4,5,6].map(i=>`<div class="card"><div class="cover"><img src="assets/sawako/${i}.jpg" alt="Sawako Kuronuma" loading="lazy"></div></div>`).join('')}</div>`)]);
+      sec('s-saw','Gallery','',`<div class="hgrid sawg">${[...[1,2,3,4,5,6].map(i=>`assets/sawako/${i}.jpg`),'https://cdn.myanimelist.net/images/characters/15/597996.jpg','https://cdn.myanimelist.net/images/characters/4/573345.jpg','https://cdn.myanimelist.net/images/characters/6/120945.jpg','https://cdn.myanimelist.net/images/characters/3/229029.jpg'].map(u=>`<div class="card"><div class="cover"><img src="${u}" alt="Sawako Kuronuma" loading="lazy" referrerpolicy="no-referrer"></div></div>`).join('')}</div>`)]);
     G('g-honc','Honorary favourites','Characters special to me beyond the top 10.','star','#d9a514',blogUrl(804802),
       fil(hon,/character/i).map(([t,d,it],i)=>sec('s-honc-'+i,t.replace(/^Honorary mentions: /,'Honorary mentions · '),d,grid(it.map(c=>hItem(c)).join('')))));
     G('g-chr','Character corner','Parents, battalions, villains, the ones I hate, and the people behind it all.','mask','#24a896',blogUrl(804802),
@@ -882,7 +883,7 @@ function rHof(){
     openMal(it)});
 }
 let tileT=null;
-const BIG=u=>u&&/cdn\.myanimelist\.net\/images\/(anime|manga|characters|voiceactors)\/\d+\/\d+\.jpg$/.test(u)?u.replace(/\.jpg$/,'l.jpg'):u;
+const BIG=u=>u&&/cdn\.myanimelist\.net\/images\/(anime|manga)\/\d+\/\d+\.jpg$/.test(u)?u.replace(/\.jpg$/,'l.jpg'):u;
 function hofTiles(){
   const H=D.hof,F=H.malFavs;const ci=c=>{const [kid]=c.split('~');return HIMG(kid[0],+kid.slice(1))};
   const imgsA=[...F.anime.map(([id])=>{const a=anime.find(x=>x.id===id);return a?a.img:HIMG('a',id)}),...anime.filter(a=>a.sc===10).map(a=>a.img)];
@@ -938,7 +939,7 @@ function spotList(){
 }
 function spotlight(){const L=spotList();if(!L.length)return'';const c=L[spotI%L.length];
   const href=c.k&&!c.own?`https://myanimelist.net/${MALK[c.k]}/${c.id}`:'';
-  return `<section class="box spot" id="spot">${c.img?`<div class="blur" style="background-image:url('${esc(c.img)}')"></div>`:''}<div class="pic">${c.img?`<img src="${esc(BIG(c.img))}" alt="" referrerpolicy="no-referrer">`:cover(c.t,'')}</div><div><div class="kick small" style="text-transform:uppercase;letter-spacing:.12em;font-weight:800;color:var(--gold)">Spotlight · ${esc(c.label)}</div><h2>${esc(c.t)}</h2>${c.sub?`<div class="muted">${esc(c.sub)}</div>`:''}${c.note?`<p class="spotnote">${esc(c.note.length>220?c.note.slice(0,220)+'…':c.note)}</p>`:''}<div class="dots">${L.map((_,i)=>`<button aria-label="Show ${esc(L[i].t)}" data-spot="${i}" class="${i===spotI%L.length?'on':''}"></button>`).join('')}</div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn" id="spotopen">Open</button><button class="btn" id="spotnext">Next →</button>${href?`<a class="btn" href="${href}" target="_blank" rel="noopener">MAL ↗</a>`:''}</div></div></section>`}
+  return `<section class="box spot" id="spot">${c.img?`<div class="blur" style="background-image:url('${esc(c.img)}')"></div>`:''}<div class="pic">${c.img?`<img src="${esc(BIG(c.img))}" alt="" referrerpolicy="no-referrer" onerror="this.onerror=null;this.src='${esc(c.img)}'">`:cover(c.t,'')}</div><div><div class="kick small" style="text-transform:uppercase;letter-spacing:.12em;font-weight:800;color:var(--gold)">Spotlight · ${esc(c.label)}</div><h2>${esc(c.t)}</h2>${c.sub?`<div class="muted">${esc(c.sub)}</div>`:''}${c.note?`<p class="spotnote">${esc(c.note.length>220?c.note.slice(0,220)+'…':c.note)}</p>`:''}<div class="dots">${L.map((_,i)=>`<button aria-label="Show ${esc(L[i].t)}" data-spot="${i}" class="${i===spotI%L.length?'on':''}"></button>`).join('')}</div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn" id="spotopen">Open</button><button class="btn" id="spotnext">Next →</button>${href?`<a class="btn" href="${href}" target="_blank" rel="noopener">MAL ↗</a>`:''}</div></div></section>`}
 function startSpot(){clearInterval(spotT);const bind=()=>{document.querySelectorAll('[data-spot]').forEach(b=>b.onclick=()=>{spotI=+b.dataset.spot;swap();startSpot()});
     const L=spotList(),c=L[spotI%L.length];const o=$('#spotopen');if(o)o.onclick=()=>{if(c.own)return c.k==='a'?openAnime(c.own):openManga(c.own);if(c.film)return openFilm(c.film);if(c.book)return openBook(c.book);if(c.game)return openGame(c.game);openMal({k:c.k,id:c.id,name:c.t})};
     const n=$('#spotnext');if(n)n.onclick=()=>{spotI++;swap();startSpot()}};
