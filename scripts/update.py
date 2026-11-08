@@ -41,6 +41,33 @@ def get(url, tries=3):
             time.sleep(3 * (i + 1))
 
 
+def save_img(path, data, max_w=600):
+    """Store a picture. Ones wider than 600 px (twice the biggest size the site shows them at) are scaled down;
+    smaller ones are saved exactly as downloaded, so nothing visible changes."""
+    try:
+        from PIL import Image
+        import io
+        im = Image.open(io.BytesIO(data))
+        if im.width > max_w:
+            im = im.convert('RGB').resize((max_w, round(im.height * max_w / im.width)), Image.LANCZOS)
+            out = io.BytesIO()
+            im.save(out, 'JPEG', quality=90, optimize=True, progressive=True)
+            if out.tell() < len(data):
+                data = out.getvalue()
+    except Exception:
+        pass
+    with open(path, 'wb') as f:
+        f.write(data)
+
+
+def repo_size():
+    """Repo size in MB (GitHub reports it), so the site can tell you when it's time to tidy old pictures."""
+    try:
+        site['repoMB'] = round(json.loads(get('https://api.github.com/repos/SatsugaiDeAtsu/saturn-collections', tries=1)).get('size', 0) / 1024)
+    except Exception:
+        pass
+
+
 def load_json(p, default):
     try:
         with open(p, encoding='utf-8') as f:
@@ -619,7 +646,7 @@ def update_game_covers():
             try:
                 b = get_bytes(v)
                 if len(b) > 2000:
-                    open(os.path.join(gd, f'{gid}.jpg'), 'wb').write(b)
+                    save_img(os.path.join(gd, f'{gid}.jpg'), b)
                     covers[gid] = f'covers/g/{gid}.jpg?v={today}'
             except Exception as e:
                 log('cover download failed', v, e)
@@ -650,7 +677,7 @@ def update_game_covers():
         except Exception as e:
             log('game cover lookup failed for', g['t'], e)
         if img:
-            open(os.path.join(gd, f'{gid}.jpg'), 'wb').write(img)
+            save_img(os.path.join(gd, f'{gid}.jpg'), img)
             covers[gid] = f'covers/g/{gid}.jpg'
         else:
             covers[gid] = 'miss:' + today
@@ -771,7 +798,7 @@ def update_dlc_pictures():
                 try:
                     b = get_bytes(have)
                     fn = f"{gid}_{re.sub(r'[^a-z0-9]+', '-', name.lower()).strip('-')}.jpg"
-                    open(os.path.join(dd, fn), 'wb').write(b)
+                    save_img(os.path.join(dd, fn), b)
                     imgs[name] = 'covers/d/' + fn
                     got += 1
                 except Exception as e:
@@ -782,7 +809,7 @@ def update_dlc_pictures():
             b = dlc_picture(games[gid], name)
             if b:
                 fn = f"{gid}_{re.sub(r'[^a-z0-9]+', '-', name.lower()).strip('-')}.jpg"
-                open(os.path.join(dd, fn), 'wb').write(b)
+                save_img(os.path.join(dd, fn), b)
                 imgs[name] = 'covers/d/' + fn
                 got += 1
             else:
@@ -1032,7 +1059,7 @@ def update_cover_mirror():
                 with urllib.request.urlopen(req, timeout=30) as r:
                     b = r.read()
                 if len(b) > 1500:
-                    open(fp, 'wb').write(b)
+                    save_img(fp, b)
                     got += 1
             except Exception:
                 fails += 1
@@ -1058,7 +1085,7 @@ def update_cover_mirror():
             with urllib.request.urlopen(req, timeout=30) as r:
                 b = r.read()
             if len(b) > 1500:
-                open(fp, 'wb').write(b)
+                save_img(fp, b)
                 got += 1
         except Exception:
             fails += 1
@@ -1083,6 +1110,7 @@ for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd'
 
 for k in ('books', 'games', 'gvFav', 'gvProfile'):
     site.pop(k, None)
+repo_size()
 site['generated'] = datetime.now(timezone.utc).strftime('%Y-%m-%d')
 site['updateStatus'] = status
 with open(os.path.join(DATA, 'site.json'), 'w', encoding='utf-8') as f:

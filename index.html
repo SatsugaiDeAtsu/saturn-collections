@@ -1567,7 +1567,7 @@ function openExt(kind,r){
 }
 
 {const US=D.updateStatus||{};const bad=Object.entries(US).filter(([k,v])=>v!=='ok');
-$('#foot').innerHTML=`Saturn Collections · data from MyAnimeList, Letterboxd, Grouvee and Medium · last refreshed ${fdate(D.generated)}${OWNER()&&bad.length?`<div style="margin-top:6px;color:var(--s4)">Last update had trouble with: ${bad.map(([k,v])=>`<b>${esc(k)}</b> <span class="muted">(${esc(String(v).slice(0,90))})</span>`).join(' · ')}. The previous data is still shown.</div>`:''}`;}
+$('#foot').innerHTML=`Saturn Collections · data from MyAnimeList, Letterboxd, Grouvee and Medium · last refreshed ${fdate(D.generated)}${OWNER()&&bad.length?`<div style="margin-top:6px;color:var(--s4)">Last update had trouble with: ${bad.map(([k,v])=>`<b>${esc(k)}</b> <span class="muted">(${esc(String(v).slice(0,90))})</span>`).join(' · ')}. The previous data is still shown.</div>`:''}${OWNER()&&(D.repoMB||0)>500?`<div style="margin-top:6px;color:var(--s3)">Storage is at ${D.repoMB} MB. Time for the picture clean-up we talked about.</div>`:''}`;}
 syncEditBtn();
 malFinish();
 go();
