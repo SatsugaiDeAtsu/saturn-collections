@@ -14,7 +14,8 @@
 }
 },
 "104343": {
-"avg": 20.8
+"avg": 20.8,
+"chk": "2026-11-08"
 },
 "104353": {
 "avg": 6.8,
@@ -36,11 +37,14 @@
 "104386": {
 "avg": 9.9,
 "dlc": [
-"Shadows of Rose"
+"Shadows of Rose",
+"Winters’ Expansion"
 ],
 "dimg": {
-"Shadows of Rose": "https://howlongtobeat.com/games/114920_Resident_Evil_Village_-_Shadows_of_Rose.jpg"
-}
+"Shadows of Rose": "covers/d/104386_shadows-of-rose.jpg",
+"Winters’ Expansion": "covers/d/104386_winters-expansion.jpg"
+},
+"chk": "2026-11-08"
 },
 "104431": {
 "avg": 8.9,
@@ -49,7 +53,7 @@
 ],
 "chk": "2026-11-08",
 "dimg": {
-"The Ghost Survivors": "https://howlongtobeat.com/games/resident-evil-2-the-ghost-survivors-header.jpg"
+"The Ghost Survivors": "covers/d/104431_the-ghost-survivors.jpg"
 }
 },
 "104440": {
@@ -72,10 +76,10 @@
 ],
 "chk": "2026-11-08",
 "dimg": {
-"The Passing": "https://howlongtobeat.com/games/20094_Left_4_Dead_2_The_Passing_DLC.jpg",
+"The Passing": "covers/d/107187_the-passing.jpg",
 "The Sacrifice": "miss:2026-11-08",
-"Cold Stream": "https://howlongtobeat.com/games/86784_Left_4_Dead_2_Cold_Stream_DLC.jpg",
-"The Last Stand": "https://howlongtobeat.com/games/84124_Left_4_Dead_2_The_Last_Stand_DLC.jpg"
+"Cold Stream": "covers/d/107187_cold-stream.jpg",
+"The Last Stand": "covers/d/107187_the-last-stand.jpg"
 }
 },
 "107313": {
@@ -89,7 +93,8 @@
 "Genkibowl VII": "covers/d/107313_genkibowl-vii.jpg",
 "Gangstas in Space": "covers/d/107313_gangstas-in-space.jpg",
 "The Trouble with Clones": "covers/d/107313_the-trouble-with-clones.jpg"
-}
+},
+"chk": "2026-11-08"
 },
 "107315": {
 "avg": 19.9,
@@ -100,10 +105,12 @@
 "dimg": {
 "Ultor Exposed": "miss:2026-11-08",
 "Corporate Warfare": "miss:2026-11-08"
-}
+},
+"chk": "2026-11-08"
 },
 "107317": {
-"avg": 17
+"avg": 17,
+"chk": "2026-11-08"
 },
 "107319": {
 "avg": 15.3,
@@ -113,10 +120,11 @@
 "How the Saints Save Christmas"
 ],
 "dimg": {
-"Gat out of Hell": "https://howlongtobeat.com/games/Saints_Row_Gat_Out_of_Hell.jpg",
+"Gat out of Hell": "covers/d/107319_gat-out-of-hell.jpg",
 "Enter the Dominatrix": "covers/d/107319_enter-the-dominatrix.jpg",
 "How the Saints Save Christmas": "miss:2026-11-08"
-}
+},
+"chk": "2026-11-08"
 },
 "107639": {
 "avg": 11.6,
@@ -139,10 +147,10 @@
 ],
 "chk": "2026-11-08",
 "dimg": {
-"The Zombie Island of Dr. Ned": "https://howlongtobeat.com/games/TheZombieIslandofDrNed_292x136.jpg",
-"Mad Moxxi's Underdome Riot": "https://howlongtobeat.com/games/MadMoxxisUnderdomeRiot.jpg",
-"The Secret Armory of General Knoxx": "https://howlongtobeat.com/games/TheSecretArmoryofGeneralKnoxx_292x136.jpg",
-"Claptrap's New Robot Revolution": "https://howlongtobeat.com/games/19974_Borderlands_Claptraps_New_Robot_Revolution.jpg"
+"The Zombie Island of Dr. Ned": "covers/d/108583_the-zombie-island-of-dr-ned.jpg",
+"Mad Moxxi's Underdome Riot": "covers/d/108583_mad-moxxi-s-underdome-riot.jpg",
+"The Secret Armory of General Knoxx": "covers/d/108583_the-secret-armory-of-general-knoxx.jpg",
+"Claptrap's New Robot Revolution": "covers/d/108583_claptrap-s-new-robot-revolution.jpg"
 }
 },
 "109306": {
@@ -157,7 +165,7 @@
 ],
 "dimg": {
 "Hearts of Stone": "covers/d/109380_hearts-of-stone.jpg",
-"Blood and Wine": "https://howlongtobeat.com/games/33660_The_Witcher_3_Wild_Hunt_-_Blood_and_Wine.jpg"
+"Blood and Wine": "covers/d/109380_blood-and-wine.jpg"
 }
 },
 "109687": {
@@ -176,7 +184,7 @@
 ],
 "chk": "2026-11-08",
 "dimg": {
-"Iki Island": "https://howlongtobeat.com/games/94846_Ghost_of_Tsushima_-_Iki_Island.jpg",
+"Iki Island": "covers/d/109820_iki-island.jpg",
 "Legends": "covers/d/109820_legends.jpg"
 }
 },
@@ -199,7 +207,7 @@
 "Left Behind"
 ],
 "dimg": {
-"Left Behind": "https://howlongtobeat.com/games/16622_The_Last_of_Us_Left_Behind.jpg"
+"Left Behind": "covers/d/110041_left-behind.jpg"
 }
 },
 "110477": {
@@ -293,7 +301,8 @@
 "Nightmare in North Point": "covers/d/116121_nightmare-in-north-point.jpg",
 "The Year of the Snake": "miss:2026-11-08",
 "Zodiac Tournament": "covers/d/116121_zodiac-tournament.jpg"
-}
+},
+"chk": "2026-11-08"
 },
 "116900": {
 "avg": 20.6,
@@ -306,7 +315,7 @@
 ],
 "chk": "2026-11-08",
 "dimg": {
-"RAAM's Shadow": "https://howlongtobeat.com/games/3866_Gears_of_War_3_RAAMs_Shadow_DLC.jpg"
+"RAAM's Shadow": "covers/d/117196_raam-s-shadow.jpg"
 }
 },
 "117817": {
@@ -340,7 +349,8 @@
 "chk": "2026-11-08"
 },
 "118530": {
-"avg": 6.4
+"avg": 6.4,
+"chk": "2026-11-08"
 },
 "120096": {
 "avg": 8,
@@ -366,7 +376,8 @@
 }
 },
 "120728": {
-"avg": 7.4
+"avg": 7.4,
+"chk": "2026-11-08"
 },
 "121340": {
 "avg": 38.3,
@@ -424,7 +435,8 @@
 "The Path Home": "covers/d/125845_the-path-home.jpg",
 "The Serpent's Heart": "covers/d/125845_the-serpent-s-heart.jpg",
 "The Grand Caiman": "covers/d/125845_the-grand-caiman.jpg"
-}
+},
+"chk": "2026-11-08"
 },
 "125927": {
 "avg": 49,
@@ -438,8 +450,8 @@
 ],
 "chk": "2026-11-08",
 "dimg": {
-"The Signal": "https://howlongtobeat.com/games/321_Alan_Wake_The_Signal_DLC.jpg",
-"The Writer": "https://howlongtobeat.com/games/322_Alan_Wake_The_Writer_DLC.jpg"
+"The Signal": "covers/d/128405_the-signal.jpg",
+"The Writer": "covers/d/128405_the-writer.jpg"
 }
 },
 "130796": {
@@ -489,7 +501,8 @@
 "The Heist and the Hazardous": "covers/d/134669_the-heist-and-the-hazardous.jpg",
 "Doc Ketchum's Murderous Mischief": "miss:2026-11-08",
 "Sabotage Under the Sun": "miss:2026-11-08"
-}
+},
+"chk": "2026-11-08"
 },
 "134739": {
 "avg": 29.3,
@@ -557,7 +570,8 @@
 ],
 "dimg": {
 "Wages of Sin": "covers/d/156496_wages-of-sin.jpg"
-}
+},
+"chk": "2026-11-08"
 },
 "159647": {
 "dlc": [
@@ -584,7 +598,8 @@
 "chk": "2026-11-08"
 },
 "176417": {
-"avg": 6.1
+"avg": 6.1,
+"chk": "2026-11-08"
 },
 "191903": {
 "dlc": [],
@@ -704,25 +719,38 @@
 "chk": "2026-11-08"
 },
 "421183": {
-"avg": 12.9
+"avg": 12.9,
+"chk": "2026-11-08",
+"dlc": [
+"THE ART OF ROMEO IS A DEAD MAN"
+],
+"dimg": {
+"THE ART OF ROMEO IS A DEAD MAN": "covers/d/421183_the-art-of-romeo-is-a-dead-man.jpg"
+}
 },
 "142444": {
-"avg": 30.2
+"avg": 30.2,
+"chk": "2026-11-08"
 },
 "167144": {
-"avg": 9.2
+"avg": 9.2,
+"chk": "2026-11-08"
 },
 "146988": {
-"avg": 16.1
+"avg": 16.1,
+"chk": "2026-11-08"
 },
 "140579": {
-"avg": 9.1
+"avg": 9.1,
+"chk": "2026-11-08"
 },
 "195642": {
-"avg": 13.7
+"avg": 13.7,
+"chk": "2026-11-08"
 },
 "197208": {
-"avg": 22.7
+"avg": 22.7,
+"chk": "2026-11-08"
 },
 "130765": {
 "avg": 8
