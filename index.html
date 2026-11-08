@@ -272,6 +272,8 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 #toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,40px);opacity:0;background:var(--bar);color:#fff;padding:10px 16px;border-left:4px solid var(--s1);font-size:13px;z-index:99;transition:.25s;max-width:90vw}
 #toast.show{opacity:1;transform:translate(-50%,0)}#toast.bad{border-left-color:var(--s4)}
 @media (max-width:640px){.eform{grid-template-columns:1fr}}
+.banner .emb{flex:none;filter:drop-shadow(0 6px 14px rgba(0,0,0,.45))}
+@media (max-width:640px){.banner .emb svg{width:84px;height:84px}}
 footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:var(--ink3)}
 
 @media (max-width:900px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.two{grid-template-columns:1fr}}
@@ -406,8 +408,21 @@ function artBg(c,seed,k){
 }
 
 const HEX={anime:'#8a50e0',manga:'#d23d5c',films:'#e8733a',games:'#24a896',books:'#b07a38',stories:'#d0508c',hof:'#e3b11c',search:'#c8325a',overview:'#c8325a'};
+const EMBLEM=(s)=>`<svg width="${s}" height="${s}" viewBox="0 0 200 200" aria-hidden="true"><defs>
+<linearGradient id="emP" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff6d93"/><stop offset=".5" stop-color="#c0274f"/><stop offset="1" stop-color="#5b2bb5"/></linearGradient>
+<linearGradient id="emG" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#b8862a"/><stop offset=".5" stop-color="#ffe7a3"/><stop offset="1" stop-color="#b8862a"/></linearGradient>
+<path id="emArcT" d="M 24 100 A 76 76 0 0 1 176 100"/><path id="emArcB" d="M 30 100 A 70 70 0 0 0 170 100"/>
+<clipPath id="emFront"><rect x="-90" y="0" width="180" height="40"/></clipPath></defs>
+<circle cx="100" cy="100" r="98" fill="#1c0e22"/><circle cx="100" cy="100" r="97" fill="none" stroke="url(#emG)" stroke-width="3"/><circle cx="100" cy="100" r="62" fill="none" stroke="url(#emG)" stroke-width="1" opacity=".35"/>
+<text font-family="Space Grotesk,sans-serif" font-weight="700" font-size="14" letter-spacing="2.5" fill="#ffe7a3"><textPath href="#emArcT" startOffset="50%" text-anchor="middle">SATSUGAI DE ATSU</textPath></text>
+<text font-family="Space Grotesk,sans-serif" font-weight="600" font-size="10" letter-spacing="2.5" fill="#cdb9d4"><textPath href="#emArcB" startOffset="50%" text-anchor="middle">SATURN COLLECTIONS</textPath></text>
+<circle cx="22" cy="100" r="2.5" fill="#ffe7a3"/><circle cx="178" cy="100" r="2.5" fill="#ffe7a3"/>
+<g transform="translate(100 100) rotate(-18)"><ellipse rx="58" ry="12" fill="none" stroke="url(#emG)" stroke-width="4.5" opacity=".9"/></g>
+<circle cx="100" cy="100" r="34" fill="url(#emP)"/><path d="M73 89c12-8 40-8 54 0" stroke="#fff" stroke-opacity=".22" stroke-width="4" fill="none"/>
+<text x="100" y="115" text-anchor="middle" font-family="Space Grotesk,sans-serif" font-weight="700" font-size="40" fill="#fff">S</text>
+<g transform="translate(100 100) rotate(-18)"><ellipse rx="58" ry="12" fill="none" stroke="url(#emG)" stroke-width="4.5" clip-path="url(#emFront)"/></g></svg>`;
 function banner(k,title,sub,stats,kicker){
-  return `<section class="banner" style="--c:${HEX[k]}">${artBg(HEX[k],title.length*13,k)}<div class="in"><div class="bico">${ico(k)}</div><div><div class="kick">${esc(kicker||'Saturn Collections')}</div><h1>${esc(title)}</h1>${sub?`<div class="sub">${sub}</div>`:''}</div>${stats&&stats.length?`<div class="bst">${stats.map(([n,l])=>`<span><b>${n}</b>${esc(l)}</span>`).join('')}</div>`:''}</div></section>`;
+  return `<section class="banner" style="--c:${HEX[k]}">${artBg(HEX[k],title.length*13,k)}<div class="in">${k==='overview'?`<div class="emb">${EMBLEM(124)}</div>`:`<div class="bico">${ico(k)}</div>`}<div><div class="kick">${esc(kicker||'Saturn Collections')}</div><h1>${esc(title)}</h1>${sub?`<div class="sub">${sub}</div>`:''}</div>${stats&&stats.length?`<div class="bst">${stats.map(([n,l])=>`<span><b>${n}</b>${esc(l)}</span>`).join('')}</div>`:''}</div></section>`;
 }
 
 /* ---------- covers ---------- */
