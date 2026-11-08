@@ -6,8 +6,7 @@
 "104336": {
 "avg": 10,
 "dlc": [
-"Road to Ruin",
-"Snowblind"
+"Road to Ruin"
 ],
 "chk": "2026-11-08"
 },
@@ -73,6 +72,7 @@
 "107319": {
 "avg": 15.3,
 "dlc": [
+"Gat out of Hell",
 "Enter the Dominatrix",
 "How the Saints Save Christmas"
 ]
@@ -86,10 +86,6 @@
 },
 "108496": {
 "avg": 15.9,
-"dlc": [
-"Monkey Business",
-"The Lost Expeditions"
-],
 "chk": "2026-11-08"
 },
 "108583": {
@@ -104,13 +100,6 @@
 },
 "109306": {
 "avg": 6.2,
-"dlc": [
-"China Rising",
-"Second Assault",
-"Naval Strike",
-"Dragon's Teeth",
-"Final Stand"
-],
 "chk": "2026-11-08"
 },
 "109380": {
@@ -164,8 +153,7 @@
 "112129": {
 "avg": 8,
 "dlc": [
-"Path to War",
-"Commando and Recon"
+"Path to War"
 ]
 },
 "112219": {
@@ -176,58 +164,26 @@
 },
 "112930": {
 "avg": 6.1,
-"dlc": [
-"Collection 1",
-"Collection 2",
-"Collection 3: Chaos Pack",
-"Collection 4: Final Assault"
-],
 "chk": "2026-11-08"
 },
 "112932": {
 "avg": 6.9,
-"dlc": [
-"Variety Map Pack"
-],
 "chk": "2026-11-08"
 },
 "112941": {
 "avg": 6,
-"dlc": [
-"Onslaught",
-"Devastation",
-"Invasion",
-"Nemesis"
-],
 "chk": "2026-11-08"
 },
 "112948": {
 "avg": 7.1,
-"dlc": [
-"Revolution",
-"Uprising",
-"Vengeance",
-"Apocalypse"
-],
 "chk": "2026-11-08"
 },
 "112951": {
 "avg": 7.1,
-"dlc": [
-"First Strike",
-"Escalation",
-"Annihilation",
-"Rezurrection"
-],
 "chk": "2026-11-08"
 },
 "112979": {
 "avg": 7,
-"dlc": [
-"Map Pack 1",
-"Map Pack 2",
-"Map Pack 3"
-],
 "chk": "2026-11-08"
 },
 "112981": {
@@ -240,10 +196,6 @@
 },
 "112999": {
 "avg": 6.6,
-"dlc": [
-"Stimulus Package",
-"Resurgence Package"
-],
 "chk": "2026-11-08"
 },
 "114574": {
@@ -268,10 +220,7 @@
 "117196": {
 "avg": 9.7,
 "dlc": [
-"RAAM's Shadow",
-"Horde Command Pack",
-"Fenix Rising",
-"Forces of Nature"
+"RAAM's Shadow"
 ],
 "chk": "2026-11-08"
 },
@@ -322,8 +271,7 @@
 "avg": 38.3,
 "dlc": [
 "Echoes of the Fallen",
-"The Rising Tide",
-"Expansion Pass"
+"The Rising Tide"
 ],
 "chk": "2026-11-08"
 },
@@ -331,12 +279,7 @@
 "avg": 18.3,
 "dlc": [
 "Crew Expendable",
-"Last Survivor",
-"Corporate Lockdown",
-"Trauma",
-"Safe Haven",
-"Lost Contact",
-"The Trigger"
+"Last Survivor"
 ],
 "chk": "2026-11-08"
 },
@@ -379,13 +322,6 @@
 },
 "130801": {
 "avg": 6.1,
-"dlc": [
-"Back to Karkand",
-"Close Quarters",
-"Armored Kill",
-"Aftermath",
-"End Game"
-],
 "chk": "2026-11-08"
 },
 "131649": {
@@ -449,8 +385,7 @@
 "149672": {
 "avg": 60.1,
 "dlc": [
-"Shadow of the Erdtree",
-"Tarnished Pack"
+"Shadow of the Erdtree"
 ],
 "chk": "2026-11-08"
 },
@@ -485,10 +420,7 @@
 "avg": 6.1
 },
 "191903": {
-"dlc": [
-"Toy Box",
-"Deluge"
-],
+"dlc": [],
 "avg": 7.9,
 "chk": "2026-11-08"
 },

@@ -683,8 +683,9 @@ JUNK_DLC = re.compile(r'soundtrack|\bost\b|art ?book|wallpaper|avatar|costume|ou
                       r'bundle|currency|coins|points|booster|\bxp\b|sticker|emote|theme|weapon pack|bonus|digital|edition|demo|'
                       r'starter|cheat|unlock|time saver|supporter|tracks?\b|music|poster|calling card|camo|reticle|operator|blueprint|'
                       r'tracer|\bkit\b|\bset\b|paint|livery|sound pack|voice pack|horse|mount|pet\b|character|legend pack|squad pack|'
-                      r'weapon|\bvo\b|slots|annual pass|season|battle ?pass|\bpro\b|redsec|nuketown|mask|helmet|gear|vehicle|car pack|bling', re.I)
-STORY_DLC = re.compile(r'expansion|episode|chapter|story|campaign|map pack|content pack|\bdlc\b|add-?on|\bsaga\b|\btale', re.I)
+                      r'weapon|\bvo\b|slots|annual pass|season|battle ?pass|\bpro\b|redsec|nuketown|mask|helmet|gear|vehicle|car pack|bling|'
+                      r'\bpack\b|\bpass\b|toy box|map|multiplayer|co-?op|arena|challenge|survivor mode|mode\b', re.I)
+STORY_DLC = re.compile(r'expansion|episode|chapter|story|campaign|\bsaga\b|\btale', re.I)
 
 
 def steam_dlcs(title, year):
@@ -714,6 +715,75 @@ def steam_dlcs(title, year):
                 names.append(re.sub(r'\s*\b(content pack|map pack|dlc)\b\s*', ' ', n, flags=re.I).strip(' :-–') or n)
         time.sleep(0.5)
     return names
+
+
+def dlc_picture(game, dlc):
+    """Box art for a DLC: its Wikipedia article if it has one, else its Steam artwork."""
+    for title in (f'{game}: {dlc}', f'{game} – {dlc}', dlc):
+        try:
+            u = ('https://en.wikipedia.org/w/api.php?action=query&format=json&prop=pageprops|description&ppprop=page_image&redirects=1&titles='
+                 + urllib.parse.quote(title))
+            pg = next(iter(json.loads(get(u, tries=1)).get('query', {}).get('pages', {}).values()), {})
+            img, ds = (pg.get('pageprops') or {}).get('page_image'), (pg.get('description') or '').lower()
+            if img and norm(dlc) in norm(pg.get('title')) and re.search(r'expansion|downloadable|dlc|video game|episode', ds):
+                ii = json.loads(get('https://en.wikipedia.org/w/api.php?action=query&format=json&prop=imageinfo&iiprop=url|size&iiurlwidth=400&titles='
+                                    + urllib.parse.quote('File:' + img), tries=1))
+                info = (next(iter(ii.get('query', {}).get('pages', {}).values()), {}).get('imageinfo') or [{}])[0]
+                if info.get('height', 0) >= info.get('width', 1):
+                    return get_bytes(info.get('thumburl') or info['url'])
+        except Exception:
+            pass
+        time.sleep(0.4)
+    try:
+        res = json.loads(get('https://store.steampowered.com/api/storesearch/?l=english&cc=us&term=' + urllib.parse.quote(f'{game} {dlc}'), tries=1))
+        hit = next((it for it in res.get('items') or [] if norm(dlc) in norm(it.get('name'))), None)
+        if hit:
+            q = json.dumps({'ids': [{'appid': hit['id']}], 'context': {'language': 'english', 'country_code': 'US'},
+                            'data_request': {'include_assets': True}}, separators=(',', ':'))
+            it = (json.loads(get('https://api.steampowered.com/IStoreBrowseService/GetItems/v1/?input_json=' + urllib.parse.quote(q), tries=1))
+                  .get('response', {}).get('store_items') or [{}])[0]
+            a = it.get('assets') or {}
+            for k in ('library_capsule', 'library_capsule_2x', 'main_capsule', 'header'):
+                if a.get(k) and a.get('asset_url_format'):
+                    b = get_bytes('https://shared.cloudflare.steamstatic.com/store_item_assets/' + a['asset_url_format'].replace('${FILENAME}', a[k]))
+                    if len(b) > 3000:
+                        return b
+    except Exception:
+        pass
+    return None
+
+
+def update_dlc_pictures():
+    """A picture for every DLC in the lists (kept in covers/d/). Ones without a picture are retried every two weeks."""
+    path = os.path.join(DATA, 'game_meta.json')
+    meta = load_json(path, {})
+    games = {str(g['id']): g['t'] for g in load_json(os.path.join(DATA, 'games.json'), {}).get('games', [])}
+    dd = os.path.join(os.path.dirname(DATA), 'covers', 'd')
+    os.makedirs(dd, exist_ok=True)
+    today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+    retry = (datetime.now(timezone.utc) - timedelta(days=14)).strftime('%Y-%m-%d')
+    t0, got = time.time(), 0
+    for gid, m in meta.items():
+        imgs = m.setdefault('dimg', {})
+        for name in m.get('dlc', []):
+            have = imgs.get(name, '')
+            if have.startswith('covers/') or (have.startswith('miss:') and have[5:] > retry) or time.time() - t0 > 360 or gid not in games:
+                continue
+            b = dlc_picture(games[gid], name)
+            if b:
+                fn = f"{gid}_{re.sub(r'[^a-z0-9]+', '-', name.lower()).strip('-')}.jpg"
+                open(os.path.join(dd, fn), 'wb').write(b)
+                imgs[name] = 'covers/d/' + fn
+                got += 1
+            else:
+                imgs[name] = 'miss:' + today
+        if not imgs:
+            m.pop('dimg', None)
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(meta, f, ensure_ascii=False, indent=0)
+    site['gameMeta'] = {k: {x: v[x] for x in ('avg', 'dlc') if v.get(x)} | ({'dimg': {n: p for n, p in v['dimg'].items() if p.startswith('covers/')}} if v.get('dimg') else {})
+                        for k, v in meta.items()}
+    log(f'dlc pictures: +{got}')
 
 
 def update_game_meta():
@@ -993,7 +1063,7 @@ def update_cover_mirror():
 
 
 for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd),
-                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('grouvee', update_grouvee), ('game meta', update_game_meta), ('characters', update_char_info), ('cover mirror', update_cover_mirror)]:
+                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('grouvee', update_grouvee), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('characters', update_char_info), ('cover mirror', update_cover_mirror)]:
     try:
         fn()
         status[name] = 'ok'
