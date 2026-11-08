@@ -294,8 +294,10 @@ class BlogTokens(HTMLParser):
             self.link = [KIND[m.group(1)], int(m.group(2)), '', ''] if m else None
         elif tag == 'img' and self.link is not None:
             self.link[3] = a.get('data-src') or a.get('src') or ''
+    def handle_startendtag(self, tag, attrs):
+        self.handle_starttag(tag, attrs)
     def handle_endtag(self, tag):
-        if not self.on:
+        if not self.on or tag in ('br', 'img', 'hr', 'input', 'meta', 'link'):
             return
         if tag == 'a' and self.link is not None:
             self.toks.append(('link', *self.link)); self.link = None
@@ -371,8 +373,8 @@ def update_hof():
     # favourites from the profile page
     prof = get(f'{MAL}/profile/{MAL_USER}')
     favs = {'anime': [], 'manga': [], 'character': [], 'people': [], 'company': []}
-    for m in re.finditer(r'id="(anime|manga|character|people|company)_favorites"(.*?)</ul>', prof, re.S):
-        kind, body = m.group(1), m.group(2)
+    for m in re.finditer(r'id="(anime|manga|character|characters|people|person|company)_favorites"(.*?)</ul>', prof, re.S):
+        kind, body = {'person': 'people', 'characters': 'character'}.get(m.group(1), m.group(1)), m.group(2)
         for li in re.finditer(r'<a href="([^"]+)"[^>]*>(.*?)</a>', body, re.S):
             href, inner = li.group(1), li.group(2)
             title = re.search(r'<span class="title[^"]*">(.*?)</span>', inner, re.S)
@@ -392,7 +394,11 @@ def update_hof():
                 cache[f'{k}{i}']['n'] = cache[f'{k}{i}'].get('n') or title
             favs[lm.group(1)].append([i, title, sub])
     if len(favs['anime']) >= 3 and len(favs['character']) >= 3:
+        for k in ('people', 'company', 'manga'):
+            if not favs[k]:
+                favs[k] = hof.get('malFavs', {}).get(k, [])
         hof['malFavs'] = favs
+    log('favourites found:', {k: len(v) for k, v in favs.items()})
     # blog posts
     def items(s):
         out = []
@@ -401,6 +407,7 @@ def update_hof():
             out.append(f'{k}{i}~{c["n"] or txt or "?"}')
         return out
     hon_chr = blog_sections(804802)
+    log('blog 804802 sections:', len(hon_chr))
     hon, chr_ = [], []
     prev = ''
     for s in hon_chr:
