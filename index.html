@@ -617,7 +617,12 @@ const films=D.films.map((f,i)=>{const o=Object.assign({},f,{i,logs:f.n,rw:f.rw||
 const filmUri={};films.forEach(f=>filmUri[f.u]=f);
 const listsFor=f=>D.filmLists.filter(l=>l.items.some(([t,y])=>norm(t)===f.n&&y===f.y)).map(l=>l.name);
 const GSH={'Playing':'var(--s1)','Played':'var(--s2)','Backlog':'var(--s3)','Retired':'var(--s4)','Wish List':'var(--s6)'};
-const GDEF=g=>({rp:g.rp||0,hrs:g.hrs||0,dlcs:g.dlcs||[]});
+const GPLAYED={Played:1,Playing:1,Retired:1};
+const GDEF=g=>{const m=(D.gameMeta||{})[g.id]||{};const mine=g.dlcs||[];const pl=new Set(mine.filter(d=>d.p).map(d=>d.n.toLowerCase()));
+  const names=[...(m.dlc||[]),...mine.map(d=>d.n)].filter((n,i,a)=>a.findIndex(x=>x.toLowerCase()===n.toLowerCase())===i);
+  const rp=g.rp||0,avg=m.avg||0;let hrs=g.hrs||0,est=!!g.hrsEst;
+  if(!hrs&&avg&&GPLAYED[g.shelf]){hrs=Math.round(avg*(1+rp)*10)/10;est=true}
+  return {rp,avg,hrs,hrsEst:est,dlcs:names.map(n=>({n,p:pl.has(n.toLowerCase())?1:0,mine:!(m.dlc||[]).some(x=>x.toLowerCase()===n.toLowerCase())}))}};
 const games=D.games.map((g,i)=>Object.assign({i,n:norm(g.t+' '+(g.fr||[]).join(' '))},g,{img:g.img||(D.gameCovers||{})[g.id]||''},GDEF(g)));
 const stories=D.stories;
 const MED={overview:{c:'var(--accent)',name:'Edit mode'},hof:{c:'var(--gold)',name:'Hall of Fame'},manga:{c:'var(--manga)',name:'Manga'},books:{c:'var(--book)',name:'Books'},anime:{c:'var(--anime)',name:'Anime'},films:{c:'var(--film)',name:'Films'},games:{c:'var(--game)',name:'Games'},stories:{c:'var(--story)',name:'Stories'}};
@@ -1025,11 +1030,21 @@ const list=s=>s.split(',').map(x=>x.trim()).filter(Boolean);
 const today=()=>new Date().toISOString().slice(0,10);
 function rebuildGames(){games.length=0;D.games.forEach((g,i)=>games.push(Object.assign({i,n:norm(g.t+' '+(g.fr||[]).join(' '))},g,{img:g.img||(D.gameCovers||{})[g.id]||''},GDEF(g))))}
 function rebuildBooks(){books.length=0;D.books.forEach((b,i)=>books.push(Object.assign({},b,{img:b.img||BCOV[b.id]||'',i,title:b.t,n:norm(b.t+' '+b.a+' '+(b.sh||[]).join(' '))})))}
-async function persist(kind,msg){
+async function ghLoad(path){
+  const r=await fetch(`https://api.github.com/repos/${REPO}/contents/${path}?ref=main&_=${Date.now()}`,{headers:{Authorization:'Bearer '+ED.token,Accept:'application/vnd.github.raw+json'},cache:'no-store'});
+  if(!r.ok)throw new Error('Could not read the latest copy ('+r.status+')');return r.json();
+}
+async function persist(kind,msg,id,del){
   toast('Saving…');
   try{
-    if(kind==='games')await ghSave('data/games.json',{games:D.games,gvFav:D.gvFav,gvProfile:D.gvProfile},msg);
-    else await ghSave('data/books.json',{books:D.books},msg);
+    // start from the newest saved file so changes made elsewhere (or by updates) are never lost
+    const path=kind==='games'?'data/games.json':'data/books.json',key=kind==='games'?'games':'books';
+    const cur=await ghLoad(path);const L=cur[key]||[];const mine=D[key].find(x=>x.id===id);
+    const at=L.findIndex(x=>x.id===id);
+    if(del){if(at>=0)L.splice(at,1)}else if(mine){if(at>=0)L[at]=mine;else L.unshift(mine)}
+    if(kind==='games'){cur.gvFav=D.gvFav;cur.gvProfile=cur.gvProfile||D.gvProfile}
+    cur[key]=L;await ghSave(path,cur,msg);
+    D[key].length=0;L.forEach(x=>D[key].push(x));if(kind==='games')rebuildGames();else rebuildBooks();render();
     toast('Saved. The live site updates in about a minute.');
   }catch(e){toast('Not saved: '+e.message,true)}
 }
@@ -1041,23 +1056,24 @@ function editGame(g){
   ${fld('e_shelf','Shelf',g.shelf||'Backlog','select:Playing|Played|Backlog|Wish List|Retired')}
   ${fld('e_r','Your rating (0 to 5)',g.r||0,'number','min="0" max="5" step="0.5"')}
   ${fld('e_rp','Times replayed',g.rp||0,'number','min="0" step="1"')}
-  ${fld('e_hrs','Hours played'+(g.hrsEst?' (currently an estimate)':''),g.hrs||'','number','min="0" step="0.5"')}
-  <div class="ef" style="grid-column:1/-1"><span>DLC (tick the ones you've played)</span><div id="e_dlcs" class="dlcedit"></div><div style="display:flex;margin-top:6px"><input id="e_dlcn" placeholder="Add a DLC name" style="flex:1"><button class="btn" id="e_dlca" type="button" style="border-radius:0">Add</button></div></div>
+  ${fld('e_hrs','Hours played',g.hrsEst?'':(g.hrs||''),'number','min="0" step="0.5"'+(g.hrsEst&&g.hrs?' placeholder="≈ '+g.hrs+' (estimate, type your own)"':''))}
+  <div class="ef" style="grid-column:1/-1"><span>DLC</span><details class="dd" id="e_dd"><summary id="e_dds"></summary><div id="e_dlcs" class="dlcedit"></div><div style="display:flex;margin-top:6px"><input id="e_dlcn" placeholder="Missing one? Type its name" style="flex:1"><button class="btn" id="e_dlca" type="button" style="border-radius:0">Add</button></div></details></div>
   ${fld('e_pf','Platforms (comma separated)',(g.pf||[]).join(', '))}
   ${fld('e_g','Genres (comma separated)',(g.g||[]).join(', '))}
   ${fld('e_dev','Developer',(g.dev||[]).join(', '))}
   ${fld('e_rel','Release date',g.rel||'','date')}
   ${fld('e_rvt','Review title',g.rvt)}
   ${fld('e_rv','Review',g.rv,'textarea')}
-  ${fld('e_img','Cover image link (optional)',g.img||'','url','placeholder="https://..."')}
+  ${fld('e_img','Cover image link (optional, leave empty for the automatic cover)',!isNew&&D.games[g.i]?D.games[g.i].img||'':g.img||'','url','placeholder="https://..."')}
   <label class="ef"><span>Favourite</span><select id="e_fav"><option value="0">No</option><option value="1" ${D.gvFav.includes(g.t)?'selected':''}>Yes</option></select></label>
   </div><div class="small" id="e_err" style="color:var(--s4)"></div>
   <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="btn pri" id="e_save">${isNew?'Add game':'Save changes'}</button>${isNew?'':'<button class="btn" id="e_del" style="margin-left:auto;color:var(--s4)">Delete</button>'}</div></div>`);
   let DL=(g.dlcs||[]).map(d=>({...d}));
-  const drawD=()=>{$('#e_dlcs').innerHTML=DL.length?DL.map((d,i)=>`<label class="dlcrow"><input type="checkbox" data-dp="${i}" ${d.p?'checked':''}> <span>${esc(d.n)}</span><button type="button" class="x" data-dx="${i}" aria-label="Remove">✕</button></label>`).join(''):'<span class="muted small">No DLC listed.</span>';
-    document.querySelectorAll('[data-dp]').forEach(c=>c.onchange=()=>{DL[+c.dataset.dp].p=c.checked?1:0});
+  const drawD=()=>{$('#e_dds').textContent=DL.length?`${DL.filter(d=>d.p).length} of ${DL.length} played ▾`:'No DLC known for this game ▾';
+    $('#e_dlcs').innerHTML=DL.length?DL.map((d,i)=>`<label class="dlcrow"><input type="checkbox" data-dp="${i}" ${d.p?'checked':''}> <span>${esc(d.n)}</span>${d.mine?`<button type="button" class="x" data-dx="${i}" aria-label="Remove">✕</button>`:''}</label>`).join(''):'<span class="muted small">None listed yet. New DLC is picked up automatically each week, or add one below.</span>';
+    document.querySelectorAll('[data-dp]').forEach(c=>c.onchange=()=>{DL[+c.dataset.dp].p=c.checked?1:0;$('#e_dds').textContent=`${DL.filter(d=>d.p).length} of ${DL.length} played ▾`});
     document.querySelectorAll('[data-dx]').forEach(b=>b.onclick=e=>{e.preventDefault();DL.splice(+b.dataset.dx,1);drawD()})};
-  drawD();$('#e_dlca').onclick=()=>{const n=gv('e_dlcn').trim();if(!n)return;DL.push({n,p:0});$('#e_dlcn').value='';drawD()};
+  drawD();$('#e_dlca').onclick=()=>{const n=gv('e_dlcn').trim();if(!n)return;DL.push({n,p:0,mine:1});$('#e_dlcn').value='';drawD()};
   const gf=$('#g_find');if(gf)gf.onclick=async()=>{const q=gv('g_q');if(!q)return;$('#g_res').textContent='Searching…';
     try{const L=await viaApi('games',q);$('#g_res').innerHTML=L&&L.length?L.slice(0,6).map((x,i)=>`<a class="link" href="#games" data-gp="${i}" style="display:block;padding:4px 0">${esc(x.t)} ${x.y?'('+x.y+')':''} · ${esc(x.meta)}</a>`).join(''):'Nothing found. Fill it in by hand.';
       document.querySelectorAll('[data-gp]').forEach(a=>a.onclick=e=>{e.preventDefault();const x=L[+a.dataset.gp];$('#e_t').value=x.t;$('#e_pf').value=(x.pf||[]).join(', ');$('#e_g').value=(x.g||[]).join(', ');$('#e_dev').value=(x.dev||[]).join(', ');if(x.rel)$('#e_rel').value=x.rel;$('#e_img').value=x.img||'';$('#g_res').textContent='Filled in. Check it and save.'})}
@@ -1067,15 +1083,15 @@ function editGame(g){
     const raw=isNew?{id:Date.now(),u:'',fr:[],pub:[],log:[],shelves:[],rvd:''}:D.games[g.i];
     const oldT=raw.t;const shelf=gv('e_shelf');
     if(isNew||raw.shelf!==shelf)raw.added=today();
-    Object.assign(raw,{img:gv('e_img'),t,shelf,shelves:[shelf],r:+gv('e_r')||0,pf:list(gv('e_pf')),g:list(gv('e_g')),dev:list(gv('e_dev')),rel:gv('e_rel'),rvt:gv('e_rvt'),rv:gv('e_rv'),rp:+gv('e_rp')||0,dlcs:DL});
-    const nh=+gv('e_hrs')||0;if(nh!==(raw.hrs||0)){raw.hrs=nh;delete raw.hrsEst}
+    Object.assign(raw,{img:gv('e_img'),t,shelf,shelves:[shelf],r:+gv('e_r')||0,pf:list(gv('e_pf')),g:list(gv('e_g')),dev:list(gv('e_dev')),rel:gv('e_rel'),rvt:gv('e_rvt'),rv:gv('e_rv'),rp:+gv('e_rp')||0,dlcs:DL.filter(d=>d.p||d.mine).map(d=>({n:d.n,p:d.p?1:0}))});
+    const nh=+gv('e_hrs')||0;if(nh){raw.hrs=nh;delete raw.hrsEst}else if(gv('e_hrs')===''&&!raw.hrsEst){delete raw.hrs}
     if(raw.rv&&!raw.rvd)raw.rvd=today();
     if(isNew)D.games.unshift(raw);
     D.gvFav=D.gvFav.filter(n=>n!==oldT&&n!==t);if(gv('e_fav')==='1')D.gvFav.push(t);
-    rebuildGames();closeM();render();persist('games',(isNew?'Add game: ':'Edit game: ')+t);
+    rebuildGames();closeM();render();persist('games',(isNew?'Add game: ':'Edit game: ')+t,raw.id);
   };
   const d=$('#e_del');if(d)d.onclick=()=>{if(d.dataset.sure!=='1'){d.dataset.sure='1';d.textContent='Tap again to delete';return}
-    D.games.splice(g.i,1);D.gvFav=D.gvFav.filter(n=>n!==g.t);rebuildGames();closeM();render();persist('games','Delete game: '+g.t)};
+    D.games.splice(g.i,1);D.gvFav=D.gvFav.filter(n=>n!==g.t);rebuildGames();closeM();render();persist('games','Delete game: '+g.t,g.id,true)};
 }
 function editBook(b){
   const isNew=!b||!!b.__new;b=b||{};
@@ -1106,10 +1122,10 @@ function editBook(b){
     const st=gv('e_st');
     Object.assign(raw,{t,ur:gv('e_ur'),a:gv('e_a'),st,r:+gv('e_r')||0,p:+gv('e_p')||0,y:+gv('e_y')||0,dr:gv('e_dr')||(st==='read'&&raw.st!=='read'?today():raw.dr||''),sh:list(gv('e_sh')),rv:gv('e_rv'),img:gv('e_img')});
     if(isNew)D.books.unshift(raw);
-    rebuildBooks();closeM();render();persist('books',(isNew?'Add book: ':'Edit book: ')+t);
+    rebuildBooks();closeM();render();persist('books',(isNew?'Add book: ':'Edit book: ')+t,raw.id);
   };
   const d=$('#e_del');if(d)d.onclick=()=>{if(d.dataset.sure!=='1'){d.dataset.sure='1';d.textContent='Tap again to delete';return}
-    D.books.splice(b.i,1);rebuildBooks();closeM();render();persist('books','Delete book: '+b.t)};
+    D.books.splice(b.i,1);rebuildBooks();closeM();render();persist('books','Delete book: '+b.t,b.id,true)};
 }
 
 /* ---------- rotating quotes ---------- */
@@ -1442,10 +1458,16 @@ async function viaApi(kind,q){
     return (r.results||[]).map(g=>({t:g.name,alt:'',y:(g.released||'').slice(0,4),meta:(g.platforms||[]).map(p=>p.platform.name).slice(0,3).join(', '),sum:'',img:g.background_image||'',url:'https://rawg.io/games/'+g.slug,g:(g.genres||[]).map(x=>x.name)}));
   }
   const hint=kind==='films'?'film':'video game';
-  const u=`https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch=${encodeURIComponent(q+' '+hint)}&gsrlimit=20&prop=pageimages|description|extracts&exintro=1&explaintext=1&exsentences=2&piprop=thumbnail&pithumbsize=300`;
+  const u=`https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch=${encodeURIComponent(q+' '+hint)}&gsrlimit=20&prop=pageimages|pageprops|description|extracts&ppprop=page_image&exintro=1&explaintext=1&exsentences=2&piprop=thumbnail&pithumbsize=300`;
   const r=await fetch(u).then(r=>r.json());
   const pages=Object.values((r.query&&r.query.pages)||{}).sort((a,b)=>a.index-b.index);
   const re=kind==='films'?/film|movie/i:/video game|game/i;
+  // box art and posters are 'non-free' files, which the thumbnail field leaves out: look them up directly
+  const want=pages.filter(p=>re.test(p.description||'')&&p.pageprops&&p.pageprops.page_image);
+  if(want.length){try{const ii=await fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=imageinfo&iiprop=url&iiurlwidth=300&titles=${encodeURIComponent(want.map(p=>'File:'+p.pageprops.page_image).join('|'))}`).then(r=>r.json());
+    const byName={};Object.values((ii.query&&ii.query.pages)||{}).forEach(f=>{const i=(f.imageinfo||[])[0];if(i)byName[f.title.replace(/^File:/,'').replace(/ /g,'_')]=i.thumburl||i.url});
+    const nz=(ii.query&&ii.query.normalized)||[];nz.forEach(n=>{const k=n.to.replace(/^File:/,'').replace(/ /g,'_');if(byName[k])byName[n.from.replace(/^File:/,'').replace(/ /g,'_')]=byName[k]});
+    want.forEach(p=>{const u=byName[p.pageprops.page_image];if(u)p.thumbnail={source:u}})}catch(e){}}
   return pages.filter(p=>re.test(p.description||'')).map(p=>{const ym=(p.description||'').match(/\b(19|20)\d\d\b/);return{t:p.title.replace(/ \((\d{4} )?(film|video game|American film|.*film)\)$/i,''),y:ym?ym[0]:'',meta:p.description||'',sum:p.extract||'',img:p.thumbnail&&p.thumbnail.source,url:'https://en.wikipedia.org/wiki/'+encodeURIComponent(p.title.replace(/ /g,'_'))}});
 }
 async function viaClaude(kind,q){

@@ -644,9 +644,9 @@ def update_game_covers():
                 if hit:
                     img = get_bytes(f"https://images.igdb.com/igdb/image/upload/t_cover_big/{hit['cover']['image_id']}.jpg")
             if not img:
-                img = steam_cover(g['t'])
+                img = wiki_cover(g['t'])   # original box art first
             if not img:
-                img = wiki_cover(g['t'])
+                img = steam_cover(g['t'])
         except Exception as e:
             log('game cover lookup failed for', g['t'], e)
         if img:
@@ -661,6 +661,78 @@ def update_game_covers():
     missing = [g['t'] for g in games if not g.get('img') and str(g.get('id')) not in site['gameCovers']]
     site['gameCoverMissing'] = missing
     log(f'game covers: looked up {n}, have {len(site["gameCovers"])}, missing {len(missing)}: {missing[:30]}')
+
+
+def hltb_search(title, token):
+    body = {'searchType': 'games', 'searchTerms': re.sub(r'[:\-]', ' ', title).split(), 'searchPage': 1, 'size': 40,
+            'searchOptions': {'games': {'userId': 0, 'platform': '', 'sortCategory': 'popular', 'rangeCategory': 'main',
+                                        'rangeTime': {'min': None, 'max': None},
+                                        'gameplay': {'perspective': '', 'flow': '', 'genre': '', 'difficulty': ''},
+                                        'rangeYear': {'min': '', 'max': ''}, 'modifier': ''},
+                              'users': {'sortCategory': 'postcount'}, 'lists': {'sortCategory': 'follows'},
+                              'filter': '', 'sort': 0, 'randomizer': 0}, 'useCache': True}
+    req = urllib.request.Request('https://howlongtobeat.com/api/search/site', data=json.dumps(body).encode(), method='POST',
+                                 headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140 Safari/537.36',
+                                          'Content-Type': 'application/json', 'Referer': 'https://howlongtobeat.com/',
+                                          'Origin': 'https://howlongtobeat.com', 'x-auth-token': token})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        return json.loads(r.read().decode()).get('data', [])
+
+
+def update_game_meta():
+    """Average length and the DLC list for every game, from HowLongToBeat. Runs through a few games each day,
+    so each game is re-checked about once a week and new DLC shows up on its own. Kept in data/game_meta.json."""
+    path = os.path.join(DATA, 'game_meta.json')
+    meta = load_json(path, {})
+    games = load_json(os.path.join(DATA, 'games.json'), {}).get('games', [])
+    try:
+        req = urllib.request.Request(f'https://howlongtobeat.com/api/search/site/init?t={int(time.time()*1000)}',
+                                     headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/140', 'Referer': 'https://howlongtobeat.com/'})
+        with urllib.request.urlopen(req, timeout=30) as r:
+            token = json.loads(r.read().decode()).get('token')
+    except Exception as e:
+        site['gameMeta'] = meta
+        raise RuntimeError(f'HowLongToBeat not reachable, kept the saved lists ({e})')
+    today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+    week_ago = (datetime.now(timezone.utc) - timedelta(days=7)).strftime('%Y-%m-%d')
+    order = sorted(games, key=lambda g: (meta.get(str(g['id']), {}).get('chk', ''), g['t']))
+    done, added = 0, []
+    for g in order:
+        m = meta.setdefault(str(g['id']), {})
+        if m.get('chk', '') > week_ago or done >= 25:
+            continue
+        try:
+            res = hltb_search(g['t'], token)
+        except Exception as e:
+            log('hltb failed for', g['t'], e)
+            break
+        done += 1
+        m['chk'] = today
+        want = norm(g['t'])
+        year = (g.get('rel') or '')[:4]
+        base = [d for d in res if norm(d.get('game_name')) == want] or []
+        if year:
+            base = sorted(base, key=lambda d: abs((d.get('release_world') or 0) - int(year)))
+        if base and base[0].get('comp_main'):
+            m['avg'] = round(base[0]['comp_main'] / 3600, 1)
+        if done == 1 and res:
+            log('hltb fields:', sorted(res[0].keys())[:40])
+        for d in res:
+            name = d.get('game_name') or ''
+            typ = (d.get('game_type') or '').lower()
+            if typ != 'dlc' and not re.search(r'\bDLC\b', name):
+                continue
+            if not norm(name).startswith(want):
+                continue
+            short = re.sub(r'\s*\bDLC\b\s*$', '', name[len(g['t']):]).strip(' :-–')
+            if short and short.lower() not in [x.lower() for x in m.setdefault('dlc', [])]:
+                m['dlc'].append(short)
+                added.append(f"{g['t']}: {short}")
+        time.sleep(1)
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(meta, f, ensure_ascii=False, indent=0)
+    site['gameMeta'] = {k: {x: v[x] for x in ('avg', 'dlc') if v.get(x)} for k, v in meta.items()}
+    log(f'game meta: checked {done}, new DLC: {added}')
 
 
 def get_bytes(u):
@@ -832,7 +904,7 @@ def update_cover_mirror():
 
 
 for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd),
-                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('grouvee', update_grouvee), ('cover mirror', update_cover_mirror)]:
+                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('grouvee', update_grouvee), ('game meta', update_game_meta), ('cover mirror', update_cover_mirror)]:
     try:
         fn()
         status[name] = 'ok'
