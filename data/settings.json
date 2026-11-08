@@ -5,5 +5,7 @@
   118807,
   122780
  ],
- "note": "MAL IDs of manga to show even though MAL tags them Erotica. Hentai-tagged anime and manga are never shown."
+ "note": "manga_allow: MAL IDs of Erotica-tagged manga to show (Hentai is never shown). tmdbKey/rawgKey: public keys used for posters and live search.",
+ "tmdbKey": "09f862cbedfccb987aa9955017c3984b",
+ "rawgKey": ""
 }

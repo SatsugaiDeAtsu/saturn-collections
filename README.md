@@ -11,12 +11,11 @@ A GitHub Action runs `scripts/update.py` every day at 02:17 (Pakistan time) and 
 | MyAnimeList (anime, manga, my tags) | automatic |
 | Letterboxd (recent watches, ratings, posters) | automatic (RSS) |
 | Medium stories | automatic (RSS) |
-| Goodreads | automatic (RSS, needs a public profile) |
-| Grouvee | manual: upload a new export as `data/imports/grouvee_export.json` |
+| Film posters | automatic (TMDB) |
+| Games and books | edited on the site itself, stored in `data/games.json` and `data/books.json` |
 
 To run it right away: **Actions → Daily update → Run workflow**.
 
-Uploading a file into `data/imports/` also triggers an update.
 
 ## Files
 

@@ -307,7 +307,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:v
 <script>
 (async function(){
 "use strict";
-let D;try{D=await fetch('data/site.json',{cache:'no-cache'}).then(r=>r.json())}catch(e){document.getElementById('app').innerHTML='<div class="empty">Could not load data/site.json.</div>';return}
+let D,SET={};try{const j=u=>fetch(u,{cache:'no-cache'}).then(r=>r.json());const [a,g,b,s]=await Promise.all([j('data/site.json'),j('data/games.json'),j('data/books.json'),j('data/settings.json').catch(()=>({}))]);D=Object.assign(a,g,b);SET=s}catch(e){document.getElementById('app').innerHTML='<div class="empty">Could not load data/site.json.</div>';return}
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm=s=>String(s||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
@@ -880,6 +880,15 @@ async function viaApi(kind,q){
     const r=await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(q)}&limit=16&sfw=true`).then(r=>r.json());
     return (r.data||[]).map(a=>({t:a.title_english||a.title,alt:a.title_english&&a.title_english!==a.title?a.title:'',y:a.year||(a.aired&&a.aired.prop&&a.aired.prop.from&&a.aired.prop.from.year)||'',meta:[a.type,a.episodes?a.episodes+' eps':'',a.score?'MAL '+a.score:''].filter(Boolean).join(' · '),sum:a.synopsis||'',img:a.images&&a.images.jpg&&a.images.jpg.image_url,url:a.url,g:(a.genres||[]).map(g=>g.name)}));
   }
+  if(kind==='films'&&SET.tmdbKey){
+    const r=await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${SET.tmdbKey}&query=${encodeURIComponent(q)}&include_adult=false`).then(r=>r.json());
+    return (r.results||[]).slice(0,16).map(m=>({t:m.title,alt:m.original_title!==m.title?m.original_title:'',y:(m.release_date||'').slice(0,4),meta:m.vote_average?'TMDB '+m.vote_average.toFixed(1):'',sum:m.overview||'',img:m.poster_path?'https://image.tmdb.org/t/p/w342'+m.poster_path:'',url:'https://www.themoviedb.org/movie/'+m.id}));
+  }
+  if(kind==='games'&&SET.rawgKey){
+    const r=await fetch(`https://api.rawg.io/api/games?key=${SET.rawgKey}&search=${encodeURIComponent(q)}&page_size=16`).then(r=>r.json());
+    return (r.results||[]).map(g=>({t:g.name,alt:'',y:(g.released||'').slice(0,4),meta:(g.platforms||[]).map(p=>p.platform.name).slice(0,3).join(', '),sum:'',img:g.background_image||'',url:'https://rawg.io/games/'+g.slug,g:(g.genres||[]).map(x=>x.name)}));
+  }
+  if(kind==='games')return null;
   const hint=kind==='films'?'film':'video game';
   const u=`https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrsearch=${encodeURIComponent(q+' '+hint)}&gsrlimit=20&prop=pageimages|description|extracts&exintro=1&explaintext=1&exsentences=2&piprop=thumbnail&pithumbsize=300`;
   const r=await fetch(u).then(r=>r.json());
@@ -905,10 +914,11 @@ async function extSearch(){
   if(S.res[key]){showExt(S.res[key],kind,q);return}
   box.innerHTML=`<div class="muted"><span class="spin"></span>Searching ${MED[kind].name.toLowerCase()}…</div>`;
   const m=await detectMode();
-  $('#xmode').textContent=m==='api'?'Live from Jikan and Wikipedia':m==='claude'?'Answered by Claude':'';
+  $('#xmode').textContent=m==='api'?'Live results':m==='claude'?'Answered by Claude':'';
   if(m==='none'){box.innerHTML=`<div class="muted">Live search isn't available here.</div>${outLinks(kind,q)}`;return}
   try{
     const res=m==='api'?await viaApi(kind,q):await viaClaude(kind,q);
+    if(res===null){box.innerHTML=`<div class="muted">Game search needs a game database key. Until then:</div>${outLinks(kind,q)}`;return}
     S.res[key]=res;if(state.search.ext===kind&&state.search.q===q)showExt(res,kind,q);
   }catch(e){
     const msg=e&&e.code==='not_granted'?'Search with Claude was not allowed on this page.':e&&e.code==='rate_limited'?'Too many searches for now. Try again in a minute.':'Search failed. Try again.';

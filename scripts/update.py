@@ -12,7 +12,7 @@ Manual imports: drop a new export into data/imports/ and the next run uses it:
                 - Goodreads:  data/imports/goodreads_library_export.csv
 """
 import csv, json, os, re, sys, glob, html, time
-import urllib.request
+import urllib.request, urllib.parse
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 
@@ -237,6 +237,33 @@ def update_letterboxd():
     log(f'letterboxd: {n} new films' + (' (rebuilt from export)' if imported else ''))
 
 
+def update_posters():
+    key = settings.get('tmdbKey')
+    if not key:
+        return
+    done = 0
+    for f in site.get('films', []):
+        if f.get('img') or f.get('tmdbTried') or done >= 200:
+            continue
+        q = urllib.parse.quote(f['t'])
+        try:
+            r = json.loads(get(f'https://api.themoviedb.org/3/search/movie?api_key={key}&query={q}&year={f["y"]}', tries=1))
+            res = r.get('results') or []
+            if not res and f['y']:
+                r = json.loads(get(f'https://api.themoviedb.org/3/search/movie?api_key={key}&query={q}', tries=1))
+                res = r.get('results') or []
+            if res and res[0].get('poster_path'):
+                f['img'] = 'https://image.tmdb.org/t/p/w342' + res[0]['poster_path']
+                f['tmdb'] = res[0]['id']
+            else:
+                f['tmdbTried'] = 1
+        except Exception:
+            pass
+        done += 1
+        time.sleep(0.25)
+    log(f'tmdb: looked up {done} posters')
+
+
 # ---------------- Medium ----------------
 def update_medium():
     root = ET.fromstring(get(f'https://medium.com/feed/@{MEDIUM_USER}'))
@@ -333,14 +360,16 @@ def update_grouvee():
                   'rel': c['release_date'], 'u': c['url'],
                   'rv': (r['text'] if r else c['review']) or '', 'rvt': (r['title'] if r else c['review_title']) or '', 'rvd': (r['date'][:10] if r else ''),
                   'log': [{k: v for k, v in x.items() if k != 'game'} for x in pl.get(c['url'], [])]})
-    site['games'] = G
-    site['gvFav'] = [f['name'] for f in g['account'].get('favorite_games', [])]
-    site['gvProfile'] = {'about': g['account'].get('profile', {}).get('about', ''), 'joined': g['account']['date_joined'][:10]}
-    log(f'grouvee: {len(G)} games from export')
+    out = {'games': G, 'gvFav': [f['name'] for f in g['account'].get('favorite_games', [])],
+           'gvProfile': {'about': g['account'].get('profile', {}).get('about', ''), 'joined': g['account']['date_joined'][:10]}}
+    with open(os.path.join(DATA, 'games.json'), 'w', encoding='utf-8') as f:
+        json.dump(out, f, ensure_ascii=False, indent=0)
+    os.rename(p, p + '.imported')
+    log(f'grouvee: {len(G)} games imported into data/games.json (one-time)')
 
 
 for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd),
-                 ('medium', update_medium), ('goodreads', update_goodreads), ('grouvee', update_grouvee)]:
+                 ('posters', update_posters), ('medium', update_medium), ('grouvee', update_grouvee)]:
     try:
         fn()
         status[name] = 'ok'
@@ -348,6 +377,8 @@ for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd'
         status[name] = f'kept previous data ({type(e).__name__}: {e})'
     log(name, '->', status[name])
 
+for k in ('books', 'games', 'gvFav', 'gvProfile'):
+    site.pop(k, None)
 site['generated'] = datetime.now(timezone.utc).strftime('%Y-%m-%d')
 site['updateStatus'] = status
 with open(os.path.join(DATA, 'site.json'), 'w', encoding='utf-8') as f:
