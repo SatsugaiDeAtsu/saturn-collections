@@ -734,8 +734,7 @@ function rOverview(){
       <div class="links" style="margin-top:8px">
         <a class="chip" href="https://myanimelist.net/profile/SatsugaiDeAtsu" target="_blank" rel="noopener"><b style="width:8px;height:8px;background:var(--anime)"></b>MyAnimeList</a>
         <a class="chip" href="https://letterboxd.com/SatsugaiDeAtsu/" target="_blank" rel="noopener"><b style="width:8px;height:8px;background:var(--film)"></b>Letterboxd</a>
-        <a class="chip" href="https://www.grouvee.com/user/186222-SatsugaiDeAtsu/" target="_blank" rel="noopener"><b style="width:8px;height:8px;background:var(--game)"></b>Grouvee</a>
-        <a class="chip" href="https://medium.com/@rajeeljaved" target="_blank" rel="noopener"><b style="width:8px;height:8px;background:var(--story)"></b>Medium</a><a class="chip" href="https://www.goodreads.com/" target="_blank" rel="noopener"><b style="width:8px;height:8px;background:var(--book)"></b>Goodreads</a>
+        <a class="chip" href="https://medium.com/@rajeeljaved" target="_blank" rel="noopener"><b style="width:8px;height:8px;background:var(--story)"></b>Medium</a>
       </div>
     </div>
   </section>
@@ -823,7 +822,7 @@ const bstars=r=>{if(!r)return'';const full=Math.floor(r),part=r-full;return '★
 function rBooks(){
   const shelves=[...new Set(books.flatMap(b=>b.sh))].sort();
   const rd=books.filter(b=>b.st==='read');
-  listPage({key:'books',title:'Books',sub:`From Goodreads · exported ${fdate(D.generated)}`,
+  listPage({key:'books',title:'Books',sub:`${books.length} books · kept on this site`,
     bst:()=>[[rd.length,'read'],[fmt(rd.reduce((s,b)=>s+b.p,0)),'pages'],[books.filter(b=>b.ur).length,'Urdu']],
     items:()=>books,
     tabs:[['all','All books',()=>true],['read','Read',b=>b.st==='read'],['reading','Reading',b=>b.st==='reading'],['toread','Want to read',b=>b.st==='toread'],['dnf','Did not finish',b=>b.st==='dnf'],['hold','On hold',b=>b.st==='hold']],
@@ -911,14 +910,14 @@ function rHof(){
   }else if(hofSeg==='games'){
     const gc=g=>{const idx=HOFITEMS.push({game:g})-1;return `<div class="card" data-h="${idx}">${cover(g.t,g.img||'',gBadge(g)+gDlcStack(g))}<div class="meta"><div class="tt">${esc(g.t)}</div>${gDlcLine(g)}<div class="ss"><span>${esc(g.shelf)}</span></div></div></div>`};
     const favG=D.gvFav.map(n=>games.find(g=>g.t===n)).filter(Boolean);
-    G('g-gtop','Grouvee favourites','My favourite games, in order.','star','#8a55e6','https://www.grouvee.com/user/186222-SatsugaiDeAtsu/',[sec('s-gtop','Favourites','',grid(favG.map(gc).join('')))]);
+    G('g-gtop','Favourite games','My favourite games, in order.','star','#8a55e6','',[sec('s-gtop','Favourites','',grid(favG.map(gc).join('')))]);
     G('g-g5','Also rated 5/5','','ten','#8a55e6','',[sec('s-g5','Five out of five','',grid(games.filter(g=>g.r===5&&!D.gvFav.includes(g.t)).map(gc).join('')))]);
-    G('g-grv','Games I wrote about','Reviews from Grouvee.','stories','#8a55e6','',[sec('s-grv','Reviewed','',grid(games.filter(g=>g.rv).sort((a,b)=>b.r-a.r).map(gc).join('')))]);
+    G('g-grv','Games I wrote about','My reviews.','stories','#8a55e6','',[sec('s-grv','Reviewed','',grid(games.filter(g=>g.rv).sort((a,b)=>b.r-a.r).map(gc).join('')))]);
   }else{
     const bc=b=>{const idx=HOFITEMS.push({book:b})-1;return `<div class="card book" data-h="${idx}">${cover(b.t,b.img||'',b.r?`<span class="badge">${b.r}★</span>`:'')}<div class="meta"><div class="tt">${esc(b.t)}</div><div class="ss"><span>${esc(b.a)}</span></div></div></div>`};
     G('g-b5','Five stars','Books I rated 5 out of 5.','ten','#b07a38','',[sec('s-b5','Five stars','',grid(books.filter(b=>b.r>=5).map(bc).join('')))]);
     const shelfNames={childhood:'Childhood',memoire:'Memoire',urdu:'Urdu',spiritual:'Spiritual',philosophy:'Philosophy',psychology:'Psychology'};
-    G('g-bsh','My shelves','Goodreads shelves I keep.','books','#b07a38','https://www.goodreads.com/',Object.keys(shelfNames).filter(k=>books.some(b=>b.sh.includes(k))).map(k=>sec('s-bsh-'+k,shelfNames[k],'',grid(books.filter(b=>b.sh.includes(k)).map(bc).join('')))));
+    G('g-bsh','My shelves','Shelves I keep.','books','#b07a38','',Object.keys(shelfNames).filter(k=>books.some(b=>b.sh.includes(k))).map(k=>sec('s-bsh-'+k,shelfNames[k],'',grid(books.filter(b=>b.sh.includes(k)).map(bc).join('')))));
   }
   const A=D.hof.about;
   const segs=[['anime','Anime','var(--anime)'],['manga','Manga','var(--manga)'],['films','Films','var(--film)'],['games','Games','var(--game)'],['books','Books','var(--book)'],['chars','Characters','#24a896'],['waifus','Waifus','#d24a7a'],['couples','Couples','#e8733a']];
@@ -1383,7 +1382,7 @@ function openFilm(f){
 
 /* ---------- games ---------- */
 function rGames(){
-  listPage({key:'games',title:'Games',bst:()=>[[games.length,'games'],[games.filter(g=>g.shelf==='Played').length,'played'],[fmt(Math.round(games.reduce((s,g)=>s+g.hrs,0)))+'h','hours played'],[games.reduce((s,g)=>s+g.rp,0),'replays']],sub:`${games.length} games · from Grouvee · exported ${fdate(D.generated)}`,
+  listPage({key:'games',title:'Games',bst:()=>[[games.length,'games'],[games.filter(g=>g.shelf==='Played').length,'played'],[fmt(Math.round(games.reduce((s,g)=>s+g.hrs,0)))+'h','hours played'],[games.reduce((s,g)=>s+g.rp,0),'replays']],sub:`${games.length} games · kept on this site`,
     items:()=>games,
     tabs:[['all','All',()=>true],...Object.keys(GSH).map(k=>[k,k,k==='Playing'?g=>g.shelf==='Playing'||g.shelf==='Replaying':g=>g.shelf===k]),['replayed','Replayed',g=>g.rp>0||g.shelf==='Replaying'],['reviewed','Reviewed',g=>!!g.rv]],
     sorts:[['added','Date added'],['rating','Your rating'],['release','Release date'],['title','Title']],
@@ -1402,7 +1401,7 @@ function openGame(g){
   ${g.log.map(p=>`<div>Play log</div><div>${[p.date_started&&p.date_started!=='None'?'Started '+fdate(p.date_started):'',p.date_finished&&p.date_finished!=='None'?'Finished '+fdate(p.date_finished):'',p.level_of_completion||'',p.notes?esc(p.notes):''].filter(Boolean).join(' · ')||'–'}</div>`).join('')}</div>
   ${g.dlcs.length?`<div class="sect" style="--c:var(--game);margin-top:14px"><h2><i></i>DLC <span class="muted mono">${g.dlcs.filter(d=>d.p).length}/${g.dlcs.length} played</span></h2><div class="dlcgrid">${g.dlcs.map((d,i)=>dlcTile(d,i,false)).join('')}</div></div>`:''}
   ${g.rv?`<div class="review" style="--c:var(--game)">${g.rvt?`<b>${esc(g.rvt)}</b>\n`:''}${esc(g.rv)}</div>`:''}
-  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?`<button class="btn pri" id="m_edit">Edit</button>`:''}${g.u?`<a class="btn${ED.on?'':' pri'}" href="${esc(g.u)}" target="_blank" rel="noopener">Open on Grouvee ↗</a>`:''}</div></div>`);
+  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?`<button class="btn pri" id="m_edit">Edit</button>`:''}</div></div>`);
   const me=$('#m_edit');if(me)me.onclick=()=>editGame(g);
 }
 
@@ -1479,8 +1478,8 @@ async function detectMode(){
   try{if(window.claude&&window.claude.use){sampleFn=await window.claude.use('sample');}}catch(e){}
   mode=sampleFn?'claude':'none';return mode;
 }
-const OUT={manga:q=>`https://myanimelist.net/manga.php?q=${encodeURIComponent(q)}`,books:q=>`https://www.goodreads.com/search?q=${encodeURIComponent(q)}`,anime:q=>`https://myanimelist.net/anime.php?q=${encodeURIComponent(q)}`,films:q=>`https://letterboxd.com/search/films/${encodeURIComponent(q)}/`,games:q=>`https://www.grouvee.com/search/?q=${encodeURIComponent(q)}`};
-const OUTN={manga:'MyAnimeList',books:'Goodreads',anime:'MyAnimeList',films:'Letterboxd',games:'Grouvee'};
+const OUT={manga:q=>`https://myanimelist.net/manga.php?q=${encodeURIComponent(q)}`,books:q=>`https://www.goodreads.com/search?q=${encodeURIComponent(q)}`,anime:q=>`https://myanimelist.net/anime.php?q=${encodeURIComponent(q)}`,films:q=>`https://letterboxd.com/search/films/${encodeURIComponent(q)}/`,games:q=>`https://howlongtobeat.com/?q=${encodeURIComponent(q)}`};
+const OUTN={manga:'MyAnimeList',books:'Goodreads',anime:'MyAnimeList',films:'Letterboxd',games:'HowLongToBeat'};
 async function viaApi(kind,q){
   if((kind==='anime'||kind==='manga')&&SET.workerUrl){
     const r=await fetch(`${SET.workerUrl}/search?type=${kind}&q=${encodeURIComponent(q)}`).then(r=>r.json());
@@ -1578,7 +1577,7 @@ function openExt(kind,r){
 }
 
 {const US=D.updateStatus||{};const bad=Object.entries(US).filter(([k,v])=>v!=='ok');
-$('#foot').innerHTML=`Saturn Collections · data from MyAnimeList, Letterboxd, Grouvee and Medium · last refreshed ${fdate(D.generated)}${OWNER()&&bad.length?`<div style="margin-top:6px;color:var(--s4)">Last update had trouble with: ${bad.map(([k,v])=>`<b>${esc(k)}</b> <span class="muted">(${esc(String(v).slice(0,90))})</span>`).join(' · ')}. The previous data is still shown.</div>`:''}${OWNER()&&(D.repoMB||0)>500?`<div style="margin-top:6px;color:var(--s3)">Storage is at ${D.repoMB} MB. Time for the picture clean-up we talked about.</div>`:''}`;}
+$('#foot').innerHTML=`Saturn Collections · data from MyAnimeList, Letterboxd and Medium · last refreshed ${fdate(D.generated)}${OWNER()&&bad.length?`<div style="margin-top:6px;color:var(--s4)">Last update had trouble with: ${bad.map(([k,v])=>`<b>${esc(k)}</b> <span class="muted">(${esc(String(v).slice(0,90))})</span>`).join(' · ')}. The previous data is still shown.</div>`:''}${OWNER()&&(D.repoMB||0)>500?`<div style="margin-top:6px;color:var(--s3)">Storage is at ${D.repoMB} MB. Time for the picture clean-up we talked about.</div>`:''}`;}
 syncEditBtn();
 malFinish();
 go();

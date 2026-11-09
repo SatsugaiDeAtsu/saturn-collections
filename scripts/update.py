@@ -548,6 +548,25 @@ def update_hof():
     log(f'hall of fame: refreshed from MAL, looked up {fetched[0]} new names')
 
 
+def mirror_book_covers():
+    """Copies of book covers kept with the site (covers/b), so they don't depend on Goodreads or Open Library."""
+    path = os.path.join(DATA, 'book_covers.json')
+    covers = load_json(path, {})
+    bd = os.path.join(os.path.dirname(DATA), 'covers', 'b')
+    os.makedirs(bd, exist_ok=True)
+    for bid, v in list(covers.items()):
+        if isinstance(v, str) and v.startswith('http'):
+            try:
+                save_img(os.path.join(bd, f'{bid}.jpg'), get_bytes(v))
+                covers[bid] = f'covers/b/{bid}.jpg'
+            except Exception as e:
+                log('book cover copy failed', bid, e)
+            time.sleep(0.3)
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(covers, f, indent=0)
+    site['bookCovers'] = {k: v for k, v in covers.items() if v}
+
+
 def update_book_covers():
     """Find covers for books that have none (Open Library). Stored separately in
     data/book_covers.json so the updater never edits books.json (which you edit on the site)."""
@@ -1106,7 +1125,7 @@ def update_cover_mirror():
 
 
 for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd),
-                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('grouvee', update_grouvee), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('characters', update_char_info), ('cover mirror', update_cover_mirror)]:
+                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('book copies', mirror_book_covers), ('grouvee', update_grouvee), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('characters', update_char_info), ('cover mirror', update_cover_mirror)]:
     try:
         fn()
         status[name] = 'ok'
