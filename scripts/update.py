@@ -111,14 +111,19 @@ def mal_rewatches(kind='anime'):
     out = {}
     f1, f2 = ('num_times_rewatched', 'is_rewatching') if kind == 'anime' else ('num_times_reread', 'is_rereading')
     url = (f'https://api.myanimelist.net/v2/users/{MAL_USER}/{kind}list'
-           f'?fields=list_status%7B{f1},{f2}%7D&limit=1000&nsfw=true')
+           f'?fields=list_status%7B{f1},{f2},updated_at%7D&limit=1000&nsfw=true')
     while url:
         req = urllib.request.Request(url, headers={'User-Agent': UA, 'X-MAL-CLIENT-ID': cid})
         with urllib.request.urlopen(req, timeout=40) as r:
             page = json.loads(r.read().decode('utf-8'))
         for it in page.get('data', []):
             ls = it.get('list_status') or {}
-            out[it['node']['id']] = (int(ls.get(f1) or 0), 1 if ls.get(f2) else 0)
+            up = ls.get('updated_at') or ''
+            try:
+                up = int(datetime.fromisoformat(up.replace('Z', '+00:00')).timestamp()) if up else 0
+            except Exception:
+                up = 0
+            out[it['node']['id']] = (int(ls.get(f1) or 0), 1 if ls.get(f2) else 0, up)
         url = (page.get('paging') or {}).get('next')
         time.sleep(1)
     return out
@@ -164,7 +169,7 @@ def update_anime():
 # ---------------- MAL manga ----------------
 def update_manga():
     rows = mal_list('manga')
-    old_rr = {m[0]: (m[14], m[15]) for m in site.get('manga', []) if len(m) > 15}
+    old_rr = {m[0]: (m[14], m[15], m[16] if len(m) > 16 else 0) for m in site.get('manga', []) if len(m) > 15}
     try:
         rr = mal_rewatches('manga')
     except Exception as e:
@@ -195,7 +200,7 @@ def update_manga():
                   m['num_read_volumes'], m['manga_num_volumes'], m.get('manga_media_type_string') or '', img,
                   year2(m.get('manga_start_date_string')), gi, float(m.get('manga_score_val') or 0),
                   rr.get(m['manga_id'], (0, 0))[0], 1 if m.get('is_rereading') else rr.get(m['manga_id'], (0, 0))[1],
-                  int(m.get('updated_at') or 0)])
+                  int(m.get('updated_at') or 0) or (rr.get(m['manga_id'], (0, 0, 0)) + (0,))[2]])
         note = '\n'.join(x for x in [str(m.get('tags') or '').strip(), str(m.get('notes') or '').strip()] if x)
         if note:
             mtags[str(m['manga_id'])] = note
