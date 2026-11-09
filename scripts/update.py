@@ -194,7 +194,8 @@ def update_manga():
         M.append([m['manga_id'], title, alt, m['status'], m['score'], m['num_read_chapters'], m['manga_num_chapters'],
                   m['num_read_volumes'], m['manga_num_volumes'], m.get('manga_media_type_string') or '', img,
                   year2(m.get('manga_start_date_string')), gi, float(m.get('manga_score_val') or 0),
-                  rr.get(m['manga_id'], (0, 0))[0], 1 if m.get('is_rereading') else rr.get(m['manga_id'], (0, 0))[1]])
+                  rr.get(m['manga_id'], (0, 0))[0], 1 if m.get('is_rereading') else rr.get(m['manga_id'], (0, 0))[1],
+                  int(m.get('updated_at') or 0)])
         note = '\n'.join(x for x in [str(m.get('tags') or '').strip(), str(m.get('notes') or '').strip()] if x)
         if note:
             mtags[str(m['manga_id'])] = note
