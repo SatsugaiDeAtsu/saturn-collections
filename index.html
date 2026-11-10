@@ -2423,7 +2423,7 @@ function ownMatch(kind,title,year){
 function rSearch(){
   const S=state.search;
   $('#gq').value=S.q;
-  if(!S.q){$('#app').innerHTML=`${banner('search','Search everything','Your collection, plus the whole catalog of anime, manga, films, games and books.',[],'Search')}<div class="box box-b"><p style="margin-bottom:10px">Search your own collection, and the whole catalog of anime, manga, films, series, games, books, characters and people.</p><form id="sform" style="display:flex;gap:0"><input id="sq" type="search" placeholder="Try “Vinland Saga”, “Inception” or “Elden Ring”" style="flex:1;border:1px solid var(--line2);padding:10px 12px;background:var(--panel);outline:none"><button class="btn pri" style="border-radius:0">Search</button></form></div>`;
+  if(!S.q){$('#app').innerHTML=`${banner('search','Search everything','Your collection, plus the whole catalog of anime, manga, films, series, games, books, characters and people.',[],'Search')}<div class="box box-b"><p style="margin-bottom:10px">Search your own collection, and the whole catalog of anime, manga, films, series, games, books, characters and people.</p><form id="sform" style="display:flex;gap:0"><input id="sq" type="search" placeholder="Try “Vinland Saga”, “Inception” or “Elden Ring”" style="flex:1;border:1px solid var(--line2);padding:10px 12px;background:var(--panel);outline:none"><button class="btn pri" style="border-radius:0">Search</button></form></div>`;
     $('#sform').onsubmit=e=>{e.preventDefault();const q=$('#sq').value.trim();if(q){S.q=q;S.res={};render()}};$('#sq').focus();return}
   const L=localHits(S.q);
   const tot=L.hofp.length+L.anime.length+L.manga.length+L.films.length+L.games.length+L.books.length+L.stories.length;
@@ -2595,7 +2595,7 @@ function openExt(kind,r){
 }
 
 {const US=D.updateStatus||{};const bad=Object.entries(US).filter(([k,v])=>v!=='ok');
-$('#foot').innerHTML=`Saturn Collections · data from MyAnimeList, Letterboxd and Medium · last refreshed ${fdate(D.generated)}${OWNER()&&bad.length?`<div style="margin-top:6px;color:var(--s4)">Last update had trouble with: ${bad.map(([k,v])=>`<b>${esc(k)}</b> <span class="muted">(${esc(String(v).slice(0,90))})</span>`).join(' · ')}. The previous data is still shown.</div>`:''}${OWNER()&&(D.repoMB||0)>500?`<div style="margin-top:6px;color:var(--s3)">Storage is at ${D.repoMB} MB. Time for the picture clean-up we talked about.</div>`:''}`;}
+$('#foot').innerHTML=`Saturn Collections · data from MyAnimeList, Letterboxd, Goodreads, Grouvee, Medium, TMDB, HowLongToBeat and Wikipedia · last refreshed ${fdate(D.generated)}${OWNER()&&bad.length?`<div style="margin-top:6px;color:var(--s4)">Last update had trouble with: ${bad.map(([k,v])=>`<b>${esc(k)}</b> <span class="muted">(${esc(String(v).slice(0,90))})</span>`).join(' · ')}. The previous data is still shown.</div>`:''}${OWNER()&&(D.repoMB||0)>500?`<div style="margin-top:6px;color:var(--s3)">Storage is at ${D.repoMB} MB. Time for the picture clean-up we talked about.</div>`:''}`;}
 syncEditBtn();
 malFinish();
 go();
