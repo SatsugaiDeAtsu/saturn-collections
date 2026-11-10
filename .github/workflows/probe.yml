@@ -1,0 +1,17 @@
+name: Probe
+on:
+  workflow_dispatch:
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          python3 - <<'PY'
+          import urllib.request,re
+          UA='Mozilla/5.0 (compatible; SaturnCollections/1.0; +https://github.com/SatsugaiDeAtsu/saturn-collections)'
+          for u in ['https://boxd.it/2aEI','https://letterboxd.com/film/moon-knight/','https://letterboxd.com/film/ihostage/']:
+              try:
+                  h=urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':UA}),timeout=30).read().decode('utf-8','replace')
+                  print('OK',u,re.findall(r'data-tmdb-(?:id|type)="[^"]+"',h)[:4])
+              except Exception as e: print('FAIL',u,e)
+          PY

@@ -336,9 +336,9 @@ def update_posters():
             if not res and f['y']:
                 r = json.loads(get(f'https://api.themoviedb.org/3/search/movie?api_key={key}&query={q}', tries=1))
                 res = r.get('results') or []
+            res = [x for x in res if norm(x.get('title')) == norm(f['t'])]
             if res and res[0].get('poster_path'):
                 f['img'] = 'https://image.tmdb.org/t/p/w342' + res[0]['poster_path']
-                f['tmdb'] = res[0]['id']
             else:
                 f['tmdbTried'] = 1
         except Exception:
@@ -1017,7 +1017,7 @@ def update_film_details():
             continue
         try:
             d = json.loads(get(f'https://api.themoviedb.org/3/movie/{tid}?api_key={key}&append_to_response=credits', tries=1))
-            o = {'rt': d.get('runtime') or 0, 'c': today, 'v': 3, 'tt': d.get('title') or ''}
+            o = {'rt': d.get('runtime') or 0, 'c': today, 'v': 3, 'tt': d.get('title') or '', 'pp': d.get('poster_path') or ''}
             cr = d.get('credits') or {}
             o['dir'] = [x['name'] for x in cr.get('crew') or [] if x.get('job') == 'Director'][:2]
             o['cast'] = [x['name'] for x in sorted(cr.get('cast') or [], key=lambda x: x.get('order', 99))][:5]
@@ -1040,6 +1040,11 @@ def update_film_details():
         time.sleep(0.15)
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(det, f, ensure_ascii=False, separators=(',', ':'))
+    for fm in site.get('films', []):
+        pp = det['f'].get(str(fm.get('tmdb')), {}).get('pp')
+        if fm.get('needImg') and pp:
+            fm['img'] = 'https://image.tmdb.org/t/p/w342' + pp
+            fm.pop('needImg', None)
     site['filmDir'] = {k: v['dir'][0] for k, v in det['f'].items() if v.get('dir')}
     log(f'film details: +{n}, {len(det["f"])} films, {len(det["col"])} series')
 
@@ -1727,53 +1732,50 @@ def update_manga_extra():
 
 # ---------------- films: find TMDB ids, tell films from series ----------------
 def update_film_ids():
-    """Films whose poster came from Letterboxd never got a TMDB id, so they had no director, cast or length.
-    Look them up; anything that is really a TV series is marked so it shows under Series."""
-    key = settings.get('tmdbKey')
-    if not key:
-        return
-    det = load_json(os.path.join(DATA, 'film_details.json'), {'f': {}, 'col': {}})
-    t0, n = time.time(), 0
-    def search(kind, t, y):
-        q = urllib.parse.quote(t)
-        yk = 'year' if kind == 'movie' else 'first_air_date_year'
-        r = json.loads(get(f'https://api.themoviedb.org/3/search/{kind}?api_key={key}&query={q}' + (f'&{yk}={y}' if y else ''), tries=1)).get('results') or []
-        for x in r:
-            nm = x.get('title') or x.get('name') or ''
-            on = x.get('original_title') or x.get('original_name') or ''
-            dy = (x.get('release_date') or x.get('first_air_date') or '')[:4]
-            if (norm(nm) == norm(t) or norm(on) == norm(t)) and (not y or not dy or abs(int(dy) - int(y)) <= 1):
-                return x
-        return None
+    """Every film's TMDB id, read from its own Letterboxd page (the page says which TMDB entry it is, and whether
+    it's a film or a TV series). Searching TMDB by title picked wrong entries before: a making-of documentary
+    for Moon Knight and Squid Game, a short instead of iHostage. Checked once per film."""
+    t0, n, fixed, fails = time.time(), 0, 0, 0
     for fm in site.get('films', []):
-        if time.time() - t0 > 300:
-            break
-        tid = fm.get('tmdb')
-        d = det['f'].get(str(tid), {}) if tid else {}
-        wrong = tid and not fm.get('tv') and d.get('tt') and norm(d['tt']) != norm(fm['t'])
-        if (tid and not wrong) or fm.get('tv') or fm.get('idTried') or fm.get('idOk'):
+        if fm.get('lbid') or time.time() - t0 > 900 or fails >= 6:
+            continue
+        u = fm.get('u') or ''
+        if not u:
             continue
         try:
-            y = fm.get('y') or 0
-            mv = search('movie', fm['t'], y)
-            tv = None if mv else search('tv', fm['t'], y)
-            if mv:
-                fm['tmdb'] = mv['id']
-                fm['idOk'] = 1
-                if not fm.get('img') and mv.get('poster_path'):
-                    fm['img'] = 'https://image.tmdb.org/t/p/w342' + mv['poster_path']
-            elif tv:
-                fm['tv'] = tv['id']
+            h = get(u, tries=2)
+            m = re.search(r'data-tmdb-id="(\d+)"', h)
+            ty = re.search(r'data-tmdb-type="(\w+)"', h)
+            if not m:
+                fm['lbid'] = 'none'
+                continue
+            tid, kind = int(m.group(1)), (ty.group(1) if ty else 'movie')
+            tmdb_img = 'image.tmdb.org' in (fm.get('img') or '')
+            if kind == 'tv':
+                if fm.get('tv') != tid:
+                    fixed += 1
+                fm['tv'] = tid
                 fm.pop('tmdb', None)
-                if tv.get('poster_path'):
-                    fm['tvimg'] = 'https://image.tmdb.org/t/p/w342' + tv['poster_path']
+                if tmdb_img:
+                    fm.pop('img', None)  # that poster belonged to the wrong entry; the series poster is used instead
             else:
-                fm['idTried'] = 1
+                if fm.get('tmdb') != tid:
+                    fixed += 1
+                    if tmdb_img or not fm.get('img'):
+                        fm['needImg'] = 1
+                fm['tmdb'] = tid
+                fm.pop('tv', None)
+                fm.pop('tvimg', None)
+            fm['lbid'] = 1
+            for k in ('idTried', 'idOk', 'tmdbTried'):
+                fm.pop(k, None)
             n += 1
+            fails = 0
         except Exception as e:
-            log('tmdb id lookup failed', fm.get('t'), e)
-        time.sleep(0.2)
-    log(f'film ids: looked up {n}')
+            fails += 1
+            log('letterboxd film page failed', fm.get('t'), e)
+        time.sleep(1.0)
+    log(f'film ids: checked {n} on Letterboxd, corrected {fixed}')
 
 
 def update_series():
@@ -1805,6 +1807,9 @@ def update_series():
         except Exception as e:
             log('tmdb series failed', tid, e)
         time.sleep(0.2)
+    for fm in site.get('films', []):
+        if fm.get('tv') and det.get(str(fm['tv']), {}).get('img'):
+            fm['tvimg'] = det[str(fm['tv'])]['img']
     with open(os.path.join(DATA, 'series_details.json'), 'w', encoding='utf-8') as f:
         json.dump(det, f, ensure_ascii=False, separators=(',', ':'))
     log(f'series details: +{n}, {len(det)} known')
