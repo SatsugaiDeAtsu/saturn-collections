@@ -12,6 +12,10 @@ Manual imports: drop a new export into data/imports/ and the next run uses it:
                 - Goodreads:  data/imports/goodreads_library_export.csv
 """
 import csv, json, os, re, sys, glob, html, time
+import socket
+_gai = socket.getaddrinfo
+# GitHub's runners have no IPv6 route; some sites (Jikan) answer IPv6 first, which made requests hang. Use IPv4.
+socket.getaddrinfo = lambda *a, **k: [r for r in _gai(*a, **k) if r[0] == socket.AF_INET] or _gai(*a, **k)
 import urllib.request, urllib.parse
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone, timedelta
@@ -930,9 +934,11 @@ def update_mal_details():
             det[k][str(mid)] = o
             n += 1
         except Exception as e:
-            fails += 1
             if '404' in str(e):
-                det[k][str(mid)] = {'gone': 1, 'c': today}
+                det[k][str(mid)] = {'gone': 1, 'c': today, 'v': 2}
+            else:
+                fails += 1
+                log('mal details failed', kind, mid, e)
         time.sleep(0.45)
     # anime <-> manga links: MAL's official data leaves these out, Jikan has them
     t1, jn = time.time(), 0
@@ -966,7 +972,7 @@ def update_mal_details():
             o.pop('_nbp', None)
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(det, f, ensure_ascii=False, separators=(',', ':'))
-    log(f'mal details: +{jn} adaptation links,, {len(det["a"])} anime / {len(det["m"])} manga known, {fails} failed')
+    log(f'mal details: +{n} fetched, +{jn} anime-manga links,, {len(det["a"])} anime / {len(det["m"])} manga known, {fails} failed')
 
 
 def update_film_details():
