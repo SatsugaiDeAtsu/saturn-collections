@@ -896,6 +896,29 @@ def mal_detail(kind, mid, cid):
     return o
 
 
+def mal_page_links(kind, mid):
+    """Anime<->manga links ('Adaptation' etc.) from the Related Entries part of a MAL page."""
+    other = 'manga' if kind == 'anime' else 'anime'
+    h = re.sub(r'\s+', ' ', get(f'https://myanimelist.net/{kind}/{mid}', tries=2))
+    i = h.find('related-entries')
+    if i < 0:
+        i = h.find('Related Entries')
+    if i < 0:
+        return []
+    part = h[i:i + 60000]
+    out, seen = [], set()
+    # tile layout: <div class="relation"> Adaptation (Manga) </div> <div class="title"><a href=".../manga/ID/...">Title</a>
+    for rel, oid, t in re.findall(r'class="relation">\s*([A-Za-z -]+?)\s*(?:\([^)]*\))?\s*</div>(?:(?!class="relation").){0,600}?<a href="https://myanimelist\.net/' + other + r'/(\d+)/[^"]*"[^>]*>([^<]+)</a>', part):
+        if oid not in seen:
+            seen.add(oid); out.append([int(oid), rel.strip().lower().replace(' ', '_').replace('-', '_'), html.unescape(t).strip()])
+    # table layout: <td ...>Adaptation:</td><td ...><ul class="entries"><li><a href=".../manga/ID/...">Title</a> ...
+    for rel, cell in re.findall(r'<td[^>]*>\s*([A-Za-z -]+?):\s*</td>\s*<td[^>]*>(.*?)</td>', part):
+        for oid, t in re.findall(r'href="https://myanimelist\.net/' + other + r'/(\d+)/[^"]*"[^>]*>([^<]+)</a>', cell):
+            if oid not in seen:
+                seen.add(oid); out.append([int(oid), rel.strip().lower().replace(' ', '_').replace('-', '_'), html.unescape(t).strip()])
+    return out[:12]
+
+
 def update_mal_details():
     """Episode length and how every anime/manga connects to others (sequels, prequels, films, OVAs...),
     for everything in your lists and whatever they link to. Kept in data/mal_details.json; refreshed every 45 days."""
@@ -939,23 +962,22 @@ def update_mal_details():
             else:
                 fails += 1
                 log('mal details failed', kind, mid, e)
-        time.sleep(0.45)
-    # anime <-> manga links: MAL's official data leaves these out, Jikan has them
+        time.sleep(0.8)
+    # anime <-> manga links: MAL's official data leaves these out, so read them from the MAL page itself
     t1, jn = time.time(), 0
     for kind, k, mid in sorted(set(mine), key=lambda x: det[x[1]].get(str(x[2]), {}).get('adc', '')):
         cur = det[k].get(str(mid))
-        if not cur or cur.get('adc', '') > old or time.time() - t1 > 900:
+        if not cur or cur.get('adc', '') > old or time.time() - t1 > 1500:
             continue
         try:
-            rel = json.loads(get(f'https://api.jikan.moe/v4/{kind}/{mid}/relations', tries=2)).get('data') or []
-            other = 'manga' if kind == 'anime' else 'anime'
-            cur['ad'] = [[e['mal_id'], (r.get('relation') or '').lower().replace(' ', '_'), e.get('name') or '']
-                         for r in rel for e in r.get('entry') or [] if e.get('type') == other]
+            cur['ad'] = mal_page_links(kind, mid)
             cur['adc'] = today
             jn += 1
         except Exception as e:
-            log('jikan relations failed', kind, mid, e)
-        time.sleep(1.2)
+            log('related entries failed', kind, mid, e)
+            if '404' not in str(e):
+                break
+        time.sleep(1.5)
     # synopses go in their own file (loaded only when needed)
     syn = {'a': {}, 'm': {}}
     for k in ('a', 'm'):
