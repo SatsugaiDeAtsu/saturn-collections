@@ -848,6 +848,111 @@ def update_dlc_pictures():
     log(f'dlc pictures: +{got}')
 
 
+REL_KEEP = {'sequel', 'prequel', 'side_story', 'parent_story', 'alternative_version', 'alternative_setting', 'spin_off',
+            'summary', 'full_story', 'other', 'character'}
+
+
+def mal_detail(kind, mid, cid):
+    f = ('id,title,alternative_titles,main_picture,media_type,start_date,status,genres,related_anime,related_manga,'
+         + ('num_episodes,average_episode_duration' if kind == 'anime' else 'num_chapters,num_volumes'))
+    req = urllib.request.Request(f'https://api.myanimelist.net/v2/{kind}/{mid}?fields={f}', headers={'User-Agent': UA, 'X-MAL-CLIENT-ID': cid})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        d = json.loads(r.read().decode('utf-8'))
+    pic = ((d.get('main_picture') or {}).get('medium') or '')
+    o = {'t': (d.get('alternative_titles') or {}).get('en') or d.get('title'), 'ty': d.get('media_type') or '', 'sd': d.get('start_date') or '',
+         'img': re.sub(r'^.*/images/' + kind + '/', '', pic.split('?')[0]).replace('.jpg', '').replace('.webp', '')}
+    if (d.get('alternative_titles') or {}).get('en') and d['alternative_titles']['en'] != d.get('title'):
+        o['jt'] = d.get('title')
+    gn = [g['name'] for g in d.get('genres') or []]
+    if 'Hentai' in gn or 'Erotica' in gn:
+        o['x'] = 1  # adult: never shown
+    if kind == 'anime':
+        o['n'] = d.get('num_episodes') or 0
+        o['dur'] = d.get('average_episode_duration') or 0
+    else:
+        o['n'] = d.get('num_chapters') or 0
+        o['v'] = d.get('num_volumes') or 0
+    o['ra'] = [[x['node']['id'], x['relation_type']] for x in d.get('related_anime') or [] if x.get('relation_type') in REL_KEEP]
+    o['rm'] = [[x['node']['id'], x['relation_type']] for x in d.get('related_manga') or []]
+    # titles of related entries, so they can be shown before their own details are fetched
+    o['_nb'] = [['a', x['node']['id'], x['node']['title'], ((x['node'].get('main_picture') or {}).get('medium') or '')] for x in d.get('related_anime') or []] + \
+               [['m', x['node']['id'], x['node']['title'], ((x['node'].get('main_picture') or {}).get('medium') or '')] for x in d.get('related_manga') or []]
+    return o
+
+
+def update_mal_details():
+    """Episode length and how every anime/manga connects to others (sequels, prequels, films, OVAs...),
+    for everything in your lists and whatever they link to. Kept in data/mal_details.json; refreshed every 45 days."""
+    cid = settings.get('malClientId')
+    path = os.path.join(DATA, 'mal_details.json')
+    det = load_json(path, {'a': {}, 'm': {}})
+    allow = set(settings.get('manga_allow', []))
+    today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+    old = (datetime.now(timezone.utc) - timedelta(days=45)).strftime('%Y-%m-%d')
+    mine = [('anime', 'a', a[0]) for a in site.get('anime', [])] + [('manga', 'm', m[0]) for m in site.get('manga', [])]
+    # what your entries link to, one step out
+    nbs = []
+    for kind, k, mid in mine:
+        for kk, nid, _t, _p in det[k].get(str(mid), {}).get('_nb', []):
+            nbs.append(('anime' if kk == 'a' else 'manga', kk, nid))
+    queue = sorted(set(mine), key=lambda x: det[x[1]].get(str(x[2]), {}).get('c', '')) + sorted(set(nbs), key=lambda x: det[x[1]].get(str(x[2]), {}).get('c', ''))
+    t0, n, fails = time.time(), 0, 0
+    for kind, k, mid in queue:
+        cur = det[k].get(str(mid))
+        if (cur and cur.get('c', '') > old) or time.time() - t0 > 1000 or fails > 15:
+            continue
+        try:
+            o = mal_detail(kind, mid, cid)
+            if k == 'm' and mid in allow:
+                o.pop('x', None)
+            o['c'] = today
+            det[k][str(mid)] = o
+            n += 1
+        except Exception as e:
+            fails += 1
+            if '404' in str(e):
+                det[k][str(mid)] = {'gone': 1, 'c': today}
+        time.sleep(0.45)
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(det, f, ensure_ascii=False, separators=(',', ':'))
+    log(f'mal details: +{n} fetched, {len(det["a"])} anime / {len(det["m"])} manga known, {fails} failed')
+
+
+def update_film_details():
+    """Runtime and film series (collections) from TMDB, for every film with a TMDB id. Kept in data/film_details.json."""
+    key = settings.get('tmdbKey')
+    if not key:
+        return
+    path = os.path.join(DATA, 'film_details.json')
+    det = load_json(path, {'f': {}, 'col': {}})
+    today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+    old = (datetime.now(timezone.utc) - timedelta(days=90)).strftime('%Y-%m-%d')
+    t0, n = time.time(), 0
+    for fm in site.get('films', []):
+        tid = fm.get('tmdb')
+        if not tid or det['f'].get(str(tid), {}).get('c', '') > old or time.time() - t0 > 400:
+            continue
+        try:
+            d = json.loads(get(f'https://api.themoviedb.org/3/movie/{tid}?api_key={key}', tries=1))
+            o = {'rt': d.get('runtime') or 0, 'c': today}
+            col = d.get('belongs_to_collection')
+            if col:
+                o['col'] = col['id']
+                if det['col'].get(str(col['id']), {}).get('c', '') <= old:
+                    cd = json.loads(get(f'https://api.themoviedb.org/3/collection/{col["id"]}?api_key={key}', tries=1))
+                    det['col'][str(col['id'])] = {'n': cd.get('name') or col.get('name'), 'c': today,
+                                                  'p': sorted([[x['id'], x.get('title'), x.get('release_date') or '', x.get('poster_path') or '']
+                                                               for x in cd.get('parts') or []], key=lambda x: x[2] or '9999')}
+            det['f'][str(tid)] = o
+            n += 1
+        except Exception as e:
+            log('tmdb details failed', tid, e)
+        time.sleep(0.15)
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(det, f, ensure_ascii=False, separators=(',', ':'))
+    log(f'film details: +{n}, {len(det["f"])} films, {len(det["col"])} series')
+
+
 def update_game_meta():
     """Average length and the DLC list for every game. Runs through a few games each day so each one is re-checked about
     once a week; new DLC is added on its own (from Steam), nothing you ticked is ever removed. Kept in data/game_meta.json."""
@@ -1125,7 +1230,7 @@ def update_cover_mirror():
 
 
 for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd),
-                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('book copies', mirror_book_covers), ('grouvee', update_grouvee), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('characters', update_char_info), ('cover mirror', update_cover_mirror)]:
+                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('book copies', mirror_book_covers), ('grouvee', update_grouvee), ('film details', update_film_details), ('mal details', update_mal_details), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('characters', update_char_info), ('cover mirror', update_cover_mirror)]:
     try:
         fn()
         status[name] = 'ok'

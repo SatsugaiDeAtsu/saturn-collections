@@ -1482,7 +1482,13 @@ const OUT={manga:q=>`https://myanimelist.net/manga.php?q=${encodeURIComponent(q)
 const OUTN={manga:'MyAnimeList',books:'Goodreads',anime:'MyAnimeList',films:'Letterboxd',games:'HowLongToBeat'};
 async function viaApi(kind,q){
   if((kind==='anime'||kind==='manga')&&SET.workerUrl){
-    const r=await fetch(`${SET.workerUrl}/search?type=${kind}&q=${encodeURIComponent(q)}`).then(r=>r.json());
+    // MAL's search sometimes fails for a moment: try up to 4 times before giving up
+    let r=null,err=null;
+    for(let i=0;i<4;i++){
+      try{const res=await fetch(`${SET.workerUrl}/search?type=${kind}&q=${encodeURIComponent(q)}${i?'&_='+i:''}`,{cache:'no-store'});const j=await res.json();if(res.ok&&j&&Array.isArray(j.data)){r=j;break}err=new Error((j&&(j.message||j.error))||('MAL said '+res.status))}catch(e){err=e}
+      await new Promise(ok=>setTimeout(ok,[600,1200,2500][i]||0));
+    }
+    if(!r)throw err||new Error('MAL search failed');
     return (r.data||[]).map(({node:n})=>({malId:n.id,t:(n.alternative_titles&&n.alternative_titles.en)||n.title,alt:(n.alternative_titles&&n.alternative_titles.en&&n.alternative_titles.en!==n.title)?n.title:'',y:(n.start_season&&n.start_season.year)||(n.start_date||'').slice(0,4),meta:[(n.media_type||'').toUpperCase().replace('_',' '),n.num_episodes?n.num_episodes+' eps':'',n.num_chapters?n.num_chapters+' ch':'',n.mean?'MAL '+n.mean:''].filter(Boolean).join(' · '),sum:n.synopsis||'',img:n.main_picture&&(n.main_picture.large||n.main_picture.medium),url:`https://myanimelist.net/${kind}/${n.id}`,g:(n.genres||[]).map(g=>g.name)}));
   }
   if(kind==='manga'){
