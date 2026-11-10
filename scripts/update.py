@@ -1482,8 +1482,7 @@ def people_page(pid):
         labels.append('Voice actor')
     roles = ' '.join(w['r'] for w in works)
     if works:
-        kinds = {w['ty'].split(',')[0].strip().lower() for w in works if w['ty']}
-        novels = kinds and kinds <= {'novel', 'light novel'}
+        novels = any('novel' in w['ty'].lower() and 'Story' in w['r'] for w in works)
         if 'Story & Art' in roles:
             labels.append('Mangaka')
         elif 'Story' in roles:
