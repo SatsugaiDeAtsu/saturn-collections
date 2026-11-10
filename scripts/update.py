@@ -464,7 +464,8 @@ def update_hof():
             img = re.search(r'data-src="([^"]+)"', inner)
             title = html.unescape(re.sub(r'<[^>]+>', '', title.group(1)).strip()) if title else ''
             if kind == 'company':
-                favs['company'].append(title); continue
+                cm = re.search(r'/producer/(\d+)', href)
+                favs['company'].append([int(cm.group(1)) if cm else 0, title, img.group(1) if img else '']); continue
             lm = LINK.search(href)
             if not lm:
                 continue
@@ -858,7 +859,7 @@ REL_KEEP = {'sequel', 'prequel', 'side_story', 'parent_story', 'alternative_vers
 
 def mal_detail(kind, mid, cid):
     f = ('id,title,alternative_titles,main_picture,media_type,start_date,status,genres,related_anime,related_manga,synopsis,mean,'
-         + ('num_episodes,average_episode_duration,broadcast,studios,start_season' if kind == 'anime' else 'num_chapters,num_volumes,authors{first_name,last_name}'))
+         + ('num_episodes,average_episode_duration,broadcast,studios,start_season,source' if kind == 'anime' else 'num_chapters,num_volumes,authors{first_name,last_name}'))
     req = urllib.request.Request(f'https://api.myanimelist.net/v2/{kind}/{mid}?fields={f}', headers={'User-Agent': UA, 'X-MAL-CLIENT-ID': cid})
     with urllib.request.urlopen(req, timeout=30) as r:
         d = json.loads(r.read().decode('utf-8'))
@@ -870,6 +871,9 @@ def mal_detail(kind, mid, cid):
     gn = [g['name'] for g in d.get('genres') or []]
     if 'Hentai' in gn or 'Erotica' in gn:
         o['x'] = 1  # adult: never shown
+    o['g'] = [x for x in gn if x not in ('Hentai', 'Erotica')]  # genres plus themes (Psychological, Isekai...)
+    if d.get('source'):
+        o['src'] = d['source']
     o['st'] = d.get('status') or ''
     if d.get('mean'):
         o['mal'] = d['mean']
@@ -940,17 +944,17 @@ def update_mal_details():
     t0, n, fails = time.time(), 0, 0
     for kind, k, mid in queue:
         cur = det[k].get(str(mid))
-        fresh = cur and cur.get('c', '') > old and cur.get('v') == 2
+        fresh = cur and cur.get('c', '') > old and cur.get('v') == 3
         if cur and cur.get('st') == 'currently_airing' and cur.get('c', '') < today:
             fresh = False  # airing shows: refresh daily so episode counts and times stay right
-        if fresh or time.time() - t0 > 3000 or fails > 25:
+        if fresh or time.time() - t0 > 3600 or fails > 25:
             continue
         try:
             o = mal_detail(kind, mid, cid)
             if k == 'm' and mid in allow:
                 o.pop('x', None)
             o['c'] = today
-            o['v'] = 2
+            o['v'] = 3
             keep = (cur or {}).get('ad')  # adaptation links found earlier
             if keep is not None:
                 o['ad'] = keep
@@ -958,7 +962,7 @@ def update_mal_details():
             n += 1
         except Exception as e:
             if '404' in str(e):
-                det[k][str(mid)] = {'gone': 1, 'c': today, 'v': 2}
+                det[k][str(mid)] = {'gone': 1, 'c': today, 'v': 3}
             else:
                 fails += 1
                 log('mal details failed', kind, mid, e)
@@ -967,7 +971,7 @@ def update_mal_details():
     t1, jn = time.time(), 0
     for kind, k, mid in sorted(set(mine), key=lambda x: det[x[1]].get(str(x[2]), {}).get('adc', '')):
         cur = det[k].get(str(mid))
-        if not cur or cur.get('adc', '') > old or time.time() - t1 > 1500:
+        if not cur or cur.get('adc', '') > old or time.time() - t1 > 1800:
             continue
         try:
             cur['ad'] = mal_page_links(kind, mid)
@@ -977,7 +981,7 @@ def update_mal_details():
             log('related entries failed', kind, mid, e)
             if '404' not in str(e):
                 break
-        time.sleep(1.5)
+        time.sleep(1.0)
     # synopses go in their own file (loaded only when needed)
     syn = {'a': {}, 'm': {}}
     for k in ('a', 'm'):
@@ -1009,11 +1013,11 @@ def update_film_details():
     t0, n = time.time(), 0
     for fm in site.get('films', []):
         tid = fm.get('tmdb')
-        if not tid or (det['f'].get(str(tid), {}).get('c', '') > old and det['f'].get(str(tid), {}).get('v') == 2) or time.time() - t0 > 600:
+        if not tid or fm.get('tv') or (det['f'].get(str(tid), {}).get('c', '') > old and det['f'].get(str(tid), {}).get('v') == 3) or time.time() - t0 > 600:
             continue
         try:
             d = json.loads(get(f'https://api.themoviedb.org/3/movie/{tid}?api_key={key}&append_to_response=credits', tries=1))
-            o = {'rt': d.get('runtime') or 0, 'c': today, 'v': 2}
+            o = {'rt': d.get('runtime') or 0, 'c': today, 'v': 3, 'tt': d.get('title') or ''}
             cr = d.get('credits') or {}
             o['dir'] = [x['name'] for x in cr.get('crew') or [] if x.get('job') == 'Director'][:2]
             o['cast'] = [x['name'] for x in sorted(cr.get('cast') or [], key=lambda x: x.get('order', 99))][:5]
@@ -1337,6 +1341,7 @@ def update_cover_mirror():
     # Hall of Fame pictures (blog images, favourites): mirrored by their MAL path, so a changed blog picture gets a new copy
     want = set()
     blob = json.dumps(load_json(os.path.join(DATA, 'hof.json'), {})) + json.dumps(site.get('hofImages', {})) + json.dumps(site.get('hof', {}))
+    blob += json.dumps(load_json(os.path.join(DATA, 'people_info.json'), {}))
     for m in re.finditer(r'myanimelist\.net/images/([^"~\s?]+?\.(?:jpe?g|png|webp|gif))', blob, re.I):
         want.add(m.group(1))
     src = {p: 'https://cdn.myanimelist.net/images/' + p for p in want}
@@ -1360,7 +1365,7 @@ def update_cover_mirror():
         except Exception:
             fails += 1
         time.sleep(0.15)
-    keep = {p.replace('/', '_') for p in want}
+    keep = {p.replace('/', '_') for p in want} | {f for f in os.listdir(ud) if f.startswith('studio_')}
     for f in os.listdir(ud):
         if f not in keep:
             os.remove(os.path.join(ud, f))  # picture no longer used anywhere
@@ -1369,8 +1374,445 @@ def update_cover_mirror():
     log(f'cover mirror: +{got} new, {len(site["mir"]["a"])} anime / {len(site["mir"]["m"])} manga / {len(site["mir"]["u"])} hall of fame stored, {fails} failed')
 
 
+# ---------------- Hall of Fame: people and studios ----------------
+SOCIAL = re.compile(r'^(twitter|x|instagram|youtube|tiktok|blog|profile|website|official site|official website|facebook|weibo|niconico|pixiv|line|agency|official blog|bluesky|threads)$', re.I)
+
+
+def _small_pic(u):
+    """MAL serves list thumbnails as /r/84x124/images/...; the full picture lives at /images/..."""
+    return re.sub(r'/r/\d+x\d+/', '/', (u or '').split('?')[0])
+
+
+def _franchise_key(t):
+    t = norm(re.split(r'[:(]', t)[0])
+    t = re.sub(r'\b(season|part|the movie|movie|gaiden|side story|special|zero|z|final|light novel|novel|anthology|\d+)\b.*$', '', t).strip()
+    return t or norm(t)
+
+
+def people_page(pid):
+    """Details of a MAL person: birthday, what they do, their most loved characters (voice actors) or best known works (authors)."""
+    h = re.sub(r'\s+', ' ', get(f'{MAL}/people/{pid}', tries=2))
+    txt = lambda x: html.unescape(re.sub(r'<[^>]+>', '', x)).strip()
+    o = {}
+    m = re.search(r'<meta property="og:title" content="([^"]*)"', h)
+    if m:
+        o['name'] = html.unescape(m.group(1)).replace(' - MyAnimeList.net', '').strip()
+    m = re.search(r'<meta property="og:image" content="([^"]*)"', h)
+    if m and 'questionmark' not in m.group(1):
+        o['img'] = m.group(1)
+    fam = re.search(r'<span class="dark_text">Family name:</span>\s*([^<]*)', h)
+    giv = re.search(r'<span class="dark_text">Given name:</span>\s*([^<]*)', h)
+    jp = ' '.join(x.group(1).strip() for x in (fam, giv) if x and x.group(1).strip())
+    if jp:
+        o['jp'] = jp
+    m = re.search(r'<span class="dark_text">Birthday:</span>\s*([^<]*)', h)
+    if m and m.group(1).strip() and m.group(1).strip() != 'Unknown':
+        o['bd'] = m.group(1).strip()
+    m = re.search(r'<span class="dark_text">Alternate names:</span>\s*([^<]*)', h)
+    if m and m.group(1).strip():
+        o['alt'] = html.unescape(m.group(1).strip())[:80]
+    m = re.search(r'Member Favorites:</span>\s*([\d,]+)', h)
+    if m:
+        o['fav'] = int(m.group(1).replace(',', ''))
+    m = re.search(r'js-people-informantion-more">(.*?)</div>', h)
+    if m:
+        facts, about = [], []
+        for ln in [txt(x) for x in re.split(r'<br\s*/?>', m.group(1))]:
+            fm = re.match(r"^([A-Z][\w .'/()-]{0,24}):\s*(.{1,80})$", ln)
+            if fm and not about:
+                if not SOCIAL.match(fm.group(1).strip()):
+                    facts.append([fm.group(1).strip(), fm.group(2).strip()])
+            elif ln and not re.match(r'^(source|sources)\b', ln, re.I):
+                about.append(ln)
+        if facts:
+            o['facts'] = facts[:6]
+        ab = ' '.join(about)
+        if ab:
+            cut = ab[:360]
+            o['about'] = (cut[:cut.rfind('. ') + 1] if len(ab) > 360 and '. ' in cut else cut).strip()
+    # voice acting: every role, then the five most loved characters
+    i, j = h.find('Voice Acting Roles'), h.find('Anime Staff Positions')
+    chars = {}
+    for row in re.findall(r'<tr class="js-people-character.*?</tr>', h[i:j] if 0 <= i < j else ''):
+        a = re.search(r'href="https://myanimelist\.net/anime/(\d+)/[^"]*" class="js-people-title">([^<]+)</a>', row)
+        c = re.search(r'href="https://myanimelist\.net/character/(\d+)/[^"]*">([^<]+)</a>', row)
+        if not a or not c:
+            continue
+        fav = re.search(r'js-people-favorites" style="display: none;">(\d+)', row)
+        date = re.search(r'entry-date" style="display: none">(\d+)', row)
+        role = 'Main' if re.search(r'>\s*Main\s*(?:&nbsp;)?\s*</div>', row) else 'Supporting'
+        pic = re.findall(r'data-src="(https://cdn\.myanimelist\.net/r/\d+x\d+/images/characters/[^"]+)"', row)
+        name = html.unescape(c.group(2)).strip()
+        if name.count(', ') == 1:
+            name = ' '.join(reversed(name.split(', ')))
+        cid = int(c.group(1))
+        d = date.group(1) if date else '9'
+        cur = chars.get(cid)
+        if not cur or d < cur['d']:  # keep the character's first show
+            chars[cid] = {'id': cid, 'n': name, 'img': _small_pic(pic[0]) if pic else '', 'aid': int(a.group(1)),
+                          'at': html.unescape(a.group(2)).strip(), 'fav': int(fav.group(1)) if fav else 0, 'r': role, 'd': d}
+    if chars:
+        top = sorted(chars.values(), key=lambda x: -x['fav'])[:5]
+        o['va'] = [[x['id'], x['n'], x['img'], x['aid'], x['at'], x['fav']] for x in top]
+        o['nva'] = len(chars)
+        o['nmain'] = sum(1 for x in chars.values() if x['r'] == 'Main')
+    # anime staff work
+    k = h.find('Published Manga')
+    staff = []
+    for row in re.findall(r'<tr class="js-people-staff.*?</tr>', h[j:k] if 0 <= j < k else ''):
+        a = re.search(r'href="https://myanimelist\.net/anime/(\d+)/[^"]*" class="js-people-title">([^<]+)</a>', row)
+        pos = re.search(r'</a>\s*<small>([^<]+)</small>', row) or re.search(r'<small>([^<]+)</small>', row)
+        mem = re.search(r'js-people-favorites" style="display: none;">(\d+)', row)
+        if a:
+            staff.append([int(a.group(1)), html.unescape(a.group(2)).strip(), html.unescape(pos.group(1)).strip() if pos else '', int(mem.group(1)) if mem else 0])
+    # written / drawn works
+    works = []
+    for row in re.findall(r'<tr class="js-people-manga.*?</tr>', h[k:] if k >= 0 else ''):
+        a = re.search(r'href="https://myanimelist\.net/manga/(\d+)/[^"]*" class="js-people-title">([^<]+)</a>', row)
+        role = re.search(r'</a>\s*<small>([^<]+)</small>', row)
+        ty = re.search(r'manga-info-text">([^<]*)<', row)
+        mem = re.search(r'js-people-favorites" style="display: none;">(\d+)', row)
+        pic = re.findall(r'data-src="(https://cdn\.myanimelist\.net/r/\d+x\d+/images/manga/[^"]+)"', row)
+        if a:
+            works.append({'id': int(a.group(1)), 't': html.unescape(a.group(2)).strip(), 'r': html.unescape(role.group(1)).strip() if role else '',
+                          'ty': (ty.group(1).strip() if ty else ''), 'm': int(mem.group(1)) if mem else 0, 'img': _small_pic(pic[0]) if pic else ''})
+    # what they do
+    labels = []
+    if chars:
+        labels.append('Voice actor')
+    roles = ' '.join(w['r'] for w in works)
+    if works:
+        kinds = {w['ty'].split(',')[0].strip().lower() for w in works if w['ty']}
+        novels = kinds and kinds <= {'novel', 'light novel'}
+        if 'Story & Art' in roles:
+            labels.append('Mangaka')
+        elif 'Story' in roles:
+            labels.append('Novelist' if novels else 'Author')
+        if re.search(r'(?<!Story & )\bArt\b', roles):
+            labels.append('Artist')
+    POS = [('Theme Song Performance', 'Singer'), ('Director', 'Director'), ('Original Creator', 'Original creator'), ('Series Composition', 'Writer'),
+           ('Script', 'Writer'), ('Character Design', 'Character designer'), ('Music', 'Composer'), ('Producer', 'Producer'), ('Key Animation', 'Animator'),
+           ('Animation Director', 'Animator')]
+    cnt = {}
+    for _a, _t, pos, _m in staff:
+        for key, lab in POS:
+            if key.lower() in pos.lower():
+                cnt[lab] = cnt.get(lab, 0) + 1
+                break
+    for lab, _n in sorted(cnt.items(), key=lambda x: -x[1]):
+        if lab not in labels and len(labels) < 3 and not (lab == 'Original creator' and set(labels) & {'Mangaka', 'Novelist', 'Author'}):
+            labels.append(lab)
+    o['labels'] = labels or ['Staff']
+    # best known works, one per franchise
+    seen, best = [], []
+    for w in sorted(works, key=lambda x: -x['m']):
+        key = _franchise_key(w['t'])
+        if any(key == s2 or (key.startswith(s2 + ' ') and len(s2.split()) >= 2) or (s2.startswith(key + ' ') and len(key.split()) >= 2) for s2 in seen):
+            continue
+        seen.append(key)
+        best.append([w['id'], w['t'], w['img'], w['ty'], w['m'], w['r']])
+        if len(best) == 5:
+            break
+    if best:
+        o['works'] = best
+        o['nworks'] = len(works)
+    if staff:
+        o['staff'] = sorted(staff, key=lambda x: -x[3])[:5]
+        o['nstaff'] = len(staff)
+    return o
+
+
+def company_page(cid):
+    h = re.sub(r'\s+', ' ', get(f'{MAL}/anime/producer/{cid}', tries=2))
+    o = {}
+    m = re.search(r'<meta property="og:image" content="([^"]*)"', h)
+    if m:
+        o['img'] = m.group(1)
+    for key, lab in (('jp', 'Japanese'), ('est', 'Established')):
+        m = re.search(r'<span class="dark_text">' + lab + r':</span>\s*([^<]*)', h)
+        if m and m.group(1).strip():
+            o[key] = html.unescape(m.group(1).strip())
+    m = re.search(r'Member Favorites:</span>\s*([\d,]+)', h)
+    if m:
+        o['fav'] = int(m.group(1).replace(',', ''))
+    m = re.search(r'Member Favorites:</span>\s*[\d,]+\s*</div>\s*<div class="spaceit_pad">\s*<span>(.*?)</span>', h)
+    if m:
+        ab = html.unescape(re.sub(r'<[^>]+>', ' ', m.group(1)))
+        ab = re.sub(r'\s+', ' ', ab).strip()
+        cut = ab[:360]
+        o['about'] = (cut[:cut.rfind('. ') + 1] if len(ab) > 360 and '. ' in cut else cut).strip()
+    o['n'] = len(set(re.findall(r'href="https://myanimelist\.net/anime/(\d+)/', h)))
+    return o
+
+
+def update_people_info():
+    """Hall of Fame people (voice actors, authors) and studios, read from their MAL pages; refreshed monthly.
+    Also works out the line shown under each character and person tile."""
+    path = os.path.join(DATA, 'people_info.json')
+    info = load_json(path, {'p': {}, 's': {}})
+    hof = load_json(os.path.join(DATA, 'hof.json'), {})
+    ids = set(re.findall(r'"p(\d+)~', json.dumps(hof))) | {str(p[0]) for p in hof.get('malFavs', {}).get('people') or []}
+    old = (datetime.now(timezone.utc) - timedelta(days=30)).strftime('%Y-%m-%d')
+    today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+    t0, n, fails = time.time(), 0, 0
+    for pid in sorted(ids, key=lambda c: info['p'].get(c, {}).get('chk', '')):
+        if info['p'].get(pid, {}).get('chk', '') > old or time.time() - t0 > 600 or fails > 4:
+            continue
+        try:
+            d = people_page(pid)
+            if d.get('name'):
+                d['chk'] = today
+                info['p'][pid] = d
+                n += 1
+        except Exception as e:
+            fails += 1
+            log('person page failed', pid, e)
+        time.sleep(2.0)
+    sd = os.path.join(os.path.dirname(DATA), 'covers', 'u')
+    os.makedirs(sd, exist_ok=True)
+    for c in hof.get('malFavs', {}).get('company') or []:
+        if not isinstance(c, list) or not c[0]:
+            continue
+        cid = str(c[0])
+        if info['s'].get(cid, {}).get('chk', '') > old or time.time() - t0 > 700:
+            continue
+        try:
+            d = company_page(cid)
+            d['name'] = c[1]
+            pic = d.get('img') or c[2]
+            if pic:
+                b = get_bytes(pic)
+                if len(b) > 500:
+                    with open(os.path.join(sd, f'studio_{cid}.png'), 'wb') as f:
+                        f.write(b)
+                    d['loc'] = f'covers/u/studio_{cid}.png'
+            d['chk'] = today
+            info['s'][cid] = d
+        except Exception as e:
+            log('studio page failed', cid, e)
+        time.sleep(2.0)
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(info, f, ensure_ascii=False, separators=(',', ':'))
+    # the line under each tile: a character's own show, a person's job
+    ci = load_json(os.path.join(DATA, 'char_info.json'), {})
+    eng = {a[0]: a[1] for a in site.get('anime', [])}
+    engm = {m[0]: m[1] for m in site.get('manga', [])}
+    sub = {}
+    for cid, c in ci.items():
+        A = c.get('anime') or []
+        pool = [x for x in A if x[2] == 'Main'] or A
+        if pool:
+            pick = min(pool, key=lambda x: (len(x[1]), x[0]))
+            sub['c' + cid] = eng.get(pick[0]) or pick[1]
+        elif c.get('manga'):
+            M = [x for x in c['manga'] if x[2] == 'Main'] or c['manga']
+            pick = min(M, key=lambda x: (len(x[1]), x[0]))
+            sub['c' + cid] = engm.get(pick[0]) or pick[1]
+    for pid, p in info['p'].items():
+        sub['p' + pid] = ' · '.join(p.get('labels') or [])
+    site['hofSub'] = sub
+    site['studios'] = {k: {x: v[x] for x in ('loc', 'img', 'est', 'fav', 'jp', 'about', 'n') if v.get(x)} for k, v in info['s'].items()}
+    log(f'people: +{n}, have {len(info["p"])} of {len(ids)} people, {len(info["s"])} studios')
+
+
+# ---------------- Goodreads book details ----------------
+def gr_session_get(url):
+    """Goodreads search sets a cookie and redirects; a cookie jar lets the redirect finish."""
+    import http.cookiejar
+    op = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
+    op.addheaders = [('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'), ('Accept', 'text/html,*/*')]
+    with op.open(url, timeout=40) as r:
+        return r.read().decode('utf-8', 'replace')
+
+
+def crisp(t, n=380):
+    t = re.sub(r'\s+', ' ', html.unescape(re.sub(r'<br\s*/?>', ' ', re.sub(r'<(?!br)[^>]+>', '', t or '')))).strip()
+    if len(t) <= n:
+        return t
+    cut = t[:n]
+    i = max(cut.rfind('. '), cut.rfind('! '), cut.rfind('? '))
+    return (cut[:i + 1] if i > 120 else cut.rsplit(' ', 1)[0] + '…').strip()
+
+
+def gr_book(bid):
+    h = gr_session_get(f'https://www.goodreads.com/book/show/{bid}')
+    m = re.search(r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>', h, re.S)
+    if not m:
+        raise RuntimeError('no book data on the page')
+    ap = json.loads(m.group(1)).get('props', {}).get('pageProps', {}).get('apolloState', {})
+    books = [v for k, v in ap.items() if k.startswith('Book:') and v.get('title')]
+    book = next((b for b in books if str(b.get('legacyId')) == str(bid)), None) or next((b for b in books if b.get('description')), None)
+    if not book:
+        raise RuntimeError('book not found in page data')
+    o = {'gid': str(bid)}
+    if book.get('description'):
+        o['gd'] = crisp(book['description'])
+    g = [x.get('genre', {}).get('name') for x in book.get('bookGenres') or []]
+    o['gg'] = [x for x in g if x][:6]
+    w = ap.get(((book.get('work') or {}).get('__ref')) or '', {})
+    st = w.get('stats') or {}
+    if st.get('averageRating'):
+        o['ga'] = round(float(st['averageRating']), 2)
+        o['gn'] = int(st.get('ratingsCount') or 0)
+    pages = (book.get('details') or {}).get('numPages')
+    if pages:
+        o['gp'] = pages
+    return o
+
+
+def update_book_details():
+    """Description, genres and average rating for every book, from its Goodreads page. Refreshed every 90 days."""
+    bpath = os.path.join(DATA, 'book_meta.json')
+    bm = load_json(bpath, {})
+    old = (datetime.now(timezone.utc) - timedelta(days=90)).strftime('%Y-%m-%d')
+    today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+    t0, n, fails = time.time(), 0, 0
+    for b in load_json(os.path.join(DATA, 'books.json'), {}).get('books', []):
+        bid = str(b.get('id'))
+        m = bm.setdefault(bid, {})
+        if m.get('gchk', '') > old or time.time() - t0 > 420 or fails > 6:
+            continue
+        try:
+            gid = bid if bid.isdigit() else m.get('gid')
+            if not gid:
+                q = urllib.parse.quote_plus(f"{re.sub(r'[(].*?[)]', '', b['t']).strip()} {b.get('a', '')}")
+                hs = gr_session_get(f'https://www.goodreads.com/search?q={q}&search_type=books')
+                f = re.search(r'href="/book/show/(\d+)', hs)
+                if not f:
+                    m['gchk'] = today
+                    continue
+                gid = f.group(1)
+            m.update(gr_book(gid))
+            m['gchk'] = today
+            n += 1
+        except Exception as e:
+            fails += 1
+            log('goodreads details failed', bid, b.get('t'), e)
+        time.sleep(1.5)
+    with open(bpath, 'w', encoding='utf-8') as f:
+        json.dump(bm, f, ensure_ascii=False, indent=0)
+    site['bookMeta'] = {k: {x: v[x] for x in ('syn', 'gd', 'gg', 'ga', 'gn', 'gid') if v.get(x)} for k, v in bm.items() if v.get('syn') or v.get('gd') or v.get('gg')}
+    log(f'goodreads details: +{n}, {fails} failed')
+
+
+# ---------------- extra novels and manga that MAL doesn't have ----------------
+def update_manga_extra():
+    """data/manga_extra.json holds manga and novels missing from MyAnimeList. Fill in their covers from Open Library."""
+    path = os.path.join(DATA, 'manga_extra.json')
+    ex = load_json(path, {'items': []})
+    d = os.path.join(os.path.dirname(DATA), 'covers', 'x')
+    os.makedirs(d, exist_ok=True)
+    n = 0
+    for it in ex.get('items', []):
+        fp = os.path.join(d, f"{it['id']}.jpg")
+        if os.path.exists(fp):
+            it['img'] = f"covers/x/{it['id']}.jpg"
+            continue
+        try:
+            q = urllib.parse.urlencode({'title': it.get('en') or it['t'], 'author': it.get('au', ''), 'limit': 5, 'fields': 'cover_i,title,first_publish_year'})
+            docs = json.loads(get('https://openlibrary.org/search.json?' + q, tries=2)).get('docs') or []
+            cov = next((x['cover_i'] for x in docs if x.get('cover_i')), None)
+            if cov:
+                b = get_bytes(f'https://covers.openlibrary.org/b/id/{cov}-L.jpg')
+                if len(b) > 2000:
+                    save_img(fp, b)
+                    it['img'] = f"covers/x/{it['id']}.jpg"
+                    n += 1
+        except Exception as e:
+            log('extra cover failed', it.get('t'), e)
+        time.sleep(0.5)
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(ex, f, ensure_ascii=False, indent=1)
+    log(f'extra manga/novels: {len(ex.get("items", []))}, +{n} covers')
+
+
+# ---------------- films: find TMDB ids, tell films from series ----------------
+def update_film_ids():
+    """Films whose poster came from Letterboxd never got a TMDB id, so they had no director, cast or length.
+    Look them up; anything that is really a TV series is marked so it shows under Series."""
+    key = settings.get('tmdbKey')
+    if not key:
+        return
+    det = load_json(os.path.join(DATA, 'film_details.json'), {'f': {}, 'col': {}})
+    t0, n = time.time(), 0
+    def search(kind, t, y):
+        q = urllib.parse.quote(t)
+        yk = 'year' if kind == 'movie' else 'first_air_date_year'
+        r = json.loads(get(f'https://api.themoviedb.org/3/search/{kind}?api_key={key}&query={q}' + (f'&{yk}={y}' if y else ''), tries=1)).get('results') or []
+        for x in r:
+            nm = x.get('title') or x.get('name') or ''
+            on = x.get('original_title') or x.get('original_name') or ''
+            dy = (x.get('release_date') or x.get('first_air_date') or '')[:4]
+            if (norm(nm) == norm(t) or norm(on) == norm(t)) and (not y or not dy or abs(int(dy) - int(y)) <= 1):
+                return x
+        return None
+    for fm in site.get('films', []):
+        if time.time() - t0 > 300:
+            break
+        tid = fm.get('tmdb')
+        d = det['f'].get(str(tid), {}) if tid else {}
+        wrong = tid and not fm.get('tv') and d.get('tt') and norm(d['tt']) != norm(fm['t'])
+        if (tid and not wrong) or fm.get('tv') or fm.get('idTried') or fm.get('idOk'):
+            continue
+        try:
+            y = fm.get('y') or 0
+            mv = search('movie', fm['t'], y)
+            tv = None if mv else search('tv', fm['t'], y)
+            if mv:
+                fm['tmdb'] = mv['id']
+                fm['idOk'] = 1
+                if not fm.get('img') and mv.get('poster_path'):
+                    fm['img'] = 'https://image.tmdb.org/t/p/w342' + mv['poster_path']
+            elif tv:
+                fm['tv'] = tv['id']
+                fm.pop('tmdb', None)
+                if tv.get('poster_path'):
+                    fm['tvimg'] = 'https://image.tmdb.org/t/p/w342' + tv['poster_path']
+            else:
+                fm['idTried'] = 1
+            n += 1
+        except Exception as e:
+            log('tmdb id lookup failed', fm.get('t'), e)
+        time.sleep(0.2)
+    log(f'film ids: looked up {n}')
+
+
+def update_series():
+    """TV series you keep on the site (data/series.json): poster, seasons, episodes and length from TMDB."""
+    key = settings.get('tmdbKey')
+    path = os.path.join(DATA, 'series.json')
+    sr = load_json(path, {'series': []})
+    if not key:
+        return
+    old = (datetime.now(timezone.utc) - timedelta(days=30)).strftime('%Y-%m-%d')
+    today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+    det = load_json(os.path.join(DATA, 'series_details.json'), {})
+    ids = {str(s['id']) for s in sr.get('series', []) if s.get('id')} | {str(f['tv']) for f in site.get('films', []) if f.get('tv')}
+    n = 0
+    for tid in ids:
+        if det.get(tid, {}).get('c', '') > old:
+            continue
+        try:
+            d = json.loads(get(f'https://api.themoviedb.org/3/tv/{tid}?api_key={key}&append_to_response=aggregate_credits', tries=1))
+            o = {'c': today, 't': d.get('name') or '', 'y': (d.get('first_air_date') or '')[:4], 'img': ('https://image.tmdb.org/t/p/w342' + d['poster_path']) if d.get('poster_path') else '',
+                 'ns': d.get('number_of_seasons') or 0, 'ne': d.get('number_of_episodes') or 0, 'rt': (d.get('episode_run_time') or [0])[0] if d.get('episode_run_time') else 0,
+                 'st': d.get('status') or '', 'g': [x['name'] for x in d.get('genres') or []][:4], 'by': [x['name'] for x in d.get('created_by') or []][:2],
+                 'net': [x['name'] for x in d.get('networks') or []][:2], 'cast': [x['name'] for x in ((d.get('aggregate_credits') or {}).get('cast') or [])][:5],
+                 'ov': (d.get('overview') or '')[:500], 'ly': (d.get('last_air_date') or '')[:4]}
+            if not o['rt'] and (d.get('last_episode_to_air') or {}).get('runtime'):
+                o['rt'] = d['last_episode_to_air']['runtime']
+            det[tid] = o
+            n += 1
+        except Exception as e:
+            log('tmdb series failed', tid, e)
+        time.sleep(0.2)
+    with open(os.path.join(DATA, 'series_details.json'), 'w', encoding='utf-8') as f:
+        json.dump(det, f, ensure_ascii=False, separators=(',', ':'))
+    log(f'series details: +{n}, {len(det)} known')
+
+
 for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd),
-                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('book copies', mirror_book_covers), ('grouvee', update_grouvee), ('film details', update_film_details), ('mal details', update_mal_details), ('summaries', update_summaries), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('characters', update_char_info), ('cover mirror', update_cover_mirror)]:
+                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('book copies', mirror_book_covers), ('grouvee', update_grouvee), ('film ids', update_film_ids), ('film details', update_film_details), ('series', update_series), ('mal details', update_mal_details), ('summaries', update_summaries), ('book details', update_book_details), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('characters', update_char_info), ('people', update_people_info), ('extra manga', update_manga_extra), ('cover mirror', update_cover_mirror)]:
     try:
         fn()
         status[name] = 'ok'

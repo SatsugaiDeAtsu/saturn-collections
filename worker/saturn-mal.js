@@ -46,6 +46,14 @@ export default {
         const data = await igdb(env, `search "${q}"; fields name,url,summary,first_release_date,cover.image_id,platforms.name,platforms.abbreviation,genres.name,involved_companies.developer,involved_companies.company.name; limit 16;`);
         return json(data);
       }
+      // book search (Goodreads' own quick search, so Urdu and lesser-known books turn up too)
+      if (url.pathname === '/books') {
+        const q = (url.searchParams.get('q') || '').slice(0, 80);
+        const r = await fetch(`https://www.goodreads.com/book/auto_complete?format=json&q=${encodeURIComponent(q)}`, { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36', Accept: 'application/json' } });
+        let d = [];
+        try { d = JSON.parse(await r.text()); } catch (e) { d = []; }
+        return json(Array.isArray(d) ? d : [], Array.isArray(d) ? 200 : 502);
+      }
       // sign-in: swap the code (or refresh token) for an access token
       if (url.pathname === '/token' && req.method === 'POST') {
         const b = await req.json();

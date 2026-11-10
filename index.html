@@ -361,6 +361,21 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .hsec .desc{color:var(--ink2);font-size:13px;padding:10px 14px 0}
 .hgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px}
 .hgrid .card .meta .tt{font-size:12px}
+.tvtag{position:absolute;left:6px;top:6px;z-index:3;font-size:9.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:rgba(10,4,14,.78);color:#fff;padding:2px 6px}
+.ficons{display:inline-flex;gap:5px;align-items:center}.ficons i{font-style:normal}
+.rwi{color:#b48cff;font-weight:700}
+.srccred{padding:0 14px 12px;line-height:1.5}
+.slogo{aspect-ratio:1;background:#fff;display:grid;place-items:center;padding:14px;border-bottom:1px solid var(--line)}
+.slogo img{max-width:100%;max-height:100%;object-fit:contain;display:block}
+.slogo b{font-family:"Space Grotesk";font-size:26px;color:#7a3fd1}
+.slogo.big{width:100%;border:1px solid var(--line);padding:22px;align-self:start}
+.plabels{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.plab{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 9px;border:1px solid var(--anime);color:var(--anime);background:color-mix(in srgb,var(--anime) 10%,transparent)}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:10px}
+.ptile{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;gap:3px;min-width:0}
+.ptile:hover .cover{outline:2px solid var(--accent)}
+.ptile .pn{font-size:12px;font-weight:600;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ptile .ps{font-size:10.5px;color:var(--ink3);line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .couples{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
 .couple{border:1px solid var(--line);background:var(--panel);display:flex;flex-direction:column}
 .couple .pair{display:grid;grid-template-columns:1fr 1fr}
@@ -658,7 +673,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:v
 <script>
 (async function(){
 "use strict";
-let D,SET={};try{const j=u=>fetch(u,{cache:'no-cache'}).then(r=>r.json());const [a,g,b,s,q,wr]=await Promise.all([j('data/site.json'),j('data/games.json'),j('data/books.json'),j('data/settings.json').catch(()=>({})),j('data/quotes.json').catch(()=>({quotes:[]})),j('data/writing.json').catch(()=>({works:[]}))]);D=Object.assign(a,g,b,q,wr);SET=s}catch(e){document.getElementById('app').innerHTML='<div class="empty">Could not load data/site.json.</div>';return}
+let D,SET={};try{const j=u=>fetch(u,{cache:'no-cache'}).then(r=>r.json());const [a,g,b,s,q,wr,mx,se]=await Promise.all([j('data/site.json'),j('data/games.json'),j('data/books.json'),j('data/settings.json').catch(()=>({})),j('data/quotes.json').catch(()=>({quotes:[]})),j('data/writing.json').catch(()=>({works:[]})),j('data/manga_extra.json').catch(()=>({items:[]})),j('data/series.json').catch(()=>({series:[]}))]);D=Object.assign(a,g,b,q,wr);D.mangaExtra=mx.items||[];D.series=se.series||[];SET=s}catch(e){document.getElementById('app').innerHTML='<div class="empty">Could not load data/site.json.</div>';return}
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm=s=>String(s||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
@@ -805,6 +820,14 @@ const anime=D.anime.map(a=>({tags:TAGS[a[0]]||'',id:a[0],t:a[1],alt:a[2],st:a[3]
 const filmByKey={};
 const films=D.films.map((f,i)=>{const o=Object.assign({},f,{i,logs:f.n,rw:f.rw||0,n:norm(f.t)});filmByKey[norm(f.t)+'|'+f.y]=o;return o});
 const filmUri={};films.forEach(f=>filmUri[f.u]=f);
+/* TV series: kept on this site (data/series.json) plus anything Letterboxd logged that is really a series */
+const SST={w:['Watched','var(--s2)'],c:['Watching','var(--s1)'],l:['Watchlist','var(--s6)'],h:['On hold','var(--s3)'],d:['Dropped','var(--s4)']};
+const seriesOwn=[];
+function rebuildSeries(){seriesOwn.length=0;const lb={};films.forEach(f=>{if(f.tv)lb[f.tv]=f});
+  films.forEach(f=>{if(f.tv&&!f.sst)f.sst=f.s==='w'?'w':'l'});
+  (D.series||[]).forEach((x,k)=>{const f=lb[x.id];if(f){Object.assign(f,{sst:x.st||f.sst,r:x.r||f.r,rv:x.note||f.rv,lk:x.lk||f.lk,rw:x.rw||f.rw,own:1,ix:k});return}
+    seriesOwn.push({tv:x.id,t:x.t,y:+x.y||0,img:x.img||'',s:x.st==='l'?'l':'w',sst:x.st||'w',r:x.r||0,rw:x.rw||0,lk:x.lk||0,rv:x.note||'',d:x.d||'',wd:x.wd||'',n:norm(x.t),u:'',own:1,ix:k,logs:0})})}
+rebuildSeries();
 const listsFor=f=>D.filmLists.filter(l=>l.items.some(([t,y])=>norm(t)===f.n&&y===f.y)).map(l=>l.name);
 const GSH={'Playing':'var(--s1)','Replaying':'#b48cff','Played':'var(--s2)','Backlog':'var(--s3)','Retired':'var(--s4)','Wish List':'var(--s6)'};
 const GPLAYED={Played:1,Playing:1,Replaying:1,Retired:1};
@@ -821,7 +844,7 @@ const gBadge=g=>g.r?`<span class="badge">${g.r}/5</span>`:'';
 const dlcTile=(d,i,edit)=>`<${edit?'button type="button"':'div'} class="dlct${d.p?' on':''}" ${edit?`data-dp="${i}" aria-pressed="${d.p?'true':'false'}"`:''} title="${esc(d.n)}${d.p?' · played':''}">${cover(d.n,d.img||d.base,`${d.img?'':'<span class="dlctag">DLC</span>'}${d.p?'<span class="dlcok">✓</span>':''}`)}<span class="dn">${esc(d.n)}</span>${edit&&d.mine?`<span class="x" data-dx="${i}" role="button" aria-label="Remove">✕</span>`:''}</${edit?'button':'div'}>`;
 const games=D.games.map((g,i)=>Object.assign({i,n:norm(g.t+' '+(g.fr||[]).join(' '))},g,{img:g.img||(D.gameCovers||{})[g.id]||''},GDEF(g)));
 const stories=D.stories;
-const MED={overview:{c:'var(--accent)',name:'Edit mode'},hof:{c:'var(--gold)',name:'Hall of Fame'},manga:{c:'var(--manga)',name:'Manga'},books:{c:'var(--book)',name:'Books'},anime:{c:'var(--anime)',name:'Anime'},films:{c:'var(--film)',name:'Films'},games:{c:'var(--game)',name:'Games'},stories:{c:'var(--story)',name:'Stories'}};
+const MED={overview:{c:'var(--accent)',name:'Edit mode'},hof:{c:'var(--gold)',name:'Hall of Fame'},manga:{c:'var(--manga)',name:'Manga'},books:{c:'var(--book)',name:'Books'},anime:{c:'var(--anime)',name:'Anime'},films:{c:'var(--film)',name:'Films'},games:{c:'var(--game)',name:'Games'},stories:{c:'var(--story)',name:'Stories'},characters:{c:'#24a896',name:'Characters'},people:{c:'#d9a514',name:'People'},hofp:{c:'var(--gold)',name:'Hall of Fame'}};
 const stars=r=>{if(!r)return'';const f=Math.floor(r);return '★'.repeat(f)+(r%1?'½':'')};
 const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
 
@@ -1037,7 +1060,9 @@ function favRow(title,k,items){
 /* ---------- manga ---------- */
 const MST={1:['Reading','var(--s1)'],2:['Completed','var(--s2)'],3:['On-Hold','var(--s3)'],4:['Dropped','var(--s4)'],6:['Plan to Read','var(--s6)']};
 const MTAGS=D.mangaTags||{};
+const XMANGA=x=>({tags:x.note||'',id:x.id,t:x.t,alt:x.alt||'',st:x.st||6,sc:x.sc||0,ch:x.ch||0,chs:x.chs||0,vol:x.vol||0,vols:x.vols||0,type:x.ty||'Novel',img:x.img||'',y:x.y||0,g:x.g||[],mal:0,rw:x.rw||0,rwing:0,up:x.up||0,n:norm(x.t+' '+(x.alt||'')+' '+(x.en||'')),local:1,au:x.au||'',jt:x.jt||'',d:x.d||''});
 const manga=D.manga.map(m=>({tags:MTAGS[m[0]]||'',id:m[0],t:m[1],alt:m[2],st:m[3],sc:m[4],ch:m[5],chs:m[6],vol:m[7],vols:m[8],type:m[9],img:MIRM.has(m[0])?`covers/m/${m[0]}.jpg`:m[10]?`https://cdn.myanimelist.net/images/manga/${m[10]}.jpg`:'',y:m[11],g:m[12].map(i=>D.mangaGenres[i]),mal:m[13],rw:m[14]||0,rwing:m[15]||0,up:m[16]||0,n:norm(m[1]+' '+m[2])}));
+(D.mangaExtra||[]).forEach(x=>manga.push(XMANGA(x)));
 function rManga(){
   const sc=manga.filter(m=>m.sc>0);
   const types=[...new Set(manga.map(m=>m.type))].sort();
@@ -1072,7 +1097,7 @@ function bindRel(det){
   document.querySelectorAll('#m_x [data-rk]').forEach(b=>b.onclick=()=>{
     const k=b.dataset.rk,id=+b.dataset.rid,own=(k==='a'?anime:manga).find(x=>x.id===id);
     if(own)return (k==='a'?openAnime:openManga)(own);
-    const d=det[k][id]||{};const kind=k==='a'?'anime':'manga';
+    const d=det[k][id]||{t:b.getAttribute('title')||''};const kind=k==='a'?'anime':'manga';
     openExt(kind,{malId:id,t:d.t,alt:d.jt||'',y:(d.sd||'').slice(0,4),sum:(_MS&&_MS[k][id])||'',img:d.img?`https://cdn.myanimelist.net/images/${kind}/${d.img}.jpg`:'',meta:[TYN[d.ty]||'',d.n?d.n+(k==='a'?' eps':' ch'):'',k==='a'&&d.dur?hm(d.dur/60)+' each':'',d.mal?'MAL '+d.mal:'',(d.stu||d.au||[]).join(', ')].filter(Boolean).join(' · '),url:`https://myanimelist.net/${kind}/${id}`});
   });
 }
@@ -1083,6 +1108,8 @@ async function malExtra(k,x){
   const det=_MD,me=det[k][x.id];
   if(!me){box.innerHTML=`<div class="small muted" style="margin-top:10px">Episode length and related entries for this one arrive with the next update.</div>`;return}
   const ok=(kk,id)=>{const d=det[kk][id];return d&&!d.x&&!d.gone};
+  const ok2k=k==='a'?'m':'a',stub={};(me.ad||[]).forEach(r=>{if(!det[ok2k][r[0]])stub[ok2k+r[0]]={t:r[2]||'',ty:''}});
+  const okr=(kk,id)=>ok(kk,id)||(!det[kk][id]&&!!stub[kk+id]);
   let h='';
   // length
   if(k==='a'&&me.dur){const per=me.dur/60,eps=me.n||x.eps||0,film=me.ty==='movie'||eps===1;
@@ -1090,9 +1117,9 @@ async function malExtra(k,x){
     h+=`<div class="kv" style="margin-top:0"><div>Length</div><div>${film?hm(per):`${hm(per)} per episode${eps?` · ${hm(per*eps)} in total`:''}`}</div>${mine>0?`<div>Your time</div><div>about ${hm(mine)}${x.rw?' including rewatches':''}</div>`:''}</div>`}
   // direct relations
   const ok2=k==='a'?'m':'a';const cross=(me.ad||[]).map(r=>[ok2,r[0],r[1]==='adaptation'?'adaptation':(r[1]||'other')]);
-  const rels=[...(me.ra||[]).map(r=>['a',r[0],r[1]]),...(me.rm||[]).map(r=>['m',r[0],r[1]]),...cross].filter((r,i,A)=>ok(r[0],r[1])&&A.findIndex(z=>z[0]===r[0]&&z[1]===r[1])===i)
+  const rels=[...(me.ra||[]).map(r=>['a',r[0],r[1]]),...(me.rm||[]).map(r=>['m',r[0],r[1]]),...cross].filter((r,i,A)=>okr(r[0],r[1])&&A.findIndex(z=>z[0]===r[0]&&z[1]===r[1])===i)
     .sort((p,q)=>(p[0]===k?0:1)-(q[0]===k?0:1)||RELO.indexOf(p[2])-RELO.indexOf(q[2]));
-  if(rels.length)h+=`<div class="sect" style="--c:${k==='a'?'var(--anime)':'var(--manga)'};margin-top:14px"><h2><i></i>Related</h2><div class="relgrid">${rels.map(r=>relTile(r[0],r[1],r[2],det[r[0]][r[1]])).join('')}</div></div>`;
+  if(rels.length)h+=`<div class="sect" style="--c:${k==='a'?'var(--anime)':'var(--manga)'};margin-top:14px"><h2><i></i>Related</h2><div class="relgrid">${rels.map(r=>relTile(r[0],r[1],r[2],det[r[0]][r[1]]||stub[r[0]+r[1]])).join('')}</div></div>`;
   // the whole franchise in release order (same medium)
   const key=k==='a'?'ra':'rm',seen=new Set([x.id]),q=[x.id];
   while(q.length&&seen.size<80){const id=q.shift(),d=det[k][id];if(!d)continue;(d[key]||[]).forEach(([n,rel])=>{if(rel!=='character'&&!seen.has(n)&&ok(k,n)){seen.add(n);q.push(n)}})}
@@ -1102,15 +1129,17 @@ async function malExtra(k,x){
       return `<li class="${cur?'cur':''}"><button type="button" ${cur?'disabled':''} data-rk="${k}" data-rid="${id}"><span class="fd mono">${esc((d.sd||'').slice(0,7)||'—')}</span><span class="ft">${esc(TYN[d.ty]||(d.ty||'').toUpperCase())}</span><span class="fn">${esc(own?own.t:d.t)}${k==='a'&&d.dur&&(d.ty==='movie'||d.n===1)?` <span class="muted">· ${hm(d.dur/60)}</span>`:k==='a'&&d.n?` <span class="muted">· ${d.n} ep</span>`:''}</span><span class="fs" style="color:${st?st[1]:'var(--ink3)'}">${cur?'You are here':st?esc(st[0])+(own.sc?' · '+own.sc:''):'Not in your list'}</span></button></li>`}).join('')}</ol></details>`;
   }
   // studio / author, airing, synopsis
-  const MS=await loadSyn();const syn=MS[k][x.id];
+  loadSyn();
   let top='';
   if(k==='a'&&me.stu&&me.stu.length)top+=`<div>Studio</div><div>${me.stu.map(esc).join(', ')}</div>`;
   if(k==='m'&&me.au&&me.au.length)top+=`<div>Author</div><div>${me.au.map(esc).join(', ')}</div>`;
   if(k==='a'&&me.st==='currently_airing'){const nx=nextAir(me);top+=`<div>Airing</div><div>Every ${esc(cap(me.bc?me.bc[0]:''))}${nx?` · next episode ${esc(nx.when)} (${esc(nx.in)})`:''}</div>`}
   else if(me.st==='not_yet_aired'||me.st==='not_yet_published')top+=`<div>Status</div><div>Not out yet${me.sd?' · starts '+esc(me.sd):''}</div>`;
-  h=(top?`<div class="kv" style="margin-top:0">${top}</div>`:'')+(syn?`<div class="syn">${esc(syn)}</div>`:'')+h;
+  h=(top?`<div class="kv" style="margin-top:0">${top}</div>`:'')+h;
   box.innerHTML=h;bindRel(det);
+  if(k==='a'&&me.src){const kv=$('#modal .kv');const t=kv&&[...kv.children].find(d=>d.textContent==='Type');if(t&&t.nextElementSibling){t.nextElementSibling.insertAdjacentHTML('afterend',`<div>Source</div><div>${esc(SRCN[me.src]||cap(me.src.replace(/_/g,' ')))}</div>`)}}
 }
+const SRCN={original:'Original',manga:'Manga','4_koma_manga':'4-koma manga',web_manga:'Web manga',digital_manga:'Digital manga',novel:'Novel',light_novel:'Light novel',visual_novel:'Visual novel',game:'Game',card_game:'Card game',book:'Book',picture_book:'Picture book',radio:'Radio',music:'Music',web_novel:'Web novel',mixed_media:'Mixed media',other:'Other'};
 let _MS=null;async function loadSyn(){if(!_MS)_MS=await loadJ('data/mal_syn.json')||{a:{},m:{}};return _MS}
 const cap=s=>s?s[0].toUpperCase()+s.slice(1):'';
 const DOW=['sunday','monday','tuesday','wednesday','thursday','friday','saturday'];
@@ -1125,7 +1154,7 @@ async function filmExtra(f){
   if(!_FD)_FD=await loadJ('data/film_details.json')||{f:{},col:{}};
   if($('#m_x')!==box)return;
   const me=_FD.f[f.tmdb];if(!me)return;
-  let h=`<div class="kv" style="margin-top:0">${me.dir&&me.dir.length?`<div>Director</div><div>${me.dir.map(esc).join(', ')}</div>`:''}${me.cast&&me.cast.length?`<div>Starring</div><div>${me.cast.map(esc).join(', ')}</div>`:''}${me.g&&me.g.length?`<div>Genres</div><div>${me.g.map(g=>`<span class="tag">${esc(g)}</span>`).join('')}</div>`:''}${me.rt?`<div>Length</div><div>${hm(me.rt)}${f.s==='w'&&f.rw?` · about ${hm(me.rt*(1+f.rw))} with rewatches`:''}</div>`:''}</div>${me.ov?`<div class="syn">${esc(me.ov)}</div>`:''}`;
+  let h=`<div class="kv" style="margin-top:0">${me.dir&&me.dir.length?`<div>Director</div><div>${me.dir.map(esc).join(', ')}</div>`:''}${me.cast&&me.cast.length?`<div>Starring</div><div>${me.cast.map(esc).join(', ')}</div>`:''}${me.g&&me.g.length?`<div>Genres</div><div>${me.g.map(g=>`<span class="tag">${esc(g)}</span>`).join('')}</div>`:''}${me.rt?`<div>Length</div><div>${hm(me.rt)}${f.s==='w'&&f.rw?` · about ${hm(me.rt*(1+f.rw))} with rewatches`:''}</div>`:''}</div>${me.ov&&f.s!=='w'?`<div class="syn">${esc(me.ov)}</div>`:''}`;
   const col=me.col&&_FD.col[me.col];
   if(col&&col.p.length>1){
     h+=`<div class="sect" style="--c:var(--film);margin-top:14px"><h2><i></i>${esc(col.n)} <span class="muted mono">${col.p.length} films</span></h2><div class="relgrid">${col.p.map(([id,t,d,pp],i)=>{const own=films.find(x=>x.tmdb===id),cur=id===f.tmdb;
@@ -1150,12 +1179,13 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-gi],[data-
 function openManga(m){
   modal('manga','Manga',`${cover(m.t,m.img)}<div><h2>${esc(m.t)}</h2>${m.alt?`<div class="muted">${esc(m.alt)}</div>`:''}
   <div class="bigscore"><div><b>${m.sc||'–'}</b><small>Your score</small></div><div><b>${m.mal?m.mal.toFixed(2):'–'}</b><small>MAL score</small></div><div><b style="color:${MST[m.st][1]}">■</b><small>${MST[m.st][0]}</small></div></div>
-  <div class="kv"><div>Type</div><div>${esc(m.type)}</div><div>Chapters</div><div>${m.ch} read of ${m.chs||'?'}</div>${m.vols||m.vol?`<div>Volumes</div><div>${m.vol} read of ${m.vols||'?'}</div>`:''}<div>Reread</div><div>${m.rw} time${m.rw===1?'':'s'}${m.rwing?' · rereading now':''}</div><div>Published</div><div>${m.y||'–'}</div><div>Genres</div><div>${m.g.map(g=>`<span class="tag">${esc(g)}</span>`).join('')||'–'}</div></div>
+  <div class="kv"><div>Type</div><div>${esc(m.type)}</div>${m.local&&!m.chs?'':`<div>Chapters</div><div>${m.ch} read of ${m.chs||'?'}</div>`}${m.vols||m.vol?`<div>Volumes</div><div>${m.vol} read of ${m.vols||'?'}</div>`:''}<div>Reread</div><div>${m.rw} time${m.rw===1?'':'s'}${m.rwing?' · rereading now':''}</div><div>Published</div><div>${m.y||'–'}</div><div>Genres</div><div>${m.g.map(g=>`<span class="tag">${esc(g)}</span>`).join('')||'–'}</div></div>
   <div id="m_x"></div>
   ${m.tags?`<div class="review" style="--c:var(--manga)">${esc(m.tags)}</div>`:''}
-  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?'<button class="btn pri" id="m_edit">Edit</button>':''}<a class="btn${ED.on?'':' pri'}" href="https://myanimelist.net/manga/${m.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
+  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?'<button class="btn pri" id="m_edit">Edit</button>':''}${m.local?`<span class="small muted" style="align-self:center">Not on MyAnimeList, so it's kept on this site.</span>`:`<a class="btn${ED.on?'':' pri'}" href="https://myanimelist.net/manga/${m.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a>`}</div></div>`);
   const me=$('#m_edit');if(me)me.onclick=()=>editMal('manga',m);
-  malExtra('m',m);
+  if(m.local){const kv=$('#modal .kv');if(kv&&(m.au||m.jt))kv.insertAdjacentHTML('beforeend',`${m.au?`<div>Author</div><div>${esc(m.au)}</div>`:''}${m.jt?`<div>Japanese</div><div>${esc(m.jt)}</div>`:''}`);if(m.d){$('#m_x').innerHTML=`<div class="syn">${esc(m.d)}</div>`}}
+  else malExtra('m',m);
 }
 
 /* ---------- books ---------- */
@@ -1166,7 +1196,7 @@ const bstars=r=>{if(!r)return'';const full=Math.floor(r),part=r-full;return '★
 function rBooks(){
   const shelves=[...new Set(books.flatMap(b=>b.sh))].sort();
   const rd=books.filter(b=>b.st==='read');
-  listPage({key:'books',title:'Books',sub:`${books.length} books · kept on this site`,
+  listPage({key:'books',title:'Books',sub:`${books.length} books`,
     bst:()=>[[rd.length,'read'],[fmt(rd.reduce((s,b)=>s+b.p,0)),'pages'],[books.filter(b=>b.ur).length,'Urdu']],
     items:()=>books,
     tabs:[['read','Read',b=>b.st==='read'],['reading','Reading',b=>b.st==='reading'],['toread','Want to read',b=>b.st==='toread'],['dnf','Did not finish',b=>b.st==='dnf'],['hold','On hold',b=>b.st==='hold']],
@@ -1182,12 +1212,13 @@ function rBooks(){
 }
 function openBook(b){
   modal('books','Book',`${cover(b.t,b.img||'')}<div><h2>${esc(b.t)}</h2>${b.ur?`<div class="urdu" style="font-size:18px">${esc(b.ur)}</div>`:''}<div class="muted">${esc(b.a)}</div>
-  <div class="bigscore"><div><b class="stars" style="color:var(--book)">${b.r?bstars(b.r):'–'}</b><small>${b.r?b.r+' / 5':'Not rated'}</small></div><div><b style="color:${BST[b.st][1]}">■</b><small>${BST[b.st][0]}</small></div></div>
-  <div class="kv">${b.p?`<div>Pages</div><div>${b.p}</div>`:''}${b.y?`<div>First published</div><div>${b.y}</div>`:''}${b.sh.length?`<div>Shelves</div><div>${b.sh.map(s=>`<span class="tag">${esc(s)}</span>`).join('')}</div>`:''}</div>
-  ${((D.bookMeta||{})[b.id]||{}).syn?`<div class="syn">${esc(D.bookMeta[b.id].syn)}</div>`:''}
+  ${(()=>{const bm=(D.bookMeta||{})[b.id]||{};b.__bm=bm;return ''})()}
+  <div class="bigscore"><div><b class="stars" style="color:var(--book)">${b.r?bstars(b.r):'–'}</b><small>${b.r?b.r+' / 5':'Not rated'}</small></div><div><b style="color:${BST[b.st][1]}">■</b><small>${BST[b.st][0]}</small></div>${b.__bm.ga?`<div><b>${b.__bm.ga.toFixed(2)}</b><small>Goodreads avg</small></div>`:''}</div>
+  <div class="kv">${b.p?`<div>Pages</div><div>${b.p}</div>`:''}${b.y?`<div>First published</div><div>${b.y}</div>`:''}${b.__bm.gg&&b.__bm.gg.length?`<div>Genres</div><div>${b.__bm.gg.map(s=>`<span class="tag">${esc(s)}</span>`).join('')}</div>`:''}${b.__bm.ga?`<div>Goodreads</div><div>${b.__bm.ga.toFixed(2)} average from ${fmt(b.__bm.gn||0)} ratings</div>`:''}${b.sh.length?`<div>Shelves</div><div>${b.sh.map(s=>`<span class="tag">${esc(s)}</span>`).join('')}</div>`:''}</div>
+  ${b.__bm.gd||b.__bm.syn?`<div class="syn">${esc(b.__bm.gd||b.__bm.syn)}</div>`:''}
   ${bookSeries(b)}
   ${b.rv?`<div class="review" style="--c:var(--book)">${esc(b.rv)}</div>`:''}
-  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?`<button class="btn pri" id="m_edit">Edit</button>`:''}${/^\d+$/.test(String(b.id))?`<a class="btn${ED.on?'':' pri'}" href="https://www.goodreads.com/book/show/${esc(b.id)}" target="_blank" rel="noopener">Open on Goodreads ↗</a>`:''}</div></div>`);
+  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?`<button class="btn pri" id="m_edit">Edit</button>`:''}${(()=>{const gid=/^\d+$/.test(String(b.id))?b.id:b.__bm.gid;return `<a class="btn${ED.on?'':' pri'}" href="${gid?'https://www.goodreads.com/book/show/'+esc(gid):'https://www.goodreads.com/search?q='+encodeURIComponent(b.t+' '+b.a)}" target="_blank" rel="noopener">Open on Goodreads ↗</a>`})()}</div></div>`);
   const me=$('#m_edit');if(me)me.onclick=()=>editBook(b);
 }
 
@@ -1200,7 +1231,8 @@ function hItem(code,extra){
   const [kid,name,pic]=code.split('~');const k=kid[0],id=+kid.slice(1);
   const own=k==='a'?anime.find(x=>x.id===id):k==='m'?manga.find(x=>x.id===id):null;
   const idx=HOFITEMS.push({k,id,name,own,pic})-1;
-  return `<div class="card" data-h="${idx}">${cover(own?own.t:name,pic||(own&&own.img?own.img:HIMG(k,id)),(own&&own.sc?`<span class="badge">${own.sc}</span>`:''))}<div class="meta"><div class="tt">${esc(name)}</div><div class="ss"><span>${esc(extra||KLAB[k])}</span></div></div></div>`;
+  const sub=(k==='c'||k==='p')&&(D.hofSub||{})[k+id]||extra||KLAB[k];
+  return `<div class="card" data-h="${idx}">${cover(own?own.t:name,pic||(own&&own.img?own.img:HIMG(k,id)),(own&&own.sc?`<span class="badge">${own.sc}</span>`:''))}<div class="meta"><div class="tt">${esc(name)}</div><div class="ss"><span>${esc(sub)}</span></div></div></div>`;
 }
 const HIMG=(k,id)=>(D.hofImages||{})[k+id]||'';
 function coupleCards(list){
@@ -1220,7 +1252,7 @@ function rHof(){
   if(hofSeg==='anime'){
     G('g-mal','MAL favourites','My official top anime and studios on MyAnimeList.','star','#8a50e0','https://myanimelist.net/profile/SatsugaiDeAtsu',[
       sec('s-mal-a','Top anime','',grid(F.anime.map(([id,t,sub])=>hItem('a'+id+'~'+t,sub)).join(''))),
-      sec('s-mal-s','Top studios','',`<div style="display:flex;flex-wrap:wrap;gap:6px">${F.company.map(c=>`<span class="chip">${esc(c)}</span>`).join('')}</div>`)]);
+      sec('s-mal-s','Top studios','These are the studios in the Favorites on your MAL profile. To change them, open a studio on MyAnimeList and tap Add to Favorites (or remove it there); the site picks it up with the next update.',grid(F.company.map(studioTile).join('')))]);
     G('g-hon','Honorary favourites','Shows special to me beyond the top 10, plus my nurturing legacy.','star','#d9a514',blogUrl(804802),
       fil(hon,/anime/i).map(([t,d,it],i)=>sec('s-hon-'+i,t.replace(/^Honorary mentions: /,'Honorary mentions · '),d,grid(it.map(c=>hItem(c)).join('')))));
     const p10=anime.filter(a=>a.sc===10).sort((a,b)=>b.mal-a.mal);
@@ -1228,11 +1260,11 @@ function rHof(){
   }else if(hofSeg==='chars'){
     G('g-malc','MAL favourites','My official top characters and people on MyAnimeList.','star','#8a50e0','https://myanimelist.net/profile/SatsugaiDeAtsu',[
       sec('s-mal-c','Top characters','',grid(F.character.map(([id,t,sub])=>hItem('c'+id+'~'+t,sub)).join(''))),
-      sec('s-mal-p','Top people','',grid(F.people.map(([id,t])=>hItem('p'+id+'~'+t,'Person')).join('')))]);
+      sec('s-mal-p','Top people','',grid(F.people.map(([id,t])=>hItem('p'+id+'~'+t)).join('')))]);
     G('g-honc','Honorary favourites','Characters special to me beyond the top 10.','star','#d9a514',blogUrl(804802),
       fil(hon,/character/i).map(([t,d,it],i)=>sec('s-honc-'+i,t.replace(/^Honorary mentions: /,'Honorary mentions · '),d,grid(it.map(c=>hItem(c)).join('')))));
     G('g-chr','Character corner','Parents, battalions, villains, the ones I hate, and the people behind it all.','mask','#24a896',blogUrl(804802),
-      chr.map(([t,d,it],i)=>sec('s-chr-'+i,t,d,grid(it.map(c=>hItem(c)).join('')),/hate/i.test(t)?'hated':'')).concat((H.people||[]).map(([t,d,it],i)=>sec('s-ppl-'+i,t,d,grid(it.map(c=>hItem(c,'Person')).join(''))))));
+      chr.map(([t,d,it],i)=>sec('s-chr-'+i,t,d,grid(it.map(c=>hItem(c)).join('')),/hate/i.test(t)?'hated':'')).concat((H.people||[]).map(([t,d,it],i)=>sec('s-ppl-'+i,t,d,grid(it.map(c=>hItem(c)).join(''))))));
   }else if(hofSeg==='waifus'){
     G('g-wai','Waifus','A blog of its own: the goddess, the waifus, the battalion and more.','heart','#d24a7a',blogUrl(804810),
       wai.map(([t,d,it],i)=>sec('s-wai-'+i,t,d,grid(it.map(c=>hItem(c)).join('')))));
@@ -1277,6 +1309,7 @@ function rHof(){
     ${g.secs.map(s=>`<section class="box hsec ${s.cls||''}" id="${s.id}" style="--c:${/hate/i.test(s.title)?'var(--s4)':g.c}"><div class="box-h"><h2>${esc(s.title)}</h2></div>${s.desc?`<div class="desc">${esc(s.desc)}</div>`:''}<div class="box-b">${s.inner}</div></section>`).join('')}`).join('')}`;
   document.querySelectorAll('[data-seg]').forEach(b=>b.onclick=()=>{hofSeg=b.dataset.seg;rHof();window.scrollTo(0,0)});
   document.querySelectorAll('[data-j]').forEach(a=>a.onclick=e=>{e.preventDefault();const el=document.getElementById(a.dataset.j);if(el)el.scrollIntoView({behavior:'smooth'})});
+  document.querySelectorAll('[data-st]').forEach(el=>el.onclick=()=>openStudio(F.company[+el.dataset.st]));
   document.querySelectorAll('[data-h]').forEach(el=>el.onclick=()=>{const it=HOFITEMS[+el.dataset.h];
     if('film' in it){if(it.film)return openFilm(it.film);return window.open('https://letterboxd.com/search/films/'+encodeURIComponent(it.t)+'/','_blank')}
     if(it.game)return openGame(it.game);
@@ -1347,7 +1380,39 @@ function startSpot(){clearInterval(spotT);const bind=()=>{document.querySelector
     const n=$('#spotnext');if(n)n.onclick=()=>{spotI++;swap();startSpot()}};
   const swap=()=>{const el=$('#spot');if(!el)return clearInterval(spotT);const tmp=document.createElement('div');tmp.innerHTML=spotlight();el.replaceWith(tmp.firstElementChild);bind()};
   bind();spotT=setInterval(()=>{if(route!=='hof')return clearInterval(spotT);spotI++;swap()},6000)}
+function studioTile(c,i){
+  if(!Array.isArray(c))c=[0,c,''];const s=(D.studios||{})[c[0]]||{},pic=s.loc||s.img||c[2];
+  return `<div class="card stile" data-st="${i}"><div class="slogo">${pic?`<img data-src="${esc(pic)}" alt="" referrerpolicy="no-referrer" onerror="this.remove()">`:`<b>${esc(initials(c[1]))}</b>`}</div><div class="meta"><div class="tt">${esc(c[1])}</div><div class="ss"><span>${s.est?'Est. '+esc(s.est.slice(-4)):'Studio'}</span></div></div></div>`;
+}
+function openStudio(c){
+  if(!Array.isArray(c))c=[0,c,''];const s=(D.studios||{})[c[0]]||{},pic=s.loc||s.img||c[2];
+  modal('anime','Studio',`<div class="slogo big">${pic?`<img src="${esc(pic)}" alt="" referrerpolicy="no-referrer">`:''}</div><div><h2>${esc(c[1])}</h2>${s.jp?`<div class="muted">${esc(s.jp)}</div>`:''}
+  <div class="bigscore">${s.fav?`<div><b>${fmt(s.fav)}</b><small>MAL favourites</small></div>`:''}${s.est?`<div><b>${esc(s.est.slice(-4))}</b><small>Established</small></div>`:''}${(()=>{const n=anime.filter(a=>((_MD||{a:{}}).a[a.id]||{}).stu&&_MD.a[a.id].stu.includes(c[1])).length;return n?`<div><b>${n}</b><small>In your list</small></div>`:''})()}</div>
+  ${s.est?`<div class="kv"><div>Established</div><div>${esc(s.est)}</div></div>`:''}
+  ${s.about?`<div class="review" style="--c:var(--anime)">${esc(s.about)}</div>`:''}
+  <div style="margin-top:14px">${c[0]?`<a class="btn pri" href="https://myanimelist.net/anime/producer/${c[0]}" target="_blank" rel="noopener">Studio page on MyAnimeList ↗</a>`:''}</div></div>`);
+}
+const bdAge=bd=>{if(!bd||!/\d{4}/.test(bd))return 0;const d=new Date(bd);if(isNaN(d))return 0;const n=new Date();let a=n.getFullYear()-d.getFullYear();if(n.getMonth()<d.getMonth()||(n.getMonth()===d.getMonth()&&n.getDate()<d.getDate()))a--;return a>0&&a<120?a:0};
+async function openPerson(it){
+  if(!D.peopleInfo){try{D.peopleInfo=await fetch('data/people_info.json',{cache:'no-cache'}).then(r=>r.json())}catch(e){D.peopleInfo={p:{},s:{}}}}
+  const p=(D.peopleInfo.p||{})[it.id];
+  if(!p){modal('anime','Person',`${cover(it.name,it.pic||HIMG('p',it.id))}<div><h2>${esc(it.name)}</h2><div class="muted">Their details arrive with the next update.</div><div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/people/${it.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);return}
+  const age=bdAge(p.bd),L=p.labels||[];
+  const an=(id,t)=>{const o=anime.find(a=>a.id===id);return o?o.t:t};
+  modal('anime','Person',`${cover(p.name||it.name,it.pic||HIMG('p',it.id)||p.img)}<div><h2>${esc(p.name||it.name)}</h2>${p.jp?`<div class="muted">${esc(p.jp)}</div>`:''}
+  <div class="plabels">${L.map(l=>`<span class="plab">${esc(l)}</span>`).join('')}</div>
+  <div class="bigscore">${p.fav?`<div><b>${fmt(p.fav)}</b><small>MAL favourites</small></div>`:''}${age?`<div><b>${age}</b><small>Years old</small></div>`:''}${p.nva?`<div><b>${fmt(p.nva)}</b><small>Characters voiced</small></div>`:''}${p.nworks?`<div><b>${fmt(p.nworks)}</b><small>Published works</small></div>`:''}</div>
+  <div class="kv"><div>Known as</div><div>${esc(L.join(', ')||'–')}</div>${p.bd?`<div>Birthday</div><div>${esc(p.bd)}${age?` (${age})`:''}</div>`:''}${p.alt?`<div>Other names</div><div>${esc(p.alt)}</div>`:''}${(p.facts||[]).map(([k,v])=>`<div>${esc(k)}</div><div>${esc(v)}</div>`).join('')}${p.nmain?`<div>Main roles</div><div>${fmt(p.nmain)}</div>`:''}</div>
+  ${p.va&&p.va.length?`<div class="sect" style="--c:var(--anime);margin-top:14px"><h2><i></i>Most loved characters</h2><div class="pgrid">${p.va.map((c,i)=>`<button type="button" class="ptile" data-pc="${i}">${cover(c[1],c[2],'','')}<span class="pn">${esc(c[1])}</span><span class="ps">${esc(an(c[3],c[4]))}</span></button>`).join('')}</div></div>`:''}
+  ${p.works&&p.works.length?`<div class="sect" style="--c:var(--manga);margin-top:14px"><h2><i></i>Best known works</h2><div class="pgrid">${p.works.map((w,i)=>{const o=manga.find(m=>m.id===w[0]);return `<button type="button" class="ptile" data-pw="${i}">${cover(o?o.t:w[1],o?o.img:w[2],o&&o.sc?`<span class="badge">${o.sc}</span>`:'','')}<span class="pn">${esc(o?o.t:w[1])}</span><span class="ps">${esc((w[3]||'').split(',')[0])}${w[5]?' · '+esc(w[5]):''}</span></button>`}).join('')}</div></div>`:''}
+  ${!p.works&&!p.va&&p.staff&&p.staff.length?`<div class="sect" style="--c:var(--anime);margin-top:14px"><h2><i></i>Anime work</h2><div class="kv" style="margin-top:0">${p.staff.map(x=>`<div>${esc(x[2])}</div><div>${esc(an(x[0],x[1]))}</div>`).join('')}</div></div>`:''}
+  ${p.about?`<div class="review" style="--c:var(--anime)">${esc(p.about)}</div>`:''}
+  <div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/people/${it.id}" target="_blank" rel="noopener">Full profile on MyAnimeList ↗</a></div></div>`);
+  document.querySelectorAll('[data-pc]').forEach(b=>b.onclick=()=>{const c=p.va[+b.dataset.pc];openMal({k:'c',id:c[0],name:c[1],pic:c[2]})});
+  document.querySelectorAll('[data-pw]').forEach(b=>b.onclick=()=>{const w=p.works[+b.dataset.pw];const o=manga.find(m=>m.id===w[0]);if(o)return openManga(o);openExt('manga',{malId:w[0],t:w[1],img:w[2],meta:[(w[3]||''),w[4]?fmt(w[4])+' members':''].filter(Boolean).join(' · '),url:'https://myanimelist.net/manga/'+w[0]})});
+}
 async function openMal(it){
+  if(it.k==='p')return openPerson(it);
   if(it.k==='c'&&!D.charInfo){try{D.charInfo=await fetch('data/char_info.json',{cache:'no-cache'}).then(r=>r.json())}catch(e){D.charInfo={}}}
   const ci=it.k==='c'?(D.charInfo||{})[it.id]:null;
   if(ci){
@@ -1618,8 +1683,10 @@ async function malSave(kind,id,body,del){
 }
 const AS={1:'watching',2:'completed',3:'on_hold',4:'dropped',6:'plan_to_watch'},MS={1:'reading',2:'completed',3:'on_hold',4:'dropped',6:'plan_to_read'};
 function editMal(kind,x,fromSearch){
+  if(x&&x.local)return editLocalManga(x);
   const isA=kind==='anime';const S=isA?AST:MST;const isNew=!x||!x.st;x=x||{};
-  const tot=isA?x.eps:x.chs;
+  const md=((_MD||{})[isA?'a':'m']||{})[x.id||x.malId]||{};
+  const tot=isA?(x.eps||md.n||0):(x.chs||md.n||0),totV=isA?0:(x.vols||md.v||0);
   modal(kind,(isNew?'Add to MAL · ':'Edit on MAL · ')+(isA?'Anime':'Manga'),`<div style="grid-column:1/-1"><h2>${esc(x.t||'')}</h2><div class="eform">
   ${fld('m_st','Status',String(x.st||6),'select:'+[1,2,3,4,6].map(k=>k+'='+S[k][0]).join('|'))}
   ${fld('m_sc','Your score (0 = none)',x.sc||0,'number','min="0" max="10" step="1"')}
@@ -1629,10 +1696,11 @@ function editMal(kind,x,fromSearch){
   ${fld('m_tags','Your note (MAL tags)',x.tags||'','textarea')}
   </div><div class="small" id="m_err" style="color:var(--s4)"></div>
   <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="btn pri" id="m_save">${isNew?'Add to my list':'Save to MAL'}</button>${isNew?'':'<button class="btn" id="m_del" style="margin-left:auto;color:var(--s4)">Remove from list</button>'}</div></div>`);
-  const sel=$('#m_st');sel.onchange=()=>{if(sel.value==='2'&&tot){const f=$(isA?'#m_ep':'#m_ch');if(f)f.value=tot}};
+  const sel=$('#m_st');sel.onchange=()=>{if(sel.value==='2'){if(tot){const f=$(isA?'#m_ep':'#m_ch');if(f)f.value=tot}if(totV&&$('#m_vol'))$('#m_vol').value=totV}};
   $('#m_save').onclick=async()=>{
     const st=+gv('m_st'),sc=+gv('m_sc')||0;const body={status:(isA?AS:MS)[st],score:sc,tags:gv('m_tags')};
     if(isA){body.num_watched_episodes=+gv('m_ep')||0;body.num_times_rewatched=+gv('m_rw')||0}else{body.num_chapters_read=+gv('m_ch')||0;body.num_volumes_read=+gv('m_vol')||0;body.num_times_reread=+gv('m_rw')||0}
+    if(st===2){if(isA){if(tot&&body.num_watched_episodes<tot)body.num_watched_episodes=tot}else{if(tot&&body.num_chapters_read<tot)body.num_chapters_read=tot;if(totV&&body.num_volumes_read<totV)body.num_volumes_read=totV}}
     $('#m_save').textContent='Saving…';
     try{await malSave(kind,x.id||x.malId,body);
       if(!isNew){Object.assign(x,{st,sc,tags:body.tags},isA?{ep:body.num_watched_episodes,rw:body.num_times_rewatched,up:Math.floor(Date.now()/1000)}:{ch:body.num_chapters_read,vol:body.num_volumes_read,rw:body.num_times_reread})}
@@ -1641,6 +1709,23 @@ function editMal(kind,x,fromSearch){
   };
   const d=$('#m_del');if(d)d.onclick=async()=>{if(d.dataset.sure!=='1'){d.dataset.sure='1';d.textContent='Tap again to remove';return}
     try{await malSave(kind,x.id,null,true);const L=isA?anime:manga;const i=L.indexOf(x);if(i>=0)L.splice(i,1);closeM();render();toast('Removed from MyAnimeList')}catch(e){$('#m_err').textContent=e.message}};
+}
+
+function editLocalManga(x){
+  modal('manga','Edit · kept on this site',`<div style="grid-column:1/-1"><h2>${esc(x.t)}</h2><div class="eform">
+  ${fld('x_st','Status',String(x.st||6),'select:'+[1,2,3,4,6].map(k=>k+'='+MST[k][0]).join('|'))}
+  ${fld('x_sc','Your score (0 = none)',x.sc||0,'number','min="0" max="10" step="1"')}
+  ${fld('x_rw','Times reread',x.rw||0,'number','min="0"')}
+  ${fld('x_note','Your note',x.tags||'','textarea')}
+  </div><div style="display:flex;gap:8px;margin-top:14px"><button class="btn pri" id="x_save">Save</button><button class="btn" id="x_del" style="margin-left:auto;color:var(--s4)">Remove</button></div></div>`);
+  const save=async del=>{toast('Saving…');
+    try{const cur=await ghLoad('data/manga_extra.json');cur.items=cur.items||[];const i=cur.items.findIndex(y=>y.id===x.id);
+      if(del){if(i>=0)cur.items.splice(i,1)}else if(i>=0)Object.assign(cur.items[i],{st:+gv('x_st'),sc:+gv('x_sc')||0,rw:+gv('x_rw')||0,note:gv('x_note'),up:Math.floor(Date.now()/1000)});
+      await ghSave('data/manga_extra.json',cur,(del?'Remove ':'Update ')+x.t);
+      if(del){const k=manga.indexOf(x);if(k>=0)manga.splice(k,1)}else Object.assign(x,{st:+gv('x_st'),sc:+gv('x_sc')||0,rw:+gv('x_rw')||0,tags:gv('x_note'),up:Math.floor(Date.now()/1000)});
+      closeM();render();toast('Saved.')}catch(e){toast('Not saved: '+e.message,true)}};
+  $('#x_save').onclick=()=>save(false);
+  const d=$('#x_del');d.onclick=()=>{if(d.dataset.sure!=='1'){d.dataset.sure='1';d.textContent='Tap again to remove';return}save(true)};
 }
 
 /* ---------- generic list page ---------- */
@@ -1668,14 +1753,16 @@ function listPage(cfg){
     rows.sort(cfg.sorter(S.sort));
     const shown=rows.slice(0,S.lim);
     let h='';
+    const pre=cfg.xhead&&cfg.xhead(S)?`<div style="margin:12px 0 0">${cfg.xhead(S)}</div>`:'';
     if(cfg.special&&cfg.special(S)){h=cfg.special(S)}
     else if(!rows.length)h='<div class="empty">Nothing here yet.</div>';
     else if(S.view==='grid')h=`<div class="cgrid">${shown.map((x,i)=>cfg.card(x,i)).join('')}</div>`;
     else h=`<table class="lt"><thead><tr>${cfg.thead}</tr></thead><tbody>${shown.map((x,i)=>cfg.row(x,i)).join('')}</tbody></table>`;
     if(!(cfg.special&&cfg.special(S))&&rows.length>S.lim)h+=`<div class="more"><button class="btn" id="lmore">Show more (${fmt(rows.length-S.lim)} left)</button></div>`;
-    $('#lbody').innerHTML=h;
+    $('#lbody').innerHTML=pre+h;
     $('#lbody').querySelectorAll('[data-i]').forEach(el=>el.onclick=()=>cfg.open(shown[+el.dataset.i]));
     if(cfg.bind)cfg.bind();
+    const sa=$('#sr_add');if(sa)sa.onclick=findSeries;
     const m=$('#lmore');if(m)m.onclick=()=>{S.lim+=120;body()};
   };
   app.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{S.tab=b.dataset.t;S.lim=60;app.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));body()});
@@ -1717,15 +1804,17 @@ function openAnime(a){
 
 /* ---------- films ---------- */
 function rFilms(){
-  listPage({key:'films',title:'Films',bst:()=>[[films.filter(f=>f.s==='w').length,'watched'],[films.filter(f=>f.rv).length,'reviews'],[films.reduce((s,f)=>s+f.rw,0),'rewatches'],[avg(films.filter(f=>f.r).map(f=>f.r)).toFixed(2)+'★','average']],sub:`${fmt(films.filter(f=>f.s==='w').length)} watched · from Letterboxd · exported ${fdate(D.generated)}`,
-    items:()=>films,
-    tabs:[['watched','Watched',f=>f.s==='w'],['rated','Rated',f=>f.r>0],['reviewed','Reviewed',f=>!!f.rv],['diary','Diary',f=>!!f.wd],['liked','Liked',f=>!!f.lk],['rewatched','Rewatched',f=>f.rw>0],['watchlist','Watchlist',f=>f.s==='l'],['lists','Lists',()=>false]],
+  const FM=f=>!f.tv;
+  listPage({key:'films',title:'Films',bst:()=>[[films.filter(f=>f.s==='w'&&FM(f)).length,'watched'],[films.filter(f=>FM(f)).reduce((s,f)=>s+f.rw,0),'rewatches'],[films.filter(f=>f.tv).length+seriesOwn.length,'series'],[avg(films.filter(f=>f.r&&FM(f)).map(f=>f.r)).toFixed(2)+'★','average']],sub:`${fmt(films.filter(f=>f.s==='w'&&FM(f)).length)} watched · from Letterboxd, series kept here`,
+    items:()=>films.concat(seriesOwn),
+    tabs:[['watched','Watched',f=>f.s==='w'&&FM(f)],['liked','Liked',f=>!!f.lk&&FM(f)],['rewatched','Rewatched',f=>f.rw>0&&FM(f)],['watchlist','Watchlist',f=>f.s==='l'&&FM(f)],['series','Series',f=>!!f.tv],['lists','Lists',()=>false]],
     sorts:[['watched','Recently watched'],['added','Date added'],['rating','Your rating'],['year','Release year'],['title','Title']],
     sorter:k=>({watched:(a,b)=>(b.wd||b.d).localeCompare(a.wd||a.d),added:(a,b)=>b.d.localeCompare(a.d),rating:(a,b)=>b.r-a.r||(b.wd||'').localeCompare(a.wd||''),year:(a,b)=>b.y-a.y,title:cmpT})[k],
-    card:(f,i)=>`<div class="card" data-i="${i}">${cover(f.t,f.img||'',(f.r?`<span class="badge">${f.r}★</span>`:'')+(f.s==='l'?`<span class="sline" style="--sc:var(--s6)"></span>`:''))}<div class="meta"><div class="tt">${esc(f.t)}</div>${(D.filmDir||{})[f.tmdb]?`<div class="ss"><span>dir. ${esc(D.filmDir[f.tmdb])}</span></div>`:''}<div class="ss"><span>${f.y||''}</span><span>${f.lk?'♥':''}${f.rv?' ✎':''}</span></div></div></div>`,
+    card:(f,i)=>`<div class="card" data-i="${i}">${cover(f.t,f.img||f.tvimg||'',(f.r?`<span class="badge">${f.r}★</span>`:'')+(f.tv?`<span class="sline" style="--sc:${SST[f.sst||'w'][1]}"></span><span class="tvtag">Series</span>`:f.s==='l'?`<span class="sline" style="--sc:var(--s6)"></span>`:''))}<div class="meta"><div class="tt">${esc(f.t)}</div><div class="ss"><span>${f.tv?esc(SST[f.sst||'w'][0]):f.y||''}</span><span class="ficons">${f.lk?'<i title="Liked">♥</i>':''}${f.rw?`<i class="rwi" title="Rewatched ${f.rw} time${f.rw>1?'s':''}">↻</i>`:''}${f.rv?'<i title="Reviewed">✎</i>':''}</span></div></div></div>`,
     thead:'<th class="hm">#</th><th></th><th>Film</th><th style="text-align:center">Year</th><th>Rating</th><th class="hm" style="text-align:center">Watched</th>',
-    row:(f,i)=>`<tr data-i="${i}"><td class="num hm">${i+1}</td><td style="width:54px">${cover(f.t,f.img||'','','mini')}</td><td><div class="ti">${esc(f.t)} ${f.lk?'<span style="color:var(--film)">♥</span>':''}</div>${f.rv?'<div class="alt">Reviewed</div>':''}</td><td class="c mono small">${f.y||''}</td><td><span class="stars">${stars(f.r)}</span></td><td class="c small hm">${f.wd?fdate(f.wd):f.s==='l'?'<span class="muted">Watchlist</span>':''}</td></tr>`,
+    row:(f,i)=>`<tr data-i="${i}"><td class="num hm">${i+1}</td><td style="width:54px">${cover(f.t,f.img||f.tvimg||'','','mini')}</td><td><div class="ti">${esc(f.t)} ${f.lk?'<span style="color:var(--film)">♥</span>':''}${f.rw?' <span class="rwi" title="Rewatched">↻</span>':''}</div>${f.tv?`<div class="alt">Series · ${esc(SST[f.sst||'w'][0])}</div>`:f.rv?'<div class="alt">Reviewed</div>':''}</td><td class="c mono small">${f.y||''}</td><td><span class="stars">${stars(f.r)}</span></td><td class="c small hm">${f.wd?fdate(f.wd):f.s==='l'?'<span class="muted">Watchlist</span>':''}</td></tr>`,
     special:S=>S.tab==='lists'?filmLists():null,
+    xhead:S=>S.tab==='series'&&ED.on?'<button class="btn pri" id="sr_add">+ Add series</button>':'',
     bind:()=>{document.querySelectorAll('[data-lf]').forEach(el=>el.onclick=()=>{const f=filmByKey[el.dataset.lf];if(f)openFilm(f);else window.open('https://letterboxd.com/search/films/'+encodeURIComponent(el.dataset.t)+'/','_blank')})},
     open:openFilm});
 }
@@ -1733,6 +1822,7 @@ function filmLists(){
   return D.filmLists.map(l=>`<section class="box" style="margin-top:14px"><div class="box-h" style="border-top:3px solid var(--film)"><h2>${esc(l.name)}</h2><span class="small muted">${l.items.length} films${l.desc?' · '+esc(l.desc):''}</span></div><div class="box-b"><div class="grid favs">${l.items.map(([t,y],i)=>{const f=filmByKey[norm(t)+'|'+y];return `<div class="card" data-lf="${esc(norm(t)+'|'+y)}" data-t="${esc(t)}">${cover(t,'',f&&f.r?`<span class="badge">${f.r}★</span>`:`<span class="badge">${i+1}</span>`)}<div class="meta"><div class="tt">${esc(t)}</div><div class="ss"><span>${y}</span></div></div></div>`}).join('')}</div></div></section>`).join('');
 }
 function openFilm(f){
+  if(f.tv)return openSeries(f);
   const ls=listsFor(f);
   modal('films','Film',`${cover(f.t,f.img||'')}<div><h2>${esc(f.t)} <span class="muted" style="font-weight:500">${f.y||''}</span></h2>
   <div class="bigscore"><div><b class="stars">${f.r?stars(f.r):'–'}</b><small>Your rating</small></div><div><b>${f.logs||(f.s==='w'?1:0)}</b><small>Times logged</small></div><div><b>${f.lk?'♥':'–'}</b><small>Liked</small></div></div>
@@ -1743,9 +1833,52 @@ function openFilm(f){
   filmExtra(f);
 }
 
+let _SD=null;
+async function openSeries(f){
+  if(!_SD)_SD=await loadJ('data/series_details.json')||{};
+  const d=_SD[f.tv]||{},st=SST[f.sst||'w'],own=f.own&&(D.series||[])[f.ix];
+  modal('films','Series',`${cover(f.t,f.img||f.tvimg||d.img||'')}<div><h2>${esc(f.t)} <span class="muted" style="font-weight:500">${esc(d.y||f.y||'')}${d.ly&&d.ly!==d.y?'–'+esc(d.ly):''}</span></h2>
+  <div class="bigscore"><div><b class="stars">${f.r?stars(f.r):'–'}</b><small>Your rating</small></div><div><b style="color:${st[1]}">■</b><small>${st[0]}</small></div>${ED.on?'<button class="btn pri" id="m_edit">Edit</button>':''}<div><b>${f.lk?'♥':'–'}</b><small>Liked</small></div></div>
+  <div class="kv">${d.ns?`<div>Seasons</div><div>${d.ns} season${d.ns>1?'s':''}${d.ne?` · ${d.ne} episodes`:''}</div>`:''}${d.rt?`<div>Episode length</div><div>${hm(d.rt)}${d.ne?` · about ${hm(d.rt*d.ne)} in all`:''}</div>`:''}${d.st?`<div>Status</div><div>${esc(d.st)}</div>`:''}${d.by&&d.by.length?`<div>Created by</div><div>${d.by.map(esc).join(', ')}</div>`:''}${d.net&&d.net.length?`<div>Network</div><div>${d.net.map(esc).join(', ')}</div>`:''}${d.cast&&d.cast.length?`<div>Starring</div><div>${d.cast.map(esc).join(', ')}</div>`:''}${d.g&&d.g.length?`<div>Genres</div><div>${d.g.map(g=>`<span class="tag">${esc(g)}</span>`).join('')}</div>`:''}${f.rw?`<div>Rewatched</div><div>${f.rw} time${f.rw>1?'s':''}</div>`:''}${f.wd?`<div>Watched</div><div>${fdate(f.wd)}</div>`:''}</div>
+  ${d.ov&&f.sst!=='w'?`<div class="syn">${esc(d.ov)}</div>`:''}
+  ${f.rv?`<div class="review" style="--c:var(--film)">${esc(f.rv)}</div>`:''}
+  ${!d.c?'<div class="small muted" style="margin-top:10px">Seasons, cast and episode length arrive with the next update.</div>':''}
+  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${f.u?`<a class="btn" href="${esc(f.u)}" target="_blank" rel="noopener">Open on Letterboxd ↗</a>`:''}<a class="btn${f.u?'':' pri'}" href="https://www.themoviedb.org/tv/${f.tv}" target="_blank" rel="noopener">Open on TMDB ↗</a></div></div>`);
+  const me=$('#m_edit');if(me)me.onclick=()=>editSeries(own||{id:f.tv,t:f.t,y:f.y,img:f.img||f.tvimg||'',st:f.sst||'w',r:f.r||0,rw:f.rw||0,lk:f.lk||0,note:f.rv||'',wd:f.wd||''});
+}
+function editSeries(x){
+  const isNew=!(D.series||[]).some(s=>String(s.id)===String(x.id));
+  modal('films',isNew?'Add series':'Edit series',`<div style="grid-column:1/-1"><h2>${esc(x.t)}</h2><div class="eform">
+  ${fld('sv_st','Status',x.st||'l','select:'+Object.keys(SST).map(k=>k+'='+SST[k][0]).join('|'))}
+  ${fld('sv_r','Your rating (0 to 5)',x.r||0,'number','min="0" max="5" step="0.5"')}
+  ${fld('sv_rw','Times rewatched',x.rw||0,'number','min="0" step="1"')}
+  ${fld('sv_wd','Finished on',x.wd||'','date')}
+  <label class="ef"><span>Liked</span><span class="chkline"><input type="checkbox" id="sv_lk" ${x.lk?'checked':''}> ♥ Liked it</span></label>
+  ${fld('sv_note','Your note',x.note||'','textarea')}
+  </div><div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="btn pri" id="sv_save">${isNew?'Add to my series':'Save'}</button>${isNew?'':'<button class="btn" id="sv_del" style="margin-left:auto;color:var(--s4)">Remove</button>'}</div></div>`);
+  const save=async del=>{toast('Saving…');
+    try{let cur;try{cur=await ghLoad('data/series.json')}catch(e){cur={series:[]}}cur.series=cur.series||[];
+      const i=cur.series.findIndex(s=>String(s.id)===String(x.id));
+      const o={id:x.id,t:x.t,y:String(x.y||''),img:x.img||'',st:gv('sv_st'),r:+gv('sv_r')||0,rw:+gv('sv_rw')||0,wd:gv('sv_wd'),lk:$('#sv_lk').checked?1:0,note:gv('sv_note'),d:(i>=0&&cur.series[i].d)||new Date().toISOString().slice(0,10)};
+      if(del){if(i>=0)cur.series.splice(i,1)}else if(i>=0)cur.series[i]=o;else cur.series.unshift(o);
+      await ghSave('data/series.json',cur,(del?'Remove series ':isNew?'Add series ':'Update series ')+x.t);
+      D.series=cur.series;films.forEach(f=>{if(f.tv){delete f.own;delete f.ix}});rebuildSeries();closeM();render();toast(del?'Removed.':'Saved. Details arrive with the next update.')}catch(e){toast('Not saved: '+e.message,true)}};
+  $('#sv_save').onclick=()=>save(false);
+  const d=$('#sv_del');if(d)d.onclick=()=>{if(d.dataset.sure!=='1'){d.dataset.sure='1';d.textContent='Tap again to remove';return}save(true)};
+}
+async function findSeries(){
+  modal('films','Add series',`<div style="grid-column:1/-1"><h2>Add a TV series</h2><div class="ef" style="margin-top:10px"><span>Find it</span><div style="display:flex"><input id="sr_q" placeholder="Series title" style="flex:1"><button class="btn" id="sr_go" style="border-radius:0">Find</button></div></div><div id="sr_res" style="margin-top:12px"></div></div>`);
+  const go=async()=>{const q=gv('sr_q');if(!q)return;$('#sr_res').innerHTML='<div class="muted"><span class="spin"></span>Searching…</div>';
+    try{const r=await fetch(`https://api.themoviedb.org/3/search/tv?api_key=${SET.tmdbKey}&query=${encodeURIComponent(q)}`).then(r=>r.json());const L=(r.results||[]).slice(0,10);
+      $('#sr_res').innerHTML=L.length?`<div class="sres" style="margin-top:0">${L.map((t,i)=>`<div class="xr" data-sr="${i}">${cover(t.name,t.poster_path?'https://image.tmdb.org/t/p/w342'+t.poster_path:'')}<div><div class="tt">${esc(t.name)}</div><div class="small muted">${esc((t.first_air_date||'').slice(0,4))}${t.original_name&&t.original_name!==t.name?' · '+esc(t.original_name):''}</div><p>${esc(t.overview||'')}</p></div></div>`).join('')}</div>`:'<div class="muted">No series found.</div>';
+      document.querySelectorAll('[data-sr]').forEach(el=>el.onclick=()=>{const t=L[+el.dataset.sr];editSeries({id:t.id,t:t.name,y:(t.first_air_date||'').slice(0,4),img:t.poster_path?'https://image.tmdb.org/t/p/w342'+t.poster_path:'',st:'l'})})}
+    catch(e){$('#sr_res').innerHTML='<div class="muted">Search failed. Try again.</div>'}};
+  $('#sr_go').onclick=go;$('#sr_q').onkeydown=e=>{if(e.key==='Enter')go()};$('#sr_q').focus();
+}
+
 /* ---------- games ---------- */
 function rGames(){
-  listPage({key:'games',title:'Games',bst:()=>[[games.length,'games'],[games.filter(g=>g.shelf==='Played').length,'played'],[fmt(Math.round(games.reduce((s,g)=>s+g.hrs,0)))+'h','hours played'],[games.reduce((s,g)=>s+g.rp,0),'replays']],sub:`${games.length} games · kept on this site`,
+  listPage({key:'games',title:'Games',bst:()=>[[games.length,'games'],[games.filter(g=>g.shelf==='Played').length,'played'],[fmt(Math.round(games.reduce((s,g)=>s+g.hrs,0)))+'h','hours played'],[games.reduce((s,g)=>s+g.rp,0),'replays']],sub:`${games.length} games`,
     items:()=>games,
     tabs:[...Object.keys(GSH).map(k=>[k,k,k==='Playing'?g=>g.shelf==='Playing'||g.shelf==='Replaying':g=>g.shelf===k]),['replayed','Replayed',g=>g.rp>0||g.shelf==='Replaying'],['reviewed','Reviewed',g=>!!g.rv]],
     sorts:[['added','Date added'],['rating','Your rating'],['release','Release date'],['title','Title']],
@@ -1762,9 +1895,9 @@ function openGame(g){
   <div class="bigscore"><div><b>${g.r?g.r+'/5':'–'}</b><small>Your rating</small></div><div><b style="color:${GSH[g.shelf]||'var(--s6)'}">■</b><small>${esc(g.shelf)}</small></div>${hrs?`<div><b>${g.hrsEst?'≈':''}${Math.round(hrs*10)/10}h</b><small>${g.hrsEst?'Hours (estimate)':'Hours played'}</small></div>`:''}<div><b>${g.rp}</b><small>Times replayed</small></div></div>
   <div class="kv">${g.pf.length?`<div>Platforms</div><div>${g.pf.map(p=>`<span class="tag">${esc(p)}</span>`).join('')}</div>`:''}${g.g.length?`<div>Genres</div><div>${g.g.map(p=>`<span class="tag">${esc(p)}</span>`).join('')}</div>`:''}${g.fr.length?`<div>Franchise</div><div>${esc(g.fr.join(', '))}</div>`:''}${g.pub.length?`<div>Publisher</div><div>${esc(g.pub.join(', '))}</div>`:''}${g.avg?`<div>Average length</div><div>${g.avg}h main story (HowLongToBeat)</div>`:''}<div>Released</div><div>${g.rel?fdate(g.rel):'–'}</div><div>Added</div><div>${g.added?fdate(g.added):'–'}</div>
   ${g.log.map(p=>`<div>Play log</div><div>${[p.date_started&&p.date_started!=='None'?'Started '+fdate(p.date_started):'',p.date_finished&&p.date_finished!=='None'?'Finished '+fdate(p.date_finished):'',p.level_of_completion||'',p.notes?esc(p.notes):''].filter(Boolean).join(' · ')||'–'}</div>`).join('')}</div>
-  ${((D.gameMeta||{})[g.id]||{}).syn?`<div class="syn">${esc(D.gameMeta[g.id].syn)}</div>`:''}${gameSeries(g)}${g.dlcs.length?`<div class="sect" style="--c:var(--game);margin-top:14px"><h2><i></i>DLC <span class="muted mono">${g.dlcs.filter(d=>d.p).length}/${g.dlcs.length} played</span></h2><div class="dlcgrid">${g.dlcs.map((d,i)=>dlcTile(d,i,false)).join('')}</div></div>`:''}
+  ${gameSeries(g)}${g.dlcs.length?`<div class="sect" style="--c:var(--game);margin-top:14px"><h2><i></i>DLC <span class="muted mono">${g.dlcs.filter(d=>d.p).length}/${g.dlcs.length} played</span></h2><div class="dlcgrid">${g.dlcs.map((d,i)=>dlcTile(d,i,false)).join('')}</div></div>`:''}
   ${g.rv?`<div class="review" style="--c:var(--game)">${g.rvt?`<b>${esc(g.rvt)}</b>\n`:''}${esc(g.rv)}</div>`:''}
-  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?`<button class="btn pri" id="m_edit">Edit</button>`:''}</div></div>`);
+  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?`<button class="btn pri" id="m_edit">Edit</button>`:''}<a class="btn pri" href="${esc(g.u||'https://www.grouvee.com/search/?q='+encodeURIComponent(g.t))}" target="_blank" rel="noopener">Open on Grouvee ↗</a></div></div>`);
   const me=$('#m_edit');if(me)me.onclick=()=>editGame(g);
 }
 
@@ -2147,8 +2280,14 @@ function localHits(q){
   const n=norm(q);if(!n)return{anime:[],manga:[],films:[],games:[],books:[],stories:[]};
   const words=n.split(' ');
   const m=s=>words.every(w=>s.includes(w));
-  return{anime:anime.filter(a=>m(a.n)),manga:manga.filter(x=>m(x.n)),films:films.filter(f=>m(f.n)),games:games.filter(g=>m(g.n)),books:books.filter(b=>m(b.n)),stories:[...works,...mediumOnly(),...(DR?DR.works:[])].filter(w=>m(norm(w.t+' '+(w.tags||[]).join(' ')+' '+(w.blurb||'')+' '+wKind(w))))};
+  return{hofp:hofPeople().filter(p=>m(p.n)),anime:anime.filter(a=>m(a.n)),manga:manga.filter(x=>m(x.n)),films:films.concat(seriesOwn).filter(f=>m(f.n)),games:games.filter(g=>m(g.n)),books:books.filter(b=>m(b.n)),stories:[...works,...mediumOnly(),...(DR?DR.works:[])].filter(w=>m(norm(w.t+' '+(w.tags||[]).join(' ')+' '+(w.blurb||'')+' '+wKind(w))))};
 }
+let HOFP=null;
+function hofPeople(){if(HOFP)return HOFP;const out=[],seen=new Set(),H=D.hof||{},F=H.malFavs||{};
+  const add=(k,id,name,pic)=>{if(seen.has(k+id))return;seen.add(k+id);out.push({k,id:+id,name,pic:pic||HIMG(k,+id),sub:(D.hofSub||{})[k+id]||KLAB[k],n:norm(name+' '+((D.hofSub||{})[k+id]||''))})};
+  (F.character||[]).forEach(([id,t])=>add('c',id,t));(F.people||[]).forEach(([id,t])=>add('p',id,t));
+  JSON.stringify(H).replace(/"([cp])(\d+)~([^~"]+)(?:~([^"]*))?"/g,(_,k,id,nm,pic)=>{add(k,id,nm,pic);return ''});
+  return HOFP=out}
 function ownMatch(kind,title,year){
   const n=norm(title);
   if(kind==='anime')return anime.find(a=>norm(a.t)===n||(a.alt&&norm(a.alt)===n));
@@ -2160,26 +2299,29 @@ function ownMatch(kind,title,year){
 function rSearch(){
   const S=state.search;
   $('#gq').value=S.q;
-  if(!S.q){$('#app').innerHTML=`${banner('search','Search everything','Your collection, plus the whole catalog of anime, manga, films, games and books.',[],'Search')}<div class="box box-b"><p style="margin-bottom:10px">Search your own collection and the whole catalog of anime, films and games.</p><form id="sform" style="display:flex;gap:0"><input id="sq" type="search" placeholder="Try “Vinland Saga”, “Inception” or “Elden Ring”" style="flex:1;border:1px solid var(--line2);padding:10px 12px;background:var(--panel);outline:none"><button class="btn pri" style="border-radius:0">Search</button></form></div>`;
+  if(!S.q){$('#app').innerHTML=`${banner('search','Search everything','Your collection, plus the whole catalog of anime, manga, films, games and books.',[],'Search')}<div class="box box-b"><p style="margin-bottom:10px">Search your own collection, and the whole catalog of anime, manga, films, series, games, books, characters and people.</p><form id="sform" style="display:flex;gap:0"><input id="sq" type="search" placeholder="Try “Vinland Saga”, “Inception” or “Elden Ring”" style="flex:1;border:1px solid var(--line2);padding:10px 12px;background:var(--panel);outline:none"><button class="btn pri" style="border-radius:0">Search</button></form></div>`;
     $('#sform').onsubmit=e=>{e.preventDefault();const q=$('#sq').value.trim();if(q){S.q=q;S.res={};render()}};$('#sq').focus();return}
   const L=localHits(S.q);
-  const tot=L.anime.length+L.manga.length+L.films.length+L.games.length+L.books.length+L.stories.length;
+  const tot=L.hofp.length+L.anime.length+L.manga.length+L.films.length+L.games.length+L.books.length+L.stories.length;
   const sec=(k,items,mk)=>items.length?`<div class="sect" style="--c:${MED[k].c}"><h2><i></i>${MED[k].name} <span class="muted mono">${items.length}</span></h2><div class="cgrid" style="margin-top:0">${items.slice(0,12).map(mk).join('')}</div></div>`:'';
   window.__L=L;
   $('#app').innerHTML=`${banner('search','“'+S.q+'”','',[[tot,'in your collection']],'Search')}
   <div class="box"><div class="box-h"><h2>In your collection</h2></div><div class="box-b" style="padding-top:0">
   ${tot?'':'<div class="muted" style="padding-top:14px">Nothing in your lists matches that.</div>'}
+  ${sec('hofp',L.hofp,(p,i)=>`<div class="card" data-hp="${i}">${cover(p.name,p.pic)}<div class="meta"><div class="tt">${esc(p.name)}</div><div class="ss"><span>${esc(p.sub)}</span></div></div></div>`)}
   ${sec('anime',L.anime,(a,i)=>`<div class="card" data-l="anime:${i}">${cover(a.t,a.img,(a.sc?`<span class="badge">${a.sc}</span>`:'')+`<span class="sline" style="--sc:${AST[a.st][1]}"></span>`)}<div class="meta"><div class="tt">${esc(a.t)}</div><div class="ss"><span>${AST[a.st][0]}</span></div></div></div>`)}
   ${sec('manga',L.manga,(x,i)=>`<div class="card" data-l="manga:${i}">${cover(x.t,x.img,(x.sc?`<span class="badge">${x.sc}</span>`:'')+`<span class="sline" style="--sc:${MST[x.st][1]}"></span>`)}<div class="meta"><div class="tt">${esc(x.t)}</div><div class="ss"><span>${MST[x.st][0]}</span></div></div></div>`)}
   ${sec('books',L.books,(b,i)=>`<div class="card" data-l="books:${i}">${cover(b.t,b.img||'',b.r?`<span class="badge">${b.r}★</span>`:'')}<div class="meta"><div class="tt">${esc(b.t)}</div><div class="ss"><span>${esc(b.a)}</span></div></div></div>`)}
-  ${sec('films',L.films,(f,i)=>`<div class="card" data-l="films:${i}">${cover(f.t,f.img||'',f.r?`<span class="badge">${f.r}★</span>`:'')}<div class="meta"><div class="tt">${esc(f.t)}</div><div class="ss"><span>${f.y}</span><span>${f.s==='l'?'Watchlist':'Watched'}</span></div></div></div>`)}
+  ${sec('films',L.films,(f,i)=>`<div class="card" data-l="films:${i}">${cover(f.t,f.img||f.tvimg||'',f.r?`<span class="badge">${f.r}★</span>`:'')}<div class="meta"><div class="tt">${esc(f.t)}</div><div class="ss"><span>${f.tv?'Series':f.y}</span><span>${f.tv?SST[f.sst||'w'][0]:f.s==='l'?'Watchlist':'Watched'}</span></div></div></div>`)}
   ${sec('games',L.games,(g,i)=>`<div class="card" data-l="games:${i}">${cover(g.t,g.img||'',gBadge(g)+gDlcStack(g))}<div class="meta"><div class="tt">${esc(g.t)}</div>${gDlcLine(g)}<div class="ss"><span>${esc(g.shelf)}</span></div></div></div>`)}
   ${L.stories.length?`<div class="sect" style="--c:var(--story)"><h2><i></i>Writing <span class="muted mono">${L.stories.length}</span></h2><div class="cgrid" style="margin-top:0">${L.stories.slice(0,12).map(w=>`<div class="card" data-wr="${esc(w.id)}">${wcover(w)}<div class="meta"><div class="tt">${esc(w.t)}</div><div class="ss"><span>${esc(wKind(w))}</span><span>${wMin(w)} min</span></div></div></div>`).join('')}</div></div>`:''}
   </div></div>
   <div class="box" style="margin-top:16px"><div class="box-h"><h2>Search everywhere</h2><span class="small muted" id="xmode"></span></div>
-  <div class="tabs" style="border:0;border-bottom:1px solid var(--line)">${['anime','manga','films','games','books'].map(k=>`<button data-x="${k}" class="${S.ext===k?'on':''}" style="--c:${MED[k].c}">${MED[k].name}</button>`).join('')}</div>
-  <div class="box-b" id="xbody"></div></div>`;
+  <div class="tabs" style="border:0;border-bottom:1px solid var(--line)">${['anime','manga','films','games','books','characters','people'].map(k=>`<button data-x="${k}" class="${S.ext===k?'on':''}" style="--c:${MED[k].c}">${k==='films'?'Films & series':MED[k].name}</button>`).join('')}</div>
+  <div class="box-b" id="xbody"></div>
+  <div class="small muted srccred">Where results come from: anime and manga from MyAnimeList; characters and people from MyAnimeList through Jikan; films and series from TMDB (The Movie Database); games from IGDB; books from Goodreads, Google Books or Open Library. Your own collection comes from MyAnimeList, Letterboxd, Medium and this site.</div></div>`;
   document.querySelectorAll('[data-wr]').forEach(el=>el.onclick=()=>{const w=L.stories.find(x=>x.id===el.dataset.wr);if(!w)return;if(w.mo)window.open(w.medium,'_blank','noopener');else location.hash='read/'+encodeURIComponent(w.id)});
+  document.querySelectorAll('[data-hp]').forEach(el=>el.onclick=()=>{const p=L.hofp[+el.dataset.hp];openMal({k:p.k,id:p.id,name:p.name,pic:p.pic})});
   document.querySelectorAll('[data-l]').forEach(el=>el.onclick=()=>{const [k,i]=el.dataset.l.split(':');const x=L[k][+i];({anime:openAnime,manga:openManga,books:openBook,films:openFilm,games:openGame})[k](x)});
   document.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{S.ext=b.dataset.x;document.querySelectorAll('[data-x]').forEach(x=>x.classList.toggle('on',x===b));extSearch()});
   extSearch();
@@ -2195,7 +2337,13 @@ async function detectMode(){
   mode=sampleFn?'claude':'none';return mode;
 }
 const OUT={manga:q=>`https://myanimelist.net/manga.php?q=${encodeURIComponent(q)}`,books:q=>`https://www.goodreads.com/search?q=${encodeURIComponent(q)}`,anime:q=>`https://myanimelist.net/anime.php?q=${encodeURIComponent(q)}`,films:q=>`https://letterboxd.com/search/films/${encodeURIComponent(q)}/`,games:q=>`https://howlongtobeat.com/?q=${encodeURIComponent(q)}`};
-const OUTN={manga:'MyAnimeList',books:'Goodreads',anime:'MyAnimeList',films:'Letterboxd',games:'HowLongToBeat'};
+const OUTN={manga:'MyAnimeList',books:'Goodreads',anime:'MyAnimeList',films:'Letterboxd',games:'HowLongToBeat',characters:'MyAnimeList',people:'MyAnimeList'};
+OUT.characters=q=>`https://myanimelist.net/character.php?q=${encodeURIComponent(q)}`;OUT.people=q=>`https://myanimelist.net/people.php?q=${encodeURIComponent(q)}`;
+const lev=(a,b)=>{if(Math.abs(a.length-b.length)>2)return 9;const d=Array.from({length:a.length+1},(_,i)=>[i]);for(let j=1;j<=b.length;j++)d[0][j]=j;for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[a.length][b.length]};
+/* keep results that actually contain what was typed (a small typo is fine), so loose matches don't drown the real ones */
+const closeTo=(q,r)=>{const W=norm(q).split(' ').filter(w=>w.length>1);if(!W.length)return true;const T=norm([r.t,r.alt,r.a].filter(Boolean).join(' ')).split(' ');
+  return W.every(w=>T.some(x=>x===w||x.startsWith(w)||(w.length>=4&&x.length>=4&&lev(w,x)<=(w.length>=7?2:1))))};
+const SRC={anime:'MyAnimeList',manga:'MyAnimeList',films:'TMDB',games:'IGDB',books:'Goodreads',characters:'MyAnimeList (through Jikan)',people:'MyAnimeList (through Jikan)'};
 async function viaApi(kind,q){
   if((kind==='anime'||kind==='manga')&&SET.workerUrl){
     // MAL's search sometimes fails for a moment: try up to 4 times before giving up
@@ -2212,6 +2360,11 @@ async function viaApi(kind,q){
     return (r.data||[]).map(a=>({t:a.title_english||a.title,alt:a.title_english&&a.title_english!==a.title?a.title:'',y:(a.published&&a.published.prop&&a.published.prop.from&&a.published.prop.from.year)||'',meta:[a.type,a.chapters?a.chapters+' ch':'',a.score?'MAL '+a.score:''].filter(Boolean).join(' · '),sum:a.synopsis||'',img:a.images&&a.images.jpg&&a.images.jpg.image_url,url:a.url,g:(a.genres||[]).map(g=>g.name)}));
   }
   if(kind==='books'){
+    if(SET.workerUrl){try{const g=await fetch(`${SET.workerUrl}/books?q=${encodeURIComponent(q)}`).then(r=>r.json());
+      if(Array.isArray(g)&&g.length){SRC.books='Goodreads';return g.slice(0,16).map(b=>({gid:b.bookId,t:b.bookTitleBare||b.title,alt:'',y:'',a:(b.author&&b.author.name)||'',meta:[(b.author&&b.author.name)||'',b.avgRating?'Goodreads '+(+b.avgRating).toFixed(2):'',b.numPages?b.numPages+' pages':''].filter(Boolean).join(' · '),sum:((b.description&&b.description.html)||'').replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,400),img:(b.imageUrl||'').replace(/\._[A-Z]{2}\d+_\./,'.'),url:'https://www.goodreads.com'+(b.bookUrl||''),p:b.numPages||''}))}}catch(e){}}
+    try{const g=await fetch(`https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(q)}&maxResults=20&printType=books`).then(r=>{if(!r.ok)throw 0;return r.json()});
+      if(g.items&&g.items.length){SRC.books='Google Books';return g.items.map(({volumeInfo:v,id})=>({t:v.title+(v.subtitle&&v.subtitle.length<40?': '+v.subtitle:''),alt:'',y:(v.publishedDate||'').slice(0,4),a:(v.authors||[]).slice(0,2).join(', '),meta:[(v.authors||[]).slice(0,2).join(', '),v.pageCount?v.pageCount+' pages':''].filter(Boolean).join(' · '),sum:(v.description||'').slice(0,400),img:v.imageLinks&&(v.imageLinks.thumbnail||v.imageLinks.smallThumbnail)?(v.imageLinks.thumbnail||v.imageLinks.smallThumbnail).replace(/^http:/,'https:').replace('&edge=curl',''):'',url:v.infoLink||('https://books.google.com/books?id='+id),g:(v.categories||[]).slice(0,4),p:v.pageCount||''}))}}catch(e){}
+    SRC.books='Open Library';
     const r=await fetch(`https://openlibrary.org/search.json?q=${encodeURIComponent(q)}&limit=16&fields=title,author_name,first_publish_year,cover_i,key,number_of_pages_median,subject`).then(r=>r.json());
     return (r.docs||[]).map(b=>({t:b.title,alt:'',y:b.first_publish_year||'',meta:[(b.author_name||[]).slice(0,2).join(', '),b.number_of_pages_median?b.number_of_pages_median+' pages':''].filter(Boolean).join(' · '),sum:'',img:b.cover_i?`https://covers.openlibrary.org/b/id/${b.cover_i}-M.jpg`:'',url:'https://openlibrary.org'+b.key,g:(b.subject||[]).slice(0,4),a:(b.author_name||[]).slice(0,2).join(', '),p:b.number_of_pages_median||''}));
   }
@@ -2220,8 +2373,14 @@ async function viaApi(kind,q){
     return (r.data||[]).map(a=>({t:a.title_english||a.title,alt:a.title_english&&a.title_english!==a.title?a.title:'',y:a.year||(a.aired&&a.aired.prop&&a.aired.prop.from&&a.aired.prop.from.year)||'',meta:[a.type,a.episodes?a.episodes+' eps':'',a.score?'MAL '+a.score:''].filter(Boolean).join(' · '),sum:a.synopsis||'',img:a.images&&a.images.jpg&&a.images.jpg.image_url,url:a.url,g:(a.genres||[]).map(g=>g.name)}));
   }
   if(kind==='films'&&SET.tmdbKey){
-    const r=await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${SET.tmdbKey}&query=${encodeURIComponent(q)}&include_adult=false`).then(r=>r.json());
-    return (r.results||[]).slice(0,16).map(m=>({t:m.title,alt:m.original_title!==m.title?m.original_title:'',y:(m.release_date||'').slice(0,4),meta:m.vote_average?'TMDB '+m.vote_average.toFixed(1):'',sum:m.overview||'',img:m.poster_path?'https://image.tmdb.org/t/p/w342'+m.poster_path:'',url:'https://www.themoviedb.org/movie/'+m.id}));
+    const [mv,tv]=await Promise.all(['movie','tv'].map(k=>fetch(`https://api.themoviedb.org/3/search/${k}?api_key=${SET.tmdbKey}&query=${encodeURIComponent(q)}&include_adult=false`).then(r=>r.json()).catch(()=>({}))));
+    const A=(mv.results||[]).map(m=>({t:m.title,alt:m.original_title!==m.title?m.original_title:'',y:(m.release_date||'').slice(0,4),meta:'Film'+(m.vote_average?' · TMDB '+m.vote_average.toFixed(1):''),sum:m.overview||'',img:m.poster_path?'https://image.tmdb.org/t/p/w342'+m.poster_path:'',url:'https://www.themoviedb.org/movie/'+m.id,pop:m.popularity||0}));
+    const B=(tv.results||[]).map(m=>({tv:m.id,t:m.name,alt:m.original_name!==m.name?m.original_name:'',y:(m.first_air_date||'').slice(0,4),meta:'TV series'+(m.vote_average?' · TMDB '+m.vote_average.toFixed(1):''),sum:m.overview||'',img:m.poster_path?'https://image.tmdb.org/t/p/w342'+m.poster_path:'',url:'https://www.themoviedb.org/tv/'+m.id,pop:m.popularity||0}));
+    return [...A,...B].sort((p,q)=>q.pop-p.pop).slice(0,20);
+  }
+  if(kind==='characters'||kind==='people'){
+    const r=await fetch(`https://api.jikan.moe/v4/${kind}?q=${encodeURIComponent(q)}&limit=16&order_by=favorites&sort=desc`).then(r=>r.json());
+    return (r.data||[]).map(c=>({malId:c.mal_id,t:c.name,alt:c.name_kanji||[c.family_name,c.given_name].filter(Boolean).join(' ')||'',y:'',meta:[c.favorites?fmt(c.favorites)+' favourites':'',c.birthday?'born '+fdate(c.birthday.slice(0,10)):''].filter(Boolean).join(' · '),sum:(c.about||'').replace(/\s+/g,' ').slice(0,400),img:c.images&&c.images.jpg&&c.images.jpg.image_url,url:c.url}));
   }
   if(kind==='games'&&SET.workerUrl&&SET.igdb){
     const r=await fetch(`${SET.workerUrl}/games?q=${encodeURIComponent(q)}`).then(r=>r.json());
@@ -2277,25 +2436,31 @@ async function extSearch(){
 function outLinks(kind,q){return `<div class="note">Also search on <a class="link" href="${OUT[kind](q)}" target="_blank" rel="noopener">${OUTN[kind]} ↗</a></div>`}
 function showExt(res,kind,q){
   const box=$('#xbody');
+  let note='';
+  if(kind==='books'&&res.length){const near=res.filter(r=>closeTo(q,r));if(near.length)res=near;else{note=`<div class="note" style="margin:0 0 10px">Nothing matches “${esc(q)}” closely. These are the nearest results.</div>`;res=res.slice(0,5)}}
+  const own=r=>r.tv?films.concat(seriesOwn).find(f=>String(f.tv)===String(r.tv)):(kind==='characters'||kind==='people')?null:ownMatch(kind,r.t,+r.y);
   if(!res.length){box.innerHTML=`<div class="muted">No ${MED[kind].name.toLowerCase()} found for “${esc(q)}”.</div>${outLinks(kind,q)}`;return}
-  box.innerHTML=`<div class="sres" style="margin-top:0">${res.map((r,i)=>{const own=ownMatch(kind,r.t,+r.y);return `<div class="xr" data-r="${i}">${cover(r.t,r.img)}<div><div class="tt">${esc(r.t)}${own?'<span class="own">In your list</span>':''}</div>${r.alt?`<div class="small muted">${esc(r.alt)}</div>`:''}<div class="small muted">${esc([r.y,r.meta].filter(Boolean).join(' · '))}</div><p>${esc(r.sum)}</p></div></div>`}).join('')}</div>
-  ${mode==='claude'?'<div class="note">These results come from Claude\'s knowledge, so very new releases may be missing. Open one to jump to it on '+OUTN[kind]+'.</div>':''}${outLinks(kind,q)}`;
-  box.querySelectorAll('[data-r]').forEach(el=>el.onclick=()=>{const r=res[+el.dataset.r];const own=ownMatch(kind,r.t,+r.y);if(own){({anime:openAnime,manga:openManga,books:openBook,films:openFilm,games:openGame})[kind](own);return}openExt(kind,r)});
+  box.innerHTML=`${note}<div class="sres" style="margin-top:0">${res.map((r,i)=>{const o=own(r);return `<div class="xr" data-r="${i}">${cover(r.t,r.img)}<div><div class="tt">${esc(r.t)}${o?'<span class="own">In your list</span>':''}${r.tv?'<span class="own" style="background:var(--panel2);color:var(--ink2)">Series</span>':''}</div>${r.alt?`<div class="small muted">${esc(r.alt)}</div>`:''}<div class="small muted">${esc([r.y,r.meta].filter(Boolean).join(' · '))}</div><p>${esc(r.sum)}</p></div></div>`}).join('')}</div>
+  ${mode==='claude'?'<div class="note">These results come from Claude\'s knowledge, so very new releases may be missing. Open one to jump to it on '+OUTN[kind]+'.</div>':`<div class="small muted" style="margin-top:8px">Results from ${esc(SRC[kind]||'')}.</div>`}${outLinks(kind,q)}`;
+  box.querySelectorAll('[data-r]').forEach(el=>el.onclick=()=>{const r=res[+el.dataset.r];const o=own(r);if(o){({anime:openAnime,manga:openManga,books:openBook,films:openFilm,games:openGame})[kind](o);return}
+    if((kind==='characters'||kind==='people')&&hofPeople().some(p=>p.k===(kind==='people'?'p':'c')&&p.id===r.malId))return openMal({k:kind==='people'?'p':'c',id:r.malId,name:r.t,pic:r.img});
+    openExt(kind,r)});
 }
 function openExt(kind,r){
-  const canAdd=OWNER()&&((kind==='anime'||kind==='manga')?!!r.malId:(kind==='books'||kind==='games'));
+  const canAdd=OWNER()&&((kind==='anime'||kind==='manga')?!!r.malId:kind==='films'?!!r.tv:(kind==='books'||kind==='games'));
   setTimeout(()=>{const b=$('#x_add');if(!b)return;b.onclick=()=>{
     if(!ED.on){toast(ED.token?'Turn editing on first (pencil button at the top).':'Set up editing first (pencil button at the top).',true);editSetup();return}
     if(kind==='anime'||kind==='manga')return editMal(kind,{malId:r.malId,t:r.t,eps:0,chs:0});
+    if(kind==='films'&&r.tv)return editSeries({id:r.tv,t:r.t,y:r.y,img:r.img||'',st:'l'});
     const y=String(r.y||'');
     if(kind==='books')return editBook({__new:1,t:r.t,a:r.a||'',p:r.p||'',y:y,img:r.img||'',st:'toread',sh:[]});
     editGame({__new:1,t:r.t,img:r.img||'',pf:r.pf||[],g:r.g||[],dev:r.dev||[],rel:r.rel||(y?y+'-01-01':''),shelf:'Wish List'});
   }},0);
-  const label={anime:'Anime',manga:'Manga',books:'Book',films:'Film',games:'Game'}[kind];
+  const label=kind==='films'&&r.tv?'Series':{anime:'Anime',manga:'Manga',books:'Book',films:'Film',games:'Game',characters:'Character',people:'Person'}[kind];
   modal(kind,label+' · not in your list',`${cover(r.t,r.img)}<div><h2>${esc(r.t)} <span class="muted" style="font-weight:500">${esc(r.y)}</span></h2>${r.alt?`<div class="muted">${esc(r.alt)}</div>`:''}
   <div class="kv">${r.meta?`<div>Details</div><div>${esc(r.meta)}</div>`:''}${r.g&&r.g.length?`<div>Genres</div><div>${r.g.map(g=>`<span class="tag">${esc(g)}</span>`).join('')}</div>`:''}</div>
   ${r.sum?`<div class="review" style="--c:${MED[kind].c}">${esc(r.sum)}</div>`:''}
-  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${canAdd?'<button class="btn pri" id="x_add">+ Add to my list</button>':''}<a class="btn${canAdd?'':' pri'}" href="${r.url&&r.malId?r.url:OUT[kind](r.t)}" target="_blank" rel="noopener">${r.malId?'Open on MyAnimeList':'Find on '+OUTN[kind]} ↗</a>${r.url?`<a class="btn" href="${esc(r.url)}" target="_blank" rel="noopener">Source ↗</a>`:''}</div></div>`);
+  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${canAdd?'<button class="btn pri" id="x_add">+ Add to my list</button>':''}<a class="btn${canAdd?'':' pri'}" href="${r.url&&(r.malId||r.gid)?r.url:OUT[kind](r.t)}" target="_blank" rel="noopener">${r.malId?'Open on MyAnimeList':r.gid?'Open on Goodreads':'Find on '+OUTN[kind]} ↗</a>${r.url?`<a class="btn" href="${esc(r.url)}" target="_blank" rel="noopener">Source ↗</a>`:''}</div></div>`);
 }
 
 {const US=D.updateStatus||{};const bad=Object.entries(US).filter(([k,v])=>v!=='ok');
