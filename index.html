@@ -141,6 +141,7 @@ main{max-width:1240px;margin:0 auto;padding:20px 16px 60px}
 .card:hover .favh{opacity:1}
 .favghost{position:fixed;z-index:90;pointer-events:none;opacity:.9;transform:rotate(-2deg) scale(1.04);box-shadow:0 18px 40px -12px rgba(0,0,0,.6)}
 .favdragging{opacity:.3}
+body.dragging{user-select:none;-webkit-user-select:none;cursor:grabbing}
 .card:hover .favx,.favx.sure{opacity:1}.favx.sure{background:var(--accent)}
 @media (hover:none){.favx,.favh{opacity:.85}}
 .card{cursor:pointer;background:var(--panel);border:1px solid var(--line);display:flex;flex-direction:column}
@@ -1068,7 +1069,7 @@ function pickForMe(){
 }
 function favRow(title,k,items){
   FAVS[k]=items;
-  setTimeout(()=>document.querySelectorAll(`[data-fk="${k}"]`).forEach(el=>el.onclick=()=>items[+el.dataset.i].o()));
+  setTimeout(()=>document.querySelectorAll(`[data-fk="${k}"]`).forEach(el=>el.onclick=()=>{if(Date.now()-(window.__favDragEnd||0)<500)return;items[+el.dataset.i].o()}));
   setTimeout(()=>{document.querySelectorAll(`[data-fadd="${k}"]`).forEach(el=>el.onclick=()=>addOvFav(k));bindFavDrag(k);document.querySelectorAll(`[data-fk="${k}"] [data-fdel]`).forEach(el=>el.onclick=e=>{e.stopPropagation();delOvFav(k,+el.dataset.fdel,el)})});
   if(!items.length&&!ED.on)return'';
   return `<section class="box" style="margin-top:16px"><div class="box-h" style="border-top:3px solid ${MED[k].c}"><h2>${esc(title)}</h2><a class="link small" href="#${k}">View all</a></div><div class="box-b"><div class="grid favs">${items.map((it,i)=>`<div class="card" data-fk="${k}" data-i="${i}">${cover(it.t,it.img,(it.b?`<span class="badge">${esc(it.b)}</span>`:'')+(it.x||'')+(ED.on&&it.fi!=null?`<button type="button" class="favx" data-fdel="${it.fi}" title="Take off favourites" aria-label="Remove">✕</button><span class="favh" data-fdrag="${k}" title="Drag to reorder" aria-label="Drag to reorder">⠿</span>`:''))}<div class="meta"><div class="tt">${esc(it.t)}</div>${it.line||''}<div class="ss"><span>${esc(it.sub)}</span></div></div></div>`).join('')}${ED.on?`<button type="button" class="favadd" data-fadd="${k}" style="--c:${MED[k].c}" aria-label="Add a favourite"><span>+</span><small>Add</small></button>`:''}</div></div></section>`;
@@ -1095,7 +1096,7 @@ async function saveOvFavs(k,list,msg){
   toast('Saving…');
   try{let cur;try{cur=await ghLoad('data/ovfavs.json')}catch(e){cur={}}
     ['films','games','anime','manga'].forEach(x=>{if(!cur[x])cur[x]=ovFavList(x)});cur[k]=list;
-    await ghSave('data/ovfavs.json',cur,msg);D.ovFavs=cur;toast('Saved.');render();return true}
+    await ghSave('data/ovfavs.json',cur,msg);D.ovFavs=cur;toast('Saved.');refreshFavRow(k);return true}
   catch(e){toast('Not saved: '+e.message,true);return false}
 }
 /* drag the ⠿ handle to reorder (mouse or finger) */
@@ -1106,15 +1107,22 @@ function bindFavDrag(k){
       const card=h.closest('.card'),grid=card.parentElement,from=+card.dataset.i;
       const r=card.getBoundingClientRect(),ghost=card.cloneNode(true);
       ghost.className+=' favghost';Object.assign(ghost.style,{width:r.width+'px',left:r.left+'px',top:r.top+'px'});document.body.appendChild(ghost);
-      const dx=e.clientX-r.left,dy=e.clientY-r.top;card.classList.add('favdragging');
+      const dx=e.clientX-r.left,dy=e.clientY-r.top;card.classList.add('favdragging');document.body.classList.add('dragging');
       const move=ev=>{ghost.style.left=(ev.clientX-dx)+'px';ghost.style.top=(ev.clientY-dy)+'px';
         const over=[...grid.querySelectorAll('.card[data-fk]')].find(c=>{if(c===card)return false;const b=c.getBoundingClientRect();return ev.clientX>b.left&&ev.clientX<b.right&&ev.clientY>b.top&&ev.clientY<b.bottom});
         if(over){const b=over.getBoundingClientRect();if(ev.clientX<b.left+b.width/2)grid.insertBefore(card,over);else grid.insertBefore(card,over.nextSibling)}
         const add=grid.querySelector('.favadd');if(add)grid.appendChild(add)};
-      const up=()=>{window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);ghost.remove();card.classList.remove('favdragging');
+      const up=()=>{window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',up);window.removeEventListener('pointercancel',up);ghost.remove();card.classList.remove('favdragging');document.body.classList.remove('dragging');window.__favDragEnd=Date.now();
         const order=[...grid.querySelectorAll('.card[data-fk]')].map(c=>+c.dataset.i);
         if(order.some((v,i)=>v!==i)){const L=ovFavList(k);saveOvFavs(k,order.map(i=>L[i]),'Reorder overview favourites')}};
       window.addEventListener('pointermove',move);window.addEventListener('pointerup',up);window.addEventListener('pointercancel',up)}});
+}
+const FAVT={films:'Favorite films',games:'Favorite games',anime:'Favorite anime',manga:'Favorite manga'};
+function refreshFavRow(k){
+  const el=document.querySelector(`[data-fk="${k}"],[data-fadd="${k}"]`),sec=el&&el.closest('section');
+  if(!sec||route!=='overview')return;
+  const y=window.scrollY,tmp=document.createElement('div');tmp.innerHTML=favRow(FAVT[k],k,ovFavItems(k));
+  if(tmp.firstElementChild)sec.replaceWith(tmp.firstElementChild);else sec.remove();window.scrollTo(0,y);
 }
 function delOvFav(k,i,el){
   if(el.dataset.sure!=='1'){el.dataset.sure='1';el.textContent='Remove?';el.classList.add('sure');setTimeout(()=>{if(el.isConnected){el.dataset.sure='';el.textContent='✕';el.classList.remove('sure')}},3000);return}
