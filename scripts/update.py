@@ -907,6 +907,8 @@ def update_mal_details():
     for kind, k, mid in mine:
         for kk, nid, _t, _p in det[k].get(str(mid), {}).get('_nb', []):
             nbs.append(('anime' if kk == 'a' else 'manga', kk, nid))
+        for nid, _r, _t in det[k].get(str(mid), {}).get('ad', []):
+            nbs.append(('manga', 'm', nid) if k == 'a' else ('anime', 'a', nid))
     queue = sorted(set(mine), key=lambda x: det[x[1]].get(str(x[2]), {}).get('c', '')) + sorted(set(nbs), key=lambda x: det[x[1]].get(str(x[2]), {}).get('c', ''))
     t0, n, fails = time.time(), 0, 0
     for kind, k, mid in queue:
