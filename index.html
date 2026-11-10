@@ -1905,7 +1905,7 @@ function rFilms(){
   const FM=f=>!f.tv;
   listPage({key:'films',title:'Films',bst:()=>[[films.filter(f=>f.s==='w'&&FM(f)).length,'watched'],[films.filter(f=>FM(f)).reduce((s,f)=>s+f.rw,0),'rewatches'],[films.filter(f=>f.tv).length+seriesOwn.length,'series'],[avg(films.filter(f=>f.r&&FM(f)).map(f=>f.r)).toFixed(2)+'★','average']],sub:`${fmt(films.filter(f=>f.s==='w'&&FM(f)).length)} watched · from Letterboxd, series kept here`,
     items:()=>films.concat(seriesOwn),
-    tabs:[['watched','Watched',f=>f.tv?f.sst==='w':f.s==='w'],['liked','Liked',f=>!!f.lk],['rewatched','Rewatched',f=>f.rw>0],['watchlist','Watchlist',f=>f.tv?f.sst==='l':f.s==='l'],['series','Series',f=>!!f.tv&&f.sst!=='l'],['lists','Lists',()=>false]],
+    tabs:[['watched','Watched',f=>f.tv?f.sst==='w':f.s==='w'],['watching','Watching',f=>!!f.tv&&f.sst==='c'],['liked','Liked',f=>!!f.lk],['rewatched','Rewatched',f=>f.rw>0],['watchlist','Watchlist',f=>f.tv?f.sst==='l':f.s==='l'],['series','Series',f=>!!f.tv&&f.sst!=='l'],['lists','Lists',()=>false]],
     sorts:[['watched','Recently watched'],['added','Date added'],['rating','Your rating'],['year','Release year'],['title','Title']],
     sorter:k=>({watched:(a,b)=>(b.wd||b.d).localeCompare(a.wd||a.d),added:(a,b)=>b.d.localeCompare(a.d),rating:(a,b)=>b.r-a.r||(b.wd||'').localeCompare(a.wd||''),year:(a,b)=>b.y-a.y,title:cmpT})[k],
     card:(f,i)=>`<div class="card" data-i="${i}">${cover(f.t,f.img||f.tvimg||'',(f.r?`<span class="badge">${f.r}★</span>`:'')+(f.tv?`<span class="sline" style="--sc:${SST[f.sst||'w'][1]}"></span><span class="tvtag">Series</span>`:f.s==='l'?`<span class="sline" style="--sc:var(--s6)"></span>`:''))}<div class="meta"><div class="tt">${esc(f.t)}</div><div class="ss"><span>${f.tv?esc(SST[f.sst||'w'][0]):f.y||''}</span><span class="ficons">${f.lk?'<i title="Liked">♥</i>':''}${f.rw?`<i class="rwi" title="Rewatched ${f.rw} time${f.rw>1?'s':''}">↻</i>`:''}${f.rv?'<i title="Reviewed">✎</i>':''}</span></div></div></div>`,
@@ -1951,7 +1951,7 @@ async function editSeries(x){
   if(!(_SD[x.id]||{}).ne&&SET.tmdbKey){try{const t=await fetch(`https://api.themoviedb.org/3/tv/${x.id}?api_key=${SET.tmdbKey}`).then(r=>r.json());if(t&&t.id)_SD[x.id]=Object.assign(_SD[x.id]||{},{ne:t.number_of_episodes||0,ns:t.number_of_seasons||0})}catch(e){}}
   const isNew=!(D.series||[]).some(s=>String(s.id)===String(x.id));
   modal('films',isNew?'Add series':'Edit series',`<div style="grid-column:1/-1"><h2>${esc(x.t)}</h2><div class="eform">
-  ${fld('sv_st','Status',x.st||'l','select:'+Object.keys(SST).map(k=>k+'='+SST[k][0]).join('|'))}
+  ${fld('sv_st','Status',['w','c','l'].includes(x.st)?x.st:x.st==='h'||x.st==='d'?'c':'l','select:w=Watched|c=Watching|l=Watchlist')}
   ${fld('sv_r','Your rating (0 to 5)',x.r||0,'number','min="0" max="5" step="0.5"')}
   ${fld('sv_ep','Episodes watched'+((_SD||{})[x.id]&&_SD[x.id].ne?' (of '+_SD[x.id].ne+')':''),x.ep||0,'number','min="0" step="1"')}
   ${fld('sv_rw','Times rewatched',x.rw||0,'number','min="0" step="1"')}
