@@ -54,6 +54,15 @@ export default {
         try { d = JSON.parse(await r.text()); } catch (e) { d = []; }
         return json(Array.isArray(d) ? d : [], Array.isArray(d) ? 200 : 502);
       }
+      // character and people search (MyAnimeList's own quick search)
+      if (url.pathname === '/people') {
+        const type = url.searchParams.get('type') === 'person' ? 'person' : 'character';
+        const q = (url.searchParams.get('q') || '').slice(0, 64);
+        const r = await fetch(`https://myanimelist.net/search/prefix.json?type=${type}&keyword=${encodeURIComponent(q)}&v=1`, { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36', Accept: 'application/json' } });
+        let d = {};
+        try { d = JSON.parse(await r.text()); } catch (e) { d = {}; }
+        return json(d, d.categories ? 200 : 502);
+      }
       // sign-in: swap the code (or refresh token) for an access token
       if (url.pathname === '/token' && req.method === 'POST') {
         const b = await req.json();

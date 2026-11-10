@@ -108,10 +108,14 @@ main{max-width:1240px;margin:0 auto;padding:20px 16px 60px}
 .act .w{font-size:12px;color:var(--ink3);white-space:nowrap}
 
 .dist{display:grid;grid-template-columns:repeat(var(--n),1fr);gap:3px;align-items:end;height:90px}
-#ov_sc .dist{height:190px;gap:6px}
-.ovgrid{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(0,1fr);gap:16px;align-items:start}
-.ovair .unl{max-height:620px;overflow-y:auto;scrollbar-width:thin;padding-right:4px}
-@media (max-width:860px){.ovgrid{grid-template-columns:1fr}}
+#ov_sc .dist{height:170px;gap:4px}
+.ovgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}
+.ovgrid>.box{display:flex;flex-direction:column;min-width:0}
+.ovgrid .hbar{grid-template-columns:96px 1fr 30px}
+.ovgrid .box-h{flex-wrap:wrap;row-gap:6px}.ovgrid .box-h h3{white-space:nowrap}.ovgrid .mtabs button{padding:3px 5px}
+.ovair .unl{max-height:300px;overflow-y:auto;scrollbar-width:thin;padding-right:4px}
+@media (max-width:1000px){.ovgrid{grid-template-columns:1fr 1fr}.ovgrid>.ovair{grid-column:1/-1}}
+@media (max-width:640px){.ovgrid{grid-template-columns:1fr}}
 .dist div{background:var(--c);opacity:.85;position:relative;min-height:2px}
 .dist div:hover{opacity:1}
 .distl{display:grid;grid-template-columns:repeat(var(--n),1fr);gap:3px;font-size:10px;color:var(--ink3);text-align:center;margin-top:4px}
@@ -247,6 +251,7 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .rdend1{text-align:center;color:var(--ink3);margin-top:34px;font-size:20px}
 .rdend1 .rdend{font-size:16px}
 .rdfoot{text-align:center;margin-top:24px}
+.rdbottom{display:flex;justify-content:space-between;gap:10px;margin-top:14px}
 .rdtoc{margin-top:16px}.rdtoc ol{list-style:none}
 .rdtoc li a{display:flex;justify-content:space-between;gap:10px;padding:9px 14px;border-top:1px solid var(--line)}
 .rdtoc li:first-child a{border-top:0}
@@ -926,6 +931,8 @@ function rOverview(){
       <div class="links">
         <a class="chip" href="https://myanimelist.net/profile/SatsugaiDeAtsu" target="_blank" rel="noopener"><b style="width:8px;height:8px;background:var(--anime)"></b>MyAnimeList</a>
         <a class="chip" href="https://letterboxd.com/SatsugaiDeAtsu/" target="_blank" rel="noopener"><b style="width:8px;height:8px;background:var(--film)"></b>Letterboxd</a>
+        <a class="chip" href="https://www.grouvee.com/user/186222-SatsugaiDeAtsu/" target="_blank" rel="noopener"><b style="width:8px;height:8px;background:var(--game)"></b>Grouvee</a>
+        <a class="chip" href="https://www.goodreads.com/user/show/206271423" target="_blank" rel="noopener"><b style="width:8px;height:8px;background:var(--book)"></b>Goodreads</a>
         <a class="chip" href="https://medium.com/@rajeeljaved" target="_blank" rel="noopener"><b style="width:8px;height:8px;background:var(--story)"></b>Medium</a>
       </div>
     </div>
@@ -951,12 +958,12 @@ function rOverview(){
       <div class="actscroll">${acts.map((a,i)=>`<div class="act" data-a="${i}" style="--c:${MED[a.k].c}"><span class="k"></span><div class="athumb">${cover(a.t,a.img||'','','mini')}</div><div class="t"><div>${esc(a.t)}</div><div class="small muted">${esc(MED[a.k].name)} · ${esc(a.w)}</div></div><div class="w">${ago(a.d)}</div></div>`).join('')}</div></div>
     <div class="box" id="ov_time"><div class="box-h"><h2>Time spent</h2><button class="btn" id="pickme">🎲 Pick something for me</button></div><div class="box-b tspent"><div class="muted small">Adding it up…</div></div></div>
   </section>
-  ${showcase()}
   <div id="ov_more"></div>
   ${favRow('Favorite films','films',favF.map(f=>({t:f.t,img:f.img||'',sub:f.y,b:f.r?f.r+'★':'',o:()=>openFilm(f)})))}
   ${favRow('Favorite games','games',favG.map(g=>({t:g.t,img:g.img||'',sub:g.pf[0]||'',b:g.r?g.r+'/5':'',x:gDlcStack(g),line:gDlcLine(g),o:()=>openGame(g)})))}
   ${favRow('Favorite anime','anime',D.hof.malFavs.anime.map(([id,t,sub])=>{const a=anime.find(x=>x.id===id);return {t:a?a.t:t,img:a?a.img:'',sub,b:a&&a.sc?String(a.sc):'',o:()=>a?openAnime(a):window.open('https://myanimelist.net/anime/'+id,'_blank')}}))}
   ${favRow('Favorite manga','manga',D.hof.malFavs.manga.map(([id,t,sub])=>{const m=manga.find(x=>x.id===id);return {t:m?m.t:t,img:m?m.img:'',sub,b:m&&m.sc?String(m.sc):'',o:()=>m?openManga(m):window.open('https://myanimelist.net/manga/'+id,'_blank')}}))}
+  ${showcase()}
   <div class="more"><a class="btn" href="#hof">Open the Hall of Fame →</a> <a class="btn" href="#wrapped">See your Wrapped →</a></div></div>
   `;
 
@@ -1023,7 +1030,7 @@ async function overviewExtra(){
   box.innerHTML=`
   ${cont.length?`<section class="box" style="margin-top:16px"><div class="box-h" style="border-top:3px solid var(--anime)"><h2>Continue the series</h2><span class="small muted">${cont.length} sequels you haven't started · scroll →</span></div><div class="box-b"><div class="hslide">${cont.map(ctile).join('')}</div></div></section>`:''}
   <section class="ovgrid" style="margin-top:16px">
-    <div class="grid" style="align-content:start">${tabsBox('ov_sc','Scores',SI)}${tabsBox('ov_gen','Top genres',GI,'Each title counts once, under its main theme.')}</div>
+    ${tabsBox('ov_sc','Scores',SI)}${tabsBox('ov_gen','Top genres',GI,'Each title counts once, under its main theme.')}
     <div class="box ovair"><div class="box-h"><h3>Airing</h3><span class="small muted">in your time</span></div><div class="box-b unl">${air.length?air.map(({a,n},i)=>`<div class="unx" data-ai="${i}"><div class="ut">${cover(a.t,a.img||'','')}</div><div class="ui"><div class="un">${esc(a.t)}</div><div class="us">${esc(n.when)} · <b>${esc(n.in)}</b>${a.st===6?' · plan to watch':''}</div></div></div>`).join(''):'<div class="muted small">None of the shows you\'re watching are airing right now.</div>'}</div></div>
   </section>`;
   box.querySelectorAll('.mtabs').forEach(t=>t.querySelectorAll('button').forEach(b=>b.onclick=()=>{t.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));const L=t.dataset.g==='ov_gen'?GI:SI;$('#'+t.dataset.g).innerHTML=L[+b.dataset.i].h}));
@@ -1172,7 +1179,9 @@ function gameSeries(g){
 const BSER=t=>{const m=/\(([^()#]+?),?\s*#\s*([\d.]+)\)\s*$/.exec(t||'');return m?{n:m[1].trim(),i:+m[2]}:null};
 function bookSeries(b){
   const me=BSER(b.t);if(!me)return '';
-  const L=books.filter(x=>{const s=BSER(x.t);return s&&s.n===me.n}).sort((a,c)=>BSER(a.t).i-BSER(c.t).i);
+  const sk=n=>norm(n).replace(/^the /,'');
+  const L=books.filter(x=>{const s=BSER(x.t);return s&&sk(s.n)===sk(me.n)}).sort((a,c)=>BSER(a.t).i-BSER(c.t).i);
+  me.n=L.map(x=>BSER(x.t).n).sort((a,c)=>c.length-a.length)[0]||me.n;
   return `<div class="sect" style="--c:var(--book);margin-top:14px"><h2><i></i>${esc(me.n)} <span class="muted mono">book ${me.i}</span></h2>${L.length>1?`<div class="relgrid">${L.map(x=>`<button type="button" class="reltile${x===b?' cur':''}" data-bi="${x.i}" ${x===b?'disabled':''}>${cover(x.t,x.img||'',x.r?`<span class="badge">${x.r}★</span>`:'')}<span class="rl">Book ${BSER(x.t).i}</span><span class="rn">${esc(x.t.replace(/\s*\([^()]*#[^()]*\)\s*$/,''))}</span><span class="rs" style="color:${x===b?'var(--book)':BST[x.st][1]}">${x===b?'You are here':esc(BST[x.st][0])}</span></button>`).join('')}</div>`:`<div class="small muted">The only book from this series in your list.</div>`}</div>`;
 }
 document.addEventListener('click',e=>{const b=e.target.closest('[data-gi],[data-bi]');if(!b||!b.closest('#modal'))return;if(b.dataset.gi!=null){const g=games.find(x=>x.i===+b.dataset.gi);if(g)openGame(g)}else{const x=books.find(x=>x.i===+b.dataset.bi);if(x)openBook(x)}});
@@ -1904,7 +1913,7 @@ function openGame(g){
 /* ---------- writing: stories, articles, other, private drafts ---------- */
 const WSEC=[['stories','Stories'],['wip','Works in progress'],['articles','Articles'],['other','Other']];
 const WST={complete:'Complete',ongoing:'Ongoing',hiatus:'On hiatus'};
-const PEN=()=>SET.penName||'Satsu';
+const PEN=()=>SET.penName||'Rajeel Javed';
 let works=[];
 function rebuildWorks(){works=(D.works||[]).slice()}
 rebuildWorks();
@@ -2092,7 +2101,7 @@ async function rStories(){
       <div class="box box-b drtools" style="margin-top:14px"><div><b>Private drafts</b><div class="small muted">Saved encrypted with your passphrase. Visitors never see this tab, and the saved file can't be read without the passphrase.</div></div><div class="drbtns"><button class="btn" id="dr_cp">Change passphrase</button><button class="btn" id="dr_lock">Lock</button></div><form id="dr_cpf" class="drform" hidden><input id="dr_n1" type="password" placeholder="New passphrase (8+ characters)" autocomplete="new-password"><input id="dr_n2" type="password" placeholder="Type it again" autocomplete="new-password"><button class="btn pri">Save new passphrase</button><div id="dr_cpm" class="small muted"></div></form></div>`
     :`<div class="box box-b drlock"><div class="drico">🔒</div><h3>Private drafts are locked</h3><p class="small muted">They're stored encrypted. Only your passphrase opens them. Visitors never see this tab.</p><form id="dr_f" class="drform"><input id="dr_pw" type="password" placeholder="Passphrase" autocomplete="current-password"><label class="small chkline"><input type="checkbox" id="dr_rem"> Remember on this device</label><button class="btn pri">Unlock</button><div id="dr_err" class="small" style="color:var(--accent)"></div></form></div>`;
   }else{
-    const L=all.filter(w=>w.sec===S.sec).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+    const L=all.filter(w=>w.sec===S.sec).sort((a,b)=>(a.pin?0:1)-(b.pin?0:1)||(a.pin||0)-(b.pin||0)||(b.date||'').localeCompare(a.date||''));
     body=L.length?`<div class="wlist">${L.map(wcard).join('')}</div>`:'<div class="box box-b muted" style="margin-top:14px">Nothing here yet.</div>';
   }
   $('#app').innerHTML=`${banner('stories','Stories & writing',`Stories, articles and the odd poem, by ${esc(PEN())}.`,[[all.length,'pieces'],[fmt(words),'words'],[chs,'chapters']],'Writing')}
@@ -2135,6 +2144,7 @@ async function rRead(){
     ${multi?`<nav class="rdnav">${n>0?`<a href="#read/${id}/${n}" class="prev"><small>Previous</small>${esc(chName(w,n-1))}</a>`:'<span></span>'}${n<ch.length-1?`<a href="#read/${id}/${n+2}" class="next"><small>Next</small>${esc(chName(w,n+1))}</a>`:`<span class="rdend">${w.st==='complete'?(/the end\W*$/i.test((c.h||'').replace(/<[^>]+>/g,' ').trim())?'':'The end'):'To be continued…'}</span>`}</nav>`:`<div class="rdend1">${w.st==='complete'?'❦':'<span class="rdend">To be continued…</span>'}</div>`}
     ${w.medium?`<div class="rdfoot small muted">Also on <a class="link" href="${esc(w.medium)}" target="_blank" rel="noopener">Medium ↗</a></div>`:''}
   </article>
+  <div class="rdbottom"><a href="#stories" class="rdback">← Writing</a><a href="#" class="rdback" onclick="window.scrollTo({top:0,behavior:'smooth'});return false">Back to top ↑</a></div>
   ${multi?`<div class="box rdtoc"><div class="box-h"><h2>Chapters</h2><span class="small muted">${fmt(w.words||0)} words</span></div><ol>${ch.map((x,i)=>`<li class="${i===n?'on':''}"><a href="#read/${id}/${i+1}"><span>${esc(chName(w,i))}</span><span class="mono small muted">${fmt((w.chw||[])[i]||wcount(x.h))} words</span></a></li>`).join('')}</ol></div>`:''}
   </div>`;
   const setFs=d=>{const v=Math.max(15,Math.min(26,store.get('rd_fs',19)+d));store.set('rd_fs',v);$('#rdp').style.setProperty('--fs',v+'px')};
@@ -2379,7 +2389,14 @@ async function viaApi(kind,q){
     return [...A,...B].sort((p,q)=>q.pop-p.pop).slice(0,20);
   }
   if(kind==='characters'||kind==='people'){
-    const r=await fetch(`https://api.jikan.moe/v4/${kind}?q=${encodeURIComponent(q)}&limit=16&order_by=favorites&sort=desc`).then(r=>r.json());
+    const tfetch=(u,ms)=>{const c=new AbortController();const t=setTimeout(()=>c.abort(),ms);return fetch(u,{signal:c.signal}).finally(()=>clearTimeout(t))};
+    // MyAnimeList's own quick search through your helper first (fast); Jikan as the fallback
+    if(SET.workerUrl){try{const j=await tfetch(`${SET.workerUrl}/people?type=${kind==='people'?'person':'character'}&q=${encodeURIComponent(q)}`,9000).then(r=>r.json());
+      const items=((j.categories||[])[0]||{}).items;
+      if(Array.isArray(items)){SRC[kind]='MyAnimeList';const flip=n=>n&&n.split(', ').length===2?n.split(', ').reverse().join(' '):n;
+        return items.map(c=>{const P=c.payload||{};return {malId:c.id,t:flip(c.name),alt:P.alternative_name||'',y:'',meta:[(P.related_works||[]).slice(0,2).join(', '),P.favorites?fmt(String(P.favorites).replace(/,/g,''))+' favourites':'',P.birthday&&P.birthday!=='Unknown'?'born '+P.birthday:''].filter(Boolean).join(' · '),sum:'',img:(c.image_url||c.thumbnail_url||'').replace(/\/r\/\d+x\d+\//,'/').split('?')[0],url:c.url}})}}catch(e){}}
+    let r;try{r=await tfetch(`https://api.jikan.moe/v4/${kind}?q=${encodeURIComponent(q)}&limit=16&order_by=favorites&sort=desc`,12000).then(r=>r.json())}catch(e){throw new Error('timeout')}
+    SRC[kind]='MyAnimeList (through Jikan)';
     return (r.data||[]).map(c=>({malId:c.mal_id,t:c.name,alt:c.name_kanji||[c.family_name,c.given_name].filter(Boolean).join(' ')||'',y:'',meta:[c.favorites?fmt(c.favorites)+' favourites':'',c.birthday?'born '+fdate(c.birthday.slice(0,10)):''].filter(Boolean).join(' · '),sum:(c.about||'').replace(/\s+/g,' ').slice(0,400),img:c.images&&c.images.jpg&&c.images.jpg.image_url,url:c.url}));
   }
   if(kind==='games'&&SET.workerUrl&&SET.igdb){
