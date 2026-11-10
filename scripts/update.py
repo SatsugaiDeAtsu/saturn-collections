@@ -899,7 +899,7 @@ def update_mal_details():
     t0, n, fails = time.time(), 0, 0
     for kind, k, mid in queue:
         cur = det[k].get(str(mid))
-        if (cur and cur.get('c', '') > old) or time.time() - t0 > 1000 or fails > 15:
+        if (cur and cur.get('c', '') > old) or time.time() - t0 > 3000 or fails > 25:
             continue
         try:
             o = mal_detail(kind, mid, cid)
