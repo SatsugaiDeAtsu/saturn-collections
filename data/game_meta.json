@@ -1,7 +1,8 @@
 {
 "104334": {
 "avg": 9,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Gears of War is a 2006 third-person shooter video game developed by Epic Games and published by Microsoft Game Studios. It is the first installment of the Gears of War series, and was initially released as an exclusive title for the Xbox 360 in November 2006. A Microsoft Windows version, developed in conjunction with People Can Fly, was released in November 2007."
 },
 "104336": {
 "avg": 10,
@@ -11,15 +12,18 @@
 "chk": "2026-11-08",
 "dimg": {
 "Road to Ruin": "miss:2026-11-08"
-}
+},
+"syn": "Gears of War 2 is a 2008 third-person shooter video game developed by Epic Games and published by Microsoft Game Studios for the Xbox 360. It is the second installment of the Gears of War series, with lead design by Cliff Bleszinski. The game was released in North America, Europe and Australia on November 7, 2008, and was released in Japan on July 30, 2009."
 },
 "104343": {
 "avg": 20.8,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Resident Evil 6 is a 2012 third-person shooter video game developed and published by Capcom. It was released for the PlayStation 3 and Xbox 360 in October 2012, and for Windows in March 2013. It was re-released with all downloadable content for the PlayStation 4 and Xbox One in March 2016, and for the Nintendo Switch in October 2019."
 },
 "104353": {
 "avg": 6.8,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Resident Evil 3: Nemesis is a 1999 survival horror game developed and published by Capcom  for the PlayStation. It takes place almost concurrently with the events of Resident Evil 2. The player controls the former elite agent Jill Valentine as she escapes from Raccoon City, which has been overrun by zombies."
 },
 "104377": {
 "avg": 15.3,
@@ -33,7 +37,8 @@
 "The Consequence": "covers/d/104377_the-consequence.jpg",
 "The Executioner": "covers/d/104377_the-executioner.jpg"
 },
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "The Evil Within is a 2014 survival horror game developed by Tango Gameworks and published by Bethesda Softworks. It was directed by Resident Evil series creator Shinji Mikami. The game centers on protagonist Sebastian Castellanos as he is pulled through a distorted world full of nightmarish locations and horrid creatures."
 },
 "104386": {
 "avg": 9.9,
@@ -45,7 +50,8 @@
 "Shadows of Rose": "covers/d/104386_shadows-of-rose.jpg",
 "Winters’ Expansion": "covers/d/104386_winters-expansion.jpg"
 },
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Resident Evil Village  is a 2021 survival horror game developed and published by Capcom. It is the sequel to Resident Evil 7: Biohazard (2017). Players control Ethan Winters, who searches for his kidnapped daughter in a mysterious European village filled with mutant creatures, which also holds secrets around the Umbrella Corporation."
 },
 "104431": {
 "avg": 8.9,
@@ -55,7 +61,8 @@
 "chk": "2026-11-08",
 "dimg": {
 "The Ghost Survivors": "covers/d/104431_the-ghost-survivors.jpg"
-}
+},
+"syn": "Resident Evil 2 is a 2019 survival horror game developed and published by Capcom. A remake of the 1998 game Resident Evil 2, it was released for PlayStation 4, Windows, and Xbox One in January 2019 and for Amazon Luna, PlayStation 5, Xbox Series X/S in June 2022, with a cloud version for Nintendo Switch released the following November. Versions for iOS, iPadOS, and macOS were released in December 2024, and a version for Nintendo Switch 2 released in October of 2026."
 },
 "104440": {
 "avg": 16.2,
@@ -65,7 +72,8 @@
 "chk": "2026-11-08",
 "dimg": {
 "Separate Ways": "covers/d/104440_separate-ways.jpg"
-}
+},
+"syn": "Resident Evil 4 is a 2023 survival horror game developed and published by Capcom. A remake of the 2005 game Resident Evil 4, it was released for PlayStation 4, PlayStation 5, Windows, and Xbox Series X/S on March 24, 2023. Versions for iOS, iPadOS, and macOS were released on December 20, 2023, and a version for Nintendo Switch 2 released on October 16, 2026."
 },
 "107187": {
 "avg": 10.3,
@@ -81,7 +89,8 @@
 "The Sacrifice": "miss:2026-11-08",
 "Cold Stream": "covers/d/107187_cold-stream.jpg",
 "The Last Stand": "covers/d/107187_the-last-stand.jpg"
-}
+},
+"syn": "Left 4 Dead 2 is a 2009 first-person shooter game by Valve. The sequel to Left 4 Dead (2008) and the second game in the Left 4 Dead series, it was released for Windows and Xbox 360 in November 2009, Mac OS X in October 2010, and Linux in July 2013.\nLeft 4 Dead 2 builds upon cooperatively focused gameplay and Valve's proprietary Source engine, the same game engine used in the original Left 4 Dead."
 },
 "107313": {
 "avg": 15.6,
@@ -95,7 +104,8 @@
 "Gangstas in Space": "covers/d/107313_gangstas-in-space.jpg",
 "The Trouble with Clones": "covers/d/107313_the-trouble-with-clones.jpg"
 },
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Saints Row: The Third is a 2011 action-adventure game developed by Volition and published by THQ. It is the sequel to 2008's Saints Row 2 and the third installment in the Saints Row series. It was released on November 15, 2011, for Microsoft Windows, PlayStation 3, and Xbox 360, and May 10, 2019, for the Nintendo Switch. A remastered version of the game, titled Saints Row: The Third Remastered, was released by Deep Silver on May 22, 2020, for the PlayStation 4, Windows, and Xbox One, March 5, 20"
 },
 "107315": {
 "avg": 19.9,
@@ -107,11 +117,13 @@
 "Ultor Exposed": "miss:2026-11-08",
 "Corporate Warfare": "miss:2026-11-08"
 },
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Saints Row 2 is a 2008 action-adventure game developed by Volition and published by THQ. It is the sequel to 2006's Saints Row and the second installment in the Saints Row series. The game was released in October 2008 for the PlayStation 3 and Xbox 360, January 2009 for Microsoft Windows, and April 2016 for Linux. A mobile tie-in game was developed by G5 Entertainment and also released in October 2008."
 },
 "107317": {
 "avg": 17,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Saints Row is a 2006 action-adventure game developed by Volition and published by THQ exclusively for the Xbox 360.  It was released in North America on August 29, 2006, followed by an Australian release two days later and a European release on September 1, 2006. Set within the fictional city of Stilwater, based on Detroit, the single-player story follows a player-created character who joins the 3rd Street Saints gang after they save his life, and helps them rise to prominence by undermining ene"
 },
 "107319": {
 "avg": 15.3,
@@ -125,19 +137,23 @@
 "Enter the Dominatrix": "covers/d/107319_enter-the-dominatrix.jpg",
 "How the Saints Save Christmas": "miss:2026-11-08"
 },
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Saints Row IV is a 2013 action-adventure game developed by Volition and published by Deep Silver. It is the sequel to 2011's Saints Row: The Third, the fourth game in the Saints Row series, and the final main installment of the original series that began with 2006's Saints Row. The game was released in August 2013 for Microsoft Windows, PlayStation 3, and Xbox 360, and was later ported to the PlayStation 4, Xbox One, and Linux in 2015."
 },
 "107639": {
 "avg": 11.6,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": ""
 },
 "108162": {
 "avg": 8,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Uncharted: Drake's Fortune is a 2007 action-adventure game developed by Naughty Dog and published by Sony Computer Entertainment for the PlayStation 3. It is the first game in the Uncharted series and follows Nathan Drake, the supposed descendant of explorer Sir Francis Drake, as he searches for the lost treasure of El Dorado with journalist Elena Fisher and mentor Victor Sullivan.\nThe development of Uncharted: Drake's Fortune began in 2005, and saw Naughty Dog altering their approach to develop"
 },
 "108496": {
 "avg": 15.9,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Far Cry 3 is a 2012 first-person shooter game developed by Ubisoft Montreal and published by Ubisoft. It is the third main installment in the Far Cry series after Far Cry 2. The game takes place on the fictional Rook Islands, a tropical archipelago which can be freely explored by players."
 },
 "108583": {
 "avg": 22.2,
@@ -153,11 +169,13 @@
 "Mad Moxxi's Underdome Riot": "covers/d/108583_mad-moxxi-s-underdome-riot.jpg",
 "The Secret Armory of General Knoxx": "covers/d/108583_the-secret-armory-of-general-knoxx.jpg",
 "Claptrap's New Robot Revolution": "covers/d/108583_claptrap-s-new-robot-revolution.jpg"
-}
+},
+"syn": "Borderlands is a 2009 action role-playing first-person shooter video game developed by Gearbox Software and published by 2K. It is the first game in the Borderlands series. The game was released worldwide in 23 October 2009 for the PlayStation 3, Xbox 360 and Microsoft Windows, with a Mac OS X version being released on December 3, 2010, by Feral Interactive. The game's story focuses on a group of four \"Vault Hunters\", who travel to the distant planet of Pandora to search for the \"Vault\", which i"
 },
 "109306": {
 "avg": 6.2,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Battlefield 4 is a 2013 first-person shooter game developed by DICE and published by Electronic Arts. The game was released in October and November for Microsoft Windows, PlayStation 3, Xbox 360, PlayStation 4, and Xbox One. It is the thirteenth installment in the Battlefield series and is the sequel of 2011's Battlefield 3, taking place six years later during the fictional \"War of 2020\"."
 },
 "109380": {
 "avg": 51.7,
@@ -169,15 +187,18 @@
 "Hearts of Stone": "covers/d/109380_hearts-of-stone.jpg",
 "Blood and Wine": "covers/d/109380_blood-and-wine.jpg"
 },
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "The Witcher 3: Wild Hunt‍ is a 2015 action role-playing game developed and published by CD Projekt. It is the sequel to the 2011 game The Witcher 2: Assassins of Kings and the third game in The Witcher video game series, played in an open world with a third-person perspective. The games follow The Witcher series of fantasy novels by Polish author Andrzej Sapkowski."
 },
 "109687": {
 "avg": 30.1,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Grand Theft Auto: San Andreas is a 2004 action-adventure game developed by Rockstar North and published by Rockstar Games. It is the fifth main game in the Grand Theft Auto series and the seventh overall entry, following 2002's Grand Theft Auto: Vice City. Set within the fictional U.S. state of San Andreas (based on California and Nevada) in 1992, the game follows Carl \"CJ\" Johnson, a former gangster who returns home following his mother's murder."
 },
 "109689": {
 "avg": 16.6,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Grand Theft Auto: Vice City is a 2002 action-adventure game developed by Rockstar North and published by Rockstar Games. It is the fourth main game in the Grand Theft Auto series, following 2001's Grand Theft Auto III, and the sixth entry overall. Set in 1986 within the fictional Vice City (based on Miami), the single-player story follows gangster Tommy Vercetti's rise to power after being released from prison and becoming caught up in an ambushed drug deal."
 },
 "109820": {
 "avg": 25.2,
@@ -189,7 +210,8 @@
 "dimg": {
 "Iki Island": "covers/d/109820_iki-island.jpg",
 "Legends": "covers/d/109820_legends.jpg"
-}
+},
+"syn": "Ghost of Tsushima is a 2020 action-adventure game developed by Sucker Punch Productions and published by Sony Interactive Entertainment. The player controls Jin Sakai, a samurai on a quest to protect Tsushima Island during the first Mongol invasion of Japan. Jin must choose between following the warrior code to fight honorably, or by using practical but dishonorable methods of repelling the Mongols with minimal casualties."
 },
 "109835": {
 "avg": 35.3,
@@ -203,7 +225,8 @@
 "Hearthfire": "covers/d/109835_hearthfire.jpg",
 "Dragonborn": "covers/d/109835_dragonborn.jpg"
 },
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "The Elder Scrolls V: Skyrim is a 2011 action role-playing game developed by Bethesda Game Studios and published by Bethesda Softworks. It is the fifth main installment in The Elder Scrolls series, following The Elder Scrolls IV: Oblivion (2006), and was released worldwide for Windows, PlayStation 3, and Xbox 360 on November 11, 2011. Skyrim was developed using the Creation Engine."
 },
 "110041": {
 "avg": 14.3,
@@ -213,7 +236,8 @@
 "dimg": {
 "Left Behind": "covers/d/110041_left-behind.jpg"
 },
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "The Last of Us Part I is a 2022 action-adventure game developed by Naughty Dog and published by Sony Interactive Entertainment. A remake of the 2013 game The Last of Us, it features revised gameplay, including enhanced combat and exploration, and expanded accessibility options. Players control Joel, who is tasked with escorting the young Ellie across a post-apocalyptic United States and defend her against cannibalistic creatures infected by a mutated strain of the Cordyceps fungus."
 },
 "110477": {
 "avg": 17,
@@ -225,11 +249,13 @@
 "dimg": {
 "Bring Down the Sky": "miss:2026-11-08",
 "Pinnacle Station": "miss:2026-11-08"
-}
+},
+"syn": "Mass Effect is a 2007 action role-playing game developed by BioWare and published by Microsoft Game Studios for the Xbox 360. It is the first game in the Mass Effect series, and takes place within the Milky Way galaxy in the year 2183, where civilization is threatened by a highly advanced machine race known as the Reapers. The player assumes the role of Commander Shepard, an elite human soldier who must stop a rogue agent from carrying out the Reapers' galactic invasion."
 },
 "111333": {
 "avg": 7.8,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Freedom Fighters is a 2003 third-person shooter video game for the PlayStation 2, GameCube, Xbox, and Windows. It was developed by IO Interactive and published by EA Games.\nThe game is set in an alternate history in which the Soviet Union has invaded and occupied New York City."
 },
 "112129": {
 "avg": 8,
@@ -239,7 +265,8 @@
 "chk": "2026-11-08",
 "dimg": {
 "Path to War": "covers/d/112129_path-to-war.jpg"
-}
+},
+"syn": "Red Faction: Armageddon is a 2011 third-person shooter video game developed by Volition and published by THQ in association with the TV network Syfy. It is the fourth and final installment in the Red Faction series, and was released for Microsoft Windows, PlayStation 3 and Xbox 360 in June 2011.\nCritics liked the new weaponry, but were puzzled at the change from an open world game to a linear shooter and that it abandoned the strong points of its predecessor."
 },
 "112219": {
 "avg": 3.4,
@@ -249,51 +276,63 @@
 "chk": "2026-11-08",
 "dimg": {
 "Inheritance": "covers/d/112219_inheritance.jpg"
-}
+},
+"syn": "Layers of Fear is a 2016 psychological horror adventure game developed by Bloober Team and published by Aspyr. It was released on Linux, Microsoft Windows, macOS, PlayStation 4, and Xbox One worldwide in February 2016.\nIn Layers of Fear, the player controls a psychologically disturbed painter who is trying to complete his magnum opus as he navigates a Victorian mansion revealing secrets about his past."
 },
 "112930": {
 "avg": 6.1,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Call of Duty: Modern Warfare 3 is a 2011 first-person shooter game developed by Infinity Ward and Sledgehammer Games and published by Activision. The game was released worldwide on November 8, 2011, for Microsoft Windows, the Xbox 360, PlayStation 3, Wii, and OS X. It is the sequel to Call of Duty: Modern Warfare 2 (2009), serving as the third and final installment in the original Modern Warfare trilogy and the eighth Call of Duty installment overall. A separate version for the Nintendo DS was d"
 },
 "112932": {
 "avg": 6.9,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Call of Duty 4: Modern Warfare is a 2007 first-person shooter game developed by Infinity Ward and published by Activision. It is the fourth main installment in the Call of Duty series. The game breaks away from the World War II setting of previous entries and is instead set in modern times."
 },
 "112941": {
 "avg": 6,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Call of Duty: Ghosts is a 2013 first-person shooter game developed by Infinity Ward and published by Activision. It is the tenth major installment in the Call of Duty series and the sixth developed by Infinity Ward. It was released for PlayStation 3, Wii U, Windows, Xbox 360, PlayStation 4, and Xbox One in November 2013."
 },
 "112948": {
 "avg": 7.1,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Call of Duty: Black Ops II is a 2012 first-person shooter game developed by Treyarch and published by Activision. It was released for Windows, PlayStation 3, and Xbox 360 on November 13, 2012, and for the Wii U on November 18 in North America and November 30 in PAL regions. Black Ops II is the ninth game in the Call of Duty franchise of video games, a sequel to the 2010 game Call of Duty: Black Ops and the first Call of Duty game for the Wii U. A corresponding game for the PlayStation Vita, Call"
 },
 "112951": {
 "avg": 7.1,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Call of Duty: Black Ops is a 2010 first-person shooter game developed by Treyarch and published by Activision. It was released worldwide in November 2010 for Microsoft Windows, the PlayStation 3, Wii, and Xbox 360, with a separate version for Nintendo DS developed by n-Space. Aspyr later ported the game to Mac OS X in September 2012."
 },
 "112979": {
 "avg": 7,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Call of Duty: World at War is a 2008 first-person shooter game developed by Treyarch and published by Activision. It is the fifth main installment of the Call of Duty series and is the fourth entry in the series to be set during World War II. The game was announced by Activision in June 2008 and was released in November 2008 for the PlayStation 3, Windows, Xbox 360, and Wii. Other games under the World at War title were published for the Nintendo DS and the PlayStation 2, featuring different sto"
 },
 "112981": {
 "avg": 8,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Call of Duty 3 is a 2006 first-person shooter game developed by Treyarch and published by Activision. It is the third major installment in the Call of Duty series. It was released for PlayStation 2, Xbox, Xbox 360, PlayStation 3 and Wii."
 },
 "112988": {
 "avg": 8,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Call of Duty 2 is a 2005 first-person shooter game developed by Infinity Ward and published by Activision in most regions of the world. It is the second installment of the Call of Duty series. Announced by Activision on April 7, 2005, the game was released for Microsoft Windows on October 25, 2005, and as a launch title for the Xbox 360 on November 22, 2005."
 },
 "112999": {
 "avg": 6.6,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Call of Duty: Modern Warfare 2 is a 2009 first-person shooter game developed by Infinity Ward and published by Activision. It is the sixth installment in the Call of Duty series and the direct sequel to Call of Duty 4: Modern Warfare. It was released worldwide on November 10, 2009, for Windows, PlayStation 3, and Xbox 360."
 },
 "114574": {
 "avg": 9.1,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Lego Star Wars III: The Clone Wars is a Lego-themed action-adventure video game developed by Traveller's Tales and published by LucasArts in March 2011 for the PlayStation 3, PlayStation Portable, Xbox 360, Wii, Nintendo DS, Microsoft Windows, and the Nintendo 3DS. It was one of the 3DS's launch titles. The game features missions and characters from the 2008 animated film Star Wars: The Clone Wars and its follow-up television series, as well as fan-favorites from the original Star Wars saga, in "
 },
 "115744": {
 "avg": 9.2,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Crysis is a first-person shooter video game series created by Crytek. The series revolves around a group of military protagonists with \"nanosuits\", technologically advanced suits of armor that give them enhanced physical strength, speed, defense, and cloaking abilities. The protagonists face off against hostile North Korean soldiers, heavily armed mercenaries, and a race of technologically advanced aliens known as the Ceph, who arrived on Earth millions of years ago and have recently been awaken"
 },
 "116121": {
 "avg": 15.3,
@@ -307,11 +346,13 @@
 "The Year of the Snake": "miss:2026-11-08",
 "Zodiac Tournament": "covers/d/116121_zodiac-tournament.jpg"
 },
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Sleeping Dogs is a 2012 action-adventure game developed by United Front Games and published by Square Enix. The game was released for PlayStation 3, Windows, and Xbox 360 in August 2012. Set in contemporary Hong Kong, the story follows Wei Shen, a Hong Kong-American police officer and martial artist who goes undercover and infiltrates the Sun On Yee Triad organization."
 },
 "116900": {
 "avg": 20.6,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "God of War is a 2018 action-adventure game developed by Santa Monica Studio and published by Sony Interactive Entertainment. It was released worldwide for the PlayStation 4 in April 2018, with a Windows port released in January 2022. It is the eighth game in the God of War series and the sequel to 2010's God of War III.\nWhile previous games were based on Greek mythology, God of War transitioned to Norse mythology, and takes places in mythical ancient Scandinavia in the realm of Midgard."
 },
 "117196": {
 "avg": 9.7,
@@ -321,7 +362,8 @@
 "chk": "2026-11-08",
 "dimg": {
 "RAAM's Shadow": "covers/d/117196_raam-s-shadow.jpg"
-}
+},
+"syn": "Gears of War 3 is a 2011 third-person shooter video game developed by Epic Games and published by Microsoft Studios for the Xbox 360. It is the third installment of the Gears of War series, and final game in the original trilogy. Originally due for release on April 8, 2011, the game was delayed and eventually released on September 20, 2011."
 },
 "117817": {
 "avg": 17.6,
@@ -331,7 +373,8 @@
 "chk": "2026-11-08",
 "dimg": {
 "Undead Nightmare": "covers/d/117817_undead-nightmare.jpg"
-}
+},
+"syn": "Red Dead Redemption is a 2010 action-adventure game developed by Rockstar San Diego and published by Rockstar Games. A successor to 2004's Red Dead Revolver, it is the second game in the Red Dead series. Red Dead Redemption is set during the decline of the American frontier in the year 1911."
 },
 "117831": {
 "avg": 27,
@@ -343,19 +386,23 @@
 "dimg": {
 "The Lost and Damned": "covers/d/117831_the-lost-and-damned.jpg",
 "The Ballad of Gay Tony": "covers/d/117831_the-ballad-of-gay-tony.jpg"
-}
+},
+"syn": "Grand Theft Auto IV is a 2008 action-adventure game developed by Rockstar North and published by Rockstar Games. It is the sixth main entry in the Grand Theft Auto series, following 2004's Grand Theft Auto: San Andreas, and the eleventh entry overall. Set in the fictional Liberty City, based on New York City, the single-player story follows Eastern European war veteran Niko Bellic and his attempts to escape his past while under pressure from high-profile criminals."
 },
 "117835": {
 "avg": 50.8,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Red Dead Redemption 2 is a 2018 action-adventure game developed and published by Rockstar Games. The game is the third entry in the Red Dead series and a prequel to the 2010 game Red Dead Redemption. The story is set in a fictionalized representation of the United States in 1899 and follows the exploits of Arthur Morgan, an outlaw and member of the Van der Linde gang, who must face the challenges of a declining Wild West, while attempting to survive against government forces, rival gangs, and ot"
 },
 "118501": {
 "avg": 12.3,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Metal Gear Solid Delta: Snake Eater is a 2025 action-adventure stealth game developed and published by Konami. It is a remake of the 2004 game Metal Gear Solid 3: Snake Eater, the fifth main entry in the Metal Gear franchise and the first chronologically. Set in 1964, it follows a FOX operative codenamed Naked Snake, who must rescue a prominent Soviet rocket scientist and sabotage the Soviet nuclear superweapon Shagohod, while clearing the United States from Soviet suspicion amid Cold War tensio"
 },
 "118530": {
 "avg": 6.4,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Serious Sam: The First Encounter is a 2001 first-person shooter game developed by Croteam and published by Gathering of Developers. It is the first in the Serious Sam series. The game follows the soldier Sam \"Serious\" Stone, who is sent back in time to ancient Egypt in 1378 BCE to uncover information about the technologically advanced civilisation of the Sirians that could help humanity survive the attacks of extraterrestrial forces in the 22nd century."
 },
 "120096": {
 "avg": 8,
@@ -365,11 +412,13 @@
 "chk": "2026-11-08",
 "dimg": {
 "Justine": "miss:2026-11-08"
-}
+},
+"syn": "Amnesia: The Dark Descent is a 2010 survival horror adventure game developed and published by the Swedish game development studio Frictional Games. It was first released on 8 September 2010 for Microsoft Windows, Mac OS X, and Linux. Later, it was released to PlayStation 4 on 22 November 2016, Xbox One on 28 September 2018, and Nintendo Switch on 12 September 2019 as part of The Amnesia Collection."
 },
 "120192": {
 "avg": 1.5,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Tekken Tag Tournament 2 is a 2011 fighting game developed and published by Namco Bandai Games. Part of the Tekken series, it is the sequel to Tekken Tag Tournament (1999). The game debuted in Japanese arcades in September 2011 and received the Unlimited update in March 2012."
 },
 "120722": {
 "avg": 26.2,
@@ -379,11 +428,13 @@
 "chk": "2026-11-08",
 "dimg": {
 "Phantom Liberty": "covers/d/120722_phantom-liberty.jpg"
-}
+},
+"syn": "Cyberpunk 2077 is a 2020 action role-playing game developed by CD Projekt Red and published by CD Projekt. Based on and set in the fictional universe of Mike Pondsmith's Cyberpunk tabletop game series, Cyberpunk 2077 takes place in the dystopian metropolis of Night City in California. The player assumes the role of V (voiced by Gavin Drea or Cherami Leigh depending on the player character's gender), a cybernetically-enhanced mercenary who is reluctantly imbued with an experimental \"biochip\" cont"
 },
 "120728": {
 "avg": 7.4,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Road 96 is a 2021 adventure video game developed by DigixArt. Set in the fictional authoritarian nation of Petria in Summer 1996, the player controls a series of nameless teenagers attempting to flee the country by reaching its northern border as political tensions rise with its upcoming election. The player navigates procedurally-generated journeys composed of various segments in different locations, traveling between them by walking, hitchhiking, or using vehicles including buses, cars, and ta"
 },
 "121340": {
 "avg": 38.3,
@@ -395,7 +446,8 @@
 "dimg": {
 "Echoes of the Fallen": "covers/d/121340_echoes-of-the-fallen.jpg",
 "The Rising Tide": "covers/d/121340_the-rising-tide.jpg"
-}
+},
+"syn": "Final Fantasy XVI is a 2023 action role-playing game developed and published by Square Enix. The sixteenth main installment in the Final Fantasy series, it was first released for the PlayStation 5, with a Windows version released in September 2024, and an Xbox Series X/S version released in June 2025. The game features segmented open environments and an action-based combat system involving melee and magic-based attacks."
 },
 "123119": {
 "avg": 18.3,
@@ -407,11 +459,13 @@
 "dimg": {
 "Crew Expendable": "covers/d/123119_crew-expendable.jpg",
 "Last Survivor": "covers/d/123119_last-survivor.jpg"
-}
+},
+"syn": "Alien: Isolation is a 2014 survival horror game developed by Creative Assembly and published by Sega for PlayStation 3, PlayStation 4, Windows, Xbox 360, and Xbox One. Based on the Alien film series, the game is set 15 years after the original 1979 film, and follows the engineer Amanda Ripley, voiced by Andrea Deck. Amanda investigates the disappearance of her mother, Ellen Ripley, aboard the space station Sevastopol, which is in disarray due to years of corporate negligence and the threat of a "
 },
 "123796": {
 "avg": 61.2,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Yakuza, also known as Like a Dragon (Japanese: 龍が如く, Hepburn: Ryū ga Gotoku), is a video game series and media franchise created by Toshihiro Nagoshi for Sega. It incorporates elements of the action-adventure, beat 'em up, and role-playing genres.\nEach installment is typically a crime drama, with plot lines inspired by yakuza films and pre-millennial Japanese crime dramas."
 },
 "124925": {
 "avg": 28.5,
@@ -421,7 +475,8 @@
 "chk": "2026-11-08",
 "dimg": {
 "The Forsaken Hollows": "covers/d/124925_the-forsaken-hollows.jpg"
-}
+},
+"syn": "Elden Ring Nightreign is a 2025 action role-playing game developed by FromSoftware and published by Bandai Namco Entertainment. The game is a roguelike spin-off to Elden Ring, using many of its features and gameplay elements, and focuses on roguelike and cooperative mechanics. Players control Nightfarers on a quest to dispel the reign of night."
 },
 "125845": {
 "avg": 12.7,
@@ -443,11 +498,13 @@
 "The Serpent's Heart": "covers/d/125845_the-serpent-s-heart.jpg",
 "The Grand Caiman": "covers/d/125845_the-grand-caiman.jpg"
 },
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Shadow of the Tomb Raider is a 2018 action-adventure game developed by Eidos-Montréal and published by Square Enix. As the sequel to Rise of the Tomb Raider (2015), it is the twelfth mainline entry in the Tomb Raider series and the final installment of the Survivor trilogy. The story follows Lara Croft as she ventures through the tropical regions of the Americas to the legendary city of Paititi, battling the paramilitary organization Trinity while racing to stop a Mayan apocalypse she inadverten"
 },
 "125927": {
 "avg": 49,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Forza Motorsport 2 is a 2007 simulation racing video game developed by Turn 10 Studios for the Xbox 360 console. It is the second title in the Forza series, and is the sequel to the original Forza Motorsport (2005) and was followed by Forza Motorsport 3 (2009)."
 },
 "128405": {
 "avg": 11.2,
@@ -459,19 +516,23 @@
 "dimg": {
 "The Signal": "covers/d/128405_the-signal.jpg",
 "The Writer": "covers/d/128405_the-writer.jpg"
-}
+},
+"syn": "Alan Wake is a 2010 action-adventure game developed by Remedy Entertainment and published by Microsoft Game Studios. The game was released in May 2010 for the Xbox 360, with a Windows version following in February 2012 and a remastered version released for PlayStation 4, PlayStation 5, Xbox One, Xbox Series X/S, and Windows in October 2021, as well as a Nintendo Switch version in October 2022. The story follows bestselling crime thriller novelist Alan Wake as he tries to uncover the mystery behi"
 },
 "130796": {
 "avg": 12.8,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "It Takes Two is a 2021 cooperative action-adventure game developed by Hazelight Studios and published by Electronic Arts. It was released for PlayStation 4, PlayStation 5, Windows, Xbox One, and Xbox Series X/S in March 2021, for Nintendo Switch in November 2022, and for Nintendo Switch 2 in October 2026. The game follows Cody and May, a husband and wife on the brink of divorce whose daughter unknowingly transports their consciousnesses into handmade dolls, forcing to work together as they try t"
 },
 "130801": {
 "avg": 6.1,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Battlefield 3 is a 2011 first-person shooter game developed by DICE and published by Electronic Arts. It is the twelfth installment in the Battlefield series and a sequel to Battlefield 2 (2005). The game was released on Microsoft Windows, PlayStation 3 and Xbox 360 in October 2011."
 },
 "131649": {
 "avg": 3.6,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Child of Eden is a 2011 musical rail shooter game developed by Q Entertainment and published by Ubisoft for Xbox 360 and PlayStation 3. Following the player's journey to purge a far-future internet of viruses, the gameplay features shooting numerous enemies from a first-person perspective, with scores based on performance and bonuses awarded for syncing groups of shots with each stage's musical track. In addition to standard controllers, each version has the option to use motion controls through"
 },
 "134115": {
 "avg": 40.3,
@@ -495,7 +556,8 @@
 "The Darkspawn Chronicles": "miss:2026-11-08",
 "The Stone Prisoner": "miss:2026-11-08",
 "Warden's Keep": "miss:2026-11-08"
-}
+},
+"syn": "Dragon Age: Origins is a 2009 role-playing video game developed by Canadian studio BioWare and published by Electronic Arts. It is the first game in the Dragon Age franchise. Set in the fictional kingdom of Ferelden during a period of civil strife, the game puts the player in the role of a warrior, mage, or rogue coming from an elven, human, or dwarven background."
 },
 "134669": {
 "avg": 12.6,
@@ -509,11 +571,13 @@
 "Doc Ketchum's Murderous Mischief": "miss:2026-11-08",
 "Sabotage Under the Sun": "miss:2026-11-08"
 },
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Saints Row is a 2022 action-adventure game developed by Volition and published by Deep Silver. It is a reboot of the Saints Row series, and the fifth main installment, following 2013's Saints Row IV. The game was released for PlayStation 4, PlayStation 5, Google Stadia, Windows, Xbox One, and Xbox Series X/S on August 23, 2022. Set within the fictional city of Santo Ileso, inspired by Las Vegas, the story follows a group of four friends who start their own outlaw gang called the Saints, which th"
 },
 "134739": {
 "avg": 29.3,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Clair Obscur: Expedition 33  is a 2025 role-playing video game developed by Sandfall Interactive and published by Kepler Interactive. Set in a dark fantasy Belle Époque-inspired universe, the game follows the members of Expedition 33 as they set out to destroy the Paintress, a mysterious entity causing the yearly \"Gommage\", which results in those at or above an ever-decreasing age being erased from existence. In Expedition 33, one controls a party of characters from a third-person perspective, e"
 },
 "137649": {
 "dlc": [
@@ -523,7 +587,8 @@
 "chk": "2026-11-08",
 "dimg": {
 "Episode INTERmission": "miss:2026-11-08"
-}
+},
+"syn": "Final Fantasy VII Remake is a 2020 action role-playing game developed and published by Square Enix for the PlayStation 4. It is the first in a trilogy of games remaking Final Fantasy VII (1997), originally released for the PlayStation. An enhanced version, Final Fantasy VII Remake Intergrade, was released for PlayStation 5 and Windows in 2021, followed by ports for the Nintendo Switch 2 and Xbox Series X/S in 2026."
 },
 "138994": {
 "dlc": [
@@ -537,7 +602,8 @@
 "Hellfire Knight": "covers/d/138994_hellfire-knight.jpg",
 "Frozen Empress": "covers/d/138994_frozen-empress.jpg",
 "Lord of Thunder": "covers/d/138994_lord-of-thunder.jpg"
-}
+},
+"syn": "Code Vein is an action role-playing game developed by Bandai Namco Studios and Shift, and published by Bandai Namco Entertainment. It was released worldwide on September 27, 2019, for PlayStation 4, Windows, and Xbox One, and sold over three million copies but received mixed reviews from critics. A sequel, Code Vein II, released in 2026."
 },
 "139953": {
 "dlc": [
@@ -551,11 +617,13 @@
 "Tunnels of Terror": "covers/d/139953_tunnels-of-terror.jpg",
 "Children of the Worm": "covers/d/139953_children-of-the-worm.jpg",
 "River of Blood": "covers/d/139953_river-of-blood.jpg"
-}
+},
+"syn": "Back 4 Blood is a 2021 first-person shooter game developed by Turtle Rock Studios and published by Warner Bros. Games. It was released on October 12, 2021, for PlayStation 4, PlayStation 5, Windows, Xbox One, and Xbox Series X/S.\nThe game is considered to be a spiritual successor to the Left 4 Dead series, and carries over several key gameplay pillars, such as a strong emphasis on cooperative teamwork, and an AI system called the \"Game Director\", which dynamically modifies the environment, place"
 },
 "149525": {
 "avg": 15.3,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "WWE 2K17 is a professional wrestling video game developed by Yuke's and published by 2K for PlayStation 3, PlayStation 4, Xbox 360, Xbox One, and Microsoft Windows. It is the eighteenth game in the WWE game series (fourth under the WWE 2K banner), serving as the following from their previous game WWE 2K16 (released in 2015), and followed by WWE 2K18 (released in 2017). This is the fourth and final installment to be released for the PlayStation 3 and Xbox 360 platforms and on those platforms it s"
 },
 "149672": {
 "avg": 60.1,
@@ -567,11 +635,13 @@
 "dimg": {
 "Shadow of the Erdtree": "covers/d/149672_shadow-of-the-erdtree.jpg",
 "Tarnished Pack": "covers/d/149672_tarnished-pack.jpg"
-}
+},
+"syn": "Elden Ring is a 2022 action role-playing game directed by Hidetaka Miyazaki with worldbuilding provided by the American fantasy writer George R. R. Martin. Developed by FromSoftware and published by Bandai Namco Entertainment, it was first released on February 25, 2022, for PlayStation 4, PlayStation 5, Windows, Xbox One, and Xbox Series X/S with a Nintendo Switch 2 version released on August 28, 2026. Set in the Lands Between, players control a customizable player character on a quest to repair"
 },
 "152183": {
 "avg": 3.6,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Gris (Spanish pronunciation: [ɡɾis]) is a 2018 platform-adventure game by Spanish developer Nomada Studio and published by Devolver Digital. The game was released for macOS, Nintendo Switch, and Windows in December 2018, for iOS in August 2019, for PlayStation 4 in November 2019, for Android in April 2020, for Amazon Luna in November 2021, and for PlayStation 5, Xbox One and Xbox Series X/S in December 2022. The game has sold over 3 million copies."
 },
 "156496": {
 "avg": 7.2,
@@ -581,7 +651,8 @@
 "dimg": {
 "Wages of Sin": "covers/d/156496_wages-of-sin.jpg"
 },
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Sin is a 1998 first-person shooter video game developed by Ritual Entertainment and published by Activision. It uses a modified version of the Quake II engine. Sin is set in the dystopian future of 2037, where John Blade, a commander in a security force named HardCorps in the megacity of Freeport, is tasked to rid the city of a recreational drug that may be tied to the rival biotechnology megacorporation, SinTek."
 },
 "159647": {
 "dlc": [
@@ -591,7 +662,8 @@
 "avg": 7,
 "dimg": {
 "Part IV: Nirvana": "miss:2026-11-08"
-}
+},
+"syn": "Asura's Wrath is a 2012 action video game developed by CyberConnect2 and published by Capcom for the PlayStation 3 and Xbox 360. Taking elements from Hindu and Buddhist mythologies and blending them with science fiction, the game follows the titular character, the demigod Asura, as he seeks revenge on the pantheon of other demigods who betrayed him.\nThe story is presented in the style and format of an episodic series of cinematic scenes, including opening and closing credits, with the gameplay s"
 },
 "165097": {
 "avg": 7.4,
@@ -601,20 +673,24 @@
 "chk": "2026-11-08",
 "dimg": {
 "Team Sabre": "covers/d/165097_team-sabre.jpg"
-}
+},
+"syn": "Delta Force: Black Hawk Down is a first-person shooter video game developed by NovaLogic. It was released for Microsoft Windows on March 25, 2003; for Mac OS X in July 2004; and for PlayStation 2 and Xbox on July 26, 2005. It is the 6th game of the Delta Force series."
 },
 "166131": {
 "avg": 8.6,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Lego Pirates of the Caribbean: The Video Game is a 2011 Lego-themed action-adventure video game, based on the Pirates of the Caribbean film series, developed by Traveller's Tales and published by Disney Interactive Studios for Xbox 360, PlayStation 3, PlayStation Portable, Wii, Nintendo DS, Nintendo 3DS, Microsoft Windows, and Mac OS X. The game was released to coincide with the release of Pirates of the Caribbean: On Stranger Tides, and retells the plot of the first four films in the Pirates Of"
 },
 "176417": {
 "avg": 6.1,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Spec Ops: The Line is a 2012 third-person shooter video game developed by Yager Development and published by 2K. It is the seventh installment and a reboot of the Spec Ops series. The player controls Captain Martin Walker, who is sent into a post-environmental catastrophe Dubai with an elite Delta Force team on a recon mission. As the story progresses, Walker's sanity deteriorates as he experiences hallucinations and slowly realizes the horrors of war."
 },
 "191903": {
 "dlc": [],
 "avg": 7.9,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Crackdown 2 is a 2010 action-adventure game developed by Ruffian Games and published by Microsoft Game Studios. It was released for the Xbox 360 in July  2010 and is a direct sequel to the 2007 video game Crackdown. A sequel, Crackdown 3, was released for the Xbox One and Microsoft Windows in February 2019."
 },
 "191940": {
 "avg": 9,
@@ -624,7 +700,8 @@
 "chk": "2026-11-08",
 "dimg": {
 "Pigsy's Perfect 10": "miss:2026-11-08"
-}
+},
+"syn": "Enslaved: Odyssey to the West is a 2010 action-adventure game developed by Ninja Theory and published by Namco Bandai Games. As a loose adaptation of the Chinese novel Journey to the West, the game is set 150 years in a future post-apocalyptic world following a global war. Only remnants of humanity survive, along with the still active war machines left over from the conflict."
 },
 "195471": {
 "dlc": [
@@ -634,78 +711,97 @@
 "chk": "2026-11-08",
 "dimg": {
 "Dark Arisen": "covers/d/195471_dark-arisen.jpg"
-}
+},
+"syn": "Dragon's Dogma is a 2012 action role-playing game developed and published by Capcom. First released for PlayStation 3 and Xbox 360, an enhanced version subtitled Dark Arisen was later released for the same consoles in 2013, with ports being released for Windows, PlayStation 4, Xbox One, and Nintendo Switch in the ensuing years. Set in Gransys, a high fantasy world inspired by Sicily, the player takes on the role of a human protagonist dubbed the Arisen on a quest to defeat the dragon Grigori, a "
 },
 "198870": {
 "avg": 8.7,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Delta Force 2 is a tactical first-person shooter video game developed by NovaLogic and released in 1999, one year after its predecessor. It is the second game in the Delta Force series and was followed by Delta Force: Land Warrior one year later. The game was re-released in 2009 on Steam."
 },
 "362263": {
 "avg": 8.1,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Project Gotham Racing 3 is a 2005 arcade-style racing video game developed by Bizarre Creations and published by Microsoft Game Studios as the third entry of the Project Gotham Racing series. It was released exclusively for the Xbox 360 as a launch title in November 2005. The game was rated by Official Xbox Magazine as Xbox 360 \"Game of the Year\" (2005), as well as \"Best 1st Person (Not Shooter) of the Year\", because of its realistic inside-car view."
 },
 "414254": {
 "avg": 8.3,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Project I.G.I. (released in North America as Project I.G.I.: I'm Going In) is a tactical first-person shooter video game. It was developed by Innerloop Studios and released in December 2000 by Eidos Interactive. The game received mixed reviews due to shortcomings including a poorly programmed A.I., lack of a mid-game save option, and the lack of multiplayer features."
 },
 "416842": {
 "avg": 10,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "I.G.I.-2: Covert Strike, known in the PAL region as Project I.G.I. 2, is a 2003 tactical shooter video game developed by Innerloop Studios and released by Codemasters. The game is a stealth-based first-person shooter. It is the sequel to Innerloop's Project I.G.I.."
 },
 "130795": {
 "chk": "2026-11-08",
-"avg": 6
+"avg": 6,
+"syn": "A Way Out is a 2018 cooperative action-adventure video game developed by Hazelight Studios and published by Electronic Arts. It is the second video game directed by Josef Fares after Brothers: A Tale of Two Sons. The game does not have a single-player option; it is playable on local or online split screen co-op between two players."
 },
 "341711": {
 "chk": "2026-11-08",
-"avg": 6.1
+"avg": 6.1,
+"syn": "Battlefield 6 is a 2025 online-only first-person shooter video game developed by Battlefield Studios and published by Electronic Arts. Serving as the eighteenth installment in the Battlefield series, the game was released for PlayStation 5, Windows, and Xbox Series X/S on October 10, 2025. A free-to-play battle royale mode, titled RedSec, was released on October 28, 2025."
 },
 "441755": {
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": ""
 },
 "196272": {
 "avg": 11,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Crackdown is a 2007 action-adventure game developed by Realtime Worlds and published by Microsoft Game Studios for the Xbox 360. Crackdown was conceived by Realtime Worlds' founder, David Jones, who also created Grand Theft Auto and Lemmings.\nSet in the fictional Pacific City, the player controls a biologically enhanced Agent, tasked with defeating three crime lords and their organized crime syndicates."
 },
 "134386": {
 "avg": 11,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Dead Space is a 2008 survival horror game developed by EA Redwood Shores and published by Electronic Arts. It was released for PlayStation 3, Xbox 360, and Windows as the debut entry in the Dead Space series. Set on a mining spaceship overrun by deadly monsters called Necromorphs following the discovery of an artifact called the Marker, the player controls engineer Isaac Clarke as he navigates the spaceship and fights the Necromorphs while struggling with growing psychosis."
 },
 "172182": {
 "avg": 3,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Dead or Alive 6 is a 2019 fighting game developed by Team Ninja and published by Koei Tecmo. The game is the sixth main entry in the Dead or Alive fighting series following Dead or Alive 5 (2012) and runs on a new engine, offering new features and introducing new mechanics. It was released for PlayStation 4, Windows, and Xbox One on March 1, 2019, and was later released for arcades in Japan on July 18, 2019."
 },
 "193464": {
 "avg": 40.5,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Death Stranding is a 2019 action-adventure game developed by Kojima Productions and published by Sony Interactive Entertainment. It is co-written, co-produced, designed, and directed by Hideo Kojima, and is the first game from Kojima after his departure from Konami in 2015. It was first released for PlayStation 4 in November 2019, followed by a Windows port in July 2020."
 },
 "257360": {
 "avg": 35.7,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Death Stranding 2: On the Beach is a 2025 action-adventure game developed by Kojima Productions and published by Sony Interactive Entertainment. It is co-written, co-produced, designed, and directed by Hideo Kojima. Serving as the sequel to Death Stranding (2019), On the Beach features the previous game's central characters, including Sam, Fragile, and Higgs, reprised by Norman Reedus, Léa Seydoux, and Troy Baker, respectively."
 },
 "169913": {
 "avg": 8.6,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Dispatch is a 2025 episodic adventure game developed and published by the American developer AdHoc Studio. Described as a superhero workplace comedy, the game has the player take the role of Robert Robertson III, formerly the superhero Mecha Man, who has to take a job as a dispatcher for villains-turned-superheroes after his mecha suit is destroyed in battle. Its cast includes the voices of Aaron Paul, Jeffrey Wright, Erin Yvette, Laura Bailey, Travis Willingham, and Matthew Mercer, as well as c"
 },
 "251937": {
 "avg": 30.2,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Ghost of Yōtei is a 2025 action-adventure game developed by Sucker Punch Productions and published by Sony Interactive Entertainment. It is a standalone sequel to the 2020 game Ghost of Tsushima. Set in 1603 in Ezo, Japan, the story follows Atsu, a mercenary seeking vengeance against the \"Yōtei Six\" for slaughtering her family sixteen years prior."
 },
 "137864": {
 "avg": 32.1,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Grand Theft Auto V is a 2013 action-adventure game developed by Rockstar North and published by Rockstar Games. It is the seventh main entry in the Grand Theft Auto series, following 2008's Grand Theft Auto IV, and the fifteenth entry overall. Set within the fictional state of San Andreas, based on Southern California, the single-player story follows three protagonists—retired bank robber Michael De Santa (Ned Luke), street gangster Franklin Clinton (Shawn Fonteno), and drug dealer and gunrunner"
 },
 "161501": {
 "avg": 21.8,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Hell Is Us is an action-adventure game developed by Rogue Factor and published by Nacon. It was released for PlayStation 5, Windows, and Xbox Series X/S on September 4, 2025. A port for Nintendo Switch 2 is scheduled to release on October 8, 2026."
 },
 "139939": {
 "avg": 6.5,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Ico (stylized in all caps) is a 2001 action-adventure video game by Sony Computer Entertainment for the PlayStation 2. It was first released in September and December 2001 for North America and Japan, respectively, with a March 2002 release for Europe. It was first re-released in Europe with its spiritual successor, Shadow of the Colossus, in 2006."
 },
 "132055": {
 "avg": 3.6,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Inside (stylized in all caps) is a 2016 puzzle-platform horror game developed and published by Playdead. The game was released for the Xbox One in June 2016, Windows in July, and PlayStation 4 in August, followed by releases for iOS in December 2017, Nintendo Switch in June 2018, and macOS in June 2020. The player controls a boy in a dystopian world, solving environmental puzzles and avoiding death."
 },
 "152184": {
 "avg": 4.1,
@@ -715,18 +811,22 @@
 ],
 "dimg": {
 "Prologue": "covers/d/152184_prologue.jpg"
-}
+},
+"syn": "Neva is a 2024 puzzle-platform game developed by Nomada Studio and published by Devolver Digital. It follows a young woman named Alba who must travel with her wolf companion Neva across four seasons in a world corrupted by darkness. The game was released for Windows, macOS, Nintendo Switch, PlayStation 4, PlayStation 5 and Xbox Series X/S in October 2024."
 },
 "98523": {
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "OD‍ is an upcoming horror game developed by Kojima Productions and set to be published by Xbox Game Studios. It is set to be directed by Hideo Kojima, who additionally serves as co-writer alongside Jordan Peele. Starring Sophia Lillis, Hunter Schafer, and Udo Kier in a posthumous appearance, the game will \"explore the concept of testing your fear threshold, and what it means to OD on fear\"."
 },
 "140733": {
 "avg": 7.3,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Outlast 2 (stylised as OU⸸LASTII) is a 2017 first-person psychological survival horror video game developed and published by Red Barrels. The sequel to Outlast (2013), it revolves around a cameraman named Blake Langermann, who works with his journalist wife, Lynn, to investigate the murder of a pregnant woman in northern Arizona. When they are separated in a helicopter crash, Blake has to find Lynn while travelling through a village inhabited by a deranged cult that believes the Judgement Day is"
 },
 "1794162993282": {
 "avg": 22.1,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Phantom Blade Zero‍ is a wuxia action role-playing game developed and published by the Chinese studio S-Game. The player assumes the role of Soul, an elite assassin of the Order. He is framed for the murder of the Shadow Sovereign of the Order and hunted by members of the Order."
 },
 "421183": {
 "avg": 12.9,
@@ -736,37 +836,46 @@
 ],
 "dimg": {
 "THE ART OF ROMEO IS A DEAD MAN": "covers/d/421183_the-art-of-romeo-is-a-dead-man.jpg"
-}
+},
+"syn": "Romeo Is a Dead Man is a 2026 action-adventure game developed and published by Grasshopper Manufacture released on February 11, 2026, for PlayStation 5, Windows, and Xbox Series X/S."
 },
 "142444": {
 "avg": 30.2,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Sekiro: Shadows Die Twice is a 2019 action-adventure game developed by FromSoftware. It was released in Japan by FromSoftware and internationally by Activision  for the PlayStation 4, Windows and Xbox One in March 2019 and for Stadia in October 2020. \nPlayers control Wolf, a shinobi who embarks on a quest to rescue his lord, and becomes embroiled into a conflict for Ashina's fate."
 },
 "167144": {
 "avg": 9.2,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Signalis is a 2022 survival horror video game developed by German studio rose-engine and published by Humble Games and Playism. The player controls an android named LSTR-512 (a.k.a. \"Elster\") as she aims to locate her ship's missing pilot amidst a supernatural event within a hostile mining facility."
 },
 "146988": {
 "avg": 16.1,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Silent Hill 2 is a 2024 survival horror game developed by Bloober Team and published by Konami Digital Entertainment. It is a remake of the 2001 video game Silent Hill 2, originally developed by Team Silent, a group within Konami Computer Entertainment Tokyo (KCET). It is the first major installment in the Silent Hill series since Silent Hill: Downpour (2012)."
 },
 "140579": {
 "avg": 9.1,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Soma is a 2015 survival horror video game developed and published by Frictional Games. It follows Simon Jarrett, who finds himself on an underwater remote research facility under mysterious circumstances, which contains machinery that exhibit human characteristics such as possessing a personality and consciousness. He embarks upon discovering its history, while trying to make sense of his predicament and potential future."
 },
 "195642": {
 "avg": 13.7,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Split Fiction is a 2025 action-adventure game developed by Hazelight Studios and published by Electronic Arts. As a cooperative multiplayer-only game, it follows authors Mio Hudson and Zoe Foster after they become imprisoned in the world of their stories when they are connected to a machine designed to steal creative ideas.\nSplit Fiction was released for PlayStation 5, Windows, and Xbox Series X/S on March 6, 2025, and was released on Nintendo Switch 2 on June 5."
 },
 "197208": {
 "avg": 22.7,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Stellar Blade (Korean: 스텔라 블레이드) is a 2024 action-adventure game developed by Shift Up. Players take control of the protagonist, Eve, as she embarks on a mission to save humanity from a relentless war against an alien race known as the Naytibas in a distant future. Throughout her journey, Eve is joined by her squad and other survivors as they fight to reclaim Earth."
 },
 "130765": {
 "avg": 8,
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Until Dawn is a 2015 interactive drama survival horror game developed by Supermassive Games and published by Sony Computer Entertainment. Players assume control of eight young adults who have to survive on Blackwood Mountain when their lives are threatened. The game features a butterfly effect system in which players must make choices that may change the story."
 },
 "1794165211319": {
-"chk": "2026-11-08"
+"chk": "2026-11-08",
+"syn": "Onimusha: Way of the Sword (鬼武者 Way of the Sword) is a 2026 action-adventure game developed and published by Capcom. As the first mainline installment in the Onimusha series since Onimusha: Dawn of Dreams (2006), the game was released on September 4, 2026 for Nintendo Switch 2, PlayStation 5, Windows, and Xbox Series X/S. The game received generally favorable reviews and sold 1 million copies on its launch day."
 }
 }
