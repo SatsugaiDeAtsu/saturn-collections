@@ -389,6 +389,19 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 /* scored 8-9 / 4-4.5: glowing purple frame */
 .card:has(.cover.pur){border:2px solid transparent;background:linear-gradient(var(--panel),var(--panel)) padding-box,linear-gradient(115deg,#3b1670,#9b5cff 25%,#e3d0ff 40%,#9b5cff 55%,#4a1d8c 75%,#9b5cff) border-box;background-size:100% 100%,300% 100%;animation:redshine 4.5s linear infinite;box-shadow:0 0 12px -2px rgba(155,92,255,.55)}
 .dlcs{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0 2px}.dlcs .tag{opacity:.6}.dlcs .tag.on{opacity:1;border-color:var(--game);color:var(--game)}
+.relgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:12px}
+.reltile{display:flex;flex-direction:column;gap:3px;background:none;border:0;padding:0;color:var(--ink);text-align:left;cursor:pointer;font:inherit}
+.reltile .cover{aspect-ratio:2/3;transition:transform .15s,box-shadow .15s}.reltile:hover .cover{transform:translateY(-2px);box-shadow:0 6px 16px -6px var(--c,#000)}
+.reltile.cur{cursor:default}.reltile.cur .cover{outline:2px solid var(--c);outline-offset:-2px}
+.reltile .rl{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--c);margin-top:3px}
+.reltile .rn{font-size:12px;font-weight:600;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.reltile .rs{font-size:11px}
+.fran summary{list-style:none;cursor:pointer}.fran summary::-webkit-details-marker{display:none}.fran summary h2{display:inline-flex}
+.franl{list-style:none;margin:8px 0 0;padding:0;border-left:2px solid var(--c);display:grid}
+.franl li button{all:unset;box-sizing:border-box;width:100%;display:grid;grid-template-columns:62px 62px 1fr auto;gap:10px;align-items:baseline;padding:7px 10px;cursor:pointer;font-size:13px}
+.franl li button:hover{background:var(--panel2)}.franl li.cur button{background:color-mix(in srgb,var(--c) 14%,transparent);cursor:default}
+.franl .fd{color:var(--ink3);font-size:11.5px}.franl .ft{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--c)}.franl .fs{font-size:11.5px;text-align:right}
+@media (max-width:640px){.franl li button{grid-template-columns:54px 1fr;row-gap:2px}.franl .ft{grid-column:2;grid-row:1}.franl .fn{grid-column:1/-1}.franl .fs{grid-column:1/-1;text-align:left}.franl .fd{grid-row:1}}
 .dlcgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
 .dlct{position:relative;display:flex;flex-direction:column;gap:5px;background:none;border:0;padding:0;color:var(--ink);text-align:left;cursor:default;font:inherit}
 button.dlct{cursor:pointer}.dlct .cover{aspect-ratio:2/3;opacity:.45;filter:grayscale(.6);transition:opacity .2s,filter .2s,transform .15s;outline:2px solid transparent;outline-offset:-2px}
@@ -805,13 +818,89 @@ function rManga(){
     row:(m,i)=>`<tr data-i="${i}"><td class="st" style="--sc:${MST[m.st][1]}"></td><td class="num hm">${i+1}</td><td style="width:54px">${cover(m.t,m.img,'','mini')}</td><td><div class="ti">${esc(m.t)}</div>${m.alt?`<div class="alt">${esc(m.alt)}</div>`:''}</td><td class="sc">${m.sc||'<span class="muted">–</span>'}</td><td class="c hm">${esc(m.type)}</td><td class="c mono small">${m.ch}<span class="muted">/${m.chs||'?'}</span></td><td class="c mono small hm">${m.mal?m.mal.toFixed(2):'–'}</td></tr>`,
     open:openManga});
 }
+/* ---------- connections: sequels, prequels, films, OVAs, series ---------- */
+let _MD=null,_FD=null;
+const loadJ=(p)=>fetch(p,{cache:'no-cache'}).then(r=>r.ok?r.json():null).catch(()=>null);
+const RELN={sequel:'Sequel',prequel:'Prequel',side_story:'Side story',parent_story:'Main story',alternative_version:'Alternative version',alternative_setting:'Alternative setting',spin_off:'Spin-off',summary:'Recap',full_story:'Full story',other:'Other',character:'Same characters',adaptation:'Adaptation'};
+const RELO=['prequel','sequel','parent_story','side_story','full_story','summary','alternative_version','alternative_setting','spin_off','adaptation','other','character'];
+const TYN={tv:'TV',movie:'Film',ova:'OVA',ona:'ONA',special:'Special',music:'Music',tv_special:'TV special',cm:'CM',pv:'PV',manga:'Manga',light_novel:'Light novel',novel:'Novel',one_shot:'One-shot',manhwa:'Manhwa',manhua:'Manhua',doujinshi:'Doujin'};
+const hm=min=>{min=Math.round(min);if(!min)return'';const h=Math.floor(min/60),m=min%60;return h?`${h} h${m?' '+m+' min':''}`:`${m} min`};
+function relTile(k,id,rel,d){
+  const own=(k==='a'?anime:manga).find(x=>x.id===+id);
+  const img=own?own.img:(d.img?`https://cdn.myanimelist.net/images/${k==='a'?'anime':'manga'}/${d.img}.jpg`:'');
+  const st=own?(k==='a'?AST:MST)[own.st]:null;
+  return `<button type="button" class="reltile" data-rk="${k}" data-rid="${id}" title="${esc(own?own.t:d.t)}">${cover(own?own.t:d.t,img,own&&own.sc?`<span class="badge">${own.sc}</span>`:'')}<span class="rl">${esc(RELN[rel]||rel)}${d.ty?` · ${esc(TYN[d.ty]||d.ty.toUpperCase())}`:''}</span><span class="rn">${esc(own?own.t:d.t)}</span><span class="rs" style="color:${st?st[1]:'var(--ink3)'}">${st?esc(st[0]):'Not in your list'}</span></button>`;
+}
+function bindRel(det){
+  document.querySelectorAll('#m_x [data-rk]').forEach(b=>b.onclick=()=>{
+    const k=b.dataset.rk,id=+b.dataset.rid,own=(k==='a'?anime:manga).find(x=>x.id===id);
+    if(own)return (k==='a'?openAnime:openManga)(own);
+    const d=det[k][id]||{};const kind=k==='a'?'anime':'manga';
+    openExt(kind,{malId:id,t:d.t,alt:d.jt||'',y:(d.sd||'').slice(0,4),img:d.img?`https://cdn.myanimelist.net/images/${kind}/${d.img}.jpg`:'',meta:[TYN[d.ty]||'',d.n?d.n+(k==='a'?' eps':' ch'):'',k==='a'&&d.dur?hm(d.dur/60)+' each':''].filter(Boolean).join(' · '),sum:'',url:`https://myanimelist.net/${kind}/${id}`});
+  });
+}
+async function malExtra(k,x){
+  const box=$('#m_x');if(!box)return;
+  if(!_MD)_MD=await loadJ('data/mal_details.json')||{a:{},m:{}};
+  if(!$('#m_x')||$('#m_x')!==box)return;
+  const det=_MD,me=det[k][x.id];
+  if(!me){box.innerHTML=`<div class="small muted" style="margin-top:10px">Episode length and related entries for this one arrive with the next update.</div>`;return}
+  const ok=(kk,id)=>{const d=det[kk][id];return d&&!d.x&&!d.gone};
+  let h='';
+  // length
+  if(k==='a'&&me.dur){const per=me.dur/60,eps=me.n||x.eps||0,film=me.ty==='movie'||eps===1;
+    const mine=(x.st===2?(x.eps||eps):x.ep)*per*(1+(x.rw||0));
+    h+=`<div class="kv" style="margin-top:0"><div>Length</div><div>${film?hm(per):`${hm(per)} per episode${eps?` · ${hm(per*eps)} in total`:''}`}</div>${mine>0?`<div>Your time</div><div>about ${hm(mine)}${x.rw?' including rewatches':''}</div>`:''}</div>`}
+  // direct relations
+  const rels=[...(me.ra||[]).map(r=>['a',r[0],r[1]]),...(me.rm||[]).map(r=>['m',r[0],r[1]])].filter(r=>ok(r[0],r[1]))
+    .sort((p,q)=>(p[0]===k?0:1)-(q[0]===k?0:1)||RELO.indexOf(p[2])-RELO.indexOf(q[2]));
+  if(rels.length)h+=`<div class="sect" style="--c:${k==='a'?'var(--anime)':'var(--manga)'};margin-top:14px"><h2><i></i>Related</h2><div class="relgrid">${rels.map(r=>relTile(r[0],r[1],r[2],det[r[0]][r[1]])).join('')}</div></div>`;
+  // the whole franchise in release order (same medium)
+  const key=k==='a'?'ra':'rm',seen=new Set([x.id]),q=[x.id];
+  while(q.length&&seen.size<80){const id=q.shift(),d=det[k][id];if(!d)continue;(d[key]||[]).forEach(([n,rel])=>{if(rel!=='character'&&!seen.has(n)&&ok(k,n)){seen.add(n);q.push(n)}})}
+  if(seen.size>2){
+    const list=[...seen].map(id=>[id,det[k][id]||{t:x.t,sd:''}]).sort((p,q)=>(p[1].sd||'9999').localeCompare(q[1].sd||'9999'));
+    h+=`<details class="sect fran" style="--c:${k==='a'?'var(--anime)':'var(--manga)'};margin-top:14px" open><summary><h2><i></i>Full series in release order <span class="muted mono">${list.length}</span></h2></summary><ol class="franl">${list.map(([id,d])=>{const own=(k==='a'?anime:manga).find(o=>o.id===id),st=own?(k==='a'?AST:MST)[own.st]:null,cur=id===x.id;
+      return `<li class="${cur?'cur':''}"><button type="button" ${cur?'disabled':''} data-rk="${k}" data-rid="${id}"><span class="fd mono">${esc((d.sd||'').slice(0,7)||'—')}</span><span class="ft">${esc(TYN[d.ty]||(d.ty||'').toUpperCase())}</span><span class="fn">${esc(own?own.t:d.t)}${k==='a'&&d.dur&&(d.ty==='movie'||d.n===1)?` <span class="muted">· ${hm(d.dur/60)}</span>`:k==='a'&&d.n?` <span class="muted">· ${d.n} ep</span>`:''}</span><span class="fs" style="color:${st?st[1]:'var(--ink3)'}">${cur?'You are here':st?esc(st[0])+(own.sc?' · '+own.sc:''):'Not in your list'}</span></button></li>`}).join('')}</ol></details>`;
+  }
+  box.innerHTML=h;bindRel(det);
+}
+async function filmExtra(f){
+  const box=$('#m_x');if(!box||!f.tmdb)return;
+  if(!_FD)_FD=await loadJ('data/film_details.json')||{f:{},col:{}};
+  if($('#m_x')!==box)return;
+  const me=_FD.f[f.tmdb];if(!me)return;
+  let h=me.rt?`<div class="kv" style="margin-top:0"><div>Length</div><div>${hm(me.rt)}${f.s==='w'&&f.rw?` · about ${hm(me.rt*(1+f.rw))} with rewatches`:''}</div></div>`:'';
+  const col=me.col&&_FD.col[me.col];
+  if(col&&col.p.length>1){
+    h+=`<div class="sect" style="--c:var(--film);margin-top:14px"><h2><i></i>${esc(col.n)} <span class="muted mono">${col.p.length} films</span></h2><div class="relgrid">${col.p.map(([id,t,d,pp],i)=>{const own=films.find(x=>x.tmdb===id),cur=id===f.tmdb;
+      return `<button type="button" class="reltile${cur?' cur':''}" data-fid="${id}" ${cur?'disabled':''}>${cover(t,own&&own.img||(pp?'https://image.tmdb.org/t/p/w185'+pp:''),own&&own.r?`<span class="badge">${own.r}★</span>`:'')}<span class="rl">Part ${i+1}${d?' · '+d.slice(0,4):''}</span><span class="rn">${esc(t)}</span><span class="rs" style="color:${cur?'var(--film)':own?(own.s==='w'?'var(--s2)':'var(--s6)'):'var(--ink3)'}">${cur?'You are here':own?(own.s==='w'?'Watched':'On watchlist'):'Not logged'}</span></button>`}).join('')}</div></div>`;
+  }
+  box.innerHTML=h;
+  box.querySelectorAll('[data-fid]').forEach(b=>b.onclick=()=>{const id=+b.dataset.fid,own=films.find(x=>x.tmdb===id);if(own)return openFilm(own);window.open('https://letterboxd.com/tmdb/'+id,'_blank','noopener')});
+}
+function gameSeries(g){
+  const fr=(g.fr||[])[0];if(!fr)return '';
+  const L=games.filter(x=>(x.fr||[]).includes(fr)).sort((a,b)=>(a.rel||'9999').localeCompare(b.rel||'9999'));
+  if(L.length<2)return '';
+  return `<div class="sect" style="--c:var(--game);margin-top:14px"><h2><i></i>${esc(fr)} series <span class="muted mono">${L.length} in your list</span></h2><div class="relgrid">${L.map(x=>`<button type="button" class="reltile${x===g?' cur':''}" data-gi="${x.i}" ${x===g?'disabled':''}>${cover(x.t,x.img||'',gBadge(x))}<span class="rl">${x.rel?x.rel.slice(0,4):''}</span><span class="rn">${esc(x.t)}</span><span class="rs" style="color:${x===g?'var(--game)':GSH[x.shelf]||'var(--ink3)'}">${x===g?'You are here':esc(x.shelf)}</span></button>`).join('')}</div></div>`;
+}
+const BSER=t=>{const m=/\(([^()#]+?),?\s*#\s*([\d.]+)\)\s*$/.exec(t||'');return m?{n:m[1].trim(),i:+m[2]}:null};
+function bookSeries(b){
+  const me=BSER(b.t);if(!me)return '';
+  const L=books.filter(x=>{const s=BSER(x.t);return s&&s.n===me.n}).sort((a,c)=>BSER(a.t).i-BSER(c.t).i);
+  return `<div class="sect" style="--c:var(--book);margin-top:14px"><h2><i></i>${esc(me.n)} <span class="muted mono">book ${me.i}</span></h2>${L.length>1?`<div class="relgrid">${L.map(x=>`<button type="button" class="reltile${x===b?' cur':''}" data-bi="${x.i}" ${x===b?'disabled':''}>${cover(x.t,x.img||'',x.r?`<span class="badge">${x.r}★</span>`:'')}<span class="rl">Book ${BSER(x.t).i}</span><span class="rn">${esc(x.t.replace(/\s*\([^()]*#[^()]*\)\s*$/,''))}</span><span class="rs" style="color:${x===b?'var(--book)':BST[x.st][1]}">${x===b?'You are here':esc(BST[x.st][0])}</span></button>`).join('')}</div>`:`<div class="small muted">The only book from this series in your list.</div>`}</div>`;
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-gi],[data-bi]');if(!b||!b.closest('#modal'))return;if(b.dataset.gi!=null){const g=games.find(x=>x.i===+b.dataset.gi);if(g)openGame(g)}else{const x=books.find(x=>x.i===+b.dataset.bi);if(x)openBook(x)}});
 function openManga(m){
   modal('manga','Manga',`${cover(m.t,m.img)}<div><h2>${esc(m.t)}</h2>${m.alt?`<div class="muted">${esc(m.alt)}</div>`:''}
   <div class="bigscore"><div><b>${m.sc||'–'}</b><small>Your score</small></div><div><b>${m.mal?m.mal.toFixed(2):'–'}</b><small>MAL score</small></div><div><b style="color:${MST[m.st][1]}">■</b><small>${MST[m.st][0]}</small></div></div>
   <div class="kv"><div>Type</div><div>${esc(m.type)}</div><div>Chapters</div><div>${m.ch} read of ${m.chs||'?'}</div>${m.vols||m.vol?`<div>Volumes</div><div>${m.vol} read of ${m.vols||'?'}</div>`:''}<div>Reread</div><div>${m.rw} time${m.rw===1?'':'s'}${m.rwing?' · rereading now':''}</div><div>Published</div><div>${m.y||'–'}</div><div>Genres</div><div>${m.g.map(g=>`<span class="tag">${esc(g)}</span>`).join('')||'–'}</div></div>
+  <div id="m_x"></div>
   ${m.tags?`<div class="review" style="--c:var(--manga)">${esc(m.tags)}</div>`:''}
   <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?'<button class="btn pri" id="m_edit">Edit</button>':''}<a class="btn${ED.on?'':' pri'}" href="https://myanimelist.net/manga/${m.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
   const me=$('#m_edit');if(me)me.onclick=()=>editMal('manga',m);
+  malExtra('m',m);
 }
 
 /* ---------- books ---------- */
@@ -840,6 +929,7 @@ function openBook(b){
   modal('books','Book',`${cover(b.t,b.img||'')}<div><h2>${esc(b.t)}</h2>${b.ur?`<div class="urdu" style="font-size:18px">${esc(b.ur)}</div>`:''}<div class="muted">${esc(b.a)}</div>
   <div class="bigscore"><div><b class="stars" style="color:var(--book)">${b.r?bstars(b.r):'–'}</b><small>${b.r?b.r+' / 5':'Not rated'}</small></div><div><b style="color:${BST[b.st][1]}">■</b><small>${BST[b.st][0]}</small></div></div>
   <div class="kv">${b.p?`<div>Pages</div><div>${b.p}</div>`:''}${b.y?`<div>First published</div><div>${b.y}</div>`:''}${b.sh.length?`<div>Shelves</div><div>${b.sh.map(s=>`<span class="tag">${esc(s)}</span>`).join('')}</div>`:''}</div>
+  ${bookSeries(b)}
   ${b.rv?`<div class="review" style="--c:var(--book)">${esc(b.rv)}</div>`:''}
   <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?`<button class="btn pri" id="m_edit">Edit</button>`:''}${/^\d+$/.test(String(b.id))?`<a class="btn${ED.on?'':' pri'}" href="https://www.goodreads.com/book/show/${esc(b.id)}" target="_blank" rel="noopener">Open on Goodreads ↗</a>`:''}</div></div>`);
   const me=$('#m_edit');if(me)me.onclick=()=>editBook(b);
@@ -1349,9 +1439,11 @@ function openAnime(a){
   modal('anime','Anime',`${cover(a.t,a.img)}<div><h2>${esc(a.t)}</h2>${a.alt?`<div class="muted">${esc(a.alt)}</div>`:''}
   <div class="bigscore"><div><b>${a.sc||'–'}</b><small>Your score</small></div><div><b>${a.mal?a.mal.toFixed(2):'–'}</b><small>MAL score</small></div><div><b style="color:${AST[a.st][1]}">■</b><small>${AST[a.st][0]}</small></div></div>
   <div class="kv"><div>Type</div><div>${esc(a.type)}</div><div>Episodes</div><div>${a.st===2&&a.eps?a.eps:a.ep} watched of ${a.eps||'?'}</div><div>Rewatched</div><div>${a.rw} time${a.rw===1?'':'s'}${a.rwing?' · rewatching now':''}</div><div>Aired</div><div>${a.y||'–'}</div><div>Genres</div><div>${a.g.map(g=>`<span class="tag">${esc(g)}</span>`).join('')||'–'}</div>${a.up?`<div>Updated</div><div>${fdate(new Date(a.up*1000).toISOString())}</div>`:''}</div>
+  <div id="m_x"></div>
   ${a.tags?`<div class="review" style="--c:var(--anime)">${esc(a.tags)}</div>`:''}
   <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?'<button class="btn pri" id="m_edit">Edit</button>':''}<a class="btn${ED.on?'':' pri'}" href="https://myanimelist.net/anime/${a.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
   const me=$('#m_edit');if(me)me.onclick=()=>editMal('anime',a);
+  malExtra('a',a);
 }
 
 /* ---------- films ---------- */
@@ -1376,8 +1468,10 @@ function openFilm(f){
   modal('films','Film',`${cover(f.t,f.img||'')}<div><h2>${esc(f.t)} <span class="muted" style="font-weight:500">${f.y||''}</span></h2>
   <div class="bigscore"><div><b class="stars">${f.r?stars(f.r):'–'}</b><small>Your rating</small></div><div><b>${f.logs||(f.s==='w'?1:0)}</b><small>Times logged</small></div><div><b>${f.lk?'♥':'–'}</b><small>Liked</small></div></div>
   <div class="kv"><div>Status</div><div>${f.s==='w'?'Watched':'On watchlist'}</div>${f.wd?`<div>Last watched</div><div>${fdate(f.wd)}</div>`:''}${f.s==='w'?`<div>Rewatched</div><div>${f.rw} time${f.rw===1?'':'s'}</div>`:''}<div>Added</div><div>${fdate(f.d)}</div>${ls.length?`<div>In lists</div><div>${ls.map(l=>`<span class="tag">${esc(l)}</span>`).join('')}</div>`:''}</div>
+  <div id="m_x"></div>
   ${f.rv?`<div class="review" style="--c:var(--film)">${esc(f.rv)}</div>`:''}
   <div style="margin-top:14px"><a class="btn pri" href="${esc(f.u)}" target="_blank" rel="noopener">Open on Letterboxd ↗</a></div></div>`);
+  filmExtra(f);
 }
 
 /* ---------- games ---------- */
@@ -1399,7 +1493,7 @@ function openGame(g){
   <div class="bigscore"><div><b>${g.r?g.r+'/5':'–'}</b><small>Your rating</small></div><div><b style="color:${GSH[g.shelf]||'var(--s6)'}">■</b><small>${esc(g.shelf)}</small></div>${hrs?`<div><b>${g.hrsEst?'≈':''}${Math.round(hrs*10)/10}h</b><small>${g.hrsEst?'Hours (estimate)':'Hours played'}</small></div>`:''}<div><b>${g.rp}</b><small>Times replayed</small></div></div>
   <div class="kv">${g.pf.length?`<div>Platforms</div><div>${g.pf.map(p=>`<span class="tag">${esc(p)}</span>`).join('')}</div>`:''}${g.g.length?`<div>Genres</div><div>${g.g.map(p=>`<span class="tag">${esc(p)}</span>`).join('')}</div>`:''}${g.fr.length?`<div>Franchise</div><div>${esc(g.fr.join(', '))}</div>`:''}${g.pub.length?`<div>Publisher</div><div>${esc(g.pub.join(', '))}</div>`:''}${g.avg?`<div>Average length</div><div>${g.avg}h main story (HowLongToBeat)</div>`:''}<div>Released</div><div>${g.rel?fdate(g.rel):'–'}</div><div>Added</div><div>${g.added?fdate(g.added):'–'}</div>
   ${g.log.map(p=>`<div>Play log</div><div>${[p.date_started&&p.date_started!=='None'?'Started '+fdate(p.date_started):'',p.date_finished&&p.date_finished!=='None'?'Finished '+fdate(p.date_finished):'',p.level_of_completion||'',p.notes?esc(p.notes):''].filter(Boolean).join(' · ')||'–'}</div>`).join('')}</div>
-  ${g.dlcs.length?`<div class="sect" style="--c:var(--game);margin-top:14px"><h2><i></i>DLC <span class="muted mono">${g.dlcs.filter(d=>d.p).length}/${g.dlcs.length} played</span></h2><div class="dlcgrid">${g.dlcs.map((d,i)=>dlcTile(d,i,false)).join('')}</div></div>`:''}
+  ${gameSeries(g)}${g.dlcs.length?`<div class="sect" style="--c:var(--game);margin-top:14px"><h2><i></i>DLC <span class="muted mono">${g.dlcs.filter(d=>d.p).length}/${g.dlcs.length} played</span></h2><div class="dlcgrid">${g.dlcs.map((d,i)=>dlcTile(d,i,false)).join('')}</div></div>`:''}
   ${g.rv?`<div class="review" style="--c:var(--game)">${g.rvt?`<b>${esc(g.rvt)}</b>\n`:''}${esc(g.rv)}</div>`:''}
   <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?`<button class="btn pri" id="m_edit">Edit</button>`:''}</div></div>`);
   const me=$('#m_edit');if(me)me.onclick=()=>editGame(g);
