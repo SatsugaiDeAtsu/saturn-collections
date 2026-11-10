@@ -133,6 +133,12 @@ main{max-width:1240px;margin:0 auto;padding:20px 16px 60px}
 .mini .ini{font-size:15px}.mini .ct{display:none}
 
 .favs{grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px}
+.favadd{border:2px dashed var(--line2);background:var(--panel2);color:var(--ink3);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:160px;font:inherit}
+.favadd span{font-size:40px;line-height:1;font-weight:300}.favadd small{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.favadd:hover{border-color:var(--c);color:var(--c)}
+.favx{position:absolute;top:5px;left:5px;z-index:4;border:0;background:rgba(10,4,14,.75);color:#fff;font-size:11px;padding:2px 6px;cursor:pointer;opacity:0;transition:opacity .15s}
+.card:hover .favx,.favx.sure{opacity:1}.favx.sure{background:var(--accent)}
+@media (hover:none){.favx{opacity:.85}}
 .card{cursor:pointer;background:var(--panel);border:1px solid var(--line);display:flex;flex-direction:column}
 .card:hover{border-color:var(--ink3)}
 .card .meta{padding:7px 8px;border-top:1px solid var(--line)}
@@ -678,7 +684,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:v
 <script>
 (async function(){
 "use strict";
-let D,SET={};try{const j=u=>fetch(u,{cache:'no-cache'}).then(r=>r.json());const [a,g,b,s,q,wr,mx,se]=await Promise.all([j('data/site.json'),j('data/games.json'),j('data/books.json'),j('data/settings.json').catch(()=>({})),j('data/quotes.json').catch(()=>({quotes:[]})),j('data/writing.json').catch(()=>({works:[]})),j('data/manga_extra.json').catch(()=>({items:[]})),j('data/series.json').catch(()=>({series:[]}))]);D=Object.assign(a,g,b,q,wr);D.mangaExtra=mx.items||[];D.series=se.series||[];SET=s}catch(e){document.getElementById('app').innerHTML='<div class="empty">Could not load data/site.json.</div>';return}
+let D,SET={};try{const j=u=>fetch(u,{cache:'no-cache'}).then(r=>r.json());const [a,g,b,s,q,wr,mx,se,ov]=await Promise.all([j('data/site.json'),j('data/games.json'),j('data/books.json'),j('data/settings.json').catch(()=>({})),j('data/quotes.json').catch(()=>({quotes:[]})),j('data/writing.json').catch(()=>({works:[]})),j('data/manga_extra.json').catch(()=>({items:[]})),j('data/series.json').catch(()=>({series:[]})),j('data/ovfavs.json').catch(()=>null)]);D=Object.assign(a,g,b,q,wr);D.mangaExtra=mx.items||[];D.ovFavs=ov;D.series=se.series||[];SET=s}catch(e){document.getElementById('app').innerHTML='<div class="empty">Could not load data/site.json.</div>';return}
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm=s=>String(s||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
@@ -959,10 +965,10 @@ function rOverview(){
     <div class="box" id="ov_time"><div class="box-h"><h2>Time spent</h2><button class="btn" id="pickme">🎲 Pick something for me</button></div><div class="box-b tspent"><div class="muted small">Adding it up…</div></div></div>
   </section>
   <div id="ov_more"></div>
-  ${favRow('Favorite films','films',favF.map(f=>({t:f.t,img:f.img||'',sub:f.y,b:f.r?f.r+'★':'',o:()=>openFilm(f)})))}
-  ${favRow('Favorite games','games',favG.map(g=>({t:g.t,img:g.img||'',sub:g.pf[0]||'',b:g.r?g.r+'/5':'',x:gDlcStack(g),line:gDlcLine(g),o:()=>openGame(g)})))}
-  ${favRow('Favorite anime','anime',D.hof.malFavs.anime.map(([id,t,sub])=>{const a=anime.find(x=>x.id===id);return {t:a?a.t:t,img:a?a.img:'',sub,b:a&&a.sc?String(a.sc):'',o:()=>a?openAnime(a):window.open('https://myanimelist.net/anime/'+id,'_blank')}}))}
-  ${favRow('Favorite manga','manga',D.hof.malFavs.manga.map(([id,t,sub])=>{const m=manga.find(x=>x.id===id);return {t:m?m.t:t,img:m?m.img:'',sub,b:m&&m.sc?String(m.sc):'',o:()=>m?openManga(m):window.open('https://myanimelist.net/manga/'+id,'_blank')}}))}
+  ${favRow('Favorite films','films',ovFavItems('films'))}
+  ${favRow('Favorite games','games',ovFavItems('games'))}
+  ${favRow('Favorite anime','anime',ovFavItems('anime'))}
+  ${favRow('Favorite manga','manga',ovFavItems('manga'))}
   ${showcase()}
   <div class="more"><a class="btn" href="#hof">Open the Hall of Fame →</a> <a class="btn" href="#wrapped">See your Wrapped →</a></div></div>
   `;
@@ -1059,10 +1065,61 @@ function pickForMe(){
 function favRow(title,k,items){
   FAVS[k]=items;
   setTimeout(()=>document.querySelectorAll(`[data-fk="${k}"]`).forEach(el=>el.onclick=()=>items[+el.dataset.i].o()));
-  if(!items.length)return'';
-  return `<section class="box" style="margin-top:16px"><div class="box-h" style="border-top:3px solid ${MED[k].c}"><h2>${esc(title)}</h2><a class="link small" href="#${k}">View all</a></div><div class="box-b"><div class="grid favs">${items.map((it,i)=>`<div class="card" data-fk="${k}" data-i="${i}">${cover(it.t,it.img,(it.b?`<span class="badge">${esc(it.b)}</span>`:'')+(it.x||''))}<div class="meta"><div class="tt">${esc(it.t)}</div>${it.line||''}<div class="ss"><span>${esc(it.sub)}</span></div></div></div>`).join('')}</div></div></section>`;
+  setTimeout(()=>{document.querySelectorAll(`[data-fadd="${k}"]`).forEach(el=>el.onclick=()=>addOvFav(k));document.querySelectorAll(`[data-fdel="${k}"]`).forEach(el=>el.onclick=e=>{e.stopPropagation();delOvFav(k,+el.dataset.fdel,el)})});
+  if(!items.length&&!ED.on)return'';
+  return `<section class="box" style="margin-top:16px"><div class="box-h" style="border-top:3px solid ${MED[k].c}"><h2>${esc(title)}</h2><a class="link small" href="#${k}">View all</a></div><div class="box-b"><div class="grid favs">${items.map((it,i)=>`<div class="card" data-fk="${k}" data-i="${i}">${cover(it.t,it.img,(it.b?`<span class="badge">${esc(it.b)}</span>`:'')+(it.x||'')+(ED.on&&it.fi!=null?`<button type="button" class="favx" data-fdel="${it.fi}" title="Take off favourites" aria-label="Remove">✕</button>`:''))}<div class="meta"><div class="tt">${esc(it.t)}</div>${it.line||''}<div class="ss"><span>${esc(it.sub)}</span></div></div></div>`).join('')}${ED.on?`<button type="button" class="favadd" data-fadd="${k}" style="--c:${MED[k].c}" aria-label="Add a favourite"><span>+</span><small>Add</small></button>`:''}</div></div></section>`;
 }
 
+
+/* overview favourites: their own list (data/ovfavs.json), separate from the profile favourites shown in the Hall of Fame */
+function ovFavList(k){
+  const O=D.ovFavs&&D.ovFavs[k];if(O)return O;
+  if(k==='films')return D.lbFavUris.map(u=>filmUri[u]).filter(Boolean).map(f=>({t:f.t,y:f.y,img:f.img||''}));
+  if(k==='games')return D.gvFav.map(n=>({t:n}));
+  return (D.hof.malFavs[k]||[]).map(([id,t,sub])=>({id,t,sub}));
+}
+function ovFavItems(k){
+  return ovFavList(k).map((x,fi)=>{
+    if(k==='films'){const f=x.tv?films.concat(seriesOwn).find(o=>String(o.tv)===String(x.tv)):filmByKey[norm(x.t)+'|'+x.y]||films.find(o=>x.tmdb&&o.tmdb===x.tmdb);
+      return f?{fi,t:f.t,img:f.img||f.tvimg||x.img||'',sub:f.tv?'Series':f.y,b:f.r?f.r+'★':'',o:()=>openFilm(f)}:{fi,t:x.t,img:x.img||'',sub:x.tv?'Series':x.y||'',o:()=>window.open(x.url||OUT.films(x.t),'_blank','noopener')}}
+    if(k==='games'){const g=games.find(o=>o.id===x.id)||games.find(o=>o.t===x.t);
+      return g?{fi,t:g.t,img:g.img||'',sub:g.pf[0]||'',b:g.r?g.r+'/5':'',x:gDlcStack(g),line:gDlcLine(g),o:()=>openGame(g)}:{fi,t:x.t,img:x.img||'',sub:x.y||'',o:()=>window.open(x.url||OUT.games(x.t),'_blank','noopener')}}
+    const L=k==='anime'?anime:manga,o=L.find(y=>y.id===x.id);
+    return o?{fi,t:o.t,img:o.img,sub:x.sub||[o.type,o.y].filter(Boolean).join(' · '),b:o.sc?String(o.sc):'',o:()=>(k==='anime'?openAnime:openManga)(o)}:{fi,t:x.t,img:x.img||'',sub:x.sub||'',o:()=>window.open(`https://myanimelist.net/${k}/${x.id}`,'_blank','noopener')}});
+}
+async function saveOvFavs(k,list,msg){
+  toast('Saving…');
+  try{let cur;try{cur=await ghLoad('data/ovfavs.json')}catch(e){cur={}}
+    ['films','games','anime','manga'].forEach(x=>{if(!cur[x])cur[x]=ovFavList(x)});cur[k]=list;
+    await ghSave('data/ovfavs.json',cur,msg);D.ovFavs=cur;toast('Saved.');render();return true}
+  catch(e){toast('Not saved: '+e.message,true);return false}
+}
+function delOvFav(k,i,el){
+  if(el.dataset.sure!=='1'){el.dataset.sure='1';el.textContent='Remove?';el.classList.add('sure');setTimeout(()=>{if(el.isConnected){el.dataset.sure='';el.textContent='✕';el.classList.remove('sure')}},3000);return}
+  const L=ovFavList(k).slice(),x=L.splice(i,1)[0];saveOvFavs(k,L,'Take '+(x&&x.t||'a favourite')+' off the overview');
+}
+function addOvFav(k){
+  const name={films:'film or series',games:'game',anime:'anime',manga:'manga'}[k];
+  modal(k,'Add a favourite',`<div style="grid-column:1/-1"><h2>Add a favourite ${esc(name)}</h2>
+  <form id="fv_f" style="display:flex;margin-top:12px"><input id="fv_q" placeholder="Search for a ${esc(name)}" style="flex:1;border:1px solid var(--line2);padding:10px 12px;background:var(--panel);outline:none"><button class="btn pri" style="border-radius:0">Search</button></form>
+  <div id="fv_res" style="margin-top:12px"><div class="small muted">Your own ${k==='films'?'films and series':k} show first, then everything else.</div></div></div>`);
+  const have=ovFavList(k);
+  const pick=async x=>{if(have.some(h=>(x.id!=null&&h.id===x.id)||(x.tv&&String(h.tv)===String(x.tv))||(!x.id&&!x.tv&&norm(h.t)===norm(x.t)&&String(h.y||'')===String(x.y||''))))return toast('Already in your favourites.');
+    if(await saveOvFavs(k,[...have,x],'Add '+x.t+' to overview favourites'))closeM()};
+  const go=async()=>{const q=gv('fv_q');if(!q)return;const box=$('#fv_res');
+    const n=norm(q),W=n.split(' '),m=s=>W.every(w=>s.includes(w));
+    const mine=(k==='films'?films.concat(seriesOwn):k==='games'?games:k==='anime'?anime:manga).filter(x=>m(x.n)).slice(0,12)
+      .map(x=>k==='films'?(x.tv?{t:x.t,y:x.y,tv:x.tv,img:x.img||x.tvimg||''}:{t:x.t,y:x.y,img:x.img||''}):k==='games'?{t:x.t,id:x.id,img:x.img||''}:{id:x.id,t:x.t,img:x.img||''});
+    const tile=(x,i,src)=>`<button type="button" class="ptile" data-fv="${src}:${i}">${cover(x.t,x.img||'','')}<span class="pn">${esc(x.t)}</span><span class="ps">${esc([x.tv?'Series':'',x.y||'',src==='m'?'in your list':''].filter(Boolean).join(' · '))}</span></button>`;
+    box.innerHTML=`${mine.length?`<div class="small muted" style="margin-bottom:6px">In your list</div><div class="pgrid">${mine.map((x,i)=>tile(x,i,'m')).join('')}</div>`:''}<div id="fv_ext" style="margin-top:14px"><div class="muted small"><span class="spin"></span>Searching everywhere…</div></div>`;
+    const bind=(L,src)=>box.querySelectorAll(`[data-fv^="${src}:"]`).forEach(b=>b.onclick=()=>pick(L[+b.dataset.fv.split(':')[1]]));
+    bind(mine,'m');
+    let ext=[];try{const r=await viaApi(k,q);ext=(r||[]).map(x=>k==='films'?(x.tv?{t:x.t,y:x.y,tv:x.tv,img:x.img||'',url:x.url}:{t:x.t,y:x.y,img:x.img||'',url:x.url}):k==='games'?{t:x.t,y:x.y,img:x.img||'',url:x.url}:{id:x.malId,t:x.t,img:x.img||'',sub:[x.meta.split(' · ')[0],x.y].filter(Boolean).join(' · ')}).filter(x=>k==='games'||k==='films'||x.id)}catch(e){}
+    const ex=$('#fv_ext');if(!ex)return;
+    ex.innerHTML=ext.length?`<div class="small muted" style="margin-bottom:6px">Everywhere</div><div class="pgrid">${ext.slice(0,16).map((x,i)=>tile(x,i,'e')).join('')}</div>`:(mine.length?'':'<div class="muted small">Nothing found. Try another spelling.</div>');
+    bind(ext,'e')};
+  $('#fv_f').onsubmit=e=>{e.preventDefault();go()};$('#fv_q').focus();
+}
 
 /* ---------- manga ---------- */
 const MST={1:['Reading','var(--s1)'],2:['Completed','var(--s2)'],3:['On-Hold','var(--s3)'],4:['Dropped','var(--s4)'],6:['Plan to Read','var(--s6)']};
