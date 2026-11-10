@@ -1638,11 +1638,44 @@ def crisp(t, n=380):
     return (cut[:i + 1] if i > 120 else cut.rsplit(' ', 1)[0] + '…').strip()
 
 
+def gr_book_html(bid, h):
+    """Goodreads sometimes serves the page without its data block; read what's visible instead."""
+    o = {'gid': str(bid)}
+    m = re.search(r'data-testid="description".*?<span class="Formatted">(.*?)</span>', h, re.S)
+    if m:
+        o['gd'] = crisp(m.group(1))
+    g = [html.unescape(x) for x in re.findall(r'href="https://www\.goodreads\.com/genres/[^"]+"[^>]*>\s*<span class="Button__labelItem">([^<]+)</span>', h)]
+    if g:
+        o['gg'] = list(dict.fromkeys(g))[:6]
+    for ld in re.findall(r'<script type="application/ld\+json">(.*?)</script>', h, re.S):
+        try:
+            j = json.loads(ld)
+        except Exception:
+            continue
+        ar = j.get('aggregateRating') or {}
+        if ar.get('ratingValue'):
+            o['ga'] = round(float(ar['ratingValue']), 2)
+            o['gn'] = int(ar.get('ratingCount') or 0)
+        if j.get('numberOfPages'):
+            o['gp'] = j['numberOfPages']
+    if len(o) == 1:
+        raise RuntimeError('no book data on the page')
+    return o
+
+
 def gr_book(bid):
-    h = gr_session_get(f'https://www.goodreads.com/book/show/{bid}')
+    h = ''
+    for i in range(3):
+        try:
+            h = gr_session_get(f'https://www.goodreads.com/book/show/{bid}') if i != 1 else get(f'https://www.goodreads.com/book/show/{bid}', tries=1)
+        except Exception:
+            h = ''
+        if '__NEXT_DATA__' in h:
+            break
+        time.sleep(6 * (i + 1))
     m = re.search(r'<script id="__NEXT_DATA__" type="application/json">(.*?)</script>', h, re.S)
     if not m:
-        raise RuntimeError('no book data on the page')
+        return gr_book_html(bid, h)
     ap = json.loads(m.group(1)).get('props', {}).get('pageProps', {}).get('apolloState', {})
     books = [v for k, v in ap.items() if k.startswith('Book:') and v.get('title')]
     book = next((b for b in books if str(b.get('legacyId')) == str(bid)), None) or next((b for b in books if b.get('description')), None)
@@ -1674,7 +1707,7 @@ def update_book_details():
     for b in load_json(os.path.join(DATA, 'books.json'), {}).get('books', []):
         bid = str(b.get('id'))
         m = bm.setdefault(bid, {})
-        if m.get('gchk', '') > old or time.time() - t0 > 420 or fails > 6:
+        if m.get('gchk', '') > old or time.time() - t0 > 900 or fails > 12:
             continue
         try:
             gid = bid if bid.isdigit() else m.get('gid')
@@ -1692,7 +1725,7 @@ def update_book_details():
         except Exception as e:
             fails += 1
             log('goodreads details failed', bid, b.get('t'), e)
-        time.sleep(1.5)
+        time.sleep(4)
     with open(bpath, 'w', encoding='utf-8') as f:
         json.dump(bm, f, ensure_ascii=False, indent=0)
     site['bookMeta'] = {k: {x: v[x] for x in ('syn', 'gd', 'gg', 'ga', 'gn', 'gid') if v.get(x)} for k, v in bm.items() if v.get('syn') or v.get('gd') or v.get('gg')}
