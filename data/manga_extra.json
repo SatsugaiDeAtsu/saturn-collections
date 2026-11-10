@@ -11,7 +11,8 @@
    "vols": 1,
    "au": "Yoru Sumino",
    "ty": "Novel",
-   "sc": 0
+   "sc": 0,
+   "img": "covers/x/ys-yoru-no-bakemono.jpg"
   },
   {
    "id": "ys-aokute-itakute-moroi",
@@ -24,7 +25,8 @@
    "au": "Yoru Sumino",
    "ty": "Novel",
    "sc": 0,
-   "vol": 0
+   "vol": 0,
+   "img": "covers/x/ys-aokute-itakute-moroi.jpg"
   },
   {
    "id": "ys-kono-kimochi",

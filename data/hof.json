@@ -189,12 +189,36 @@
    ]
   ],
   "company": [
-   "Wit Studio",
-   "Shin-Ei Animation",
-   "Production I.G",
-   "A-1 Pictures",
-   "White Fox",
-   "Madhouse"
+   [
+    858,
+    "Wit Studio",
+    "https://cdn.myanimelist.net/s/common/company_logos/e7e64f9e-23f6-4c74-9813-cb4fcdb600cf_70x70_i?s=9d6b3d8538aa70f4f36fff058c50b98c"
+   ],
+   [
+    247,
+    "Shin-Ei Animation",
+    "https://cdn.myanimelist.net/s/common/company_logos/6c00b898-b342-41e4-895d-5cfe7c0e624c_70x70_i?s=2d0edfaa4f8eb35c2af3a9c27c8b3cdf"
+   ],
+   [
+    10,
+    "Production I.G",
+    "https://cdn.myanimelist.net/s/common/company_logos/5b86997d-226e-4870-ae60-e353a78178a0_70x70_i?s=882762ba2e25bd69fdc4bff5f921475d"
+   ],
+   [
+    56,
+    "A-1 Pictures",
+    "https://cdn.myanimelist.net/s/common/company_logos/4713c58b-833f-4c92-bf4a-0e2f7af8a461_70x70_i?s=d514651b5fa59c1bf2c51ba83cc959a4"
+   ],
+   [
+    314,
+    "White Fox",
+    "https://cdn.myanimelist.net/s/common/company_logos/40ba3310-9602-47fc-beb2-cc346adada09_70x70_i?s=df327941eda7d4afdc803c4e49f32df6"
+   ],
+   [
+    11,
+    "Madhouse",
+    "https://cdn.myanimelist.net/s/common/company_logos/e68488ab-f0a0-411f-850a-18fb3e21b96c_70x70_i?s=343e76e1b584a86772eef2eeda6783b8"
+   ]
   ]
  },
  "blog": [
