@@ -1605,8 +1605,9 @@ def update_people_info():
     for cid, c in ci.items():
         A = c.get('anime') or []
         pool = [x for x in A if x[2] == 'Main'] or A
+        pool = [x for x in pool if x[0] in eng] or pool  # a show you've seen beats a spin-off you haven't
         if pool:
-            pick = min(pool, key=lambda x: (len(x[1]), x[0]))
+            pick = min(pool, key=lambda x: x[0])  # the earliest entry is the original series
             sub['c' + cid] = eng.get(pick[0]) or pick[1]
         elif c.get('manga'):
             M = [x for x in c['manga'] if x[2] == 'Main'] or c['manga']
