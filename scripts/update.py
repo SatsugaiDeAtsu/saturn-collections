@@ -843,7 +843,7 @@ def update_dlc_pictures():
             m.pop('dimg', None)
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(meta, f, ensure_ascii=False, indent=0)
-    site['gameMeta'] = {k: {x: v[x] for x in ('avg', 'dlc') if v.get(x)} | ({'dimg': {n: p for n, p in v['dimg'].items() if p.startswith('covers/')}} if v.get('dimg') else {})
+    site['gameMeta'] = {k: {x: v[x] for x in ('avg', 'dlc', 'syn') if v.get(x)} | ({'dimg': {n: p for n, p in v['dimg'].items() if p.startswith('covers/')}} if v.get('dimg') else {})
                         for k, v in meta.items()}
     log(f'dlc pictures: +{got}')
 
@@ -853,8 +853,8 @@ REL_KEEP = {'sequel', 'prequel', 'side_story', 'parent_story', 'alternative_vers
 
 
 def mal_detail(kind, mid, cid):
-    f = ('id,title,alternative_titles,main_picture,media_type,start_date,status,genres,related_anime,related_manga,'
-         + ('num_episodes,average_episode_duration' if kind == 'anime' else 'num_chapters,num_volumes'))
+    f = ('id,title,alternative_titles,main_picture,media_type,start_date,status,genres,related_anime,related_manga,synopsis,mean,'
+         + ('num_episodes,average_episode_duration,broadcast,studios,start_season' if kind == 'anime' else 'num_chapters,num_volumes,authors{first_name,last_name}'))
     req = urllib.request.Request(f'https://api.myanimelist.net/v2/{kind}/{mid}?fields={f}', headers={'User-Agent': UA, 'X-MAL-CLIENT-ID': cid})
     with urllib.request.urlopen(req, timeout=30) as r:
         d = json.loads(r.read().decode('utf-8'))
@@ -866,10 +866,22 @@ def mal_detail(kind, mid, cid):
     gn = [g['name'] for g in d.get('genres') or []]
     if 'Hentai' in gn or 'Erotica' in gn:
         o['x'] = 1  # adult: never shown
+    o['st'] = d.get('status') or ''
+    if d.get('mean'):
+        o['mal'] = d['mean']
+    syn = re.sub(r'\s*\[Written by MAL Rewrite\]\s*', '', d.get('synopsis') or '').strip()
+    if syn:
+        cut = syn[:420]
+        o['syn'] = (cut[:cut.rfind('. ') + 1] if len(syn) > 420 and '. ' in cut else cut).strip()
     if kind == 'anime':
         o['n'] = d.get('num_episodes') or 0
         o['dur'] = d.get('average_episode_duration') or 0
+        bc = d.get('broadcast') or {}
+        if bc.get('day_of_the_week'):
+            o['bc'] = [bc['day_of_the_week'], bc.get('start_time') or '']
+        o['stu'] = [x['name'] for x in d.get('studios') or []][:3]
     else:
+        o['au'] = [' '.join(x for x in [(a.get('node') or {}).get('first_name'), (a.get('node') or {}).get('last_name')] if x) for a in d.get('authors') or []][:3]
         o['n'] = d.get('num_chapters') or 0
         o['v'] = d.get('num_volumes') or 0
     o['ra'] = [[x['node']['id'], x['relation_type']] for x in d.get('related_anime') or [] if x.get('relation_type') in REL_KEEP]
@@ -899,13 +911,20 @@ def update_mal_details():
     t0, n, fails = time.time(), 0, 0
     for kind, k, mid in queue:
         cur = det[k].get(str(mid))
-        if (cur and cur.get('c', '') > old) or time.time() - t0 > 3000 or fails > 25:
+        fresh = cur and cur.get('c', '') > old and cur.get('v') == 2
+        if cur and cur.get('st') == 'currently_airing' and cur.get('c', '') < today:
+            fresh = False  # airing shows: refresh daily so episode counts and times stay right
+        if fresh or time.time() - t0 > 3000 or fails > 25:
             continue
         try:
             o = mal_detail(kind, mid, cid)
             if k == 'm' and mid in allow:
                 o.pop('x', None)
             o['c'] = today
+            o['v'] = 2
+            keep = (cur or {}).get('ad')  # adaptation links found earlier
+            if keep is not None:
+                o['ad'] = keep
             det[k][str(mid)] = o
             n += 1
         except Exception as e:
@@ -913,9 +932,39 @@ def update_mal_details():
             if '404' in str(e):
                 det[k][str(mid)] = {'gone': 1, 'c': today}
         time.sleep(0.45)
+    # anime <-> manga links: MAL's official data leaves these out, Jikan has them
+    t1, jn = time.time(), 0
+    for kind, k, mid in sorted(set(mine), key=lambda x: det[x[1]].get(str(x[2]), {}).get('adc', '')):
+        cur = det[k].get(str(mid))
+        if not cur or cur.get('adc', '') > old or time.time() - t1 > 900:
+            continue
+        try:
+            rel = json.loads(get(f'https://api.jikan.moe/v4/{kind}/{mid}/relations', tries=2)).get('data') or []
+            other = 'manga' if kind == 'anime' else 'anime'
+            cur['ad'] = [[e['mal_id'], (r.get('relation') or '').lower().replace(' ', '_'), e.get('name') or '']
+                         for r in rel for e in r.get('entry') or [] if e.get('type') == other]
+            cur['adc'] = today
+            jn += 1
+        except Exception as e:
+            log('jikan relations failed', kind, mid, e)
+        time.sleep(1.2)
+    # synopses go in their own file (loaded only when needed)
+    syn = {'a': {}, 'm': {}}
+    for k in ('a', 'm'):
+        for i, o in det[k].items():
+            if o.get('syn'):
+                syn[k][i] = o.pop('syn')
+    old_syn = load_json(os.path.join(DATA, 'mal_syn.json'), {'a': {}, 'm': {}})
+    for k in ('a', 'm'):
+        old_syn[k].update(syn[k])
+    with open(os.path.join(DATA, 'mal_syn.json'), 'w', encoding='utf-8') as f:
+        json.dump(old_syn, f, ensure_ascii=False, separators=(',', ':'))
+    for k in ('a', 'm'):
+        for o in det[k].values():
+            o.pop('_nbp', None)
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(det, f, ensure_ascii=False, separators=(',', ':'))
-    log(f'mal details: +{n} fetched, {len(det["a"])} anime / {len(det["m"])} manga known, {fails} failed')
+    log(f'mal details: +{jn} adaptation links,, {len(det["a"])} anime / {len(det["m"])} manga known, {fails} failed')
 
 
 def update_film_details():
@@ -930,11 +979,18 @@ def update_film_details():
     t0, n = time.time(), 0
     for fm in site.get('films', []):
         tid = fm.get('tmdb')
-        if not tid or det['f'].get(str(tid), {}).get('c', '') > old or time.time() - t0 > 400:
+        if not tid or (det['f'].get(str(tid), {}).get('c', '') > old and det['f'].get(str(tid), {}).get('v') == 2) or time.time() - t0 > 600:
             continue
         try:
-            d = json.loads(get(f'https://api.themoviedb.org/3/movie/{tid}?api_key={key}', tries=1))
-            o = {'rt': d.get('runtime') or 0, 'c': today}
+            d = json.loads(get(f'https://api.themoviedb.org/3/movie/{tid}?api_key={key}&append_to_response=credits', tries=1))
+            o = {'rt': d.get('runtime') or 0, 'c': today, 'v': 2}
+            cr = d.get('credits') or {}
+            o['dir'] = [x['name'] for x in cr.get('crew') or [] if x.get('job') == 'Director'][:2]
+            o['cast'] = [x['name'] for x in sorted(cr.get('cast') or [], key=lambda x: x.get('order', 99))][:5]
+            o['g'] = [x['name'] for x in d.get('genres') or []][:4]
+            ov = (d.get('overview') or '').strip()
+            if ov:
+                o['ov'] = ov[:500]
             col = d.get('belongs_to_collection')
             if col:
                 o['col'] = col['id']
@@ -950,7 +1006,61 @@ def update_film_details():
         time.sleep(0.15)
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(det, f, ensure_ascii=False, separators=(',', ':'))
+    site['filmDir'] = {k: v['dir'][0] for k, v in det['f'].items() if v.get('dir')}
     log(f'film details: +{n}, {len(det["f"])} films, {len(det["col"])} series')
+
+
+def update_summaries():
+    """Short descriptions for games (Wikipedia) and books (Open Library), kept in game_meta.json / book_meta.json."""
+    gpath = os.path.join(DATA, 'game_meta.json')
+    gm = load_json(gpath, {})
+    t0, n = time.time(), 0
+    for g in load_json(os.path.join(DATA, 'games.json'), {}).get('games', []):
+        m = gm.setdefault(str(g['id']), {})
+        if 'syn' in m or time.time() - t0 > 240:
+            continue
+        y = (g.get('rel') or '')[:4]
+        txt = ''
+        for cand in ([f"{g['t']} ({y} video game)"] if y else []) + [f"{g['t']} (video game)", g['t']]:
+            try:
+                u = ('https://en.wikipedia.org/w/api.php?action=query&format=json&prop=extracts|description&exintro=1&explaintext=1&exsentences=3&redirects=1&titles='
+                     + urllib.parse.quote(cand))
+                pg = next(iter(json.loads(get(u, tries=1)).get('query', {}).get('pages', {}).values()), {})
+                if 'missing' not in pg and 'game' in (pg.get('description') or '').lower() and pg.get('extract'):
+                    txt = pg['extract'].strip()
+                    break
+            except Exception:
+                pass
+            time.sleep(0.3)
+        m['syn'] = txt[:500]
+        n += 1
+    with open(gpath, 'w', encoding='utf-8') as f:
+        json.dump(gm, f, ensure_ascii=False, indent=0)
+    bpath = os.path.join(DATA, 'book_meta.json')
+    bm = load_json(bpath, {})
+    for b in load_json(os.path.join(DATA, 'books.json'), {}).get('books', []):
+        bid = str(b.get('id'))
+        if bid in bm or time.time() - t0 > 400:
+            continue
+        txt = ''
+        try:
+            title = re.sub(r'\s*\(.*?\)\s*', ' ', b['t']).strip()
+            q = urllib.parse.urlencode({'title': title, 'author': b.get('a', ''), 'limit': 1, 'fields': 'key'})
+            docs = json.loads(get('https://openlibrary.org/search.json?' + q, tries=1)).get('docs') or []
+            if docs:
+                w = json.loads(get('https://openlibrary.org' + docs[0]['key'] + '.json', tries=1))
+                dsc = w.get('description') or ''
+                txt = (dsc.get('value') if isinstance(dsc, dict) else dsc) or ''
+                txt = re.sub(r'\s*\(?\[source\]\(.*?\)\)?|-{3,}.*$', '', txt, flags=re.S).strip()
+        except Exception:
+            pass
+        bm[bid] = {'syn': txt[:600]}
+        n += 1
+        time.sleep(0.4)
+    with open(bpath, 'w', encoding='utf-8') as f:
+        json.dump(bm, f, ensure_ascii=False, indent=0)
+    site['bookMeta'] = {k: v for k, v in bm.items() if v.get('syn')}
+    log(f'summaries: +{n}')
 
 
 def update_game_meta():
@@ -984,7 +1094,7 @@ def update_game_meta():
         time.sleep(0.7)
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(meta, f, ensure_ascii=False, indent=0)
-    site['gameMeta'] = {k: {x: v[x] for x in ('avg', 'dlc') if v.get(x)} for k, v in meta.items()}
+    site['gameMeta'] = {k: {x: v[x] for x in ('avg', 'dlc', 'syn') if v.get(x)} for k, v in meta.items()}
     log(f'game meta: checked {done}, new DLC: {added}')
 
 
@@ -1230,7 +1340,7 @@ def update_cover_mirror():
 
 
 for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd),
-                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('book copies', mirror_book_covers), ('grouvee', update_grouvee), ('film details', update_film_details), ('mal details', update_mal_details), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('characters', update_char_info), ('cover mirror', update_cover_mirror)]:
+                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('book copies', mirror_book_covers), ('grouvee', update_grouvee), ('film details', update_film_details), ('mal details', update_mal_details), ('summaries', update_summaries), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('characters', update_char_info), ('cover mirror', update_cover_mirror)]:
     try:
         fn()
         status[name] = 'ok'
