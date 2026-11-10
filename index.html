@@ -108,6 +108,10 @@ main{max-width:1240px;margin:0 auto;padding:20px 16px 60px}
 .act .w{font-size:12px;color:var(--ink3);white-space:nowrap}
 
 .dist{display:grid;grid-template-columns:repeat(var(--n),1fr);gap:3px;align-items:end;height:90px}
+#ov_sc .dist{height:190px;gap:6px}
+.ovgrid{display:grid;grid-template-columns:minmax(0,1.75fr) minmax(0,1fr);gap:16px;align-items:start}
+.ovair .unl{max-height:620px;overflow-y:auto;scrollbar-width:thin;padding-right:4px}
+@media (max-width:860px){.ovgrid{grid-template-columns:1fr}}
 .dist div{background:var(--c);opacity:.85;position:relative;min-height:2px}
 .dist div:hover{opacity:1}
 .distl{display:grid;grid-template-columns:repeat(var(--n),1fr);gap:3px;font-size:10px;color:var(--ink3);text-align:center;margin-top:4px}
@@ -318,11 +322,16 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .modal .mh button{background:none;border:1px solid #4a2a58;color:#fff;width:30px;height:30px;cursor:pointer}
 .mb{display:grid;grid-template-columns:180px 1fr;gap:20px;padding:18px}
 .mb h2{font-size:24px;line-height:1.15}
-.kv{display:grid;grid-template-columns:110px 1fr;border-top:1px solid var(--line);margin-top:12px}
+.kv{display:grid;grid-template-columns:minmax(110px,max-content) minmax(0,1fr);column-gap:16px;border-top:1px solid var(--line);margin-top:12px}
 .kv div{padding:6px 0;border-bottom:1px solid var(--line);font-size:13px}
 .kv div:nth-child(odd){color:var(--ink3);font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;padding-top:8px}
 .review{margin-top:14px;border-left:3px solid var(--c);padding:10px 14px;background:var(--panel2);white-space:pre-wrap;font-size:13.5px;color:var(--ink2)}
-.bigscore{display:flex;gap:8px;margin-top:12px}
+.bigscore{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.bigscore .bsedit{border:1px solid var(--accent);background:var(--accentSoft);color:var(--accent);min-width:74px;padding:8px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font:inherit}
+.bigscore .bsedit b{font-size:20px;line-height:1}
+.bigscore .bsedit:hover{background:var(--accent);color:#fff}
+.bigscore .bsedit:hover small{color:#fff}
+.sect h2 span.mono.muted,.box-h h2 span.mono.muted{display:inline-block;font-size:11px;line-height:1.6;padding:0 7px;border:1px solid var(--line2);background:var(--panel2);color:var(--ink2);letter-spacing:0;font-weight:600;margin-left:4px;text-transform:none}
 .bigscore div{border:1px solid var(--line);padding:8px 12px;text-align:center;min-width:90px}
 .bigscore b{display:block;font-family:"Space Grotesk";font-size:24px}
 .bigscore small{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);font-weight:700}
@@ -527,7 +536,7 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .syn{margin-top:12px;font-size:13.5px;line-height:1.55;color:var(--ink2);border-left:3px solid var(--line);padding:2px 0 2px 12px}
 .unl{display:grid;gap:8px}
 .pick{display:grid;grid-template-columns:110px 1fr;gap:14px;align-items:center;cursor:pointer;padding:8px;border:1px solid var(--line)}.pick:hover{background:var(--panel2)}.pick .cover{aspect-ratio:2/3}
-.actscroll{max-height:410px;overflow-y:auto;scrollbar-width:thin}
+.actscroll{max-height:246px;overflow-y:auto;scrollbar-width:thin}
 .hslide{display:grid;grid-auto-flow:column;grid-auto-columns:120px;gap:12px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x proximity;scrollbar-width:thin}.hslide>*{scroll-snap-align:start}
 .mtabs{display:flex;gap:2px;flex-wrap:wrap}.mtabs button{background:none;border:1px solid transparent;color:var(--ink3);font:inherit;font-size:11px;font-weight:700;letter-spacing:.04em;padding:3px 7px;cursor:pointer}.mtabs button.on{color:var(--c);border-color:var(--c)}.unx{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;cursor:pointer;padding:4px;border:1px solid transparent}.unx:hover{border-color:var(--line);background:var(--panel2)}
 .unx .ut .cover{aspect-ratio:2/3}.unx .un{font-weight:600;font-size:13.5px;line-height:1.3}.unx .us{font-size:12px;color:var(--ink3);margin-top:2px}
@@ -543,7 +552,7 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .reltile .rl{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--c);margin-top:3px}
 .reltile .rn{font-size:12px;font-weight:600;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .reltile .rs{font-size:11px}
-.fran summary{list-style:none;cursor:pointer}.fran summary::-webkit-details-marker{display:none}.fran summary h2{display:inline-flex}
+.fran summary{list-style:none;cursor:pointer}.fran summary::-webkit-details-marker{display:none}.fran summary h2{display:inline-flex;align-items:center;gap:8px}
 .franl{list-style:none;margin:8px 0 0;padding:0;border-left:2px solid var(--c);display:grid}
 .franl li button{all:unset;box-sizing:border-box;width:100%;display:grid;grid-template-columns:62px 62px 1fr auto;gap:10px;align-items:baseline;padding:7px 10px;cursor:pointer;font-size:13px}
 .franl li button:hover{background:var(--panel2)}.franl li.cur button{background:color-mix(in srgb,var(--c) 14%,transparent);cursor:default}
@@ -891,8 +900,7 @@ function rOverview(){
   ${banner('overview','SatsugaiDeAtsu','<span id="quote" class="quote"></span>',[],'House of DeAtsu')}
   <section class="box prof" style="grid-template-columns:1fr;padding:12px 16px">
     <div>${ED.on?'<button class="btn" id="qedit" style="float:right">Edit quotes</button>':''}
-      <div class="muted">${esc(D.lbProfile.bio||'')} · ${esc(D.gvProfile.about||'')}</div>
-      <div class="links" style="margin-top:8px">
+      <div class="links">
         <a class="chip" href="https://myanimelist.net/profile/SatsugaiDeAtsu" target="_blank" rel="noopener"><b style="width:8px;height:8px;background:var(--anime)"></b>MyAnimeList</a>
         <a class="chip" href="https://letterboxd.com/SatsugaiDeAtsu/" target="_blank" rel="noopener"><b style="width:8px;height:8px;background:var(--film)"></b>Letterboxd</a>
         <a class="chip" href="https://medium.com/@rajeeljaved" target="_blank" rel="noopener"><b style="width:8px;height:8px;background:var(--story)"></b>Medium</a>
@@ -931,6 +939,7 @@ function rOverview(){
 
   document.querySelectorAll('.act').forEach(el=>el.onclick=()=>acts[+el.dataset.a].o());
   bindShowcase();
+  {const r=$('.actscroll .act');if(r&&r.offsetHeight)$('.actscroll').style.maxHeight=(r.offsetHeight*3)+'px'}
   startQuotes();
   const qe=$('#qedit');if(qe)qe.onclick=editQuotes;
   overviewExtra();
@@ -953,7 +962,7 @@ async function overviewExtra(){
   const tb=$('#ov_time .tspent');
   if(tb)tb.innerHTML=`<div style="--c:var(--anime)"><b>${dh(aH)}</b><span>Anime</span></div><div style="--c:var(--manga)"><b>${dh(mH)}</b><span>Manga</span></div><div style="--c:var(--film)"><b>${dh(fH)}</b><span>Films</span></div>
     <div style="--c:var(--game)"><b>${dh(gH)}</b><span>Games</span></div><div style="--c:var(--book)"><b>${dh(bH)}</b><span>Books</span></div><div style="--c:var(--accent)"><b>${dh(aH+mH+fH+gH+bH)}</b><span>Altogether</span></div>
-    <div class="small muted" style="grid-column:1/-1">Manga counted at 5 minutes a chapter, books at 50 pages an hour, games from your hours (or the average where you haven't entered them).</div>`;
+`;
   const pm=$('#pickme');if(pm)pm.onclick=pickForMe;
   // ---- continue the series ----
   const cont=[];const seen=new Set();
@@ -964,17 +973,23 @@ async function overviewExtra(){
   // ---- airing ----
   const air=anime.filter(a=>(a.st===1||a.st===6)&&A(a.id).st==='currently_airing').map(a=>({a,n:nextAir(A(a.id))})).filter(x=>x.n).sort((p,q)=>p.n.t-q.n.t);
   // ---- genres for every medium ----
-  const top=(L,f,n=7)=>{const c={};L.forEach(x=>f(x).forEach(g=>{if(g)c[g]=(c[g]||0)+1}));return Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,n)};
+  // each title counts once, under its main theme: the first genre where the source ranks them (films, books),
+  // otherwise its most distinctive tag (the least common one across your list that still shows up a few times)
+  const NOTTHEME=new Set(['Award Winning','Shounen','Seinen','Shoujo','Josei','Kids']);
+  const top=(L,f,first,n=8)=>{const T=L.map(x=>[...new Set((f(x)||[]).filter(t=>t&&!NOTTHEME.has(t)))]).filter(t=>t.length);const fr={};T.forEach(ts=>ts.forEach(t=>fr[t]=(fr[t]||0)+1));
+    const min=Math.max(3,Math.round(T.length*.02)),c={};
+    T.forEach(ts=>{let g;if(first)g=ts[0];else{const el=ts.filter(t=>fr[t]>=min);g=(el.length?el:ts).reduce((a,b)=>fr[b]<fr[a]?b:a)}c[g]=(c[g]||0)+1});
+    return Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,n)};
   const bars=(T,c)=>{const mx=T[0]?T[0][1]:1;return T.length?T.map(([g,n])=>`<div class="hbar" style="--c:${c}"><span>${esc(g)}</span><div class="tr"><i style="width:${n/mx*100}%"></i></div><span class="mono muted">${n}</span></div>`).join(''):'<div class="muted small">Nothing yet.</div>'};
   const SKIP=new Set(['read','currently-reading','to-read','to read','favorites','favourites']);
-  const G={anime:top(anime.filter(a=>a.st===2),a=>a.g),manga:top(manga.filter(m=>m.st===2||m.st===1),m=>m.g),
-    films:top(films.filter(f=>f.s==='w'),f=>((_FD.f[f.tmdb]||{}).g||[])),games:top(games.filter(g=>GPLAYED[g.shelf]),g=>g.g||[]),
-    books:top(books,b=>(b.sh||[]).filter(x=>!SKIP.has(x.toLowerCase())))};
+  const G={anime:top(anime.filter(a=>a.st===2),a=>(A(a.id).g||a.g)),manga:top(manga.filter(m=>m.st===2||m.st===1),m=>((MD.m[m.id]||{}).g||m.g)),
+    films:top(films.filter(f=>f.s==='w'),f=>((_FD.f[f.tmdb]||{}).g||[]),true),games:top(games.filter(g=>GPLAYED[g.shelf]),g=>g.g||[]),
+    books:top(books.filter(b=>b.st!=='toread'),b=>((D.bookMeta||{})[b.id]||{}).gg||(b.sh||[]).filter(x=>!SKIP.has(x.toLowerCase())),!!Object.keys(D.bookMeta||{}).length)};
   // ---- scores for every medium ----
   const sa=anime.filter(a=>a.sc),sm=manga.filter(m=>m.sc),sf=films.filter(f=>f.s==='w'&&f.r),sg=games.filter(g=>g.r),sb=books.filter(b=>b.r);
   const ten=L=>Array.from({length:10},(_,i)=>L.filter(x=>x.sc===i+1).length);
   const five=(L,steps)=>steps.map(v=>L.filter(x=>x.r===v).length);
-  const tabsBox=(id,title,items)=>`<div class="box"><div class="box-h"><h3>${title}</h3><div class="mtabs" data-g="${id}">${items.map((it,i)=>`<button type="button" class="${i?'':'on'}" data-i="${i}" style="--c:${it.c}">${it.n}</button>`).join('')}</div></div><div class="box-b" id="${id}">${items[0].h}</div></div>`;
+  const tabsBox=(id,title,items,note)=>`<div class="box"><div class="box-h"><h3>${title}</h3><div class="mtabs" data-g="${id}">${items.map((it,i)=>`<button type="button" class="${i?'':'on'}" data-i="${i}" style="--c:${it.c}">${it.n}</button>`).join('')}</div></div><div class="box-b" id="${id}">${items[0].h}</div>${note?`<div class="small muted" style="padding:0 14px 12px">${note}</div>`:''}</div>`;
   const GI=[['Anime','var(--anime)',bars(G.anime,'var(--anime)')],['Manga','var(--manga)',bars(G.manga,'var(--manga)')],['Films','var(--film)',bars(G.films,'var(--film)')],['Games','var(--game)',bars(G.games,'var(--game)')],['Books','var(--book)',bars(G.books,'var(--book)')]].map(([n,c,h])=>({n,c,h}));
   const SI=[['Anime','var(--anime)',`<div class="small muted" style="margin-bottom:6px">${sa.length} scored</div>`+dist(ten(sa),[1,2,3,4,5,6,7,8,9,10],'var(--anime)')],
     ['Manga','var(--manga)',`<div class="small muted" style="margin-bottom:6px">${sm.length} scored</div>`+dist(ten(sm),[1,2,3,4,5,6,7,8,9,10],'var(--manga)')],
@@ -984,12 +999,9 @@ async function overviewExtra(){
   const ctile=(c,i)=>`<button type="button" class="reltile" data-ci="${i}" style="--c:${c.k==='a'?'var(--anime)':'var(--manga)'}">${cover(c.d.t,c.d.img?`https://cdn.myanimelist.net/images/${c.k==='a'?'anime':'manga'}/${c.d.img}.jpg`:'','')}<span class="rl">${esc(TYN[c.d.ty]||'')}${c.d.sd?' · '+c.d.sd.slice(0,4):''}</span><span class="rn">${esc(c.d.t)}</span><span class="rs">after ${esc(c.from.t)}</span></button>`;
   box.innerHTML=`
   ${cont.length?`<section class="box" style="margin-top:16px"><div class="box-h" style="border-top:3px solid var(--anime)"><h2>Continue the series</h2><span class="small muted">${cont.length} sequels you haven't started · scroll →</span></div><div class="box-b"><div class="hslide">${cont.map(ctile).join('')}</div></div></section>`:''}
-  <section class="grid two" style="margin-top:16px">
-    <div class="grid" style="align-content:start">
-      <div class="box"><div class="box-h"><h3>Airing</h3><span class="small muted">in your time</span></div><div class="box-b unl">${air.length?air.map(({a,n},i)=>`<div class="unx" data-ai="${i}"><div class="ut">${cover(a.t,a.img||'','')}</div><div class="ui"><div class="un">${esc(a.t)}</div><div class="us">${esc(n.when)} · <b>${esc(n.in)}</b>${a.st===6?' · plan to watch':''}</div></div></div>`).join(''):'<div class="muted small">None of the shows you\'re watching are airing right now.</div>'}</div></div>
-      ${tabsBox('ov_gen','Top genres',GI)}
-    </div>
-    <div class="grid" style="align-content:start">${tabsBox('ov_sc','Scores',SI)}</div>
+  <section class="ovgrid" style="margin-top:16px">
+    <div class="grid" style="align-content:start">${tabsBox('ov_sc','Scores',SI)}${tabsBox('ov_gen','Top genres',GI,'Each title counts once, under its main theme.')}</div>
+    <div class="box ovair"><div class="box-h"><h3>Airing</h3><span class="small muted">in your time</span></div><div class="box-b unl">${air.length?air.map(({a,n},i)=>`<div class="unx" data-ai="${i}"><div class="ut">${cover(a.t,a.img||'','')}</div><div class="ui"><div class="un">${esc(a.t)}</div><div class="us">${esc(n.when)} · <b>${esc(n.in)}</b>${a.st===6?' · plan to watch':''}</div></div></div>`).join(''):'<div class="muted small">None of the shows you\'re watching are airing right now.</div>'}</div></div>
   </section>`;
   box.querySelectorAll('.mtabs').forEach(t=>t.querySelectorAll('button').forEach(b=>b.onclick=()=>{t.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));const L=t.dataset.g==='ov_gen'?GI:SI;$('#'+t.dataset.g).innerHTML=L[+b.dataset.i].h}));
   box.querySelectorAll('[data-ai]').forEach(el=>el.onclick=()=>openAnime(air[+el.dataset.ai].a));
@@ -2120,7 +2132,10 @@ async function editWork(w){
 function modal(k,label,inner){
   $('#modal').innerHTML=`<div class="mh" style="border-bottom:3px solid ${MED[k].c}"><span><i style="width:8px;height:8px;background:${MED[k].c};display:inline-block"></i>${esc(label)}</span><button id="mx" aria-label="Close">✕</button></div><div class="mb">${inner}</div>`;
   $('#ov').classList.add('show');$('#mx').onclick=closeM;
-  const me=$('#m_edit');if(me){me.classList.add('mhedit');$('#modal .mh').insertBefore(me,$('#mx'))}
+  const me=$('#m_edit'),bs=$('#modal .bigscore');
+  if(me&&bs){const btn=document.createElement('button');btn.type='button';btn.id='m_edit';btn.className='bsedit';btn.innerHTML='<b>✎</b><small>Edit</small>';btn.title='Edit';me.replaceWith(document.createComment(''));
+    const st=[...bs.children].find(d=>{const b=d.querySelector('b');return b&&b.textContent==='■'});if(st)st.after(btn);else bs.appendChild(btn)}
+  else if(me){me.classList.add('mhedit');$('#modal .mh').insertBefore(me,$('#mx'))}
 }
 function closeM(){$('#ov').classList.remove('show')}
 $('#ov').onclick=e=>{if(e.target.id==='ov')closeM()};
