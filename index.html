@@ -178,6 +178,9 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .ov{position:fixed;inset:0;background:rgba(5,8,15,.6);z-index:50;display:none;align-items:flex-start;justify-content:center;padding:40px 16px;overflow-y:auto}
 .ov.show{display:flex}
 .modal{background:var(--panel);border:1px solid var(--line2);width:100%;max-width:760px;position:relative}
+.modal .mh .shdd summary{cursor:pointer;padding:9px 10px;border:1px solid var(--line);background:var(--panel2);list-style:none}.shdd summary::-webkit-details-marker{display:none}
+.shl{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:4px;margin-top:8px;max-height:220px;overflow:auto}.shrow{display:flex;gap:8px;align-items:center;font-size:13px;padding:4px 6px;border:1px solid var(--line);cursor:pointer}.shrow input{width:auto}
+.mhedit{margin-left:auto;margin-right:10px;padding:5px 14px}
 .modal .mh{display:flex;justify-content:space-between;align-items:center;background:var(--bar);color:#fff;padding:10px 14px}
 .modal .mh span{font-size:11px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;display:flex;gap:8px;align-items:center}
 .modal .mh button{background:none;border:1px solid #4a2a58;color:#fff;width:30px;height:30px;cursor:pointer}
@@ -390,7 +393,11 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .card:has(.cover.pur){border:2px solid transparent;background:linear-gradient(var(--panel),var(--panel)) padding-box,linear-gradient(115deg,#3b1670,#9b5cff 25%,#e3d0ff 40%,#9b5cff 55%,#4a1d8c 75%,#9b5cff) border-box;background-size:100% 100%,300% 100%;animation:redshine 4.5s linear infinite;box-shadow:0 0 12px -2px rgba(155,92,255,.55)}
 .dlcs{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0 2px}.dlcs .tag{opacity:.6}.dlcs .tag.on{opacity:1;border-color:var(--game);color:var(--game)}
 .syn{margin-top:12px;font-size:13.5px;line-height:1.55;color:var(--ink2);border-left:3px solid var(--line);padding:2px 0 2px 12px}
-.unl{display:grid;gap:8px}.unx{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;cursor:pointer;padding:4px;border:1px solid transparent}.unx:hover{border-color:var(--line);background:var(--panel2)}
+.unl{display:grid;gap:8px}
+.pick{display:grid;grid-template-columns:110px 1fr;gap:14px;align-items:center;cursor:pointer;padding:8px;border:1px solid var(--line)}.pick:hover{background:var(--panel2)}.pick .cover{aspect-ratio:2/3}
+.actscroll{max-height:calc(5 * 62px);overflow-y:auto;scrollbar-width:thin}
+.hslide{display:grid;grid-auto-flow:column;grid-auto-columns:120px;gap:12px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x proximity;scrollbar-width:thin}.hslide>*{scroll-snap-align:start}
+.mtabs{display:flex;gap:2px;flex-wrap:wrap}.mtabs button{background:none;border:1px solid transparent;color:var(--ink3);font:inherit;font-size:11px;font-weight:700;letter-spacing:.04em;padding:3px 7px;cursor:pointer}.mtabs button.on{color:var(--c);border-color:var(--c)}.unx{display:grid;grid-template-columns:44px 1fr auto;gap:10px;align-items:center;cursor:pointer;padding:4px;border:1px solid transparent}.unx:hover{border-color:var(--line);background:var(--panel2)}
 .unx .ut .cover{aspect-ratio:2/3}.unx .un{font-weight:600;font-size:13.5px;line-height:1.3}.unx .us{font-size:12px;color:var(--ink3);margin-top:2px}
 .upb{height:4px;background:var(--line);margin-top:6px;grid-column:2}.upb i{display:block;height:100%}
 .unx .ui{display:flex;flex-direction:column}.unx .plus{padding:6px 10px;font-weight:800}
@@ -714,7 +721,7 @@ function rOverview(){
   games.filter(g=>g.added).sort((a,b)=>b.added.localeCompare(a.added)).slice(0,10).forEach(g=>act.push({img:g.img||'',d:g.added,k:'games',t:g.t,w:`Added to ${g.shelf}${g.r?` · ${g.r}/5`:''}`,o:()=>openGame(g)}));
   stories.forEach((s,i)=>act.push({d:s.date,k:'stories',t:s.title,w:'Published on Medium',o:()=>{location.hash='stories'}}));
   act.sort((a,b)=>b.d.localeCompare(a.d));
-  const acts=act.slice(0,14);
+  const acts=act.slice(0,15);
   window.__acts=acts;
   // genres
   const gc={};anime.filter(a=>a.st===2).forEach(a=>a.g.forEach(g=>gc[g]=(gc[g]||0)+1));
@@ -765,9 +772,9 @@ function rOverview(){
       ${statusBar([1,2,3,4,6].map(s=>[AST[s][0],ac(s),AST[s][1]]),[['Rewatched',anime.filter(a=>a.rw>0).length,'#b48cff']])}</a>
     <a class="box stat" href="#manga" style="--c:var(--manga)">${art('manga')}<span class="ic">${ico('manga')}</span><div class="lab"><span>Manga</span><span>${(()=>{const s=manga.filter(m=>m.sc);return s.length?avg(s.map(m=>m.sc)).toFixed(2)+' avg':''})()}</span></div><div class="num">${fmt(manga.length)}</div><div class="sub">${fmt(manga.reduce((s,m)=>s+m.ch,0))} chapters read · ${fmt(manga.reduce((s,m)=>s+m.rw,0))} rereads</div>
       ${statusBar([1,2,3,4,6].map(s=>[MST[s][0],manga.filter(m=>m.st===s).length,MST[s][1]]),[['Reread',manga.filter(m=>m.rw>0).length,'#b48cff']])}</a>
-    <a class="box stat" href="#films" style="--c:var(--film)">${art('films')}<span class="ic">${ico('films')}</span><div class="lab"><span>Films</span><span>${fr.length?avg(fr.map(f=>f.r)).toFixed(2)+'★ avg':''}</span></div><div class="num">${fmt(fw.length)}</div><div class="sub">${fmt(fr.length)} rated · ${fmt(frv.length)} reviews · ${fmt(films.reduce((s,f)=>s+f.rw,0))} rewatches</div>
+    <a class="box stat" href="#films" style="--c:var(--film)">${art('films')}<span class="ic">${ico('films')}</span><div class="lab"><span>Films</span><span>${fr.length?avg(fr.map(f=>f.r)).toFixed(2)+'★ avg':''}</span></div><div class="num">${fmt(fw.length)}</div><div class="sub">${fmt(fr.length)} rated · ${fmt(films.reduce((s,f)=>s+f.rw,0))} rewatches</div>
       ${statusBar([['Watched',fw.length,'var(--film)'],['Watchlist',films.length-fw.length,'var(--s6)']],[...(fr.length!==fw.length?[['Rated',fr.length,'var(--film)']]:[]),['Rewatched',films.filter(f=>f.rw>0).length,'#b48cff']])}</a>
-    <a class="box stat" href="#games" style="--c:var(--game)">${art('games')}<span class="ic">${ico('games')}</span><div class="lab"><span>Games</span><span>${gr.length?avg(gr.map(g=>g.r)).toFixed(2)+'/5 avg':''}</span></div><div class="num">${fmt(games.length)}</div><div class="sub">${gs('Played')} played · ${gs('Playing')} playing · ${fmt(Math.round(games.reduce((s,g)=>s+g.hrs,0)))}h · ${games.reduce((s,g)=>s+g.rp,0)} replays</div>
+    <a class="box stat" href="#games" style="--c:var(--game)">${art('games')}<span class="ic">${ico('games')}</span><div class="lab"><span>Games</span><span>${gr.length?avg(gr.map(g=>g.r)).toFixed(2)+'/5 avg':''}</span></div><div class="num">${fmt(games.length)}</div><div class="sub">${gs('Played')} played · ${gs('Playing')} playing · ${games.reduce((s,g)=>s+g.rp,0)} replays</div>
       ${statusBar(Object.keys(GSH).map(k=>[k,gs(k),GSH[k]]),[['Replayed',games.filter(g=>g.rp>0||g.shelf==='Replaying').length,'#b48cff']])}</a>
     <a class="box stat" href="#books" style="--c:var(--book)">${art('books')}<span class="ic">${ico('books')}</span><div class="lab"><span>Books</span><span>${(()=>{const s=books.filter(b=>b.r);return s.length?avg(s.map(b=>b.r)).toFixed(2)+'★ avg':''})()}</span></div><div class="num">${books.length}</div><div class="sub">${books.filter(b=>b.st==='read').length} read · ${books.filter(b=>b.ur).length} in Urdu</div>
       ${statusBar(Object.keys(BST).map(k=>[BST[k][0],books.filter(b=>b.st===k).length,BST[k][1]]).filter(p=>p[1]))}</a>
@@ -775,17 +782,12 @@ function rOverview(){
       ${statusBar([['Stories',stories.filter(s=>!s.tags.includes('articles')).length,'var(--story)'],['Articles',stories.filter(s=>s.tags.includes('articles')).length,'var(--s3)']])}</a>
   </section>
   <div style="margin-top:14px">${wallBot}</div>
-  <div id="ov_more"></div>
-  <section class="grid two" style="margin-top:16px">
-    <div class="box"><div class="box-h"><h2>Recent activity</h2><span class="small muted">across everything</span></div>
-      <div>${acts.map((a,i)=>`<div class="act" data-a="${i}" style="--c:${MED[a.k].c}"><span class="k"></span><div class="athumb">${cover(a.t,a.img||'','','mini')}</div><div class="t"><div>${esc(a.t)}</div><div class="small muted">${esc(MED[a.k].name)} · ${esc(a.w)}</div></div><div class="w">${ago(a.d)}</div></div>`).join('')}</div></div>
-    <div class="grid" style="align-content:start">
-      <div class="box"><div class="box-h"><h3>Anime scores</h3><span class="small muted">${scored.length} scored</span></div><div class="box-b">${dist(ad,ad.map((_,i)=>i+1),'var(--anime)')}</div></div>
-      <div class="box"><div class="box-h"><h3>Film ratings</h3><span class="small muted">${fr.length} rated</span></div><div class="box-b">${dist(fd,['½','1','','2','','3','','4','','5'],'var(--film)')}</div></div>
-      <div class="box"><div class="box-h"><h3>Game ratings</h3><span class="small muted">${gr.length} rated</span></div><div class="box-b">${dist(gd,[1,2,3,4,5],'var(--game)')}</div></div>
-      <div class="box"><div class="box-h"><h3>Top anime genres</h3><span class="small muted">completed</span></div><div class="box-b">${topG.map(([g,n])=>`<div class="hbar" style="--c:var(--anime)"><span>${esc(g)}</span><div class="tr"><i style="width:${n/gmx*100}%"></i></div><span class="mono muted">${n}</span></div>`).join('')}</div></div>
-    </div>
+  <section class="grid two ovtop" style="margin-top:16px">
+    <div class="box"><div class="box-h"><h2>Recent activity</h2><span class="small muted">last 15, across everything</span></div>
+      <div class="actscroll">${acts.map((a,i)=>`<div class="act" data-a="${i}" style="--c:${MED[a.k].c}"><span class="k"></span><div class="athumb">${cover(a.t,a.img||'','','mini')}</div><div class="t"><div>${esc(a.t)}</div><div class="small muted">${esc(MED[a.k].name)} · ${esc(a.w)}</div></div><div class="w">${ago(a.d)}</div></div>`).join('')}</div></div>
+    <div class="box" id="ov_time"><div class="box-h"><h2>Time spent</h2><button class="btn" id="pickme">🎲 Pick something for me</button></div><div class="box-b tspent"><div class="muted small">Adding it up…</div></div></div>
   </section>
+  <div id="ov_more"></div>
   ${favRow('Favorite films','films',favF.map(f=>({t:f.t,img:f.img||'',sub:f.y,b:f.r?f.r+'★':'',o:()=>openFilm(f)})))}
   ${favRow('Favorite games','games',favG.map(g=>({t:g.t,img:g.img||'',sub:g.pf[0]||'',b:g.r?g.r+'/5':'',x:gDlcStack(g),line:gDlcLine(g),o:()=>openGame(g)})))}
   ${favRow('Favorite anime','anime',D.hof.malFavs.anime.map(([id,t,sub])=>{const a=anime.find(x=>x.id===id);return {t:a?a.t:t,img:a?a.img:'',sub,b:a&&a.sc?String(a.sc):'',o:()=>a?openAnime(a):window.open('https://myanimelist.net/anime/'+id,'_blank')}}))}
@@ -806,50 +808,58 @@ async function overviewExtra(){
   if(!_FD)_FD=await loadJ('data/film_details.json')||{f:{},col:{}};
   if($('#ov_more')!==box)return;
   const MD=_MD;const A=id=>MD.a[id]||{};
-  // up next
-  const up=[...anime.filter(a=>a.st===1).map(a=>({k:'anime',x:a,img:a.img,t:a.t,p:`Episode ${a.ep+1}${a.eps?' of '+a.eps:''}`,pc:a.eps?a.ep/a.eps:0,o:()=>openAnime(a),plus:1})),
-    ...manga.filter(m=>m.st===1).map(m=>({k:'manga',x:m,img:m.img,t:m.t,p:`Chapter ${m.ch+1}${m.chs?' of '+m.chs:''}`,pc:m.chs?m.ch/m.chs:0,o:()=>openManga(m),plus:1})),
-    ...games.filter(g=>g.shelf==='Playing'||g.shelf==='Replaying').map(g=>({k:'games',x:g,img:g.img,t:g.t,p:g.shelf+(g.hrs?` · ${g.hrsEst?'≈':''}${g.hrs} h`:''),pc:0,o:()=>openGame(g)})),
-    ...books.filter(b=>b.st==='reading').map(b=>({k:'books',x:b,img:b.img,t:b.t,p:'Reading'+(b.p?` · ${b.p} pages`:''),pc:0,o:()=>openBook(b)}))];
-  // airing
-  const air=anime.filter(a=>(a.st===1||a.st===6)&&A(a.id).st==='currently_airing').map(a=>({a,n:nextAir(A(a.id))})).filter(x=>x.n).sort((p,q)=>p.n.t-q.n.t);
-  // continue the series: sequels of things you finished that you haven't started
+  // ---- time spent (manga: 5 min a chapter; books: 50 pages an hour) ----
+  const aH=anime.reduce((s,a)=>{const d=A(a.id);const eps=a.st===2?(a.eps||d.n||a.ep):a.ep;return s+(d.dur?eps*d.dur/3600*(1+(a.rw||0)):0)},0);
+  const fH=films.filter(f=>f.s==='w').reduce((s,f)=>{const d=_FD.f[f.tmdb];return s+(d&&d.rt?d.rt/60*(1+(f.rw||0)):0)},0);
+  const gH=games.reduce((s,g)=>s+(g.hrs||0),0);
+  const mH=manga.reduce((s,m)=>s+(m.st===2?(m.chs||m.ch):m.ch)*(1+(m.rw||0)),0)*5/60;
+  const bH=books.filter(b=>b.st==='read').reduce((s,b)=>s+(+b.p||0),0)/50;
+  const dh=(h,note)=>`${fmt(Math.round(h))} h<small>${(h/24).toFixed(1)} days${note?' · '+note:''}</small>`;
+  const tb=$('#ov_time .tspent');
+  if(tb)tb.innerHTML=`<div style="--c:var(--anime)"><b>${dh(aH)}</b><span>Anime</span></div><div style="--c:var(--manga)"><b>${dh(mH)}</b><span>Manga</span></div><div style="--c:var(--film)"><b>${dh(fH)}</b><span>Films</span></div>
+    <div style="--c:var(--game)"><b>${dh(gH)}</b><span>Games</span></div><div style="--c:var(--book)"><b>${dh(bH)}</b><span>Books</span></div><div style="--c:var(--accent)"><b>${dh(aH+mH+fH+gH+bH)}</b><span>Altogether</span></div>
+    <div class="small muted" style="grid-column:1/-1">Manga counted at 5 minutes a chapter, books at 50 pages an hour, games from your hours (or the average where you haven't entered them).</div>`;
+  const pm=$('#pickme');if(pm)pm.onclick=pickForMe;
+  // ---- continue the series ----
   const cont=[];const seen=new Set();
   for(const [k,L,key] of [['a',anime,'ra'],['m',manga,'rm']])for(const x of L.filter(x=>x.st===2)){
     for(const [id,rel] of ((MD[k][x.id]||{})[key]||[])){if(rel!=='sequel'||seen.has(k+id))continue;const d=MD[k][id];if(!d||d.x||d.gone)continue;
       const own=L.find(o=>o.id===id);if(own&&own.st!==6)continue;seen.add(k+id);cont.push({k,id,d,from:x,own})}}
   cont.sort((p,q)=>(q.d.sd||'').localeCompare(p.d.sd||''));
-  // time spent
-  const aH=anime.reduce((s,a)=>{const d=A(a.id);const eps=a.st===2?(a.eps||d.n||a.ep):a.ep;return s+(d.dur?eps*d.dur/3600*(1+(a.rw||0)):0)},0);
-  const fH=films.filter(f=>f.s==='w').reduce((s,f)=>{const d=_FD.f[f.tmdb];return s+(d&&d.rt?d.rt/60*(1+(f.rw||0)):0)},0);
-  const gH=games.reduce((s,g)=>s+(g.hrs||0),0);
-  const ch=manga.reduce((s,m)=>s+(m.st===2?(m.chs||m.ch):m.ch)*(1+(m.rw||0)),0);
-  const pg=books.filter(b=>b.st==='read').reduce((s,b)=>s+(+b.p||0),0);
-  const dh=h=>`${fmt(Math.round(h))} h<small>${(h/24).toFixed(1)} days</small>`;
-  const tile=(c,img,t,sub,extra,attr)=>`<div class="unx" ${attr}><div class="ut">${cover(t,img||'','')}</div><div class="ui"><div class="un">${esc(t)}</div><div class="us">${sub}</div>${extra||''}</div></div>`;
+  // ---- airing ----
+  const air=anime.filter(a=>(a.st===1||a.st===6)&&A(a.id).st==='currently_airing').map(a=>({a,n:nextAir(A(a.id))})).filter(x=>x.n).sort((p,q)=>p.n.t-q.n.t);
+  // ---- genres for every medium ----
+  const top=(L,f,n=7)=>{const c={};L.forEach(x=>f(x).forEach(g=>{if(g)c[g]=(c[g]||0)+1}));return Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,n)};
+  const bars=(T,c)=>{const mx=T[0]?T[0][1]:1;return T.length?T.map(([g,n])=>`<div class="hbar" style="--c:${c}"><span>${esc(g)}</span><div class="tr"><i style="width:${n/mx*100}%"></i></div><span class="mono muted">${n}</span></div>`).join(''):'<div class="muted small">Nothing yet.</div>'};
+  const SKIP=new Set(['read','currently-reading','to-read','to read','favorites','favourites']);
+  const G={anime:top(anime.filter(a=>a.st===2),a=>a.g),manga:top(manga.filter(m=>m.st===2||m.st===1),m=>m.g),
+    films:top(films.filter(f=>f.s==='w'),f=>((_FD.f[f.tmdb]||{}).g||[])),games:top(games.filter(g=>GPLAYED[g.shelf]),g=>g.g||[]),
+    books:top(books,b=>(b.sh||[]).filter(x=>!SKIP.has(x.toLowerCase())))};
+  // ---- scores for every medium ----
+  const sa=anime.filter(a=>a.sc),sm=manga.filter(m=>m.sc),sf=films.filter(f=>f.s==='w'&&f.r),sg=games.filter(g=>g.r),sb=books.filter(b=>b.r);
+  const ten=L=>Array.from({length:10},(_,i)=>L.filter(x=>x.sc===i+1).length);
+  const five=(L,steps)=>steps.map(v=>L.filter(x=>x.r===v).length);
+  const tabsBox=(id,title,items)=>`<div class="box"><div class="box-h"><h3>${title}</h3><div class="mtabs" data-g="${id}">${items.map((it,i)=>`<button type="button" class="${i?'':'on'}" data-i="${i}" style="--c:${it.c}">${it.n}</button>`).join('')}</div></div><div class="box-b" id="${id}">${items[0].h}</div></div>`;
+  const GI=[['Anime','var(--anime)',bars(G.anime,'var(--anime)')],['Manga','var(--manga)',bars(G.manga,'var(--manga)')],['Films','var(--film)',bars(G.films,'var(--film)')],['Games','var(--game)',bars(G.games,'var(--game)')],['Books','var(--book)',bars(G.books,'var(--book)')]].map(([n,c,h])=>({n,c,h}));
+  const SI=[['Anime','var(--anime)',`<div class="small muted" style="margin-bottom:6px">${sa.length} scored</div>`+dist(ten(sa),[1,2,3,4,5,6,7,8,9,10],'var(--anime)')],
+    ['Manga','var(--manga)',`<div class="small muted" style="margin-bottom:6px">${sm.length} scored</div>`+dist(ten(sm),[1,2,3,4,5,6,7,8,9,10],'var(--manga)')],
+    ['Films','var(--film)',`<div class="small muted" style="margin-bottom:6px">${sf.length} rated</div>`+dist(five(sf,[.5,1,1.5,2,2.5,3,3.5,4,4.5,5]),['½','1','','2','','3','','4','','5'],'var(--film)')],
+    ['Games','var(--game)',`<div class="small muted" style="margin-bottom:6px">${sg.length} rated</div>`+dist(five(sg,[1,2,3,4,5]),[1,2,3,4,5],'var(--game)')],
+    ['Books','var(--book)',`<div class="small muted" style="margin-bottom:6px">${sb.length} rated</div>`+dist(five(sb,[1,2,3,4,5]),[1,2,3,4,5],'var(--book)')]].map(([n,c,h])=>({n,c,h}));
+  const ctile=(c,i)=>`<button type="button" class="reltile" data-ci="${i}" style="--c:${c.k==='a'?'var(--anime)':'var(--manga)'}">${cover(c.d.t,c.d.img?`https://cdn.myanimelist.net/images/${c.k==='a'?'anime':'manga'}/${c.d.img}.jpg`:'','')}<span class="rl">${esc(TYN[c.d.ty]||'')}${c.d.sd?' · '+c.d.sd.slice(0,4):''}</span><span class="rn">${esc(c.d.t)}</span><span class="rs">after ${esc(c.from.t)}</span></button>`;
   box.innerHTML=`
+  ${cont.length?`<section class="box" style="margin-top:16px"><div class="box-h" style="border-top:3px solid var(--anime)"><h2>Continue the series</h2><span class="small muted">${cont.length} sequels you haven't started · scroll →</span></div><div class="box-b"><div class="hslide">${cont.map(ctile).join('')}</div></div></section>`:''}
   <section class="grid two" style="margin-top:16px">
-    <div class="box"><div class="box-h"><h2>Up next</h2><span class="small muted">${up.length} in progress</span></div><div class="box-b unl">${up.length?up.map((u,i)=>tile(MED[u.k].c,u.img,u.t,`<span style="color:${MED[u.k].c}">${esc(MED[u.k].name)}</span> · ${esc(u.p)}`,`${u.pc?`<div class="upb"><i style="width:${Math.min(100,u.pc*100)}%;background:${MED[u.k].c}"></i></div>`:''}${u.plus&&ED.on?`<button class="btn plus" data-up="${i}">+1</button>`:''}`,`data-uo="${i}"`)).join(''):'<div class="muted small">Nothing in progress.</div>'}</div></div>
     <div class="grid" style="align-content:start">
-      <div class="box"><div class="box-h"><h2>Airing</h2><span class="small muted">your time</span></div><div class="box-b unl">${air.length?air.map(({a,n},i)=>tile('var(--anime)',a.img,a.t,`${esc(n.when)} · <b>${esc(n.in)}</b>${a.st===6?' · <span class="muted">plan to watch</span>':''}`,'',`data-ai="${i}"`)).join(''):'<div class="muted small">None of the shows you\'re watching are airing right now.</div>'}</div></div>
-      <div class="box"><div class="box-h"><h2>Time spent</h2><button class="btn" id="pickme">🎲 Pick something for me</button></div><div class="box-b tspent">
-        <div style="--c:var(--anime)"><b>${dh(aH)}</b><span>Anime</span></div><div style="--c:var(--film)"><b>${dh(fH)}</b><span>Films</span></div><div style="--c:var(--game)"><b>${dh(gH)}</b><span>Games</span></div>
-        <div style="--c:var(--manga)"><b>${fmt(ch)}<small>chapters</small></b><span>Manga</span></div><div style="--c:var(--book)"><b>${fmt(pg)}<small>pages</small></b><span>Books</span></div><div style="--c:var(--accent)"><b>${dh(aH+fH+gH)}</b><span>Watching and playing</span></div>
-      </div></div>
+      <div class="box"><div class="box-h"><h3>Airing</h3><span class="small muted">in your time</span></div><div class="box-b unl">${air.length?air.map(({a,n},i)=>`<div class="unx" data-ai="${i}"><div class="ut">${cover(a.t,a.img||'','')}</div><div class="ui"><div class="un">${esc(a.t)}</div><div class="us">${esc(n.when)} · <b>${esc(n.in)}</b>${a.st===6?' · plan to watch':''}</div></div></div>`).join(''):'<div class="muted small">None of the shows you\'re watching are airing right now.</div>'}</div></div>
+      ${tabsBox('ov_gen','Top genres',GI)}
     </div>
-  </section>
-  ${cont.length?`<section class="box" style="margin-top:16px"><div class="box-h" style="border-top:3px solid var(--anime)"><h2>Continue the series</h2><span class="small muted">${cont.length} sequels you haven't started</span></div><div class="box-b"><div class="relgrid" id="contg">${cont.slice(0,16).map((c,i)=>`<button type="button" class="reltile" data-ci="${i}" style="--c:${c.k==='a'?'var(--anime)':'var(--manga)'}">${cover(c.d.t,c.d.img?`https://cdn.myanimelist.net/images/${c.k==='a'?'anime':'manga'}/${c.d.img}.jpg`:'','')}<span class="rl">${esc(TYN[c.d.ty]||'')}${c.d.sd?' · '+c.d.sd.slice(0,4):''}</span><span class="rn">${esc(c.d.t)}</span><span class="rs">after ${esc(c.from.t)}</span></button>`).join('')}</div>${cont.length>16?`<div style="margin-top:10px"><button class="btn" id="contall">Show all ${cont.length}</button></div>`:''}</div></section>`:''}`;
-  box.querySelectorAll('[data-uo]').forEach(el=>el.onclick=e=>{if(e.target.closest('[data-up]'))return;up[+el.dataset.uo].o()});
-  box.querySelectorAll('[data-up]').forEach(b=>b.onclick=async e=>{e.stopPropagation();const u=up[+b.dataset.up],x=u.x,isA=u.k==='anime';
-    b.disabled=true;const n=(isA?x.ep:x.ch)+1,tot=isA?x.eps:x.chs,done=tot&&n>=tot;
-    try{await malSave(u.k,x.id,isA?{num_watched_episodes:n,...(done?{status:'completed'}:{})}:{num_chapters_read:n,...(done?{status:'completed'}:{})});
-      if(isA)x.ep=n;else x.ch=n;if(done)x.st=2;toast(`${x.t}: ${isA?'episode':'chapter'} ${n} saved${done?' · completed!':''}`);overviewExtra()}
-    catch(err){toast(err.message,true);b.disabled=false}});
+    <div class="grid" style="align-content:start">${tabsBox('ov_sc','Scores',SI)}</div>
+  </section>`;
+  box.querySelectorAll('.mtabs').forEach(t=>t.querySelectorAll('button').forEach(b=>b.onclick=()=>{t.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));const L=t.dataset.g==='ov_gen'?GI:SI;$('#'+t.dataset.g).innerHTML=L[+b.dataset.i].h}));
   box.querySelectorAll('[data-ai]').forEach(el=>el.onclick=()=>openAnime(air[+el.dataset.ai].a));
   const openC=c=>{if(c.own)return (c.k==='a'?openAnime:openManga)(c.own);const kind=c.k==='a'?'anime':'manga';loadSyn().then(MS=>openExt(kind,{malId:c.id,t:c.d.t,y:(c.d.sd||'').slice(0,4),img:c.d.img?`https://cdn.myanimelist.net/images/${kind}/${c.d.img}.jpg`:'',meta:[TYN[c.d.ty]||'',c.d.n?c.d.n+(c.k==='a'?' eps':' ch'):'',c.d.mal?'MAL '+c.d.mal:'',`sequel to ${c.from.t}`].filter(Boolean).join(' · '),sum:MS[c.k][c.id]||'',url:`https://myanimelist.net/${kind}/${c.id}`}))};
   box.querySelectorAll('[data-ci]').forEach(el=>el.onclick=()=>openC(cont[+el.dataset.ci]));
-  const ca=$('#contall');if(ca)ca.onclick=()=>{$('#contg').innerHTML=cont.map((c,i)=>`<button type="button" class="reltile" data-ci="${i}" style="--c:${c.k==='a'?'var(--anime)':'var(--manga)'}">${cover(c.d.t,c.d.img?`https://cdn.myanimelist.net/images/${c.k==='a'?'anime':'manga'}/${c.d.img}.jpg`:'','')}<span class="rl">${esc(TYN[c.d.ty]||'')}${c.d.sd?' · '+c.d.sd.slice(0,4):''}</span><span class="rn">${esc(c.d.t)}</span><span class="rs">after ${esc(c.from.t)}</span></button>`).join('');ca.remove();box.querySelectorAll('[data-ci]').forEach(el=>el.onclick=()=>openC(cont[+el.dataset.ci]))};
-  $('#pickme').onclick=pickForMe;
 }
 function pickForMe(){
   modal('overview','Pick something for me',`<div style="grid-column:1/-1"><div class="eform">
@@ -865,7 +875,7 @@ function pickForMe(){
     if(g)L=L.filter(x=>((x.g||[]).join(' ')+' '+((FD.f[x.tmdb]||{}).g||[]).join(' ')+' '+(x.sh||[]).join(' ')).toLowerCase().includes(g));
     if(!L.length){$('#pk_out').innerHTML='<div class="muted">Nothing matches. Try a different length or genre.</div>';return}
     const x=L[Math.floor(Math.random()*L.length)];
-    $('#pk_out').innerHTML=`<div class="unx" id="pk_x" style="cursor:pointer"><div class="ut" style="width:90px">${cover(x.t,x.img||'','')}</div><div class="ui"><div class="un" style="font-size:16px">${esc(x.t)}</div><div class="us">${L.length} to choose from · tap to open</div></div></div><button class="btn" id="pk_again" style="margin-top:10px">Pick again</button>`;
+    $('#pk_out').innerHTML=`<div class="pick" id="pk_x"><div class="pc">${cover(x.t,x.img||'','')}</div><div><div class="un" style="font-size:17px;font-weight:700">${esc(x.t)}</div><div class="us muted small" style="margin-top:4px">${L.length} to choose from · tap to open</div></div></div><button class="btn" id="pk_again" style="margin-top:10px">Pick again</button>`;
     $('#pk_x').onclick=()=>({anime:openAnime,manga:openManga,films:openFilm,games:openGame,books:openBook})[k](x);$('#pk_again').onclick=go};
   $('#pk_go').onclick=go;
 }
@@ -887,7 +897,7 @@ function rManga(){
   listPage({key:'manga',title:'Manga list',sub:`From MyAnimeList · updated ${fdate(D.generated)}`,
     bst:()=>[[fmt(manga.length),'entries'],[fmt(manga.reduce((s,m)=>s+m.ch,0)),'chapters read'],[fmt(manga.reduce((s,m)=>s+m.rw,0)),'rereads'],[avg(sc.map(m=>m.sc)).toFixed(2),'mean score']],
     items:()=>manga,
-    tabs:[['all','All manga',()=>true],['1','Reading',m=>m.st===1],['2','Completed',m=>m.st===2],['3','On-Hold',m=>m.st===3],['4','Dropped',m=>m.st===4],['6','Plan to Read',m=>m.st===6],['rw','Reread',m=>m.rw>0||m.rwing]],
+    tabs:[['1','Reading',m=>m.st===1],['2','Completed',m=>m.st===2],['3','On-Hold',m=>m.st===3],['4','Dropped',m=>m.st===4],['6','Plan to Read',m=>m.st===6],['rw','Reread',m=>m.rw>0||m.rwing]],
     sorts:[['score','Your score'],['mal','MAL score'],['title','Title'],['year','Year (newest)'],['ch','Chapters read']],
     extra:S=>`<select id="ltype" aria-label="Type"><option value="">All types</option>${types.map(t=>`<option ${S.type===t?'selected':''}>${esc(t)}</option>`).join('')}</select>`,
     bindExtra:(S,body)=>{$('#ltype').onchange=e=>{S.type=e.target.value;body()}},
@@ -1012,7 +1022,7 @@ function rBooks(){
   listPage({key:'books',title:'Books',sub:`${books.length} books · kept on this site`,
     bst:()=>[[rd.length,'read'],[fmt(rd.reduce((s,b)=>s+b.p,0)),'pages'],[books.filter(b=>b.ur).length,'Urdu']],
     items:()=>books,
-    tabs:[['all','All books',()=>true],['read','Read',b=>b.st==='read'],['reading','Reading',b=>b.st==='reading'],['toread','Want to read',b=>b.st==='toread'],['dnf','Did not finish',b=>b.st==='dnf'],['hold','On hold',b=>b.st==='hold']],
+    tabs:[['read','Read',b=>b.st==='read'],['reading','Reading',b=>b.st==='reading'],['toread','Want to read',b=>b.st==='toread'],['dnf','Did not finish',b=>b.st==='dnf'],['hold','On hold',b=>b.st==='hold']],
     sorts:[['rating','Your rating'],['title','Title'],['author','Author'],['year','Year (newest)'],['pages','Pages']],
     extra:S=>`<select id="lshelf" aria-label="Shelf"><option value="">All shelves</option>${shelves.map(t=>`<option ${S.shelf===t?'selected':''}>${esc(t)}</option>`).join('')}</select>`,
     bindExtra:(S,body)=>{$('#lshelf').onchange=e=>{S.shelf=e.target.value;body()}},
@@ -1314,6 +1324,12 @@ function editGame(g){
     try{const L=await viaApi('games',q);$('#g_res').innerHTML=L&&L.length?L.slice(0,6).map((x,i)=>`<a class="link" href="#games" data-gp="${i}" style="display:block;padding:4px 0">${esc(x.t)} ${x.y?'('+x.y+')':''} · ${esc(x.meta)}</a>`).join(''):'Nothing found. Fill it in by hand.';
       document.querySelectorAll('[data-gp]').forEach(a=>a.onclick=e=>{e.preventDefault();const x=L[+a.dataset.gp];$('#e_t').value=x.t;$('#e_pf').value=(x.pf||[]).join(', ');$('#e_g').value=(x.g||[]).join(', ');$('#e_dev').value=(x.dev||[]).join(', ');if(x.rel)$('#e_rel').value=x.rel;$('#e_img').value=x.img||'';$('#g_res').textContent='Filled in. Check it and save.'})}
     catch(e){$('#g_res').textContent='Search failed. Fill it in by hand.'}};
+  const SHX=new Set(['read','currently-reading','to-read']);
+  let SH=[...new Set(books.flatMap(x=>x.sh||[]).filter(x=>!SHX.has(x)))].sort();let MY=new Set(($('#e_shl')?(typeof b!=='undefined'?(b.sh||[]):[]):[]).filter(x=>!SHX.has(x)));
+  const drawSh=()=>{$('#e_shs').textContent=MY.size?[...MY].join(', ')+' ▾':'Choose shelves ▾';
+    $('#e_shl').innerHTML=SH.map(x=>`<label class="shrow"><input type="checkbox" value="${esc(x)}" ${MY.has(x)?'checked':''}> ${esc(x)}</label>`).join('')||'<span class="muted small">No shelves yet.</span>';
+    $('#e_shl').querySelectorAll('input').forEach(c=>c.onchange=()=>{c.checked?MY.add(c.value):MY.delete(c.value);$('#e_sh').value=[...MY].join(', ');$('#e_shs').textContent=MY.size?[...MY].join(', ')+' ▾':'Choose shelves ▾'})};
+  if($('#e_shl')){drawSh();$('#e_sha').onclick=()=>{const n=gv('e_shn').toLowerCase().replace(/\s+/g,'-');if(!n)return;if(!SH.includes(n))SH.push(n);MY.add(n);$('#e_shn').value='';$('#e_sh').value=[...MY].join(', ');drawSh()}}
   $('#e_save').onclick=()=>{
     const t=gv('e_t');if(!t){$('#e_err').textContent='Give it a title.';return}
     const raw=isNew?{id:Date.now(),u:'',fr:[],pub:[],log:[],shelves:[],rvd:''}:D.games[g.i];
@@ -1342,7 +1358,7 @@ function editBook(b){
   ${fld('e_p','Pages',b.p||'','number','min="0"')}
   ${fld('e_y','First published (year)',b.y||'','number')}
   ${fld('e_dr','Date finished',b.dr||'','date')}
-  ${fld('e_sh','Shelves (comma separated, e.g. urdu, childhood)',(b.sh||[]).join(', '))}
+  <div class="ef" style="grid-column:1/-1"><span>Shelves</span><input type="hidden" id="e_sh" value="${esc((b.sh||[]).join(', '))}"><details class="shdd"><summary id="e_shs"></summary><div id="e_shl" class="shl"></div><div style="display:flex;margin-top:8px"><input id="e_shn" placeholder="New shelf name" style="flex:1"><button class="btn" type="button" id="e_sha" style="border-radius:0">Create</button></div></details></div>
   ${fld('e_rv','Review',b.rv,'textarea')}
   ${fld('e_img','Cover image link (optional)',!isNew&&D.books[b.i]?D.books[b.i].img||'':b.img||'','url','placeholder="https://..."')}</div>
   <div class="small" id="e_err" style="color:var(--s4)"></div>
@@ -1352,6 +1368,12 @@ function editBook(b){
       const docs=r.docs||[];$('#e_res').innerHTML=docs.length?docs.map((d,i)=>`<a class="link" href="#books" data-pick="${i}" style="display:block;padding:4px 0">${esc(d.title)} · ${esc((d.author_name||[])[0]||'')} ${d.first_publish_year||''}</a>`).join(''):'Nothing found. Fill it in by hand.';
       document.querySelectorAll('[data-pick]').forEach(a=>a.onclick=e=>{e.preventDefault();const d=docs[+a.dataset.pick];$('#e_t').value=d.title;$('#e_a').value=(d.author_name||[])[0]||'';$('#e_y').value=d.first_publish_year||'';$('#e_p').value=d.number_of_pages_median||'';$('#e_img').value=d.cover_i?`https://covers.openlibrary.org/b/id/${d.cover_i}-M.jpg`:'';$('#e_res').textContent='Filled in. Check it and save.'});
     }catch(e){$('#e_res').textContent='Search failed. Fill it in by hand.'}};
+  const SHX=new Set(['read','currently-reading','to-read']);
+  let SH=[...new Set(books.flatMap(x=>x.sh||[]).filter(x=>!SHX.has(x)))].sort();let MY=new Set(($('#e_shl')?(typeof b!=='undefined'?(b.sh||[]):[]):[]).filter(x=>!SHX.has(x)));
+  const drawSh=()=>{$('#e_shs').textContent=MY.size?[...MY].join(', ')+' ▾':'Choose shelves ▾';
+    $('#e_shl').innerHTML=SH.map(x=>`<label class="shrow"><input type="checkbox" value="${esc(x)}" ${MY.has(x)?'checked':''}> ${esc(x)}</label>`).join('')||'<span class="muted small">No shelves yet.</span>';
+    $('#e_shl').querySelectorAll('input').forEach(c=>c.onchange=()=>{c.checked?MY.add(c.value):MY.delete(c.value);$('#e_sh').value=[...MY].join(', ');$('#e_shs').textContent=MY.size?[...MY].join(', ')+' ▾':'Choose shelves ▾'})};
+  if($('#e_shl')){drawSh();$('#e_sha').onclick=()=>{const n=gv('e_shn').toLowerCase().replace(/\s+/g,'-');if(!n)return;if(!SH.includes(n))SH.push(n);MY.add(n);$('#e_shn').value='';$('#e_sh').value=[...MY].join(', ');drawSh()}}
   $('#e_save').onclick=()=>{
     const t=gv('e_t');if(!t){$('#e_err').textContent='Give it a title.';return}
     const raw=isNew?{id:'s'+Date.now(),d:today()}:D.books[b.i];
@@ -1479,6 +1501,7 @@ const ICON_GRID='<svg width="14" height="14" viewBox="0 0 14 14" fill="currentCo
 const ICON_LIST='<svg width="14" height="14" viewBox="0 0 14 14" fill="currentColor"><rect x="0" y="0" width="14" height="3"/><rect x="0" y="5.5" width="14" height="3"/><rect x="0" y="11" width="14" height="3"/></svg>';
 function listPage(cfg){
   const S=state[cfg.key];
+  if(!cfg.tabs.some(t=>t[0]===S.tab))S.tab=({anime:'2',manga:'2',games:'Played',books:'read'})[cfg.key]||cfg.tabs[0][0];
   const all=cfg.items();
   const counts={};cfg.tabs.forEach(([k,,f])=>counts[k]=all.filter(f).length);
   const app=$('#app');
@@ -1523,7 +1546,7 @@ function rAnime(){
   const types=[...new Set(anime.map(a=>a.type))].sort();
   listPage({key:'anime',title:'Anime list',bst:()=>[[fmt(anime.length),'entries'],[fmt(anime.reduce((s,a)=>s+(a.st===2?(a.eps||a.ep):a.ep),0)),'episodes'],[fmt(anime.reduce((s,a)=>s+a.rw,0)),'rewatches'],[avg(anime.filter(a=>a.sc).map(a=>a.sc)).toFixed(2),'mean score']],sub:`${fmt(anime.length)} entries · from MyAnimeList · updated ${fdate(D.generated)}`,
     items:()=>anime,
-    tabs:[['all','All anime',()=>true],['1','Watching',a=>a.st===1],['2','Completed',a=>a.st===2],['3','On-Hold',a=>a.st===3],['4','Dropped',a=>a.st===4],['6','Plan to Watch',a=>a.st===6],['rw','Rewatched',a=>a.rw>0||a.rwing]],
+    tabs:[['1','Watching',a=>a.st===1],['2','Completed',a=>a.st===2],['3','On-Hold',a=>a.st===3],['4','Dropped',a=>a.st===4],['6','Plan to Watch',a=>a.st===6],['rw','Rewatched',a=>a.rw>0||a.rwing]],
     sorts:[['updated','Last updated'],['score','Your score'],['mal','MAL score'],['title','Title'],['year','Year (newest)'],['eps','Episodes']],
     extra:S=>`<select id="ltype" aria-label="Type"><option value="">All types</option>${types.map(t=>`<option ${S.type===t?'selected':''}>${esc(t)}</option>`).join('')}</select>`,
     bindExtra:(S,body)=>{$('#ltype').onchange=e=>{S.type=e.target.value;body()}},
@@ -1577,7 +1600,7 @@ function openFilm(f){
 function rGames(){
   listPage({key:'games',title:'Games',bst:()=>[[games.length,'games'],[games.filter(g=>g.shelf==='Played').length,'played'],[fmt(Math.round(games.reduce((s,g)=>s+g.hrs,0)))+'h','hours played'],[games.reduce((s,g)=>s+g.rp,0),'replays']],sub:`${games.length} games · kept on this site`,
     items:()=>games,
-    tabs:[['all','All',()=>true],...Object.keys(GSH).map(k=>[k,k,k==='Playing'?g=>g.shelf==='Playing'||g.shelf==='Replaying':g=>g.shelf===k]),['replayed','Replayed',g=>g.rp>0||g.shelf==='Replaying'],['reviewed','Reviewed',g=>!!g.rv]],
+    tabs:[...Object.keys(GSH).map(k=>[k,k,k==='Playing'?g=>g.shelf==='Playing'||g.shelf==='Replaying':g=>g.shelf===k]),['replayed','Replayed',g=>g.rp>0||g.shelf==='Replaying'],['reviewed','Reviewed',g=>!!g.rv]],
     sorts:[['added','Date added'],['rating','Your rating'],['release','Release date'],['title','Title']],
     sorter:k=>({added:(a,b)=>b.added.localeCompare(a.added),rating:(a,b)=>b.r-a.r||b.added.localeCompare(a.added),release:(a,b)=>(b.rel||'').localeCompare(a.rel||''),title:cmpT})[k],
     card:(g,i)=>`<div class="card" data-i="${i}">${cover(g.t,g.img||'',gBadge(g)+gDlcStack(g)+`<span class="sline" style="--sc:${GSH[g.shelf]||'var(--s6)'}"></span>`)}<div class="meta"><div class="tt">${esc(g.t)}</div>${gDlcLine(g)}<div class="ss"><span>${esc(g.shelf)}</span><span>${g.rel?g.rel.slice(0,4):''}</span></div></div></div>`,
@@ -1614,6 +1637,7 @@ function rStories(){
 function modal(k,label,inner){
   $('#modal').innerHTML=`<div class="mh" style="border-bottom:3px solid ${MED[k].c}"><span><i style="width:8px;height:8px;background:${MED[k].c};display:inline-block"></i>${esc(label)}</span><button id="mx" aria-label="Close">✕</button></div><div class="mb">${inner}</div>`;
   $('#ov').classList.add('show');$('#mx').onclick=closeM;
+  const me=$('#m_edit');if(me){me.classList.add('mhedit');$('#modal .mh').insertBefore(me,$('#mx'))}
 }
 function closeM(){$('#ov').classList.remove('show')}
 $('#ov').onclick=e=>{if(e.target.id==='ov')closeM()};
