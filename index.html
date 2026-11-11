@@ -1388,7 +1388,7 @@ function rHof(){
   if(hofSeg==='anime'){
     G('g-mal','MAL favourites','My official top anime and studios on MyAnimeList.','star','#8a50e0','https://myanimelist.net/profile/SatsugaiDeAtsu',[
       sec('s-mal-a','Top anime','',grid(F.anime.map(([id,t,sub])=>hItem('a'+id+'~'+t,sub)).join(''))),
-      sec('s-mal-s','Top studios','These are the studios in the Favorites on your MAL profile. To change them, open a studio on MyAnimeList and tap Add to Favorites (or remove it there); the site picks it up with the next update.',grid(F.company.map(studioTile).join('')))]);
+      sec('s-mal-s','Top studios','',grid(F.company.map(studioTile).join('')))]);
     G('g-hon','Honorary favourites','Shows special to me beyond the top 10, plus my nurturing legacy.','star','#d9a514',blogUrl(804802),
       fil(hon,/anime/i).map(([t,d,it],i)=>sec('s-hon-'+i,t.replace(/^Honorary mentions: /,'Honorary mentions · '),d,grid(it.map(c=>hItem(c)).join('')))));
     const p10=anime.filter(a=>a.sc===10).sort((a,b)=>b.mal-a.mal);
