@@ -1016,11 +1016,12 @@ async function overviewExtra(){
   const air=anime.filter(a=>(a.st===1||a.st===6)&&A(a.id).st==='currently_airing').map(a=>({a,n:nextAir(A(a.id))})).filter(x=>x.n).sort((p,q)=>p.n.t-q.n.t);
   // ---- genres for every medium ----
   // each title counts once, under its main theme: the first genre where the source ranks them (films, books),
-  // otherwise its most distinctive tag (the least common one across your list that still shows up a few times)
-  const NOTTHEME=new Set(['Award Winning','Shounen','Seinen','Shoujo','Josei','Kids']);
+  // otherwise its specific theme (Psychological, Mystery, Isekai...) over broad genres like Romance or Action
+  const NOTTHEME=new Set(['Award Winning','Shounen','Seinen','Shoujo','Josei','Kids','Eligible Titles for You Should Read This','Adult Cast']);
+  const BROAD=new Set(['Action','Adventure','Comedy','Drama','Fantasy','Romance','Slice of Life','School','Sci-Fi','Supernatural','Sports']);
   const top=(L,f,first,n=8)=>{const T=L.map(x=>[...new Set((f(x)||[]).filter(t=>t&&!NOTTHEME.has(t)))]).filter(t=>t.length);const fr={};T.forEach(ts=>ts.forEach(t=>fr[t]=(fr[t]||0)+1));
     const min=Math.max(3,Math.round(T.length*.02)),c={};
-    T.forEach(ts=>{let g;if(first)g=ts[0];else{const el=ts.filter(t=>fr[t]>=min);g=(el.length?el:ts).reduce((a,b)=>fr[b]<fr[a]?b:a)}c[g]=(c[g]||0)+1});
+    T.forEach(ts=>{let g;if(first)g=ts[0];else{const sp=ts.filter(t=>!BROAD.has(t));g=(sp.length?sp:ts).reduce((a,b)=>fr[b]>fr[a]?b:a)}c[g]=(c[g]||0)+1});
     return Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,n)};
   const bars=(T,c)=>{const mx=T[0]?T[0][1]:1;return T.length?T.map(([g,n])=>`<div class="hbar" style="--c:${c}"><span>${esc(g)}</span><div class="tr"><i style="width:${n/mx*100}%"></i></div><span class="mono muted">${n}</span></div>`).join(''):'<div class="muted small">Nothing yet.</div>'};
   const SKIP=new Set(['read','currently-reading','to-read','to read','favorites','favourites']);
