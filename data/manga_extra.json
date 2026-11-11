@@ -39,7 +39,8 @@
    "au": "Yoru Sumino",
    "ty": "Novel",
    "sc": 0,
-   "vol": 0
+   "vol": 0,
+   "img": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1655758090i/59203131.jpg"
   },
   {
    "id": "ys-hara-wo-wattara",
@@ -52,7 +53,8 @@
    "au": "Yoru Sumino",
    "ty": "Novel",
    "sc": 0,
-   "vol": 0
+   "vol": 0,
+   "img": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1709182081i/209287562.jpg"
   },
   {
    "id": "ys-koi-to-sore-to",
@@ -78,7 +80,8 @@
    "au": "Yoru Sumino",
    "ty": "Novel",
    "sc": 0,
-   "vol": 0
+   "vol": 0,
+   "img": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1784489577i/251426853.jpg"
   }
  ]
 }
