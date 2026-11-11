@@ -113,6 +113,8 @@ main{max-width:1240px;margin:0 auto;padding:20px 16px 60px}
 .ovgrid>.box{display:flex;flex-direction:column;min-width:0}
 .ovgrid .hbar{grid-template-columns:96px 1fr 30px}
 .ovgrid .hbars{max-height:300px;overflow-y:auto;scrollbar-width:thin;padding-right:4px}
+@media (min-width:641px){.ovgrid>.box{height:440px}.ovgrid>.box>.box-b{flex:1;min-height:0;display:flex;flex-direction:column}
+  #ov_sc>div:last-child{flex:1;display:flex;flex-direction:column;min-height:0}#ov_sc .dist{flex:1;height:auto;min-height:120px}.ovgrid .hbars{flex:1;max-height:none;min-height:0}.ovair .unl{max-height:none;overflow-y:auto;display:block}}
 .ovgrid .box-h{flex-wrap:wrap;row-gap:6px}.ovgrid .box-h h3{white-space:nowrap}.ovgrid .mtabs button{padding:3px 5px}
 .ovair .unl{max-height:300px;overflow-y:auto;scrollbar-width:thin;padding-right:4px}
 @media (max-width:1000px){.ovgrid{grid-template-columns:1fr 1fr}.ovgrid>.ovair{grid-column:1/-1}}
