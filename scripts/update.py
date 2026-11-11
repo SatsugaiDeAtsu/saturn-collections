@@ -1695,6 +1695,8 @@ def gr_book(bid):
     pages = (book.get('details') or {}).get('numPages')
     if pages:
         o['gp'] = pages
+    if book.get('imageUrl'):
+        o['gimg'] = re.sub(r'\._[A-Z]{2}\d+_\.', '.', book['imageUrl'])
     return o
 
 
@@ -1729,7 +1731,17 @@ def update_book_details():
         time.sleep(4)
     with open(bpath, 'w', encoding='utf-8') as f:
         json.dump(bm, f, ensure_ascii=False, indent=0)
-    site['bookMeta'] = {k: {x: v[x] for x in ('syn', 'gd', 'gg', 'ga', 'gn', 'gid') if v.get(x)} for k, v in bm.items() if v.get('syn') or v.get('gd') or v.get('gg')}
+    site['bookMeta'] = {k: {x: v[x] for x in ('syn', 'gd', 'gg', 'ga', 'gn', 'gid', 'gp') if v.get(x)} for k, v in bm.items() if v.get('syn') or v.get('gd') or v.get('gg')}
+    # books added on the site without a picture take the Goodreads cover
+    cpath = os.path.join(DATA, 'book_covers.json')
+    covers = load_json(cpath, {})
+    for b in load_json(os.path.join(DATA, 'books.json'), {}).get('books', []):
+        bid = str(b.get('id'))
+        if not b.get('img') and bm.get(bid, {}).get('gimg'):
+            covers[bid] = bm[bid]['gimg']
+    with open(cpath, 'w', encoding='utf-8') as f:
+        json.dump(covers, f, indent=0)
+    site['bookCovers'] = {k: v for k, v in covers.items() if v}
     log(f'goodreads details: +{n}, {fails} failed')
 
 
