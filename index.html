@@ -112,6 +112,7 @@ main{max-width:1240px;margin:0 auto;padding:20px 16px 60px}
 .ovgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch}
 .ovgrid>.box{display:flex;flex-direction:column;min-width:0}
 .ovgrid .hbar{grid-template-columns:96px 1fr 30px}
+.ovgrid .hbars{max-height:300px;overflow-y:auto;scrollbar-width:thin;padding-right:4px}
 .ovgrid .box-h{flex-wrap:wrap;row-gap:6px}.ovgrid .box-h h3{white-space:nowrap}.ovgrid .mtabs button{padding:3px 5px}
 .ovair .unl{max-height:300px;overflow-y:auto;scrollbar-width:thin;padding-right:4px}
 @media (max-width:1000px){.ovgrid{grid-template-columns:1fr 1fr}.ovgrid>.ovair{grid-column:1/-1}}
@@ -1017,23 +1018,40 @@ async function overviewExtra(){
   // ---- genres for every medium ----
   // each title counts once, under its main theme: the first genre where the source ranks them (films, books),
   // otherwise its specific theme (Psychological, Mystery, Isekai...) over broad genres like Romance or Action
-  const NOTTHEME=new Set(['Award Winning','Shounen','Seinen','Shoujo','Josei','Kids','Eligible Titles for You Should Read This','Adult Cast']);
-  const BROAD=new Set(['Action','Adventure','Comedy','Drama','Fantasy','Romance','Slice of Life','School','Sci-Fi','Supernatural','Sports']);
-  const top=(L,f,first,n=8)=>{const T=L.map(x=>[...new Set((f(x)||[]).filter(t=>t&&!NOTTHEME.has(t)))]).filter(t=>t.length);const fr={};T.forEach(ts=>ts.forEach(t=>fr[t]=(fr[t]||0)+1));
-    const min=Math.max(3,Math.round(T.length*.02)),c={};
-    T.forEach(ts=>{let g;if(first)g=ts[0];else{const sp=ts.filter(t=>!BROAD.has(t));g=(sp.length?sp:ts).reduce((a,b)=>fr[b]>fr[a]?b:a)}c[g]=(c[g]||0)+1});
-    return Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,n)};
-  const bars=(T,c)=>{const mx=T[0]?T[0][1]:1;return T.length?T.map(([g,n])=>`<div class="hbar" style="--c:${c}"><span>${esc(g)}</span><div class="tr"><i style="width:${n/mx*100}%"></i></div><span class="mono muted">${n}</span></div>`).join(''):'<div class="muted small">Nothing yet.</div>'};
+  // ---- what each title is about: tags grouped into story themes; a title counts once, under its most telling theme ----
+  const TH=(spec)=>{const m={},order=[];spec.forEach(([cat,tags])=>{order.push(cat);tags.forEach(t=>m[t]=cat)});return{m,order}};
+  const THA=TH([['Psychological',['Psychological']],['Horror',['Horror','Gore','Vampire']],['Mystery & thriller',['Mystery','Suspense','Detective','Organized Crime','High Stakes Game','Survival']],
+    ['Sports',['Sports','Team Sports','Combat Sports','Racing']],['Music & performing',['Music','Idols (Female)','Idols (Male)','Performing Arts','Showbiz']],['Gaming',['Video Game','Strategy Game']],
+    ['Romance',['Romance','Love Polygon','Love Status Quo','Harem','Reverse Harem','Boys Love','Girls Love','Villainess']],['War & military',['Military']],['Sci-fi',['Sci-Fi','Mecha','Space','Time Travel']],
+    ['Historical',['Historical','Samurai']],['Fantasy',['Fantasy','Isekai','Reincarnation','Mythology','Urban Fantasy','Mahou Shoujo']],['Action',['Action','Martial Arts','Super Power']],['Adventure',['Adventure']],
+    ['Supernatural',['Supernatural']],['Slice of life',['Slice of Life','Iyashikei','CGDCT','Gourmet','Childcare']],['Drama',['Drama']],['Comedy',['Comedy','Parody','Gag Humor']],['Ecchi',['Ecchi']]]);
+  const THF=TH([['Horror',['Horror']],['Documentary',['Documentary']],['War',['War']],['Western',['Western']],['Crime',['Crime']],['Mystery & thriller',['Thriller','Mystery']],['Sci-fi',['Science Fiction']],
+    ['Romance',['Romance']],['Fantasy',['Fantasy']],['Music',['Music']],['Historical',['History']],['Action',['Action']],['Adventure',['Adventure']],['Comedy',['Comedy']],['Drama',['Drama']]]);
+  const THG=TH([['Shooter',['Shooter']],['RPG',['Role-playing (RPG)']],['Fighting',['Fighting']],['Hack & slash',["Hack and slash/Beat 'em up"]],['Racing',['Racing']],['Sports',['Sport']],
+    ['Strategy',['Strategy','Tactical','Turn-based strategy (TBS)','Real Time Strategy (RTS)']],['Puzzle',['Puzzle','Quiz/Trivia']],['Platform',['Platform']],['Simulation',['Simulator']],['Music',['Music']],['Adventure',['Adventure','Point-and-click']]]);
+  const THB=TH([['Horror',['Horror']],['Mystery & thriller',['Mystery','Thriller','Crime','Suspense']],['Romance',['Romance']],['Fantasy',['Fantasy','Magic','High Fantasy']],['Supernatural',['Supernatural','Paranormal']],['Sci-fi',['Science Fiction','Dystopia']],
+    ['Psychology',['Psychology']],['Philosophy',['Philosophy']],['Spirituality & religion',['Spirituality','Islam','Religion','Faith','Christian']],['Self-help',['Self Help','Personal Development','Productivity']],
+    ['Biography & memoir',['Biography','Memoir','Autobiography','Biography Memoir']],['Historical',['Historical Fiction','Historical','History']],['Poetry',['Poetry']],['Short stories',['Short Stories']],
+    ['Children\'s',['Childrens','Middle Grade','Picture Books']],['Adventure',['Adventure']],['Contemporary',['Contemporary','Realistic Fiction','Literary Fiction']]]);
+  // every title you've started counts, so the bars add up to the total; titles with no usable tags are shown as such
+  const theme=(L,f,T,fall)=>{const c={};L.forEach(x=>{const tags=f(x)||[];let g=null;for(const cat of T.order){if(tags.some(t=>T.m[t]===cat)){g=cat;break}}
+      if(!g)g=tags.length?(fall?fall(tags):'Other'):'Not tagged yet';c[g]=(c[g]||0)+1});
+    return Object.entries(c).sort((a,b)=>(a[0]==='Not tagged yet')-(b[0]==='Not tagged yet')||(a[0]==='Other')-(b[0]==='Other')||b[1]-a[1])};
+  const bars=(T,c,sub)=>{const mx=Math.max(1,...T.map(x=>x[1]));const tot=T.reduce((s,x)=>s+x[1],0);return T.length?`<div class="small muted" style="margin-bottom:8px">${sub} · ${fmt(tot)} in all</div><div class="hbars">${T.map(([g,n])=>`<div class="hbar" style="--c:${c}"><span>${esc(g)}</span><div class="tr"><i style="width:${n/mx*100}%"></i></div><span class="mono muted">${n}</span></div>`).join('')}</div>`:'<div class="muted small">Nothing yet.</div>'};
   const SKIP=new Set(['read','currently-reading','to-read','to read','favorites','favourites']);
-  const G={anime:top(anime.filter(a=>a.st===2),a=>(A(a.id).g||a.g)),manga:top(manga.filter(m=>m.st===2||m.st===1),m=>((MD.m[m.id]||{}).g||m.g)),
-    films:top(films.filter(f=>f.s==='w'),f=>((_FD.f[f.tmdb]||{}).g||[]),true),games:top(games.filter(g=>GPLAYED[g.shelf]),g=>g.g||[]),
-    books:top(books.filter(b=>b.st!=='toread'),b=>((D.bookMeta||{})[b.id]||{}).gg||(b.sh||[]).filter(x=>!SKIP.has(x.toLowerCase())),!!Object.keys(D.bookMeta||{}).length)};
+  const cnt=(L,k,names)=>Object.entries(names).map(([v,n])=>[n,L.filter(x=>String(x[k])===v).length]).filter(x=>x[1]).map(([n,v])=>`${v} ${n}`).join(' · ');
+  const aL=anime.filter(a=>a.st!==6),mL=manga.filter(m=>m.st!==6),fL=films.filter(f=>f.s==='w'&&!f.tv),gL=games.filter(g=>g.shelf!=='Backlog'&&g.shelf!=='Wish List'),bL=books.filter(b=>b.st!=='toread');
+  const G={anime:theme(aL,a=>(A(a.id).g||a.g),THA),manga:theme(mL,m=>((MD.m[m.id]||{}).g||m.g),THA),
+    films:theme(fL,f=>((_FD.f[f.tmdb]||{}).g||[]),THF),games:theme(gL,g=>g.g||[],THG),
+    books:theme(bL,b=>((D.bookMeta||{})[b.id]||{}).gg||[],THB,t=>t.includes('Nonfiction')?'Nonfiction':'General fiction')};
+  const GS={anime:cnt(aL,'st',{1:'watching',2:'completed',3:'on hold',4:'dropped'}),manga:cnt(mL,'st',{1:'reading',2:'completed',3:'on hold',4:'dropped'}),films:`${fmt(fL.length)} films watched`,
+    games:cnt(gL,'shelf',{Played:'played',Playing:'playing',Replaying:'replaying',Retired:'retired'}),books:cnt(bL,'st',{read:'read',reading:'reading',dnf:'not finished',hold:'on hold'})};
   // ---- scores for every medium ----
   const sa=anime.filter(a=>a.sc),sm=manga.filter(m=>m.sc),sf=films.filter(f=>f.s==='w'&&f.r),sg=games.filter(g=>g.r),sb=books.filter(b=>b.r);
   const ten=L=>Array.from({length:10},(_,i)=>L.filter(x=>x.sc===i+1).length);
   const five=(L,steps)=>steps.map(v=>L.filter(x=>x.r===v).length);
   const tabsBox=(id,title,items,note)=>`<div class="box"><div class="box-h"><h3>${title}</h3><div class="mtabs" data-g="${id}">${items.map((it,i)=>`<button type="button" class="${i?'':'on'}" data-i="${i}" style="--c:${it.c}">${it.n}</button>`).join('')}</div></div><div class="box-b" id="${id}">${items[0].h}</div>${note?`<div class="small muted" style="padding:0 14px 12px">${note}</div>`:''}</div>`;
-  const GI=[['Anime','var(--anime)',bars(G.anime,'var(--anime)')],['Manga','var(--manga)',bars(G.manga,'var(--manga)')],['Films','var(--film)',bars(G.films,'var(--film)')],['Games','var(--game)',bars(G.games,'var(--game)')],['Books','var(--book)',bars(G.books,'var(--book)')]].map(([n,c,h])=>({n,c,h}));
+  const GI=[['Anime','var(--anime)',bars(G.anime,'var(--anime)',GS.anime)],['Manga','var(--manga)',bars(G.manga,'var(--manga)',GS.manga)],['Films','var(--film)',bars(G.films,'var(--film)',GS.films)],['Games','var(--game)',bars(G.games,'var(--game)',GS.games)],['Books','var(--book)',bars(G.books,'var(--book)',GS.books)]].map(([n,c,h])=>({n,c,h}));
   const SI=[['Anime','var(--anime)',`<div class="small muted" style="margin-bottom:6px">${sa.length} scored</div>`+dist(ten(sa),[1,2,3,4,5,6,7,8,9,10],'var(--anime)')],
     ['Manga','var(--manga)',`<div class="small muted" style="margin-bottom:6px">${sm.length} scored</div>`+dist(ten(sm),[1,2,3,4,5,6,7,8,9,10],'var(--manga)')],
     ['Films','var(--film)',`<div class="small muted" style="margin-bottom:6px">${sf.length} rated</div>`+dist(five(sf,[.5,1,1.5,2,2.5,3,3.5,4,4.5,5]),['½','1','','2','','3','','4','','5'],'var(--film)')],
@@ -1043,7 +1061,7 @@ async function overviewExtra(){
   box.innerHTML=`
   ${cont.length?`<section class="box" style="margin-top:16px"><div class="box-h" style="border-top:3px solid var(--anime)"><h2>Continue the series</h2><span class="small muted">${cont.length} sequels you haven't started · scroll →</span></div><div class="box-b"><div class="hslide">${cont.map(ctile).join('')}</div></div></section>`:''}
   <section class="ovgrid" style="margin-top:16px">
-    ${tabsBox('ov_sc','Scores',SI)}${tabsBox('ov_gen','Top genres',GI,'Each title counts once, under its main theme.')}
+    ${tabsBox('ov_sc','Scores',SI)}${tabsBox('ov_gen','Top genres',GI,'Each title counts once, under what its story is mainly about.')}
     <div class="box ovair"><div class="box-h"><h3>Airing</h3><span class="small muted">in your time</span></div><div class="box-b unl">${air.length?air.map(({a,n},i)=>`<div class="unx" data-ai="${i}"><div class="ut">${cover(a.t,a.img||'','')}</div><div class="ui"><div class="un">${esc(a.t)}</div><div class="us">${esc(n.when)} · <b>${esc(n.in)}</b>${a.st===6?' · plan to watch':''}</div></div></div>`).join(''):'<div class="muted small">None of the shows you\'re watching are airing right now.</div>'}</div></div>
   </section>`;
   box.querySelectorAll('.mtabs').forEach(t=>t.querySelectorAll('button').forEach(b=>b.onclick=()=>{t.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));const L=t.dataset.g==='ov_gen'?GI:SI;$('#'+t.dataset.g).innerHTML=L[+b.dataset.i].h}));
