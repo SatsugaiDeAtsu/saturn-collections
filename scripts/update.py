@@ -1809,6 +1809,27 @@ def update_film_ids():
             fails += 1
             log('letterboxd film page failed', fm.get('t'), e)
         time.sleep(1.0)
+    # Letterboxd itself files a few series under a making-of special (Moon Knight, Squid Game). When the TMDB title
+    # doesn't match and there's a TV series with exactly the Letterboxd title and year, it's that series.
+    key = settings.get('tmdbKey')
+    det = load_json(os.path.join(DATA, 'film_details.json'), {'f': {}})
+    for fm in site.get('films', []):
+        d = det['f'].get(str(fm.get('tmdb')), {}) if fm.get('tmdb') else {}
+        if not key or fm.get('tv') or fm.get('tvChk') or not d.get('tt') or norm(d['tt']) == norm(fm['t']):
+            continue
+        fm['tvChk'] = 1
+        try:
+            r = json.loads(get(f"https://api.themoviedb.org/3/search/tv?api_key={key}&query={urllib.parse.quote(fm['t'])}", tries=1)).get('results') or []
+            hit = next((x for x in r if norm(x.get('name')) == norm(fm['t']) and (not fm.get('y') or abs(int((x.get('first_air_date') or '0')[:4] or 0) - int(fm['y'])) <= 1)), None)
+            if hit:
+                fm['tv'] = hit['id']
+                fm.pop('tmdb', None)
+                if 'image.tmdb.org' in (fm.get('img') or ''):
+                    fm.pop('img', None)
+                fixed += 1
+        except Exception as e:
+            log('tv check failed', fm.get('t'), e)
+        time.sleep(0.3)
     log(f'film ids: checked {n} on Letterboxd, corrected {fixed}')
 
 
