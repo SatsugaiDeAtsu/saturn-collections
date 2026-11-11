@@ -26,6 +26,8 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#1c0e22">
+<link rel="preconnect" href="https://cdn.myanimelist.net">
+<link rel="preconnect" href="https://image.tmdb.org">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500&family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
@@ -692,7 +694,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:v
 <header class="top">
   <div class="top-in">
     <a class="brand" href="#overview" aria-label="Saturn Collections home">
-      <img src="assets/logo.png" alt="" width="40" height="40" style="display:block;filter:drop-shadow(0 0 6px rgba(255,31,75,.55))">
+      <img src="assets/logo-80.png" alt="" width="40" height="40" style="display:block;filter:drop-shadow(0 0 6px rgba(255,31,75,.55))">
       <span class="bt">Saturn Collections</span>
     </a>
     <form class="gsearch" id="gform" role="search">
@@ -826,7 +828,7 @@ const EMBLEM=(s)=>`<svg class="crest" width="${s}" height="${s}" viewBox="0 0 20
 <text font-family="Space Grotesk,sans-serif" font-weight="700" font-size="10" letter-spacing="3" fill="#e9cf8a" opacity=".9"><textPath href="#cArc" startOffset="50%" text-anchor="middle" dy="0">· DE ATSU ·</textPath></text>
 </svg>`;
 function banner(k,title,sub,stats,kicker){
-  return `<section class="banner${k==='overview'?' ovb':''}" style="--c:${HEX[k]}">${artBg(HEX[k],title.length*13,k)}<div class="in">${k==='overview'?`<div class="emb ava"><img src="assets/avatar.gif" alt=""></div>`:`<div class="bico">${ico(k)}</div>`}<div><div class="kick">${esc(kicker||'Saturn Collections')}</div><h1>${esc(title)}</h1>${sub?`<div class="sub">${sub}</div>`:''}</div>${stats&&stats.length?`<div class="bst">${stats.map(([n,l])=>`<span><b>${n}</b>${esc(l)}</span>`).join('')}</div>`:''}</div></section>`;
+  return `<section class="banner${k==='overview'?' ovb':''}" style="--c:${HEX[k]}">${artBg(HEX[k],title.length*13,k)}<div class="in">${k==='overview'?`<div class="emb ava"><img src="assets/avatar.webp" alt=""></div>`:`<div class="bico">${ico(k)}</div>`}<div><div class="kick">${esc(kicker||'Saturn Collections')}</div><h1>${esc(title)}</h1>${sub?`<div class="sub">${sub}</div>`:''}</div>${stats&&stats.length?`<div class="bst">${stats.map(([n,l])=>`<span><b>${n}</b>${esc(l)}</span>`).join('')}</div>`:''}</div></section>`;
 }
 
 /* ---------- covers ---------- */
@@ -891,7 +893,7 @@ const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
 
 /* ---------- nav / routing ---------- */
 const ROUTES=[['overview','Overview','#e9ecf5'],['hof','Hall of Fame','#f0c43c'],['anime','Anime','#a77ef0'],['manga','Manga','#f06f88'],['films','Films','#f08a50'],['games','Games','#3cc5b2'],['books','Books','#d4a062'],['stories','Stories','#ec7ab0'],['search','Search','#e9ecf5'],['wrapped','Wrapped','#ff6d93']];
-$('#nav').innerHTML=ROUTES.map(([k,l,c])=>`<a href="#${k}" data-r="${k}" style="--c:${c}">${k==='overview'?'<img src="assets/logo.png" alt="" width="18" height="18" style="display:block;filter:drop-shadow(0 0 4px rgba(255,31,75,.5))">':ico(k)}${l}</a>`).join('');
+$('#nav').innerHTML=ROUTES.map(([k,l,c])=>`<a href="#${k}" data-r="${k}" style="--c:${c}">${k==='overview'?'<img src="assets/logo-80.png" alt="" width="18" height="18" style="display:block;filter:drop-shadow(0 0 4px rgba(255,31,75,.5))">':ico(k)}${l}</a>`).join('');
 let route='overview';
 const state={anime:{tab:'all',q:'',sort:'updated',view:store.get('view_anime','table'),type:'',lim:60},films:{tab:'watched',q:'',sort:'watched',view:store.get('view_films','grid'),lim:60},games:{tab:'all',q:'',sort:'added',view:store.get('view_games','grid'),lim:60},manga:{tab:'all',q:'',sort:'score',view:store.get('view_manga','grid'),type:'',lim:60},books:{tab:'all',q:'',sort:'rating',view:store.get('view_books','grid'),shelf:'',lim:60},search:{q:'',ext:'anime',res:{},busy:false}};
 function go(){
@@ -2670,5 +2672,6 @@ malFinish();
 go();
 })();
 </script>
+<script>if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))</script>
 </body>
 </html>
