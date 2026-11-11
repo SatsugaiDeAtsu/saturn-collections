@@ -383,6 +383,7 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .tvtag{position:absolute;left:6px;top:6px;z-index:3;font-size:9.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:rgba(10,4,14,.78);color:#fff;padding:2px 6px}
 .ficons{display:inline-flex;gap:5px;align-items:center}.ficons i{font-style:normal}
 .rwi{color:#b48cff;font-weight:700}
+.genbtn{padding:1px 7px;font-size:12px;margin-left:6px}
 .srccred{padding:0 14px 12px;line-height:1.5}
 .slogo{aspect-ratio:1;background:#fff;display:grid;place-items:center;padding:14px;border-bottom:1px solid var(--line)}
 .slogo img{max-width:100%;max-height:100%;object-fit:contain;display:block}
@@ -693,7 +694,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:v
 <script>
 (async function(){
 "use strict";
-let D,SET={};try{const j=u=>fetch(u,{cache:'no-cache'}).then(r=>r.json());const [a,g,b,s,q,wr,mx,se,ov]=await Promise.all([j('data/site.json'),j('data/games.json'),j('data/books.json'),j('data/settings.json').catch(()=>({})),j('data/quotes.json').catch(()=>({quotes:[]})),j('data/writing.json').catch(()=>({works:[]})),j('data/manga_extra.json').catch(()=>({items:[]})),j('data/series.json').catch(()=>({series:[]})),j('data/ovfavs.json').catch(()=>null)]);D=Object.assign(a,g,b,q,wr);D.mangaExtra=mx.items||[];D.ovFavs=ov;D.series=se.series||[];SET=s}catch(e){document.getElementById('app').innerHTML='<div class="empty">Could not load data/site.json.</div>';return}
+let D,SET={};try{const j=u=>fetch(u,{cache:'no-cache'}).then(r=>r.json());const [a,g,b,s,q,wr,mx,se,ov,th]=await Promise.all([j('data/site.json'),j('data/games.json'),j('data/books.json'),j('data/settings.json').catch(()=>({})),j('data/quotes.json').catch(()=>({quotes:[]})),j('data/writing.json').catch(()=>({works:[]})),j('data/manga_extra.json').catch(()=>({items:[]})),j('data/series.json').catch(()=>({series:[]})),j('data/ovfavs.json').catch(()=>null),j('data/themes.json').catch(()=>({}))]);D=Object.assign(a,g,b,q,wr);D.mangaExtra=mx.items||[];D.ovFavs=ov;D.themes=th||{};D.series=se.series||[];SET=s}catch(e){document.getElementById('app').innerHTML='<div class="empty">Could not load data/site.json.</div>';return}
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm=s=>String(s||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
@@ -1022,31 +1023,17 @@ async function overviewExtra(){
   // each title counts once, under its main theme: the first genre where the source ranks them (films, books),
   // otherwise its specific theme (Psychological, Mystery, Isekai...) over broad genres like Romance or Action
   // ---- what each title is about: tags grouped into story themes; a title counts once, under its most telling theme ----
-  const TH=(spec)=>{const m={},order=[];spec.forEach(([cat,tags])=>{order.push(cat);tags.forEach(t=>m[t]=cat)});return{m,order}};
-  const THA=TH([['Psychological',['Psychological']],['Horror',['Horror','Gore','Vampire']],['Mystery & thriller',['Mystery','Suspense','Detective','Organized Crime','High Stakes Game','Survival']],
-    ['Sports',['Sports','Team Sports','Combat Sports','Racing']],['Music & performing',['Music','Idols (Female)','Idols (Male)','Performing Arts','Showbiz']],['Gaming',['Video Game','Strategy Game']],
-    ['Romance',['Romance','Love Polygon','Love Status Quo','Harem','Reverse Harem','Boys Love','Girls Love','Villainess']],['War & military',['Military']],['Sci-fi',['Sci-Fi','Mecha','Space','Time Travel']],
-    ['Historical',['Historical','Samurai']],['Fantasy',['Fantasy','Isekai','Reincarnation','Mythology','Urban Fantasy','Mahou Shoujo']],['Action',['Action','Martial Arts','Super Power']],['Adventure',['Adventure']],
-    ['Supernatural',['Supernatural']],['Slice of life',['Slice of Life','Iyashikei','CGDCT','Gourmet','Childcare']],['Drama',['Drama']],['Comedy',['Comedy','Parody','Gag Humor']],['Ecchi',['Ecchi']]]);
-  const THF=TH([['Horror',['Horror']],['Documentary',['Documentary']],['War',['War']],['Western',['Western']],['Crime',['Crime']],['Mystery & thriller',['Thriller','Mystery']],['Sci-fi',['Science Fiction']],
-    ['Romance',['Romance']],['Fantasy',['Fantasy']],['Music',['Music']],['Historical',['History']],['Action',['Action']],['Adventure',['Adventure']],['Comedy',['Comedy']],['Drama',['Drama']]]);
-  const THG=TH([['Shooter',['Shooter']],['RPG',['Role-playing (RPG)']],['Fighting',['Fighting']],['Hack & slash',["Hack and slash/Beat 'em up"]],['Racing',['Racing']],['Sports',['Sport']],
-    ['Strategy',['Strategy','Tactical','Turn-based strategy (TBS)','Real Time Strategy (RTS)']],['Puzzle',['Puzzle','Quiz/Trivia']],['Platform',['Platform']],['Simulation',['Simulator']],['Music',['Music']],['Adventure',['Adventure','Point-and-click']]]);
-  const THB=TH([['Horror',['Horror']],['Mystery & thriller',['Mystery','Thriller','Crime','Suspense']],['Romance',['Romance']],['Fantasy',['Fantasy','Magic','High Fantasy']],['Supernatural',['Supernatural','Paranormal']],['Sci-fi',['Science Fiction','Dystopia']],
-    ['Psychology',['Psychology']],['Philosophy',['Philosophy']],['Spirituality & religion',['Spirituality','Islam','Religion','Faith','Christian']],['Self-help',['Self Help','Personal Development','Productivity']],
-    ['Biography & memoir',['Biography','Memoir','Autobiography','Biography Memoir']],['Historical',['Historical Fiction','Historical','History']],['Poetry',['Poetry']],['Short stories',['Short Stories']],
-    ['Children\'s',['Childrens','Middle Grade','Picture Books']],['Adventure',['Adventure']],['Contemporary',['Contemporary','Realistic Fiction','Literary Fiction']]]);
-  // every title you've started counts, so the bars add up to the total; titles with no usable tags are shown as such
-  const theme=(L,f,T,fall)=>{const c={};L.forEach(x=>{const tags=f(x)||[];let g=null;for(const cat of T.order){if(tags.some(t=>T.m[t]===cat)){g=cat;break}}
-      if(!g)g=tags.length?(fall?fall(tags):'Other'):'Not tagged yet';c[g]=(c[g]||0)+1});
-    return Object.entries(c).sort((a,b)=>(a[0]==='Not tagged yet')-(b[0]==='Not tagged yet')||(a[0]==='Other')-(b[0]==='Other')||b[1]-a[1])};
+  const theme=(L,kind,key,tags)=>{const c={};L.forEach(x=>{const g=mainGenre(kind,key(x),tags(x));c[g]=(c[g]||0)+1});
+    const E=Object.entries(c).sort((a,b)=>(a[0]==='Not tagged yet')-(b[0]==='Not tagged yet')||b[1]-a[1]);
+    if(E.length<=9)return E;const top=E.filter(x=>x[0]!=='Not tagged yet').slice(0,8),rest=E.filter(x=>!top.includes(x));
+    return [...top,[`${rest.length} other genres`,rest.reduce((s,x)=>s+x[1],0)]]};
   const bars=(T,c,sub)=>{const mx=Math.max(1,...T.map(x=>x[1]));const tot=T.reduce((s,x)=>s+x[1],0);return T.length?`<div class="small muted" style="margin-bottom:8px">${sub} · ${fmt(tot)} in all</div><div class="hbars">${T.map(([g,n])=>`<div class="hbar" style="--c:${c}"><span>${esc(g)}</span><div class="tr"><i style="width:${n/mx*100}%"></i></div><span class="mono muted">${n}</span></div>`).join('')}</div>`:'<div class="muted small">Nothing yet.</div>'};
   const SKIP=new Set(['read','currently-reading','to-read','to read','favorites','favourites']);
   const cnt=(L,k,names)=>Object.entries(names).map(([v,n])=>[n,L.filter(x=>String(x[k])===v).length]).filter(x=>x[1]).map(([n,v])=>`${v} ${n}`).join(' · ');
   const aL=anime.filter(a=>a.st!==6),mL=manga.filter(m=>m.st!==6),fL=films.filter(f=>f.s==='w'&&!f.tv),gL=games.filter(g=>g.shelf!=='Backlog'&&g.shelf!=='Wish List'),bL=books.filter(b=>b.st!=='toread');
-  const G={anime:theme(aL,a=>(A(a.id).g||a.g),THA),manga:theme(mL,m=>((MD.m[m.id]||{}).g||m.g),THA),
-    films:theme(fL,f=>((_FD.f[f.tmdb]||{}).g||[]),THF),games:theme(gL,g=>g.g||[],THG),
-    books:theme(bL,b=>((D.bookMeta||{})[b.id]||{}).gg||[],THB,t=>t.includes('Nonfiction')?'Nonfiction':'General fiction')};
+  const G={anime:theme(aL,'anime',a=>a.id,a=>A(a.id).g||a.g),manga:theme(mL,'manga',m=>m.id,m=>(MD.m[m.id]||{}).g||m.g),
+    films:theme(fL,'films',f=>f.tmdb||f.u,f=>(_FD.f[f.tmdb]||{}).g||[]),games:theme(gL,'games',g=>g.id,g=>g.g||[]),
+    books:theme(bL,'books',b=>b.id,b=>((D.bookMeta||{})[b.id]||{}).gg||[])};
   const GS={anime:cnt(aL,'st',{1:'watching',2:'completed',3:'on hold',4:'dropped'}),manga:cnt(mL,'st',{1:'reading',2:'completed',3:'on hold',4:'dropped'}),films:`${fmt(fL.length)} films watched`,
     games:cnt(gL,'shelf',{Played:'played',Playing:'playing',Replaying:'replaying',Retired:'retired'}),books:cnt(bL,'st',{read:'read',reading:'reading',dnf:'not finished',hold:'on hold'})};
   // ---- scores for every medium ----
@@ -1064,7 +1051,7 @@ async function overviewExtra(){
   box.innerHTML=`
   ${cont.length?`<section class="box" style="margin-top:16px"><div class="box-h" style="border-top:3px solid var(--anime)"><h2>Continue the series</h2><span class="small muted">${cont.length} sequels you haven't started · scroll →</span></div><div class="box-b"><div class="hslide">${cont.map(ctile).join('')}</div></div></section>`:''}
   <section class="ovgrid" style="margin-top:16px">
-    ${tabsBox('ov_sc','Scores',SI)}${tabsBox('ov_gen','Top genres',GI,'Each title counts once, under what its story is mainly about.')}
+    ${tabsBox('ov_sc','Scores',SI)}${tabsBox('ov_gen','Top genres',GI,'Each title counts once, under what its story is mainly about. Seasons, films and specials count separately.')}
     <div class="box ovair"><div class="box-h"><h3>Airing</h3><span class="small muted">in your time</span></div><div class="box-b unl">${air.length?air.map(({a,n},i)=>`<div class="unx" data-ai="${i}"><div class="ut">${cover(a.t,a.img||'','')}</div><div class="ui"><div class="un">${esc(a.t)}</div><div class="us">${esc(n.when)} · <b>${esc(n.in)}</b>${a.st===6?' · plan to watch':''}</div></div></div>`).join(''):'<div class="muted small">None of the shows you\'re watching are airing right now.</div>'}</div></div>
   </section>`;
   box.querySelectorAll('.mtabs').forEach(t=>t.querySelectorAll('button').forEach(b=>b.onclick=()=>{t.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));const L=t.dataset.g==='ov_gen'?GI:SI;$('#'+t.dataset.g).innerHTML=L[+b.dataset.i].h}));
@@ -1098,6 +1085,40 @@ function favRow(title,k,items){
   return `<section class="box" style="margin-top:16px"><div class="box-h" style="border-top:3px solid ${MED[k].c}"><h2>${esc(title)}</h2><a class="link small" href="#${k}">View all</a></div><div class="box-b"><div class="grid favs">${items.map((it,i)=>`<div class="card" data-fk="${k}" data-i="${i}">${cover(it.t,it.img,(it.b?`<span class="badge">${esc(it.b)}</span>`:'')+(it.x||'')+(ED.on&&it.fi!=null?`<button type="button" class="favx" data-fdel="${it.fi}" title="Take off favourites" aria-label="Remove">✕</button><span class="favh" data-fdrag="${k}" title="Drag to reorder" aria-label="Drag to reorder">⠿</span>`:''))}<div class="meta"><div class="tt">${esc(it.t)}</div>${it.line||''}<div class="ss"><span>${esc(it.sub)}</span></div></div></div>`).join('')}${ED.on?`<button type="button" class="favadd" data-fadd="${k}" style="--c:${MED[k].c}" aria-label="Add a favourite"><span>+</span><small>Add</small></button>`:''}</div></div></section>`;
 }
 
+
+/* main genre: what a title is mainly about. Your own pick (data/themes.json) wins; otherwise its tags decide.
+   Anime and manga: the most telling tag wins (Isekai over Action over Romance...); setting and fan-service tags never decide. */
+const GW={Isekai:['Isekai',10],Reincarnation:['Isekai',9],Villainess:['Isekai',9],Sports:['Sports',10],'Team Sports':['Sports',10],'Combat Sports':['Sports',10],Racing:['Sports',10],
+  Music:['Music',9],'Idols (Female)':['Music',9],'Idols (Male)':['Music',9],'Performing Arts':['Music',8],Mecha:['Sci-Fi',8],Psychological:['Psychological',8],'High Stakes Game':['Psychological',7.5],
+  Horror:['Horror',7.6],Mystery:['Mystery',7],Detective:['Mystery',7],Military:['Military',6.5],'Video Game':['Gaming',6.5],'Strategy Game':['Gaming',6],Historical:['Historical',6],Samurai:['Historical',6],
+  'Sci-Fi':['Sci-Fi',6],Space:['Sci-Fi',6],'Time Travel':['Sci-Fi',6],Suspense:['Mystery',5.5],'Organized Crime':['Action',5.5],Survival:['Action',5.2],Action:['Action',5],'Martial Arts':['Action',5],'Super Power':['Action',5],
+  Romance:['Romance',4.5],'Love Polygon':['Romance',4.5],'Love Status Quo':['Romance',4.5],Harem:['Romance',4.5],'Reverse Harem':['Romance',4.5],'Boys Love':['Romance',4.5],'Girls Love':['Romance',4.5],
+  Fantasy:['Fantasy',4],Mythology:['Fantasy',4],'Urban Fantasy':['Fantasy',4],'Mahou Shoujo':['Fantasy',4],Supernatural:['Fantasy',3.6],Vampire:['Fantasy',3.6],Adventure:['Fantasy',3.5],
+  Drama:['Drama',3],Medical:['Drama',3],'Slice of Life':['Slice of Life',2.8],Iyashikei:['Slice of Life',2.8],CGDCT:['Slice of Life',2.8],Gourmet:['Slice of Life',2.8],Childcare:['Slice of Life',2.8],Workplace:['Slice of Life',2.5],
+  Comedy:['Comedy',2],Parody:['Comedy',2],'Gag Humor':['Comedy',2]};
+const GORDER={films:[['Horror',['Horror']],['Documentary',['Documentary']],['War',['War']],['Western',['Western']],['Crime',['Crime']],['Thriller',['Thriller','Mystery']],['Sci-Fi',['Science Fiction']],['Romance',['Romance']],['Fantasy',['Fantasy']],['Music',['Music']],['Historical',['History']],['Action',['Action']],['Adventure',['Adventure']],['Comedy',['Comedy']],['Drama',['Drama']]],
+  games:[['Shooter',['Shooter']],['RPG',['Role-playing (RPG)']],['Fighting',['Fighting']],['Brawler',["Hack and slash/Beat 'em up"]],['Racing',['Racing']],['Sports',['Sport']],['Strategy',['Strategy','Tactical','Turn-based strategy (TBS)','Real Time Strategy (RTS)']],['Puzzle',['Puzzle','Quiz/Trivia']],['Platformer',['Platform']],['Simulation',['Simulator']],['Music',['Music']],['Adventure',['Adventure','Point-and-click']]],
+  books:[['Horror',['Horror']],['Thriller',['Mystery','Thriller','Crime','Suspense']],['Romance',['Romance']],['Fantasy',['Fantasy','Magic','High Fantasy','Supernatural','Paranormal']],['Sci-Fi',['Science Fiction','Dystopia']],['Psychology',['Psychology']],['Philosophy',['Philosophy']],['Spirituality',['Spirituality','Islam','Religion','Faith','Christian']],['Self-help',['Self Help','Personal Development','Productivity']],['Biography',['Biography','Memoir','Autobiography','Biography Memoir']],['Historical',['Historical Fiction','Historical','History']],['Poetry',['Poetry']],['Children',['Childrens','Middle Grade','Picture Books']],['Adventure',['Adventure']],['Contemporary',['Contemporary','Realistic Fiction','Literary Fiction','Short Stories']]]};
+const GLIST={anime:[...new Set(Object.values(GW).map(x=>x[0]))],films:GORDER.films.map(x=>x[0]),games:GORDER.games.map(x=>x[0]),books:[...GORDER.books.map(x=>x[0]),'Nonfiction','Fiction']};GLIST.manga=GLIST.anime;
+function mainGenre(kind,key,tags){
+  const own=(D.themes||{})[kind[0]+':'+key];if(own)return own;
+  tags=tags||[];if(!tags.length)return 'Not tagged yet';
+  if(kind==='anime'||kind==='manga'){let best=null;tags.forEach(t=>{const w=GW[t];if(w&&(!best||w[1]>best[1]))best=w});return best?best[0]:'Comedy'}
+  for(const [cat,ts] of GORDER[kind])if(tags.some(t=>ts.includes(t)))return cat;
+  return kind==='books'?(tags.includes('Nonfiction')?'Nonfiction':'Fiction'):'Other';
+}
+/* a "Main genre" row in a title's info; while editing, tap ✎ to pick it yourself */
+function genreRow(kind,key,tags){
+  const kv=$('#modal .kv');if(!kv||$('#modal [data-gen]'))return;
+  const g=mainGenre(kind,key,tags),mine=!!(D.themes||{})[kind[0]+':'+key];
+  kv.insertAdjacentHTML('beforeend',`<div>Main genre</div><div data-gen="1">${esc(g)}${mine?' <span class="muted small">(your pick)</span>':''}${ED.on?` <button type="button" class="btn genbtn" title="Choose the main genre">✎</button>`:''}</div>`);
+  const b=$('#modal .genbtn');if(!b)return;
+  b.onclick=()=>{const cell=$('#modal [data-gen]');cell.innerHTML=`<select id="gen_s">${['',...GLIST[kind]].map(x=>`<option value="${esc(x)}" ${x===(mine?g:'')?'selected':''}>${x?esc(x):'Decide from its tags'}</option>`).join('')}</select> <button type="button" class="btn pri" id="gen_ok">Save</button>`;
+    $('#gen_ok').onclick=async()=>{const v=$('#gen_s').value;toast('Saving…');
+      try{let cur;try{cur=await ghLoad('data/themes.json')}catch(e){cur={}}const k=kind[0]+':'+key;if(v)cur[k]=v;else delete cur[k];
+        await ghSave('data/themes.json',cur,'Main genre for '+key);D.themes=cur;cell.innerHTML=`${esc(mainGenre(kind,key,tags))}${v?' <span class="muted small">(your pick)</span>':''}`;toast('Saved.')}
+      catch(e){toast('Not saved: '+e.message,true)}}};
+}
 
 /* overview favourites: their own list (data/ovfavs.json), separate from the profile favourites shown in the Hall of Fame */
 function ovFavList(k){
@@ -1271,6 +1292,7 @@ async function malExtra(k,x){
   else if(me.st==='not_yet_aired'||me.st==='not_yet_published')top+=`<div>Status</div><div>Not out yet${me.sd?' · starts '+esc(me.sd):''}</div>`;
   h=(top?`<div class="kv" style="margin-top:0">${top}</div>`:'')+h;
   box.innerHTML=h;bindRel(det);
+  genreRow(k==='a'?'anime':'manga',x.id,me.g||x.g);
   if(k==='a'&&me.src){const kv=$('#modal .kv');const t=kv&&[...kv.children].find(d=>d.textContent==='Type');if(t&&t.nextElementSibling){t.nextElementSibling.insertAdjacentHTML('afterend',`<div>Source</div><div>${esc(SRCN[me.src]||cap(me.src.replace(/_/g,' ')))}</div>`)}}
 }
 const SRCN={original:'Original',manga:'Manga','4_koma_manga':'4-koma manga',web_manga:'Web manga',digital_manga:'Digital manga',novel:'Novel',light_novel:'Light novel',visual_novel:'Visual novel',game:'Game',card_game:'Card game',book:'Book',picture_book:'Picture book',radio:'Radio',music:'Music',web_novel:'Web novel',mixed_media:'Mixed media',other:'Other'};
@@ -1294,7 +1316,7 @@ async function filmExtra(f){
     h+=`<div class="sect" style="--c:var(--film);margin-top:14px"><h2><i></i>${esc(col.n)} <span class="muted mono">${col.p.length} films</span></h2><div class="relgrid">${col.p.map(([id,t,d,pp],i)=>{const own=films.find(x=>x.tmdb===id),cur=id===f.tmdb;
       return `<button type="button" class="reltile${cur?' cur':''}" data-fid="${id}" ${cur?'disabled':''}>${cover(t,own&&own.img||(pp?'https://image.tmdb.org/t/p/w185'+pp:''),own&&own.r?`<span class="badge">${own.r}★</span>`:'')}<span class="rl">Part ${i+1}${d?' · '+d.slice(0,4):''}</span><span class="rn">${esc(t)}</span><span class="rs" style="color:${cur?'var(--film)':own?(own.s==='w'?'var(--s2)':'var(--s6)'):'var(--ink3)'}">${cur?'You are here':own?(own.s==='w'?'Watched':'On watchlist'):'Not logged'}</span></button>`}).join('')}</div></div>`;
   }
-  box.innerHTML=h;
+  box.innerHTML=h;genreRow('films',f.tmdb||f.u,me.g||[]);
   box.querySelectorAll('[data-fid]').forEach(b=>b.onclick=()=>{const id=+b.dataset.fid,own=films.find(x=>x.tmdb===id);if(own)return openFilm(own);window.open('https://letterboxd.com/tmdb/'+id,'_blank','noopener')});
 }
 function gameSeries(g){
@@ -1356,6 +1378,7 @@ function openBook(b){
   ${b.rv?`<div class="review" style="--c:var(--book)">${esc(b.rv)}</div>`:''}
   <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?`<button class="btn pri" id="m_edit">Edit</button>`:''}${(()=>{const gid=/^\d+$/.test(String(b.id))?b.id:b.__bm.gid;return `<a class="btn${ED.on?'':' pri'}" href="${gid?'https://www.goodreads.com/book/show/'+esc(gid):'https://www.goodreads.com/search?q='+encodeURIComponent(b.t+' '+b.a)}" target="_blank" rel="noopener">Open on Goodreads ↗</a>`})()}</div></div>`);
   const me=$('#m_edit');if(me)me.onclick=()=>editBook(b);
+  genreRow('books',b.id,((D.bookMeta||{})[b.id]||{}).gg||[]);
 }
 
 /* ---------- hall of fame ---------- */
@@ -2044,6 +2067,7 @@ function openGame(g){
   ${g.rv?`<div class="review" style="--c:var(--game)">${g.rvt?`<b>${esc(g.rvt)}</b>\n`:''}${esc(g.rv)}</div>`:''}
   <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?`<button class="btn pri" id="m_edit">Edit</button>`:''}<a class="btn pri" href="${esc(g.u||'https://www.grouvee.com/search/?q='+encodeURIComponent(g.t))}" target="_blank" rel="noopener">Open on Grouvee ↗</a></div></div>`);
   const me=$('#m_edit');if(me)me.onclick=()=>editGame(g);
+  genreRow('games',g.id,g.g||[]);
 }
 
 /* ---------- writing: stories, articles, other, private drafts ---------- */
