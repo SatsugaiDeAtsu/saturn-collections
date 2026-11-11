@@ -1025,9 +1025,8 @@ async function overviewExtra(){
   // ---- what each title is about: tags grouped into story themes; a title counts once, under its most telling theme ----
   const theme=(L,kind,key,tags)=>{const c={};L.forEach(x=>{const g=mainGenre(kind,key(x),tags(x));c[g]=(c[g]||0)+1});
     const E=Object.entries(c).sort((a,b)=>(a[0]==='Not tagged yet')-(b[0]==='Not tagged yet')||b[1]-a[1]);
-    if(E.length<=9)return E;const top=E.filter(x=>x[0]!=='Not tagged yet').slice(0,8),rest=E.filter(x=>!top.includes(x));
-    return [...top,[`${rest.length} other genres`,rest.reduce((s,x)=>s+x[1],0)]]};
-  const bars=(T,c,sub)=>{const mx=Math.max(1,...T.map(x=>x[1]));const tot=T.reduce((s,x)=>s+x[1],0);return T.length?`<div class="small muted" style="margin-bottom:8px">${sub} · ${fmt(tot)} in all</div><div class="hbars">${T.map(([g,n])=>`<div class="hbar" style="--c:${c}"><span>${esc(g)}</span><div class="tr"><i style="width:${n/mx*100}%"></i></div><span class="mono muted">${n}</span></div>`).join('')}</div>`:'<div class="muted small">Nothing yet.</div>'};
+    return E};
+  const bars=(T,c,sub)=>{const mx=Math.max(1,...T.map(x=>x[1]));const tot=T.reduce((s,x)=>s+x[1],0);return T.length?`<div class="hbars">${T.map(([g,n])=>`<div class="hbar" style="--c:${c}"><span>${esc(g)}</span><div class="tr"><i style="width:${n/mx*100}%"></i></div><span class="mono muted">${n}</span></div>`).join('')}</div>`:'<div class="muted small">Nothing yet.</div>'};
   const SKIP=new Set(['read','currently-reading','to-read','to read','favorites','favourites']);
   const cnt=(L,k,names)=>Object.entries(names).map(([v,n])=>[n,L.filter(x=>String(x[k])===v).length]).filter(x=>x[1]).map(([n,v])=>`${v} ${n}`).join(' · ');
   const aL=anime.filter(a=>a.st!==6),mL=manga.filter(m=>m.st!==6),fL=films.filter(f=>f.s==='w'&&!f.tv),gL=games.filter(g=>g.shelf!=='Backlog'&&g.shelf!=='Wish List'),bL=books.filter(b=>b.st!=='toread');
@@ -1099,11 +1098,14 @@ const GW={Isekai:['Isekai',10],Reincarnation:['Isekai',9],Villainess:['Isekai',9
 const GORDER={films:[['Horror',['Horror']],['Documentary',['Documentary']],['War',['War']],['Western',['Western']],['Crime',['Crime']],['Thriller',['Thriller','Mystery']],['Sci-Fi',['Science Fiction']],['Romance',['Romance']],['Fantasy',['Fantasy']],['Music',['Music']],['Action',['Action']],['Adventure',['Adventure']],['Comedy',['Comedy']],['Drama',['Drama']]],
   games:[['Shooter',['Shooter']],['RPG',['Role-playing (RPG)']],['Fighting',['Fighting']],['Brawler',["Hack and slash/Beat 'em up"]],['Racing',['Racing']],['Sports',['Sport']],['Strategy',['Strategy','Tactical','Turn-based strategy (TBS)','Real Time Strategy (RTS)']],['Puzzle',['Puzzle','Quiz/Trivia']],['Platformer',['Platform']],['Simulation',['Simulator']],['Music',['Music']],['Adventure',['Adventure','Point-and-click']]],
   books:[['Horror',['Horror']],['Thriller',['Mystery','Thriller','Crime','Suspense']],['Romance',['Romance']],['Fantasy',['Fantasy','Magic','High Fantasy','Supernatural','Paranormal']],['Sci-Fi',['Science Fiction','Dystopia']],['Psychology',['Psychology']],['Philosophy',['Philosophy']],['Spirituality',['Spirituality','Islam','Religion','Faith','Christian']],['Self-help',['Self Help','Personal Development','Productivity']],['Biography',['Biography','Memoir','Autobiography','Biography Memoir']],['Poetry',['Poetry']],['Children',['Childrens','Middle Grade','Picture Books']],['Adventure',['Adventure']],['Contemporary',['Contemporary','Realistic Fiction','Literary Fiction','Short Stories']]]};
-const GLIST={anime:[...new Set(Object.values(GW).map(x=>x[0]))],films:GORDER.films.map(x=>x[0]),games:GORDER.games.map(x=>x[0]),books:[...GORDER.books.map(x=>x[0]),'Nonfiction','Fiction']};GLIST.manga=GLIST.anime;
+const BOOKMETA=new Set(['Fiction','Nonfiction','Classics','Young Adult','Novels','Literature','Audiobook','Book Club','Manga','Light Novel','Japanese Literature','Russian Literature','Turkish Literature','Pakistan','India','Japan','Scotland','Russia','Turkish','Love','Family','School','Science','Inspirational','Adult','Adult Fiction','Middle Grade','Literary Fiction','Football','Humor','Contemporary']);
+const BOOKNAME={Childrens:"Children's",'Self Help':'Self-help','Science Fiction Fantasy':'Science Fiction'};
+const GLIST={anime:[...new Set(Object.values(GW).map(x=>x[0]))],films:GORDER.films.map(x=>x[0]),games:GORDER.games.map(x=>x[0]),books:[...GORDER.books.map(x=>x[0]),'Nonfiction','Fiction']};GLIST.manga=GLIST.anime;GLIST.books=[...new Set(Object.values(D.bookMeta||{}).flatMap(v=>(v.gg||[]).filter(t=>!BOOKMETA.has(t)).map(t=>BOOKNAME[t]||t)))].sort();
 function mainGenre(kind,key,tags){
   const own=(D.themes||{})[kind[0]+':'+key];if(own)return own;
   tags=tags||[];if(!tags.length)return 'Not tagged yet';
   if(kind==='anime'||kind==='manga'){let best=null;tags.forEach(t=>{const w=GW[t];if(w&&(!best||w[1]>best[1]))best=w});return best?best[0]:'Comedy'}
+  if(kind==='books'){const g=tags.find(t=>!BOOKMETA.has(t));return g?(BOOKNAME[g]||g):(tags.includes('Nonfiction')?'Nonfiction':'Fiction')}
   for(const [cat,ts] of GORDER[kind])if(tags.some(t=>ts.includes(t)))return cat;
   return kind==='books'?(tags.includes('Nonfiction')?'Nonfiction':'Fiction'):'Other';
 }
