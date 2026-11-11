@@ -1736,7 +1736,7 @@ function editBook(b){
   ${fld('e_dr','Date finished',b.dr||'','date')}
   <div class="ef" style="grid-column:1/-1"><span>Shelves</span><input type="hidden" id="e_sh" value="${esc((b.sh||[]).join(', '))}"><details class="shdd"><summary id="e_shs"></summary><div id="e_shl" class="shl"></div><div style="display:flex;margin-top:8px"><input id="e_shn" placeholder="New shelf name" style="flex:1"><button class="btn" type="button" id="e_sha" style="border-radius:0">Create</button></div></details></div>
   ${fld('e_rv','Review',b.rv,'textarea')}
-  ${fld('e_img','Cover image link (optional)',!isNew&&D.books[b.i]?D.books[b.i].img||'':b.img||'','url','placeholder="https://..."')}</div>
+  ${fld('e_img','Cover image link (optional)',!isNew&&D.books[b.i]?D.books[b.i].img||'':b.img||'','url','placeholder="https://..."')}<div class="ef"><span>Or your own picture</span><div style="display:flex;gap:8px;align-items:center"><button type="button" class="btn" id="e_up">Upload a cover</button><span class="small muted" id="e_upm"></span></div><input type="file" id="e_upf" accept="image/*" hidden></div></div>
   <div class="small" id="e_err" style="color:var(--s4)"></div>
   <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="btn pri" id="e_save">${isNew?'Add book':'Save changes'}</button>${isNew?'':'<button class="btn" id="e_del" style="margin-left:auto;color:var(--s4)">Delete</button>'}</div></div>`);
   const f=$('#e_find');if(f)f.onclick=async()=>{const q=gv('e_q');if(!q)return;$('#e_res').textContent='Searching…';
@@ -1751,6 +1751,8 @@ function editBook(b){
     $('#e_shl').querySelectorAll('input').forEach(c=>c.onchange=()=>{c.checked?MY.add(c.value):MY.delete(c.value);$('#e_sh').value=[...MY].join(', ');$('#e_shs').textContent=MY.size?[...MY].join(', ')+' ▾':'Choose shelves ▾'})};
   if($('#e_shl')){drawSh();$('#e_sha').onclick=()=>{const n=gv('e_shn').toLowerCase().replace(/\s+/g,'-');if(!n)return;if(!SH.includes(n))SH.push(n);MY.add(n);$('#e_shn').value='';$('#e_sh').value=[...MY].join(', ');drawSh()}}
   {const st=$('#e_st');if(st)st.addEventListener('change',()=>{if(st.value==='read'&&$('#e_dr')&&!$('#e_dr').value)$('#e_dr').value=new Date().toISOString().slice(0,10)})}
+  {const u=$('#e_up');if(u){u.onclick=()=>$('#e_upf').click();$('#e_upf').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;$('#e_upm').textContent='Uploading…';
+    try{const {path}=await uploadPic(f,'book-'+(b.id||'new'),'b');$('#e_img').value=path;$('#e_upm').textContent='Uploaded. Save to keep it.'}catch(err){$('#e_upm').textContent='Not uploaded: '+err.message}}}}
   $('#e_save').onclick=()=>{
     const t=gv('e_t');if(!t){$('#e_err').textContent='Give it a title.';return}
     const raw=isNew?{id:'s'+Date.now(),d:today()}:D.books[b.i];
@@ -2146,7 +2148,7 @@ async function ghPutB64(path,data,msg){
 }
 function shrinkImg(src,max){return new Promise((res,rej)=>{const go=u=>{const im=new Image();im.onload=()=>{const k=Math.min(1,max/im.width),c=document.createElement('canvas');c.width=Math.round(im.width*k);c.height=Math.round(im.height*k);const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',.86))};im.onerror=()=>rej(new Error('That file is not a picture I can read.'));im.src=u};
   if(typeof src==='string')go(src);else{const r=new FileReader();r.onload=()=>go(r.result);r.onerror=()=>rej(r.error);r.readAsDataURL(src)}})}
-async function uploadPic(src,base){const url=await shrinkImg(src,1000);const path=`covers/w/${base||'pic'}-${Date.now().toString(36)}${Math.random().toString(36).slice(2,5)}.jpg`;await ghPutB64(path,url.split(',')[1],'Add a picture for writing');return{path,url}}
+async function uploadPic(src,base,dir){const url=await shrinkImg(src,1000);const path=`covers/${dir||'w'}/${base||'pic'}-${Date.now().toString(36)}${Math.random().toString(36).slice(2,5)}.jpg`;await ghPutB64(path,url.split(',')[1],'Add a picture for writing');return{path,url}}
 /* keep only the formatting a story needs; works for text pasted from Word, Google Docs or the web */
 function cleanHTML(html,keepData){
   const src=new DOMParser().parseFromString('<body>'+html+'</body>','text/html').body;

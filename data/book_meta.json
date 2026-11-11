@@ -984,10 +984,7 @@
 "gimg": "https://m.media-amazon.com/images/S/compressed.photo.goodreads.com/books/1709182081i/209287562.jpg",
 "gchk": "2026-11-11"
 },
-"ys8": {
-"syn": "",
-"gchk": "2026-11-11"
-},
+"ys8": {},
 "ys9": {
 "syn": "",
 "gid": "251426853",
@@ -1000,7 +997,6 @@
 "gchk": "2026-11-11"
 },
 "ys10": {
-"syn": "",
-"gchk": "2026-11-11"
+"gid": "56649425"
 }
 }

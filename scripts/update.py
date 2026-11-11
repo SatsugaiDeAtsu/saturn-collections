@@ -1718,6 +1718,9 @@ def update_book_details():
                 q = urllib.parse.quote_plus(f"{re.sub(r'[(].*?[)]', '', b['t']).strip()} {b.get('a', '')}")
                 hs = gr_session_get(f'https://www.goodreads.com/search?q={q}&search_type=books')
                 f = re.search(r'href="/book/show/(\d+)', hs)
+                if not f and b.get('jt'):  # no English edition: try the original title
+                    hs = gr_session_get(f"https://www.goodreads.com/search?q={urllib.parse.quote_plus(b['jt'])}&search_type=books")
+                    f = re.search(r'href="/book/show/(\d+)', hs)
                 if not f:
                     m['gchk'] = today
                     continue

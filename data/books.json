@@ -921,7 +921,8 @@
     "japanese"
    ],
    "rv": "",
-   "img": ""
+   "img": "",
+   "jt": "恋とそれとあと全部"
   },
   {
    "id": "ys9",
@@ -943,19 +944,20 @@
   {
    "id": "ys10",
    "d": "2026-11-11",
-   "t": "Mugimoto Sanpo no Kotoba Sagashi",
+   "t": "Mugimoto Sanpo no Suki na Mono",
    "ur": "",
    "a": "Yoru Sumino",
    "st": "toread",
    "r": 0,
    "p": 0,
-   "y": 2023,
+   "y": 2019,
    "dr": "",
    "sh": [
     "japanese"
    ],
    "rv": "",
-   "img": ""
+   "img": "",
+   "jt": "麦本三歩の好きなもの"
   }
  ]
 }
