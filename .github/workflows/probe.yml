@@ -4,14 +4,20 @@ jobs:
   p:
     runs-on: ubuntu-latest
     steps:
+      - run: pip install -q curl_cffi
       - run: |
           python3 - <<'PY'
-          import re,urllib.request,time
-          UA='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'
-          for u in ['https://letterboxd.com/satsugaideatsu/films/by/date/','https://letterboxd.com/satsugaideatsu/films/']:
+          import re,time
+          from curl_cffi import requests as R
+          for u in ['https://letterboxd.com/satsugaideatsu/films/by/date/','https://letterboxd.com/satsugaideatsu/films/by/date/page/2/','https://letterboxd.com/satsugaideatsu/films/page/3/']:
             try:
-              h=urllib.request.urlopen(urllib.request.Request(u,headers={'User-Agent':UA,'Accept':'text/html','Accept-Language':'en-US,en;q=0.9'})).read().decode()
-              print(u, re.findall(r'data-item-full-display-name="([^"]*)"',h)[:10])
-            except Exception as e: print(u,e)
+              r=R.get(u,impersonate='chrome',timeout=30)
+              print('CFFI',u,r.status_code, re.findall(r'data-item-full-display-name="([^"]*)"',r.text)[:8])
+            except Exception as e: print('CFFI',u,e)
             time.sleep(3)
+          import urllib.request
+          try:
+            h=urllib.request.urlopen(urllib.request.Request('https://r.jina.ai/https://letterboxd.com/satsugaideatsu/films/by/date/',headers={'User-Agent':'x'}),timeout=60).read().decode()
+            print('JINA',len(h),h[:600])
+          except Exception as e: print('JINA',e)
           PY
