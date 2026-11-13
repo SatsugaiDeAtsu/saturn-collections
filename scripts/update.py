@@ -333,9 +333,19 @@ def update_letterboxd_watched():
     seen = added = moved = 0
     for page in range(1, 60):
         url = f'https://letterboxd.com/{LETTERBOXD_USER}/films/' + (f'page/{page}/' if page > 1 else '')
-        req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36', 'Accept': 'text/html'})
-        with urllib.request.urlopen(req, timeout=40) as rs:
-            h = rs.read().decode('utf-8', 'replace')
+        h = None
+        for tr in range(4):
+            try:
+                req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36',
+                                                           'Accept': 'text/html,application/xhtml+xml', 'Accept-Language': 'en-US,en;q=0.9'})
+                with urllib.request.urlopen(req, timeout=40) as rs:
+                    h = rs.read().decode('utf-8', 'replace')
+                break
+            except Exception as e:
+                log(f'letterboxd films page {page}: {e} (try {tr + 1})')
+                time.sleep(6 * (tr + 1))
+        if h is None:
+            break  # keep what the earlier pages gave
         items = re.findall(r'<li class="griditem">(.*?)</li>', h, re.S)
         if not items:
             break
