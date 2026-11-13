@@ -334,7 +334,7 @@ def update_letterboxd_watched():
     for page in range(1, 60):
         url = f'https://letterboxd.com/{LETTERBOXD_USER}/films/' + (f'page/{page}/' if page > 1 else '')
         h = None
-        for tr in range(4):
+        for tr in range(4 if page == 1 else 1):  # Letterboxd often refuses later pages to scripts; page 1 holds the newest 72
             try:
                 req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36',
                                                            'Accept': 'text/html,application/xhtml+xml', 'Accept-Language': 'en-US,en;q=0.9'})
