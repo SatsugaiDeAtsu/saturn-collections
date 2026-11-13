@@ -12,7 +12,7 @@ jobs:
           h=urllib.request.urlopen(urllib.request.Request('https://letterboxd.com/satsugaideatsu/films/',headers={'User-Agent':UA})).read().decode()
           print('LEN',len(h))
           i=h.find('poster-container');i=i if i>0 else h.find('griditem')
-          print(h[i-300:i+2500])
+          j=h.find('</li>',i);print(h[i:j+6][-900:]);print('SORT',re.findall(r'films/by/[a-z-]+/',h)[:12])
           print('PAGES',re.findall(r'/films/page/(\d+)/',h)[-3:])
           print('COUNT',len(re.findall(r'data-film-slug|data-item-slug',h)))
           PY
