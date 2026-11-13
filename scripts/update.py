@@ -321,6 +321,48 @@ def update_letterboxd():
     log(f'letterboxd: {n} new films' + (' (rebuilt from export)' if imported else ''))
 
 
+def update_letterboxd_watched():
+    """Films marked watched on Letterboxd (the eye) never reach the diary feed, so read the Films pages too.
+    Anything there that the site doesn't have yet is added to the list; watchlist films now watched move over.
+    Nothing is ever removed here."""
+    films = site.setdefault('films', [])
+    idx = {norm(f['t']) + '|' + str(f.get('y') or 0): f for f in films}
+    slug_of = lambda u: (re.search(r'/film/([^/]+)/', u or '') or [None, None])[1]
+    by_slug = {slug_of(f.get('u')): f for f in films if slug_of(f.get('u'))}
+    today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+    seen = added = moved = 0
+    for page in range(1, 60):
+        url = f'https://letterboxd.com/{LETTERBOXD_USER}/films/' + (f'page/{page}/' if page > 1 else '')
+        h = get(url)
+        items = re.findall(r'<li class="griditem">(.*?)</li>', h, re.S)
+        if not items:
+            break
+        for it in items:
+            nm = re.search(r'data-item-full-display-name="([^"]*)"', it) or re.search(r'data-item-name="([^"]*)"', it)
+            sl = re.search(r'data-item-slug="([^"]*)"', it)
+            if not nm or not sl:
+                continue
+            seen += 1
+            name = html.unescape(nm.group(1)); slug = sl.group(1)
+            m = re.match(r'(.*) \((\d{4})\)$', name)
+            t, y = (m.group(1), int(m.group(2))) if m else (name, 0)
+            rt = re.search(r'rated-(\d+)', it); r = int(rt.group(1)) / 2 if rt else 0
+            lk = 1 if 'icon-liked' in it else 0
+            f = by_slug.get(slug) or idx.get(norm(t) + '|' + str(y))
+            if not f:
+                f = {'t': t, 'y': y, 'u': f'https://letterboxd.com/film/{slug}/', 'd': today, 'r': r, 's': 'w', 'n': 0, 'rv': '', 'lk': lk}
+                films.append(f); idx[norm(t) + '|' + str(y)] = f; by_slug[slug] = f; added += 1
+                continue
+            if f.get('s') != 'w':
+                f['s'] = 'w'; f['d'] = today; moved += 1
+            if r and not f.get('r'):
+                f['r'] = r
+            if lk:
+                f['lk'] = 1
+        time.sleep(1.5)
+    log(f'letterboxd films pages: {seen} seen, {added} new, {moved} moved from watchlist')
+
+
 def update_posters():
     key = settings.get('tmdbKey')
     if not key:
@@ -1885,7 +1927,7 @@ def update_series():
     log(f'series details: +{n}, {len(det)} known')
 
 
-for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd),
+for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd), ('letterboxd films', update_letterboxd_watched),
                  ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('book copies', mirror_book_covers), ('grouvee', update_grouvee), ('film ids', update_film_ids), ('film details', update_film_details), ('series', update_series), ('mal details', update_mal_details), ('summaries', update_summaries), ('book details', update_book_details), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('characters', update_char_info), ('people', update_people_info), ('extra manga', update_manga_extra), ('cover mirror', update_cover_mirror)]:
     try:
         fn()
