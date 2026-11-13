@@ -1065,7 +1065,9 @@ def update_film_details():
     today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
     old = (datetime.now(timezone.utc) - timedelta(days=90)).strftime('%Y-%m-%d')
     t0, n = time.time(), 0
-    for fm in site.get('films', []):
+    lpath = os.path.join(DATA, 'films_local.json')
+    local = load_json(lpath, {'films': []})
+    for fm in site.get('films', []) + local.get('films', []):
         tid = fm.get('tmdb')
         if not tid or fm.get('tv') or (det['f'].get(str(tid), {}).get('c', '') > old and det['f'].get(str(tid), {}).get('v') == 3) or time.time() - t0 > 600:
             continue
@@ -1099,6 +1101,15 @@ def update_film_details():
         if fm.get('needImg') and pp:
             fm['img'] = 'https://image.tmdb.org/t/p/w342' + pp
             fm.pop('needImg', None)
+    fixed = 0
+    for fm in local.get('films', []):  # films added by hand on the site get their poster here
+        pp = det['f'].get(str(fm.get('tmdb')), {}).get('pp')
+        if not fm.get('img') and pp:
+            fm['img'] = 'https://image.tmdb.org/t/p/w342' + pp
+            fixed += 1
+    if fixed:
+        with open(lpath, 'w', encoding='utf-8') as f:
+            json.dump(local, f, ensure_ascii=False, indent=1)
     site['filmDir'] = {k: v['dir'][0] for k, v in det['f'].items() if v.get('dir')}
     log(f'film details: +{n}, {len(det["f"])} films, {len(det["col"])} series')
 

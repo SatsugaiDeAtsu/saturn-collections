@@ -715,7 +715,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:v
 <script>
 (async function(){
 "use strict";
-let D,SET={};try{const j=u=>fetch(u,{cache:'no-cache'}).then(r=>r.json());const [a,g,b,s,q,wr,mx,se,ov,th]=await Promise.all([j('data/site.json'),j('data/games.json'),j('data/books.json'),j('data/settings.json').catch(()=>({})),j('data/quotes.json').catch(()=>({quotes:[]})),j('data/writing.json').catch(()=>({works:[]})),j('data/manga_extra.json').catch(()=>({items:[]})),j('data/series.json').catch(()=>({series:[]})),j('data/ovfavs.json').catch(()=>null),j('data/themes.json').catch(()=>({}))]);D=Object.assign(a,g,b,q,wr);D.mangaExtra=mx.items||[];D.ovFavs=ov;D.themes=th||{};D.series=se.series||[];SET=s}catch(e){document.getElementById('app').innerHTML='<div class="empty">Could not load data/site.json.</div>';return}
+let D,SET={};try{const j=u=>fetch(u,{cache:'no-cache'}).then(r=>r.json());const [a,g,b,s,q,wr,mx,se,ov,th,fl]=await Promise.all([j('data/site.json'),j('data/games.json'),j('data/books.json'),j('data/settings.json').catch(()=>({})),j('data/quotes.json').catch(()=>({quotes:[]})),j('data/writing.json').catch(()=>({works:[]})),j('data/manga_extra.json').catch(()=>({items:[]})),j('data/series.json').catch(()=>({series:[]})),j('data/ovfavs.json').catch(()=>null),j('data/themes.json').catch(()=>({})),j('data/films_local.json').catch(()=>({films:[]}))]);D=Object.assign(a,g,b,q,wr);D.mangaExtra=mx.items||[];D.ovFavs=ov;D.themes=th||{};D.series=se.series||[];D.filmsLocal=(fl&&fl.films)||[];SET=s}catch(e){document.getElementById('app').innerHTML='<div class="empty">Could not load data/site.json.</div>';return}
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm=s=>String(s||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
@@ -862,6 +862,12 @@ const MIRA=new Set((D.mir||{}).a||[]),MIRM=new Set((D.mir||{}).m||[]);
 const anime=D.anime.map(a=>({tags:TAGS[a[0]]||'',id:a[0],t:a[1],alt:a[2],st:a[3],sc:a[4],ep:a[5],eps:a[6],type:a[7],img:MIRA.has(a[0])?`covers/a/${a[0]}.jpg`:a[8]?`https://cdn.myanimelist.net/images/anime/${a[8]}.jpg`:'',y:a[9],g:a[10].map(i=>D.animeGenres[i]),mal:a[11],up:a[12],rw:a[13]||0,rwing:a[14]||0,n:norm(a[1]+' '+a[2])}));
 const filmByKey={};
 const films=D.films.map((f,i)=>{const o=Object.assign({},f,{i,logs:f.n,rw:f.rw||0,n:norm(f.t)});filmByKey[norm(f.t)+'|'+f.y]=o;return o});
+/* films added by hand on this site (data/films_local.json); one Letterboxd already has is skipped */
+function mergeLocalFilms(){for(let i=films.length-1;i>=0;i--)if(films[i].lf)films.splice(i,1);
+  (D.filmsLocal||[]).forEach((x,k)=>{const key=norm(x.t)+'|'+(+x.y||0);if(filmByKey[key]&&!filmByKey[key].lf)return;
+    const o={t:x.t,y:+x.y||0,u:x.tmdb?`https://letterboxd.com/tmdb/${x.tmdb}/`:`https://letterboxd.com/search/${encodeURIComponent(x.t)}/`,d:x.d||'',r:+x.r||0,s:x.s==='l'?'l':'w',n:norm(x.t),logs:x.s==='l'?0:1,rv:x.rv||'',lk:x.lk||0,wd:x.wd||'',img:x.img||'',tmdb:x.tmdb||0,rw:+x.rw||0,i:-1,lf:1,lix:k};
+    films.push(o);filmByKey[key]=o})}
+mergeLocalFilms();
 const filmUri={};films.forEach(f=>filmUri[f.u]=f);
 /* TV series: kept on this site (data/series.json) plus anything Letterboxd logged that is really a series */
 const SST={w:['Watched','var(--s2)'],c:['Watching','var(--s1)'],l:['Watchlist','var(--s6)'],h:['On hold','var(--s3)'],d:['Dropped','var(--s4)']};
@@ -2011,12 +2017,39 @@ function openFilm(f){
   if(f.tv)return openSeries(f);
   const ls=listsFor(f);
   modal('films','Film',`${cover(f.t,f.img||'')}<div><h2>${esc(f.t)} <span class="muted" style="font-weight:500">${f.y||''}</span></h2>
-  <div class="bigscore"><div><b class="stars">${f.r?stars(f.r):'–'}</b><small>Your rating</small></div><div><b>${f.logs||(f.s==='w'?1:0)}</b><small>Times logged</small></div><div><b>${f.lk?'♥':'–'}</b><small>Liked</small></div></div>
+  <div class="bigscore"><div><b class="stars">${f.r?stars(f.r):'–'}</b><small>Your rating</small></div><div><b>${f.logs||(f.s==='w'?1:0)}</b><small>Times logged</small></div>${f.lf&&ED.on?'<button class="btn pri" id="m_fedit">Edit</button>':''}<div><b>${f.lk?'♥':'–'}</b><small>Liked</small></div></div>
   <div class="kv"><div>Status</div><div>${f.s==='w'?'Watched':'On watchlist'}</div>${f.wd?`<div>Last watched</div><div>${fdate(f.wd)}</div>`:''}${f.s==='w'?`<div>Rewatched</div><div>${f.rw} time${f.rw===1?'':'s'}</div>`:''}<div>Added</div><div>${fdate(f.d)}</div>${ls.length?`<div>In lists</div><div>${ls.map(l=>`<span class="tag">${esc(l)}</span>`).join('')}</div>`:''}</div>
   <div id="m_x"></div>
   ${f.rv?`<div class="review" style="--c:var(--film)">${esc(f.rv)}</div>`:''}
   <div style="margin-top:14px"><a class="btn pri" href="${esc(f.u)}" target="_blank" rel="noopener">Open on Letterboxd ↗</a></div></div>`);
   filmExtra(f);
+  const fe=$('#m_fedit');if(fe)fe.onclick=()=>editFilmLocal(D.filmsLocal[f.lix]);
+}
+async function editFilmLocal(x){
+  const isNew=!!x.__new;
+  if(isNew){const have=filmByKey[norm(x.t)+'|'+(+x.y||0)];if(have&&!have.lf){toast('Already in your films (from Letterboxd).');return openFilm(have)}if(have&&have.lf)x=D.filmsLocal[have.lix]}
+  const isAdd=!!x.__new;
+  modal('films',isAdd?'Add film':'Edit film',`<div style="grid-column:1/-1"><h2>${esc(x.t)} <span class="muted" style="font-weight:500">${esc(x.y||'')}</span></h2><div class="eform">
+  ${fld('fl_s','Status',x.s==='l'?'l':'w','select:w=Watched|l=Watchlist')}
+  ${fld('fl_r','Your rating (0 to 5)',x.r||0,'number','min="0" max="5" step="0.5"')}
+  ${fld('fl_wd','Watched on',x.wd||(isAdd?new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10):''),'date')}
+  ${fld('fl_rw','Times rewatched',x.rw||0,'number','min="0" step="1"')}
+  <label class="ef"><span>Liked</span><span class="chkline"><input type="checkbox" id="fl_lk" ${x.lk?'checked':''}> ♥ Liked it</span></label>
+  ${fld('fl_rv','Your review (optional)',x.rv||'','textarea')}
+  </div><div class="small muted" style="margin-top:8px">Kept on this site. If you log it on Letterboxd later, the Letterboxd entry takes over.</div>
+  <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="btn pri" id="fl_save">${isAdd?'Add to my films':'Save'}</button>${isAdd?'':'<button class="btn" id="fl_del" style="margin-left:auto;color:var(--s4)">Remove</button>'}</div></div>`);
+  const sync=()=>{const w=gv('fl_s')==='w';['fl_wd','fl_rw','fl_r'].forEach(id=>{const e=$('#'+id);if(e)e.closest('.ef').style.display=w?'':'none'})};
+  $('#fl_s').addEventListener('change',sync);sync();
+  const save=async del=>{toast('Saving…');
+    try{let cur;try{cur=await ghLoad('data/films_local.json')}catch(e){cur={films:[]}}cur.films=cur.films||[];
+      const k=f=>norm(f.t)+'|'+(+f.y||0),i=cur.films.findIndex(f=>k(f)===k(x)),w=gv('fl_s')==='w';
+      const o={t:x.t,y:+x.y||0,tmdb:x.tmdb||0,img:x.img||'',s:w?'w':'l',r:w?+gv('fl_r')||0:0,wd:w?gv('fl_wd'):'',rw:w?+gv('fl_rw')||0:0,lk:$('#fl_lk').checked?1:0,rv:gv('fl_rv'),d:(i>=0&&cur.films[i].d)||new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10)};
+      if(del){if(i>=0)cur.films.splice(i,1)}else if(i>=0)cur.films[i]=o;else cur.films.unshift(o);
+      await ghSave('data/films_local.json',cur,(del?'Remove film ':isAdd?'Add film ':'Update film ')+x.t);
+      D.filmsLocal=cur.films;Object.keys(filmByKey).forEach(q=>{if(filmByKey[q].lf)delete filmByKey[q]});mergeLocalFilms();films.forEach(f=>{if(f.lf)filmUri[f.u]=f});
+      closeM();render();toast(del?'Removed.':'Saved.')}catch(e){toast('Not saved: '+e.message,true)}};
+  $('#fl_save').onclick=()=>save(false);
+  const d=$('#fl_del');if(d)d.onclick=()=>{if(d.dataset.sure!=='1'){d.dataset.sure='1';d.textContent='Tap again to remove';return}save(true)};
 }
 
 let _SD=null;
@@ -2569,7 +2602,7 @@ async function viaApi(kind,q){
   }
   if(kind==='films'&&SET.tmdbKey){
     const [mv,tv]=await Promise.all(['movie','tv'].map(k=>fetch(`https://api.themoviedb.org/3/search/${k}?api_key=${SET.tmdbKey}&query=${encodeURIComponent(q)}&include_adult=false`).then(r=>r.json()).catch(()=>({}))));
-    const A=(mv.results||[]).map(m=>({t:m.title,alt:m.original_title!==m.title?m.original_title:'',y:(m.release_date||'').slice(0,4),meta:'Film'+(m.vote_average?' · TMDB '+m.vote_average.toFixed(1):''),sum:m.overview||'',img:m.poster_path?'https://image.tmdb.org/t/p/w342'+m.poster_path:'',url:'https://www.themoviedb.org/movie/'+m.id,pop:m.popularity||0}));
+    const A=(mv.results||[]).map(m=>({mv:m.id,t:m.title,alt:m.original_title!==m.title?m.original_title:'',y:(m.release_date||'').slice(0,4),meta:'Film'+(m.vote_average?' · TMDB '+m.vote_average.toFixed(1):''),sum:m.overview||'',img:m.poster_path?'https://image.tmdb.org/t/p/w342'+m.poster_path:'',url:'https://www.themoviedb.org/movie/'+m.id,pop:m.popularity||0}));
     const B=(tv.results||[]).map(m=>({tv:m.id,t:m.name,alt:m.original_name!==m.name?m.original_name:'',y:(m.first_air_date||'').slice(0,4),meta:'TV series'+(m.vote_average?' · TMDB '+m.vote_average.toFixed(1):''),sum:m.overview||'',img:m.poster_path?'https://image.tmdb.org/t/p/w342'+m.poster_path:'',url:'https://www.themoviedb.org/tv/'+m.id,pop:m.popularity||0}));
     return [...A,...B].sort((p,q)=>q.pop-p.pop).slice(0,20);
   }
@@ -2649,11 +2682,12 @@ function showExt(res,kind,q){
     openExt(kind,r)});
 }
 function openExt(kind,r){
-  const canAdd=OWNER()&&((kind==='anime'||kind==='manga')?!!r.malId:kind==='films'?!!r.tv:(kind==='books'||kind==='games'));
+  const canAdd=OWNER()&&((kind==='anime'||kind==='manga')?!!r.malId:kind==='films'?!!(r.tv||r.mv):(kind==='books'||kind==='games'));
   setTimeout(()=>{const b=$('#x_add');if(!b)return;b.onclick=()=>{
     if(!ED.on){toast(ED.token?'Turn editing on first (pencil button at the top).':'Set up editing first (pencil button at the top).',true);editSetup();return}
     if(kind==='anime'||kind==='manga')return editMal(kind,{malId:r.malId,t:r.t,eps:0,chs:0});
     if(kind==='films'&&r.tv)return editSeries({id:r.tv,t:r.t,y:r.y,img:r.img||'',st:'l'});
+    if(kind==='films')return editFilmLocal({__new:1,t:r.t,y:+r.y||0,tmdb:r.mv,img:r.img||'',s:'w'});
     const y=String(r.y||'');
     if(kind==='books')return editBook({__new:1,t:r.t,a:r.a||'',p:r.p||'',y:y,img:r.img||'',st:'toread',sh:[]});
     editGame({__new:1,t:r.t,img:r.img||'',pf:r.pf||[],g:r.g||[],dev:r.dev||[],rel:r.rel||(y?y+'-01-01':''),shelf:'Wish List'});
