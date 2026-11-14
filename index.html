@@ -359,6 +359,7 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .modal .mh{display:flex;justify-content:space-between;align-items:center;background:var(--bar);color:#fff;padding:10px 14px}
 .modal .mh span{font-size:11px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;display:flex;gap:8px;align-items:center}
 .modal .mh button{background:none;border:1px solid #4a2a58;color:#fff;width:30px;height:30px;cursor:pointer}
+.modal .mh .mhshare{margin-left:auto;margin-right:8px;display:grid;place-items:center}
 .mb{display:grid;grid-template-columns:180px minmax(0,1fr);gap:20px;padding:18px}
 .mb>*{min-width:0}
 .mb h2{font-size:24px;line-height:1.15}
@@ -702,6 +703,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:v
       <button type="submit" aria-label="Search">Search</button>
     </form>
     <button class="iconbtn" id="editbtn" aria-label="Edit mode" title="Edit mode"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/></svg></button>
+    <button class="iconbtn" id="sharebtn" aria-label="Share this page" title="Share this page"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square" aria-hidden="true"><path d="M12 3v12"/><path d="M7 8l5-5 5 5"/><path d="M5 13v7h14v-7"/></svg></button>
     <button class="iconbtn" id="theme" aria-label="Toggle dark mode" title="Toggle dark mode">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><rect x="2" y="2" width="12" height="12" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="2" y="2" width="6" height="12"/></svg>
     </button>
@@ -906,6 +908,9 @@ function go(){
   let h=(location.hash||'').replace('#','');
   if(h==='edit'){store.set('owner',true);syncEditBtn();history.replaceState(null,'','#overview');h='overview';setTimeout(editSetup,300)}
   if(h==='hof'&&route!=='hof')hofSeg='home';
+  if(!h.startsWith('item/'))$('#ov').classList.remove('show');
+  if(h.startsWith('item/')){const p=h.split('/'),k=p[1],id=decodeURIComponent(p.slice(2).join('/'));
+    if(SHK[k]){route=SHK[k][0];document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('on',a.dataset.r===route));render();setTimeout(()=>openFromLink(k,id),50);return}}
   if(h.startsWith('read/')){const p=h.split('/');RD={id:decodeURIComponent(p[1]||''),n:Math.max(0,(parseInt(p[2])||1)-1)};route='read';document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('on',a.dataset.r==='stories'));render();window.scrollTo(0,0);return}
   if(!ROUTES.some(r=>r[0]===h))h='overview';
   route=h;
@@ -913,6 +918,25 @@ function go(){
   render();window.scrollTo(0,0);
 }
 window.addEventListener('hashchange',go);
+/* sharing: works the same in the browser and in the home-screen app (which has no address bar) */
+const BASEURL=location.origin+location.pathname;
+async function shareLink(url,title){
+  try{if(navigator.share){await navigator.share({title:title||'Saturn Collections',url});return}}catch(e){if(e&&e.name==='AbortError')return}
+  try{await navigator.clipboard.writeText(url);toast('Link copied')}catch(e){prompt('Copy this link:',url)}
+}
+const PAGEN={overview:'Overview',hof:'Hall of Fame',anime:'Anime',manga:'Manga',films:'Films',games:'Games',books:'Books',stories:'Stories',search:'Search',wrapped:'Wrapped'};
+$('#sharebtn').onclick=()=>{
+  if(route==='read'&&RD){const w=[...works,...(DR?DR.works:[])].find(x=>x.id===RD.id);return shareLink(BASEURL+'#read/'+encodeURIComponent(RD.id),w?w.t+' · Rajeel Javed':'Saturn Collections')}
+  shareLink(BASEURL+'#'+route,(PAGEN[route]||'')+' · Saturn Collections')};
+let __sh=null;
+const SHK={a:['anime',x=>x.id],m:['manga',x=>x.id],f:['films',x=>norm(x.t)+'|'+(+x.y||0)],s:['films',x=>x.id],g:['games',x=>x.id||('i'+x.i)],b:['books',x=>x.id]};
+function shareWrap(k,fn){return function(x){try{if(x&&!x.__new)__sh={u:BASEURL+'#item/'+k+'/'+encodeURIComponent(SHK[k][1](x)),t:(x.t||x.title||'')+' · Saturn Collections'}}catch(e){__sh=null}return fn.apply(this,arguments)}}
+function openFromLink(k,id){
+  const f={a:()=>anime.find(x=>String(x.id)===id),m:()=>manga.find(x=>String(x.id)===id),f:()=>films.find(x=>norm(x.t)+'|'+(+x.y||0)===id),
+    s:()=>(seriesOwn||[]).find(x=>String(x.id)===id),g:()=>games.find(x=>String(x.id||('i'+x.i))===id),b:()=>books.find(x=>String(x.id)===id)}[k];
+  const it=f&&f();if(!it){toast('That item is no longer on the list.');return}
+  ({a:openAnime,m:openManga,f:openFilm,s:openSeries,g:openGame,b:openBook})[k](it)}
+openAnime=shareWrap('a',openAnime);openManga=shareWrap('m',openManga);openFilm=shareWrap('f',openFilm);openSeries=shareWrap('s',openSeries);openGame=shareWrap('g',openGame);openBook=shareWrap('b',openBook);
 function render(){({wrapped:rWrapped,manga:rManga,books:rBooks,hof:rHof,overview:rOverview,anime:rAnime,films:rFilms,games:rGames,stories:rStories,read:rRead,search:rSearch})[route]()}
 
 /* ---------- overview ---------- */
@@ -2355,7 +2379,7 @@ async function rRead(){
   if(multi)store.set('rd_'+w.id,n);
   const fs=store.get('rd_fs',19),poem=(w.tags||[]).includes('poem');
   $('#app').innerHTML=`<div class="rdbar"><i id="rdprog"></i></div><div class="reader">
-  <div class="rdtop"><a href="#stories" class="rdback">← Writing</a><div class="rdctl">${multi?`<select id="rd_ch" aria-label="Chapter">${ch.map((x,i)=>`<option value="${i}" ${i===n?'selected':''}>${esc(chName(w,i))}</option>`).join('')}</select>`:''}<button class="btn" id="rd_sm" title="Smaller text" aria-label="Smaller text">A−</button><button class="btn" id="rd_lg" title="Larger text" aria-label="Larger text">A+</button>${ED.on?`<button class="btn" id="rd_ed">✎ Edit${multi?' chapter':''}</button>`:''}</div></div>
+  <div class="rdtop"><a href="#stories" class="rdback">← Writing</a><div class="rdctl">${multi?`<select id="rd_ch" aria-label="Chapter">${ch.map((x,i)=>`<option value="${i}" ${i===n?'selected':''}>${esc(chName(w,i))}</option>`).join('')}</select>`:''}<button class="btn" id="rd_sm" title="Smaller text" aria-label="Smaller text">A−</button><button class="btn" id="rd_lg" title="Larger text" aria-label="Larger text">A+</button><button class="btn" id="rd_sh" title="Share this story">Share</button>${ED.on?`<button class="btn" id="rd_ed">✎ Edit${multi?' chapter':''}</button>`:''}</div></div>
   <article class="rdpaper" id="rdp" style="--fs:${fs}px">
     <header class="rdh">${n===0||!multi?`<div class="rdk">${esc(wKind(w))}${w.st!=='complete'?' · '+(WST[w.st]||''):''}${w.priv?' · 🔒 Private':''}</div><h1>${esc(w.t)}</h1><div class="rdm">${esc(PEN())} · ${fdate(w.date)} · ${multi?ch.length+' chapters · ':''}${fmt(w.words||0)} words · ${wMin(w)} min read</div>`:`<div class="rdk"><a href="#read/${id}">${esc(w.t)}</a></div>`}${multi?`<h2 class="rdch">${esc(chName(w,n))}</h2>`:''}</header>
     <div class="rdtext${poem?' poem':''}">${c.h||'<p class="muted">Nothing written here yet.</p>'}</div>
@@ -2366,7 +2390,7 @@ async function rRead(){
   ${multi?`<div class="box rdtoc"><div class="box-h"><h2>Chapters</h2><span class="small muted">${fmt(w.words||0)} words</span></div><ol>${ch.map((x,i)=>`<li class="${i===n?'on':''}"><a href="#read/${id}/${i+1}"><span>${esc(chName(w,i))}</span><span class="mono small muted">${fmt((w.chw||[])[i]||wcount(x.h))} words</span></a></li>`).join('')}</ol></div>`:''}
   </div>`;
   const setFs=d=>{const v=Math.max(15,Math.min(26,store.get('rd_fs',19)+d));store.set('rd_fs',v);$('#rdp').style.setProperty('--fs',v+'px')};
-  $('#rd_sm').onclick=()=>setFs(-1);$('#rd_lg').onclick=()=>setFs(1);
+  $('#rd_sm').onclick=()=>setFs(-1);$('#rd_lg').onclick=()=>setFs(1);$('#rd_sh').onclick=()=>shareLink(BASEURL+'#read/'+encodeURIComponent(w.id),w.t+' · Rajeel Javed');
   const sel=$('#rd_ch');if(sel)sel.onchange=()=>{location.hash=`read/${id}/${+sel.value+1}`};
   const ed=$('#rd_ed');if(ed)ed.onclick=()=>chapEditor({label:w.t+(multi?' · '+chName(w,n):''),t:c.t||'',h:c.h||'',key:w.id+'_'+n,named:multi,onSave:async(h,t)=>{const E=Object.assign({},w,{tags:(w.tags||[]).slice(),ch:ch.map(x=>({...x}))});E.ch[n]={t,h};const ok=await saveWork(E);if(ok){if(!w.priv)WCACHE[w.id]=E.ch}return ok},onClose:()=>render()});
   rdProg();
@@ -2493,12 +2517,13 @@ async function editWork(w){
 function modal(k,label,inner){
   $('#modal').innerHTML=`<div class="mh" style="border-bottom:3px solid ${MED[k].c}"><span><i style="width:8px;height:8px;background:${MED[k].c};display:inline-block"></i>${esc(label)}</span><button id="mx" aria-label="Close">✕</button></div><div class="mb">${inner}</div>`;
   $('#ov').classList.add('show');$('#mx').onclick=closeM;
+  if(__sh){const sh=__sh;__sh=null;const b=document.createElement('button');b.id='m_share';b.type='button';b.className='mhshare';b.title='Share';b.setAttribute('aria-label','Share');b.innerHTML=$('#sharebtn').innerHTML;b.onclick=()=>shareLink(sh.u,sh.t);$('#modal .mh').insertBefore(b,$('#mx'))}
   const me=$('#m_edit'),bs=$('#modal .bigscore');
   if(me&&bs){const btn=document.createElement('button');btn.type='button';btn.id='m_edit';btn.className='bsedit';btn.innerHTML='<b>✎</b><small>Edit</small>';btn.title='Edit';me.replaceWith(document.createComment(''));
     const st=[...bs.children].find(d=>{const b=d.querySelector('b');return b&&b.textContent==='■'});if(st)st.after(btn);else bs.appendChild(btn)}
   else if(me){me.classList.add('mhedit');$('#modal .mh').insertBefore(me,$('#mx'))}
 }
-function closeM(){$('#ov').classList.remove('show')}
+function closeM(){$('#ov').classList.remove('show');__sh=null;if((location.hash||'').startsWith('#item/'))history.replaceState(null,'','#'+route)}
 $('#ov').onclick=e=>{if(e.target.id==='ov')closeM()};
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeM()});
 
