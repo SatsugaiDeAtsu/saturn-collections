@@ -1,0 +1,25 @@
+name: probe
+on: workflow_dispatch
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          mkdir out && cd out && python3 - <<'PY'
+          import re,urllib.request,xml.etree.ElementTree as ET
+          UA={'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36'}
+          x=urllib.request.urlopen(urllib.request.Request('https://medium.com/feed/@rajeeljaved',headers=UA)).read()
+          r=ET.fromstring(x);ns={'content':'http://purl.org/rss/1.0/modules/content/'}
+          for it in r.iter('item'):
+            t=it.findtext('title');c=it.findtext('content:encoded',namespaces=ns) or ''
+            imgs=re.findall(r'<img[^>]+src="([^"]+)"',c)
+            print('POST',t,len(imgs),imgs[:3])
+            slug=re.sub(r'[^a-z0-9]+','-',t.lower()).strip('-')
+            for k,u in enumerate(imgs[:3]):
+              u2=re.sub(r'/max/\d+/','/max/2000/',u)
+              try:
+                open(f'{slug}-{k}.img','wb').write(urllib.request.urlopen(urllib.request.Request(u2,headers=UA)).read())
+              except Exception as e: print('ERR',u2,e)
+          PY
+      - uses: actions/upload-artifact@v4
+        with: {name: med, path: out}
