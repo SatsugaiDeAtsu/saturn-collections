@@ -15,6 +15,7 @@ jobs:
             t=it.findtext('title');c=it.findtext('content:encoded',namespaces=ns) or ''
             imgs=re.findall(r'<img[^>]+src="([^"]+)"',c)
             print('POST',t,len(imgs),[i for i in imgs if 'cdn-images' in i][:3])
+            open(re.sub(r'[^a-z0-9]+','-',t.lower()).strip('-')+'.html','w').write(c)
             slug=re.sub(r'[^a-z0-9]+','-',t.lower()).strip('-')
             for k,u in enumerate([i for i in imgs if 'cdn-images' in i][:3]):
               u2=re.sub(r'/max/\d+/','/max/2000/',u)
