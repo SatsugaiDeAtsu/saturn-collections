@@ -359,6 +359,9 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .modal .mh{display:flex;justify-content:space-between;align-items:center;background:var(--bar);color:#fff;padding:10px 14px}
 .modal .mh span{font-size:11px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;display:flex;gap:8px;align-items:center}
 .modal .mh button{background:none;border:1px solid #4a2a58;color:#fff;width:30px;height:30px;cursor:pointer}
+.mwcov{width:100%;max-width:240px}.mwcov .wcov{width:100%;aspect-ratio:2/3;height:auto}
+.wsum{margin-top:14px;font-family:var(--serif,Georgia,serif);font-size:15.5px;line-height:1.65;color:var(--ink)}.wsum p{margin:0 0 10px}
+.wtoc{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}.wtoc li a{display:flex;justify-content:space-between;gap:10px;padding:9px 2px;border-bottom:1px solid var(--line);color:var(--ink);text-decoration:none}.wtoc li a:hover{background:var(--soft,rgba(0,0,0,.03))}
 .modal .mh .mhshare{margin-left:auto;margin-right:8px;display:grid;place-items:center}
 .mb{display:grid;grid-template-columns:180px minmax(0,1fr);gap:20px;padding:18px}
 .mb>*{min-width:0}
@@ -929,14 +932,14 @@ $('#sharebtn').onclick=()=>{
   if(route==='read'&&RD){const w=[...works,...(DR?DR.works:[])].find(x=>x.id===RD.id);return shareLink(BASEURL+'#read/'+encodeURIComponent(RD.id),w?w.t+' · Rajeel Javed':'Saturn Collections')}
   shareLink(BASEURL+'#'+route,(PAGEN[route]||'')+' · Saturn Collections')};
 let __sh=null;
-const SHK={a:['anime',x=>x.id],m:['manga',x=>x.id],f:['films',x=>norm(x.t)+'|'+(+x.y||0)],s:['films',x=>x.id],g:['games',x=>x.id||('i'+x.i)],b:['books',x=>x.id]};
+const SHK={a:['anime',x=>x.id],m:['manga',x=>x.id],f:['films',x=>norm(x.t)+'|'+(+x.y||0)],s:['films',x=>x.id],g:['games',x=>x.id||('i'+x.i)],b:['books',x=>x.id],w:['stories',x=>x.id]};
 function shareWrap(k,fn){return function(x){try{if(x&&!x.__new)__sh={u:BASEURL+'#item/'+k+'/'+encodeURIComponent(SHK[k][1](x)),t:(x.t||x.title||'')+' · Saturn Collections'}}catch(e){__sh=null}return fn.apply(this,arguments)}}
 function openFromLink(k,id){
   const f={a:()=>anime.find(x=>String(x.id)===id),m:()=>manga.find(x=>String(x.id)===id),f:()=>films.find(x=>norm(x.t)+'|'+(+x.y||0)===id),
-    s:()=>(seriesOwn||[]).find(x=>String(x.id)===id),g:()=>games.find(x=>String(x.id||('i'+x.i))===id),b:()=>books.find(x=>String(x.id)===id)}[k];
+    s:()=>(seriesOwn||[]).find(x=>String(x.id)===id),g:()=>games.find(x=>String(x.id||('i'+x.i))===id),b:()=>books.find(x=>String(x.id)===id),w:()=>wById(id)}[k];
   const it=f&&f();if(!it){toast('That item is no longer on the list.');return}
-  ({a:openAnime,m:openManga,f:openFilm,s:openSeries,g:openGame,b:openBook})[k](it)}
-openAnime=shareWrap('a',openAnime);openManga=shareWrap('m',openManga);openFilm=shareWrap('f',openFilm);openSeries=shareWrap('s',openSeries);openGame=shareWrap('g',openGame);openBook=shareWrap('b',openBook);
+  ({a:openAnime,m:openManga,f:openFilm,s:openSeries,g:openGame,b:openBook,w:openWork})[k](it)}
+openAnime=shareWrap('a',openAnime);openManga=shareWrap('m',openManga);openFilm=shareWrap('f',openFilm);openSeries=shareWrap('s',openSeries);openGame=shareWrap('g',openGame);openBook=shareWrap('b',openBook);openStory=shareWrap('w',openStory);
 function render(){({wrapped:rWrapped,manga:rManga,books:rBooks,hof:rHof,overview:rOverview,anime:rAnime,films:rFilms,games:rGames,stories:rStories,read:rRead,search:rSearch})[route]()}
 
 /* ---------- overview ---------- */
@@ -957,7 +960,7 @@ function rOverview(){
   books.filter(b=>b.dr||(b.d&&b.d>'2026-11-08')).sort((a,b)=>(b.dr||b.d).localeCompare(a.dr||a.d)).slice(0,8).forEach(b=>act.push({img:b.img||'',d:b.dr||b.d,k:'books',t:b.t,w:b.dr?`Finished${b.r?` · ${b.r}★`:''}`:`Added to ${BST[b.st]?BST[b.st][0]:'shelf'}`,o:()=>openBook(b)}));
   films.filter(f=>f.wd).sort((a,b)=>b.wd.localeCompare(a.wd)).slice(0,12).forEach(f=>act.push({img:f.img||'',d:f.wd,k:'films',t:`${f.t} (${f.y})`,w:`Watched${f.r?` · ${stars(f.r)}`:''}`,o:()=>openFilm(f)}));
   games.filter(g=>g.added).sort((a,b)=>b.added.localeCompare(a.added)).slice(0,10).forEach(g=>act.push({img:g.img||'',d:g.added,k:'games',t:g.t,w:`Added to ${g.shelf}${g.r?` · ${g.r}/5`:''}`,o:()=>openGame(g)}));
-  wPub.forEach(w=>act.push({img:w.cover||'',d:w.up||w.date,k:'stories',t:w.t,w:w.mo?'Published on Medium':`${w.up&&w.up>w.date?'Updated':'Wrote'} · ${wKind(w)}`,o:()=>{if(w.mo)window.open(w.medium,'_blank','noopener');else location.hash='read/'+encodeURIComponent(w.id)}}));
+  wPub.forEach(w=>act.push({img:w.cover||'',d:w.up||w.date,k:'stories',t:w.t,w:w.mo?'Published on Medium':`${w.up&&w.up>w.date?'Updated':'Wrote'} · ${wKind(w)}`,o:()=>openWork(w)}));
   act.sort((a,b)=>b.d.localeCompare(a.d));
   const acts=act.slice(0,15);
   window.__acts=acts;
@@ -2188,6 +2191,22 @@ function wcard(w){
     ${own&&!w.priv?`<button class="btn wpin${w.pin?' on':''}" data-pin="${esc(w.id)}" title="${w.pin?'Take it off':'Put it on'} the Literary showcase">${w.pin?'★ Pinned':'☆ Pin'}</button>`:''}${own?`<button class="btn" data-wed="${esc(w.id)}">✎ Edit</button>`:''}</div>
   </div></article>`;
 }
+/* story page: completed stories open a details page first, like a book */
+const wHasPage=w=>w&&!w.mo&&!w.priv&&w.sec==='stories'&&w.st==='complete';
+function openWork(w){if(!w)return;if(w.mo)return void window.open(w.medium,'_blank','noopener');if(wHasPage(w))return openStory(w);location.hash='read/'+encodeURIComponent(w.id)}
+const wTime=m=>m<60?m+' min':Math.floor(m/60)+' h'+(m%60?' '+m%60+' min':'');
+function openStory(w){
+  const n=(w.chn||['']).length,last=store.get('rd_'+w.id,0),id=encodeURIComponent(w.id);
+  const gen=(w.gen&&w.gen.length?w.gen:(w.tags||[]).filter(t=>!/^(stories|articles|poem|short|fiction)$/i.test(t)));
+  const chw=w.chw||[];
+  modal('stories','Story',`<div class="mwcov">${wcover(w).replace('data-src=','src=')}</div><div><h2>${esc(w.t)}</h2><div class="muted">by ${esc(PEN())}</div>
+  <div class="bigscore"><div><b>${fmt(w.words||0)}</b><small>Words</small></div><div><b>${wTime(wMin(w))}</b><small>To read</small></div><div><b>${n}</b><small>${n>1?'Chapters':'Chapter'}</small></div></div>
+  <div class="kv">${gen.length?`<div>Genres</div><div>${gen.map(g=>`<span class="tag">${esc(g)}</span>`).join('')}</div>`:''}<div>Status</div><div>Complete</div><div>Published</div><div>${fdate(w.date)}</div>${w.medium?`<div>Also on</div><div><a href="${esc(w.medium)}" target="_blank" rel="noopener">Medium ↗</a></div>`:''}</div>
+  <div class="wsum">${esc(w.sum||w.blurb||'').split(/\n+/).map(x=>`<p>${x}</p>`).join('')}</div>
+  ${n>1?`<div class="sect" style="--c:var(--story);margin-top:16px"><h2><i></i>Chapters <span class="muted mono">${n}</span></h2><ol class="wtoc">${(w.chn||[]).map((c,i)=>`<li><a href="#read/${id}/${i+1}"><span>${esc(chName(w,i))}</span><span class="muted mono small">${chw[i]?fmt(chw[i])+' words · '+wTime(Math.max(1,Math.round(chw[i]/230))):''}</span></a></li>`).join('')}</ol></div>`:''}
+  <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap"><a class="btn pri" href="#read/${id}${n>1&&last>0?'/'+(last+1):''}">${n>1&&last>0?'Continue · '+esc(chName(w,last)):'Start reading'}</a>${n>1&&last>0?`<a class="btn" href="#read/${id}/1">From the start</a>`:''}${ED.on?`<button class="btn" id="m_wed">✎ Edit</button>`:''}</div></div>`);
+  const e=$('#m_wed');if(e)e.onclick=()=>editWork(w);
+}
 /* private drafts: AES-GCM, key from the passphrase with PBKDF2-SHA256 (250k rounds) */
 const u8=b=>Uint8Array.from(atob(b),c=>c.charCodeAt(0));
 const b64u=a=>{const u=new Uint8Array(a);let s='';for(let i=0;i<u.length;i+=0x8000)s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(s)};
@@ -2275,7 +2294,7 @@ async function wChapters(w){
   return WCACHE[w.id]=(await r.json()).ch||[];
 }
 async function wMetaSave(fn,msg){const cur=await ghLoad('data/writing.json');cur.works=cur.works||[];fn(cur.works);await ghSave('data/writing.json',cur,msg);D.works=cur.works;rebuildWorks()}
-const WMETA=['id','t','sec','st','date','tags','blurb','words','cover','cp','medium','pin','chn','chw','up'];
+const WMETA=['id','t','sec','st','date','tags','blurb','sum','gen','words','cover','cp','medium','pin','chn','chw','up'];
 async function saveWork(E,verb){
   const wasPriv=!!(DR&&DR.works.some(x=>x.id===E.id)),wasPub=works.some(x=>x.id===E.id);
   E.ch=E.ch.map(c=>({t:(c.t||'').trim(),h:c.h||''}));
@@ -2325,7 +2344,7 @@ function showcase(){
   return `<section class="box lshow" style="margin-top:16px"><div class="box-h"><h2>Literary showcase</h2><a class="small link" href="#stories">All writing →</a></div><div class="box-b">${P.length?`<div class="lsrow">${P.map((w,i)=>`<div class="lst" data-rd="${esc(w.id)}" tabindex="0" role="link">${wcover(w,`<div class="wbl"><span>${esc(w.blurb||'')}</span></div>`)}<div class="tt">${esc(w.t)}</div><div class="ss">${esc(wKind(w))} · ${(w.chn||['']).length>1?w.chn.length+' chapters':wMin(w)+' min read'}</div>${ED.on?`<div class="lsmv"><button data-lsm="${i}:-1" ${i?'':'disabled'} title="Move left">‹</button><button data-lsu="${esc(w.id)}" title="Take off the showcase">✕</button><button data-lsm="${i}:1" ${i<P.length-1?'':'disabled'} title="Move right">›</button></div>`:''}</div>`).join('')}</div>`:'<div class="muted small">Pin pieces on the Stories page to show them here.</div>'}</div></section>`;
 }
 function bindShowcase(){
-  document.querySelectorAll('.lst').forEach(el=>{const open=()=>{location.hash='read/'+encodeURIComponent(el.dataset.rd)};el.onclick=e=>{if(e.target.closest('button'))return;open()};el.onkeydown=e=>{if(e.key==='Enter')open()}});
+  document.querySelectorAll('.lst').forEach(el=>{const open=()=>{openWork(wById(el.dataset.rd))};el.onclick=e=>{if(e.target.closest('button'))return;open()};el.onkeydown=e=>{if(e.key==='Enter')open()}});
   document.querySelectorAll('[data-lsm]').forEach(b=>b.onclick=e=>{e.stopPropagation();const [i,d]=b.dataset.lsm.split(':').map(Number);movePin(i,d)});
   document.querySelectorAll('[data-lsu]').forEach(b=>b.onclick=e=>{e.stopPropagation();togglePin(b.dataset.lsu)});
 }
@@ -2351,7 +2370,7 @@ async function rStories(){
   ${body}
   ${S.sec!=='drafts'?'<div class="note">Pieces also published on Medium link back there, and new Medium posts show up here on their own.</div>':''}`;
   document.querySelectorAll('[data-ws]').forEach(b=>b.onclick=()=>{S.sec=b.dataset.ws;rStories()});
-  document.querySelectorAll('.wcard').forEach(el=>el.onclick=e=>{if(e.target.closest('a,button'))return;const w=[...all,...(DR?DR.works:[])].find(x=>x.id===el.dataset.w);if(!w)return;if(w.mo)window.open(w.medium,'_blank','noopener');else location.hash='read/'+encodeURIComponent(w.id)});
+  document.querySelectorAll('.wcard').forEach(el=>el.onclick=e=>{if(e.target.closest('a,button'))return;openWork([...all,...(DR?DR.works:[])].find(x=>x.id===el.dataset.w))});
   document.querySelectorAll('[data-pin]').forEach(b=>b.onclick=()=>togglePin(b.dataset.pin));
   document.querySelectorAll('[data-wed]').forEach(b=>b.onclick=()=>editWork(wById(b.dataset.wed)));
   const wn=$('#wnew');if(wn)wn.onclick=()=>editWork(null);
@@ -2480,6 +2499,8 @@ async function editWork(w){
     ${fld('w_tags','Tags (comma separated)',(E.tags||[]).join(', '))}
     ${fld('w_med','Medium link (optional)',E.medium,'url')}
     ${fld('w_bl','Short description (leave empty to use the opening lines)',E.blurb,'textarea')}
+    ${fld('w_sum','Back-cover summary (shown on the story page; no spoilers)',E.sum||'','textarea')}
+    ${fld('w_gen','Genres (comma separated, shown on the story page)',(E.gen||[]).join(', '))}
     <div class="ef" style="grid-column:1/-1"><span>Cover picture</span><div class="wcovrow"><div id="w_cprev" class="wcovp">${wcover(E)}</div><div class="wcovc"><input id="w_cov" placeholder="Picture link, or upload one" value="${esc(E.cover||'')}"><div style="display:flex;gap:6px;flex-wrap:wrap"><button class="btn" type="button" id="w_up">Upload picture</button><button class="btn" type="button" id="w_cx">No picture</button></div><span class="small muted">Without a picture, a title cover is drawn for it.</span></div></div><input type="file" id="w_upf" accept="image/*" hidden></div>
     <label class="ef"><span>Visibility</span><span class="chkline"><input type="checkbox" id="w_priv" ${E.priv?'checked':''}> Private draft (passphrase-locked, hidden from visitors)</span></label>
     <label class="ef"><span>Literary showcase</span><span class="chkline"><input type="checkbox" id="w_pin" ${E.pin?'checked':''} ${E.priv?'disabled':''}> Pinned on the overview</span></label>
@@ -2492,7 +2513,7 @@ async function editWork(w){
     document.querySelectorAll('[data-cx]').forEach(b=>b.onclick=()=>{if(b.dataset.sure){E.ch.splice(+b.dataset.cx,1);draw();return}b.dataset.sure=1;b.textContent='Remove?';setTimeout(()=>{if(b.isConnected){delete b.dataset.sure;b.textContent='✕'}},3000)});
     document.querySelectorAll('[data-ce]').forEach(b=>b.onclick=()=>{collect();const i=+b.dataset.ce;chapEditor({label:(E.t||'New piece')+(E.ch.length>1?' · '+chName({chn:E.ch.map(x=>x.t)},i):''),t:E.ch[i].t,h:E.ch[i].h,key:(E.id||'new')+'_'+i,named:true,onSave:async(h,t)=>{E.ch[i]={t,h};const ok=await doSave(true);return ok},onClose:()=>{if($('#w_chs'))draw()}})});
   };
-  const collect=()=>{if(!$('#w_t'))return;E.t=gv('w_t');E.sec=gv('w_sec');E.st=gv('w_st');E.date=gv('w_date')||E.date;E.tags=gv('w_tags').split(',').map(s=>s.trim()).filter(Boolean);E.medium=gv('w_med');E.blurb=gv('w_bl');E.cover=gv('w_cov');E.priv=$('#w_priv').checked?1:0;
+  const collect=()=>{if(!$('#w_t'))return;E.t=gv('w_t');E.sec=gv('w_sec');E.st=gv('w_st');E.date=gv('w_date')||E.date;E.tags=gv('w_tags').split(',').map(s=>s.trim()).filter(Boolean);E.medium=gv('w_med');E.blurb=gv('w_bl');E.sum=gv('w_sum');E.gen=gv('w_gen').split(',').map(x=>x.trim()).filter(Boolean);E.cover=gv('w_cov');E.priv=$('#w_priv').checked?1:0;
     const pin=$('#w_pin').checked&&!E.priv,had=(works.find(x=>x.id===E.id)||{}).pin;E.pin=pin?(had||Math.max(0,...works.map(x=>x.pin||0))+1):0};
   const doSave=async quiet=>{collect();
     if(!E.t){toast('Give it a title first.',true);return false}
@@ -2573,7 +2594,7 @@ function rSearch(){
   <div class="tabs" style="border:0;border-bottom:1px solid var(--line)">${['anime','manga','films','games','books','characters','people'].map(k=>`<button data-x="${k}" class="${S.ext===k?'on':''}" style="--c:${MED[k].c}">${k==='films'?'Films & series':MED[k].name}</button>`).join('')}</div>
   <div class="box-b" id="xbody"></div>
   <div class="small muted srccred">Where results come from: anime and manga from MyAnimeList; characters and people from MyAnimeList through Jikan; films and series from TMDB (The Movie Database); games from IGDB; books from Goodreads, Google Books or Open Library. Your own collection comes from MyAnimeList, Letterboxd, Medium and this site.</div></div>`;
-  document.querySelectorAll('[data-wr]').forEach(el=>el.onclick=()=>{const w=L.stories.find(x=>x.id===el.dataset.wr);if(!w)return;if(w.mo)window.open(w.medium,'_blank','noopener');else location.hash='read/'+encodeURIComponent(w.id)});
+  document.querySelectorAll('[data-wr]').forEach(el=>el.onclick=()=>openWork(L.stories.find(x=>x.id===el.dataset.wr)));
   document.querySelectorAll('[data-hp]').forEach(el=>el.onclick=()=>{const p=L.hofp[+el.dataset.hp];openMal({k:p.k,id:p.id,name:p.name,pic:p.pic})});
   document.querySelectorAll('[data-l]').forEach(el=>el.onclick=()=>{const [k,i]=el.dataset.l.split(':');const x=L[k][+i];({anime:openAnime,manga:openManga,books:openBook,films:openFilm,games:openGame})[k](x)});
   document.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{S.ext=b.dataset.x;document.querySelectorAll('[data-x]').forEach(x=>x.classList.toggle('on',x===b));extSearch()});
