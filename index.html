@@ -2199,11 +2199,14 @@ function openStory(w){
   const n=(w.chn||['']).length,last=store.get('rd_'+w.id,0),id=encodeURIComponent(w.id);
   const gen=(w.gen&&w.gen.length?w.gen:(w.tags||[]).filter(t=>!/^(stories|articles|poem|short|fiction)$/i.test(t)));
   const chw=w.chw||[];
+  /* chapter minutes share out the story's total, so they always add up to it */
+  const chm=(()=>{const T=wMin(w),W=chw.reduce((a,b)=>a+b,0)||1,ex=chw.map(c=>c*T/W),m=ex.map(Math.floor);let left=T-m.reduce((a,b)=>a+b,0);
+    ex.map((e,i)=>[e-m[i],i]).sort((a,b)=>b[0]-a[0]).forEach(([,i])=>{if(left>0){m[i]++;left--}});return m.map(x=>Math.max(1,x))})();
   modal('stories','Story',`<div class="mwcov">${wcover(w).replace('data-src=','src=')}</div><div><h2>${esc(w.t)}</h2><div class="muted">by ${esc(PEN())}</div>
   <div class="bigscore"><div><b>${fmt(w.words||0)}</b><small>Words</small></div><div><b>${wTime(wMin(w))}</b><small>To read</small></div><div><b>${n}</b><small>${n>1?'Chapters':'Chapter'}</small></div></div>
   <div class="kv">${gen.length?`<div>Genres</div><div>${gen.map(g=>`<span class="tag">${esc(g)}</span>`).join('')}</div>`:''}<div>Status</div><div>Complete</div><div>Published</div><div>${fdate(w.date)}</div>${w.medium?`<div>Also on</div><div><a href="${esc(w.medium)}" target="_blank" rel="noopener">Medium ↗</a></div>`:''}</div>
   <div class="wsum">${esc(w.sum||w.blurb||'').split(/\n+/).map(x=>`<p>${x}</p>`).join('')}</div>
-  ${n>1?`<div class="sect" style="--c:var(--story);margin-top:16px"><h2><i></i>Chapters <span class="muted mono">${n}</span></h2><ol class="wtoc">${(w.chn||[]).map((c,i)=>`<li><a href="#read/${id}/${i+1}"><span>${esc(chName(w,i))}</span><span class="muted mono small">${chw[i]?fmt(chw[i])+' words · '+wTime(Math.max(1,Math.round(chw[i]/230))):''}</span></a></li>`).join('')}</ol></div>`:''}
+  ${n>1?`<div class="sect" style="--c:var(--story);margin-top:16px"><h2><i></i>Chapters <span class="muted mono">${n}</span></h2><ol class="wtoc">${(w.chn||[]).map((c,i)=>`<li><a href="#read/${id}/${i+1}"><span>${esc(chName(w,i))}</span><span class="muted mono small">${chw[i]?fmt(chw[i])+' words · '+wTime(chm[i]):''}</span></a></li>`).join('')}</ol></div>`:''}
   <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap"><a class="btn pri" href="#read/${id}${n>1&&last>0?'/'+(last+1):''}">${n>1&&last>0?'Continue · '+esc(chName(w,last)):'Start reading'}</a>${n>1&&last>0?`<a class="btn" href="#read/${id}/1">From the start</a>`:''}${ED.on?`<button class="btn" id="m_wed">✎ Edit</button>`:''}</div></div>`);
   const e=$('#m_wed');if(e)e.onclick=()=>editWork(w);
 }
