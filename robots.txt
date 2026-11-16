@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://satsugaideatsu.github.io/saturn-collections/sitemap.xml

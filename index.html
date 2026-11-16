@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="Cache-Control" content="no-cache">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Saturn Collections</title>
+<title>Saturn Collections · Rajeel Javed (SatsugaiDeAtsu)</title>
 <meta name="google-site-verification" content="BlJpA6hVAqSeKj85wkVMQzxLlJG7xCu_GX_5JqmqpAA" />
 <meta name="description" content="Rajeel Javed (SatsugaiDeAtsu)'s personal media hub: anime, manga, films, series, games, books and original writing, with ratings, favourites and reviews.">
 <meta name="author" content="Rajeel Javed (SatsugaiDeAtsu)">
@@ -714,7 +714,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:v
   <nav class="nav"><div class="nav-in" id="nav"></div></nav>
 </header>
 <main id="app"></main>
-<footer id="foot"></footer>
+<footer id="foot"><p><b>Saturn Collections</b> is Rajeel Javed's (SatsugaiDeAtsu) personal collection of anime, manga, films, series, games, books and original stories.</p></footer>
 <div class="ov" id="ov" role="dialog" aria-modal="true"><div class="modal" id="modal"></div></div>
 
 <script>
@@ -2751,7 +2751,7 @@ function openExt(kind,r){
 }
 
 {const US=D.updateStatus||{};const bad=Object.entries(US).filter(([k,v])=>v!=='ok');
-$('#foot').innerHTML=`Saturn Collections · data from MyAnimeList, Letterboxd, Goodreads, Grouvee, Medium, TMDB, HowLongToBeat and Wikipedia · last refreshed ${fdate(D.generated)}${OWNER()&&bad.length?`<div style="margin-top:6px;color:var(--s4)">Last update had trouble with: ${bad.map(([k,v])=>`<b>${esc(k)}</b> <span class="muted">(${esc(String(v).slice(0,90))})</span>`).join(' · ')}. The previous data is still shown.</div>`:''}${OWNER()&&(D.repoMB||0)>500?`<div style="margin-top:6px;color:var(--s3)">Storage is at ${D.repoMB} MB. Time for the picture clean-up we talked about.</div>`:''}`;}
+$('#foot').innerHTML=`<p style="margin:0 0 6px"><b>Saturn Collections</b> is Rajeel Javed's (SatsugaiDeAtsu) personal collection of anime, manga, films, series, games, books and original stories.</p>Saturn Collections · data from MyAnimeList, Letterboxd, Goodreads, Grouvee, Medium, TMDB, HowLongToBeat and Wikipedia · last refreshed ${fdate(D.generated)}${OWNER()&&bad.length?`<div style="margin-top:6px;color:var(--s4)">Last update had trouble with: ${bad.map(([k,v])=>`<b>${esc(k)}</b> <span class="muted">(${esc(String(v).slice(0,90))})</span>`).join(' · ')}. The previous data is still shown.</div>`:''}${OWNER()&&(D.repoMB||0)>500?`<div style="margin-top:6px;color:var(--s3)">Storage is at ${D.repoMB} MB. Time for the picture clean-up we talked about.</div>`:''}`;}
 syncEditBtn();
 malFinish();
 go();
