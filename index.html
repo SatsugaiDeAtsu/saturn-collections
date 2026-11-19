@@ -852,7 +852,7 @@ function cover(title,img,extra,cls){
   return `<div class="cover ${cls||''}${gold?' gold':''}${pur?' pur':''}" style="--tc:${c}">${RING}<div class="ini">${esc(initials(title))}</div><div class="ct">${esc(title)}</div>${im}${extra||''}</div>`;
 }
 let imgFails=0,imgLoads=0;
-window.__imgFail=el=>{const n=+(el.dataset.try||0);if(n<2){el.dataset.try=n+1;const u=el.src.split('?')[0];setTimeout(()=>{el.src=u+'?r='+(n+1)},1200*(n+1));return}el.remove();imgFails++};
+window.__imgFail=el=>{const n=+(el.dataset.try||0);if(n<4){el.dataset.try=n+1;const u=el.src.split('?')[0];setTimeout(()=>{el.src=u+'?r='+(n+1)},1500*(n+1));return}el.remove();imgFails++};
 document.addEventListener('load',e=>{if(e.target.tagName==='IMG')imgLoads++},true);
 /* our own lazy loader: native loading="lazy" was stalling on some devices */
 const lazyIO='IntersectionObserver' in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const i=e.target;lazyIO.unobserve(i);if(i.dataset.src){i.src=i.dataset.src;i.removeAttribute('data-src')}}}),{rootMargin:'800px 400px'}):null;
