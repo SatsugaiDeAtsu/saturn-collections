@@ -25,9 +25,12 @@ self.addEventListener('fetch',e=>{
   }
   if(r.mode==='navigate'||(/\/data\/[^/]+\.json$/.test(p)&&!u.search)||/\/(index\.html)?$/.test(p)){
     e.respondWith((async()=>{
-      const c=await caches.open(PAGE);
-      try{const res=await fetch(r,{cache:'no-cache'});if(res.ok)c.put(r,res.clone());return res}
-      catch(err){const hit=await c.match(r,{ignoreSearch:r.mode==='navigate'});if(hit)return hit;throw err}
+      const c=await caches.open(PAGE),hit=await c.match(r,{ignoreSearch:r.mode==='navigate'});
+      const net=fetch(r,{cache:'no-cache'}).then(res=>{if(res.ok)c.put(r,res.clone());return res});
+      if(!hit)return net;
+      // slow connection: after 4 seconds show the saved copy; the fresh one still saves for next time
+      e.waitUntil(net.catch(()=>{}));
+      return Promise.race([net.catch(()=>hit),new Promise(ok=>setTimeout(()=>ok(hit),4000))]);
     })());
   }
 });
