@@ -1950,8 +1950,105 @@ def update_series():
     log(f'series details: +{n}, {len(det)} known')
 
 
+def update_music():
+    """Spotify (through the Cloudflare helper) + Last.fm -> data/music.json. Does nothing until Spotify is connected."""
+    W = settings.get('workerUrl', '').rstrip('/')
+    if not W:
+        return
+
+    def sp(path, **q):
+        url = W + '/spotify/api' + path + ('?' + urllib.parse.urlencode(q) if q else '')
+        with urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': UA}), timeout=40) as r:
+            return json.load(r)
+    try:
+        me = sp('/me')
+        if not me.get('id'):
+            raise ValueError(str(me)[:120])
+    except Exception as e:
+        log('music: Spotify not connected yet', e)
+        return
+    out = load_json(os.path.join(DATA, 'music.json'), {})
+    tracks, artists = {}, out.get('artists', {})
+    img = lambda o: ((o or {}).get('images') or [{}])[0].get('url', '')
+
+    def tr(t):
+        if not t or not t.get('id'):
+            return None
+        tracks[t['id']] = {'n': t.get('name', ''), 'ar': [[a.get('id'), a.get('name')] for a in t.get('artists', [])],
+                           'al': (t.get('album') or {}).get('name', ''), 'img': img(t.get('album')), 'ms': t.get('duration_ms', 0),
+                           'y': ((t.get('album') or {}).get('release_date') or '')[:4]}
+        for a in t.get('artists', []):
+            if a.get('id') and a['id'] not in artists:
+                artists[a['id']] = {'n': a.get('name', ''), 'img': '', 'g': []}
+        return t['id']
+
+    def ar(a):
+        artists[a['id']] = {'n': a.get('name', ''), 'img': img(a), 'g': a.get('genres', [])}
+        return a['id']
+    top = {'artists': {}, 'tracks': {}}
+    for rng in ('short_term', 'medium_term', 'long_term'):
+        top['artists'][rng] = [ar(a) for a in sp('/me/top/artists', time_range=rng, limit=50).get('items', [])]
+        top['tracks'][rng] = [x for x in (tr(t) for t in sp('/me/top/tracks', time_range=rng, limit=50).get('items', [])) if x]
+    recent = [{'t': it.get('played_at', ''), 'id': tr(it.get('track'))} for it in sp('/me/player/recently-played', limit=50).get('items', [])]
+    # keep a running play log (Spotify only shows the last 50, so we add new ones each night)
+    seen = {(r['t'], r['id']) for r in out.get('log', [])}
+    plog = out.get('log', []) + [r for r in recent if r['id'] and (r['t'], r['id']) not in seen]
+    plog.sort(key=lambda r: r['t'], reverse=True)
+    pls, off = [], 0
+    while True:
+        j = sp('/me/playlists', limit=50, offset=off)
+        for p in j.get('items', []):
+            if not p:
+                continue
+            own = (p.get('owner') or {}).get('id') == me.get('id') or p.get('collaborative')
+            o = {'id': p['id'], 'n': p.get('name', ''), 'img': img(p), 'desc': p.get('description', ''), 'own': bool(own),
+                 'by': (p.get('owner') or {}).get('display_name', ''), 'items': []}
+            if own:
+                o2 = 0
+                while o2 < 3000:
+                    k = sp(f"/playlists/{p['id']}/items", limit=100, offset=o2)
+                    for it in k.get('items', []):
+                        x = tr(it.get('item') or it.get('track'))
+                        if x:
+                            o['items'].append(x)
+                    if not k.get('next'):
+                        break
+                    o2 += 100
+            pls.append(o)
+        if not j.get('next'):
+            break
+        off += 50
+    fol = []
+    try:
+        fol = [ar(a) for a in sp('/me/following', type='artist', limit=50).get('artists', {}).get('items', [])]
+    except Exception as e:
+        log('music: followed artists failed', e)
+    out.update({'me': {'n': me.get('display_name', ''), 'img': img(me), 'id': me.get('id')}, 'top': top, 'recent': recent, 'log': plog,
+                'playlists': pls, 'followed': fol, 'tracks': {**out.get('tracks', {}), **tracks}, 'artists': artists})
+    # Last.fm: full play counts (only if a username is set in data/settings.json as "lastfm")
+    U = settings.get('lastfm')
+    if U:
+        def lf(method, **q):
+            url = W + '/lastfm?' + urllib.parse.urlencode({'method': method, 'user': U, **q})
+            with urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': UA}), timeout=40) as r:
+                return json.load(r)
+        try:
+            info = lf('user.getinfo').get('user', {})
+            L = {'plays': int(info.get('playcount', 0)), 'since': (info.get('registered') or {}).get('unixtime', '')}
+            for per in ('7day', '1month', '12month', 'overall'):
+                L['artists_' + per] = [[a['name'], int(a['playcount'])] for a in lf('user.gettopartists', period=per, limit=100).get('topartists', {}).get('artist', [])]
+                L['tracks_' + per] = [[t['name'], t['artist']['name'], int(t['playcount'])] for t in lf('user.gettoptracks', period=per, limit=200).get('toptracks', {}).get('track', [])]
+            out['lastfm'] = L
+        except Exception as e:
+            log('music: last.fm failed', e)
+    out['generated'] = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+    with open(os.path.join(DATA, 'music.json'), 'w', encoding='utf-8') as f:
+        json.dump(out, f, ensure_ascii=False, separators=(',', ':'))
+    log(f"music: {len(pls)} playlists, {len(tracks)} songs, {len(artists)} artists, {len(plog)} plays logged")
+
+
 for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd), ('letterboxd films', update_letterboxd_watched),
-                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('book copies', mirror_book_covers), ('grouvee', update_grouvee), ('film ids', update_film_ids), ('film details', update_film_details), ('series', update_series), ('mal details', update_mal_details), ('summaries', update_summaries), ('book details', update_book_details), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('characters', update_char_info), ('people', update_people_info), ('extra manga', update_manga_extra), ('cover mirror', update_cover_mirror)]:
+                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('music', update_music), ('book copies', mirror_book_covers), ('grouvee', update_grouvee), ('film ids', update_film_ids), ('film details', update_film_details), ('series', update_series), ('mal details', update_mal_details), ('summaries', update_summaries), ('book details', update_book_details), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('characters', update_char_info), ('people', update_people_info), ('extra manga', update_manga_extra), ('cover mirror', update_cover_mirror)]:
     try:
         fn()
         status[name] = 'ok'

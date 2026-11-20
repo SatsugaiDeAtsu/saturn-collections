@@ -4,6 +4,10 @@
 //   MAL_CLIENT_SECRET  (secret)  your MAL Client Secret
 //   TWITCH_CLIENT_ID     (text)    for the IGDB game database
 //   TWITCH_CLIENT_SECRET (secret)  for the IGDB game database
+//   SPOTIFY_CLIENT_ID      (text)    from your Spotify developer app
+//   SPOTIFY_CLIENT_SECRET  (secret)  from your Spotify developer app
+//   SPOTIFY_REFRESH_TOKEN  (secret)  shown once after you open /spotify/login
+//   LASTFM_API_KEY         (secret)  from last.fm/api/account/create
 const ORIGIN = 'https://satsugaideatsu.github.io';  // only your site may use this helper
 const MAL = 'https://api.myanimelist.net/v2';
 let igdbToken = null, igdbExp = 0;
@@ -17,6 +21,22 @@ async function igdb(env, body) {
   const r = await fetch('https://api.igdb.com/v4/games', { method: 'POST', headers: { 'Client-ID': env.TWITCH_CLIENT_ID, Authorization: 'Bearer ' + igdbToken, Accept: 'application/json' }, body });
   return r.json();
 }
+
+// ---------- Spotify (read-only: your top artists, plays, playlists, now playing) ----------
+const SP_SCOPES = 'user-top-read user-read-recently-played user-read-currently-playing user-read-playback-state playlist-read-private playlist-read-collaborative user-library-read user-follow-read';
+let spToken = null, spExp = 0;
+async function spAccess(env) {
+  if (spToken && Date.now() < spExp) return spToken;
+  const r = await fetch('https://accounts.spotify.com/api/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded', Authorization: 'Basic ' + btoa(env.SPOTIFY_CLIENT_ID + ':' + env.SPOTIFY_CLIENT_SECRET) }, body: new URLSearchParams({ grant_type: 'refresh_token', refresh_token: env.SPOTIFY_REFRESH_TOKEN }) });
+  const j = await r.json();
+  if (!j.access_token) throw new Error('Spotify login failed: ' + JSON.stringify(j));
+  spToken = j.access_token; spExp = Date.now() + (j.expires_in - 120) * 1000;
+  return spToken;
+}
+// only these read-only Spotify paths may be fetched through this helper
+const SP_OK = [/^\/me$/, /^\/me\/top\/(artists|tracks)$/, /^\/me\/player\/recently-played$/, /^\/me\/player\/currently-playing$/, /^\/me\/playlists$/, /^\/playlists\/[A-Za-z0-9]+(\/items)?$/, /^\/me\/following$/, /^\/me\/albums$/, /^\/me\/tracks$/, /^\/artists\/[A-Za-z0-9]+(\/albums)?$/, /^\/albums\/[A-Za-z0-9]+$/, /^\/tracks\/[A-Za-z0-9]+$/, /^\/search$/];
+const LFM_OK = ['user.getinfo', 'user.gettopartists', 'user.gettoptracks', 'user.gettopalbums', 'user.getrecenttracks', 'user.getweeklyartistchart', 'user.getweeklytrackchart', 'track.getinfo', 'artist.getinfo'];
+const page = (title, body) => new Response(`<!doctype html><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><body style="font:16px system-ui;max-width:640px;margin:40px auto;padding:0 16px;background:#160a1c;color:#eee">${body}</body>`, { headers: { 'Content-Type': 'text/html;charset=utf-8' } });
 
 export default {
   async fetch(req, env) {
@@ -70,6 +90,45 @@ export default {
         if (b.refresh_token) { body.set('grant_type', 'refresh_token'); body.set('refresh_token', b.refresh_token); }
         else { body.set('grant_type', 'authorization_code'); body.set('code', b.code); body.set('code_verifier', b.code_verifier); body.set('redirect_uri', b.redirect_uri); }
         const r = await fetch('https://myanimelist.net/v1/oauth2/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+        return json(await r.json(), r.status);
+      }
+      // ---- Spotify: one-time sign-in, then read-only data ----
+      if (url.pathname === '/spotify/login') {
+        const q = new URLSearchParams({ client_id: env.SPOTIFY_CLIENT_ID, response_type: 'code', redirect_uri: url.origin + '/spotify/callback', scope: SP_SCOPES, show_dialog: 'true' });
+        return Response.redirect('https://accounts.spotify.com/authorize?' + q, 302);
+      }
+      if (url.pathname === '/spotify/callback') {
+        const code = url.searchParams.get('code');
+        if (!code) return page('Spotify', '<h2>Sign-in was cancelled.</h2>');
+        const r = await fetch('https://accounts.spotify.com/api/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded', Authorization: 'Basic ' + btoa(env.SPOTIFY_CLIENT_ID + ':' + env.SPOTIFY_CLIENT_SECRET) }, body: new URLSearchParams({ grant_type: 'authorization_code', code, redirect_uri: url.origin + '/spotify/callback' }) });
+        const j = await r.json();
+        if (!j.refresh_token) return page('Spotify', '<h2>Something went wrong</h2><pre style="white-space:pre-wrap">' + JSON.stringify(j).replace(/</g, '&lt;') + '</pre>');
+        return page('Spotify connected', `<h2>Spotify connected ✓</h2><p>Copy this code and add it in Cloudflare (this Worker → Settings → Variables and Secrets) as a <b>Secret</b> named <b>SPOTIFY_REFRESH_TOKEN</b>. Don't share it with anyone.</p><textarea id="t" readonly style="width:100%;height:120px;background:#000;color:#9f9;font:13px monospace">${j.refresh_token}</textarea><p><button onclick="navigator.clipboard.writeText(document.getElementById('t').value);this.textContent='Copied ✓'" style="font-size:16px;padding:10px 18px">Copy</button></p><p>Then close this page.</p>`);
+      }
+      if (url.pathname === '/spotify/now') {
+        const r = await fetch('https://api.spotify.com/v1/me/player/currently-playing', { headers: { Authorization: 'Bearer ' + await spAccess(env) } });
+        if (r.status === 204) return json({ playing: false });
+        const j = await r.json(), it = j.item;
+        if (!it || !j.is_playing) return json({ playing: false });
+        return json({ playing: true, id: it.id, n: it.name, ar: (it.artists || []).map(a => a.name).join(', '), img: ((it.album || {}).images || [])[0]?.url || '', url: (it.external_urls || {}).spotify || '' });
+      }
+      if (url.pathname.startsWith('/spotify/api/')) {
+        const path = url.pathname.slice('/spotify/api'.length);
+        if (!SP_OK.some(rx => rx.test(path))) return json({ error: 'not allowed' }, 403);
+        const cache = caches.default, key = new Request(url.toString());
+        const hit = await cache.match(key);
+        if (hit) return new Response(hit.body, { status: hit.status, headers: { ...cors, 'Content-Type': 'application/json' } });
+        const r = await fetch('https://api.spotify.com/v1' + path + url.search, { headers: { Authorization: 'Bearer ' + await spAccess(env) } });
+        const out = new Response(await r.text(), { status: r.status, headers: { ...cors, 'Content-Type': 'application/json', 'Cache-Control': 'max-age=600' } });
+        if (r.ok) await cache.put(key, out.clone());
+        return out;
+      }
+      // ---- Last.fm (read-only) ----
+      if (url.pathname === '/lastfm') {
+        const p = new URLSearchParams(url.search), method = (p.get('method') || '').toLowerCase();
+        if (!LFM_OK.includes(method)) return json({ error: 'not allowed' }, 403);
+        p.set('api_key', env.LASTFM_API_KEY); p.set('format', 'json');
+        const r = await fetch('https://ws.audioscrobbler.com/2.0/?' + p, { headers: { 'User-Agent': 'SaturnCollections/1.0' } });
         return json(await r.json(), r.status);
       }
       // update or remove a list entry
