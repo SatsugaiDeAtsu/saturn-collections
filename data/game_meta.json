@@ -2,7 +2,32 @@
 "104334": {
 "avg": 9,
 "chk": "2026-11-17",
-"syn": "Gears of War is a 2006 third-person shooter video game developed by Epic Games and published by Microsoft Game Studios. It is the first installment of the Gears of War series, and was initially released as an exclusive title for the Xbox 360 in November 2006. A Microsoft Windows version, developed in conjunction with People Can Fly, was released in November 2007."
+"syn": "Gears of War is a 2006 third-person shooter video game developed by Epic Games and published by Microsoft Game Studios. It is the first installment of the Gears of War series, and was initially released as an exclusive title for the Xbox 360 in November 2006. A Microsoft Windows version, developed in conjunction with People Can Fly, was released in November 2007.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "gears-of-war",
+"n": "Gears of War",
+"pf": [
+"PC",
+"Xbox One",
+"Xbox 360"
+],
+"mc": 90,
+"age": "Mature",
+"tags": [
+"War",
+"Monsters",
+"invaders"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/854/854f930ed3b39cfd00eca91b7a99c7de.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/342/34219a3368b000d8380714aa34fc85d0.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/95d/95d43a23c2777d6e3f0e99505416da3b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/c4a/c4a31b6dd94540e36695c617dd60f660.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/6c9/6c95c707889a09fb592c04206d90d902.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/e6a/e6a2e2de37eca634f0285adb91263867.jpg"
+]
+}
 },
 "104336": {
 "avg": 10,
@@ -13,17 +38,106 @@
 "dimg": {
 "Road to Ruin": "miss:2026-11-08"
 },
-"syn": "Gears of War 2 is a 2008 third-person shooter video game developed by Epic Games and published by Microsoft Game Studios for the Xbox 360. It is the second installment of the Gears of War series, with lead design by Cliff Bleszinski. The game was released in North America, Europe and Australia on November 7, 2008, and was released in Japan on July 30, 2009."
+"syn": "Gears of War 2 is a 2008 third-person shooter video game developed by Epic Games and published by Microsoft Game Studios for the Xbox 360. It is the second installment of the Gears of War series, with lead design by Cliff Bleszinski. The game was released in North America, Europe and Australia on November 7, 2008, and was released in Japan on July 30, 2009.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "gears-of-war-2",
+"n": "Gears of War 2",
+"pf": [
+"Xbox One",
+"Xbox 360"
+],
+"mc": 93,
+"age": "Mature",
+"tags": [
+"exclusive"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/940/940af6bc2f8bf8a0aeea7f288a476ff9.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/8f6/8f682abd336569c58d30989521d99f4e.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/c17/c17e3e8695eb57d2842c8ae740a2f395.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/d92/d92715d6f3984e0d14bb7c0e2993514d.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/bcb/bcb63724df2898dd2b552e28fde15893.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/ee6/ee6b32fc3cf7627504c8c1f267d17928.jpg"
+]
+}
 },
 "104343": {
 "avg": 20.8,
 "chk": "2026-11-19",
-"syn": "Resident Evil 6 is a 2012 third-person shooter video game developed and published by Capcom. It was released for the PlayStation 3 and Xbox 360 in October 2012, and for Windows in March 2013. It was re-released with all downloadable content for the PlayStation 4 and Xbox One in March 2016, and for the Nintendo Switch in October 2019."
+"syn": "Resident Evil 6 is a 2012 third-person shooter video game developed and published by Capcom. It was released for the PlayStation 3 and Xbox 360 in October 2012, and for Windows in March 2013. It was re-released with all downloadable content for the PlayStation 4 and Xbox One in March 2016, and for the Nintendo Switch in October 2019.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "resident-evil-6",
+"n": "Resident Evil 6",
+"pf": [
+"PC",
+"PlayStation 4",
+"Xbox One",
+"Nintendo Switch",
+"Xbox 360",
+"PlayStation 3",
+"Web"
+],
+"mc": 67,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Multiplayer",
+"Steam Cloud",
+"Atmospheric",
+"steam-trading-cards",
+"Co-op",
+"cooperative",
+"Third Person",
+"Partial Controller Support"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/fe3/fe360941c0dfeff5f463621821fded97.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/5e4/5e40f084bff861a6a6ab4779aa31fab4.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/071/071f2d49c10619f054864e84367e0151.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/39d/39d6ef1c71bf4c24aaef1f85179cd7b4.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/d79/d79911cbb34fda052f6cd7f8b537e325.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/2ad/2ad5e9b4670d7da997ae9d98aa36f7d0.jpg"
+]
+}
 },
 "104353": {
 "avg": 6.8,
 "chk": "2026-11-18",
-"syn": "Resident Evil 3: Nemesis is a 1999 survival horror game developed and published by Capcom  for the PlayStation. It takes place almost concurrently with the events of Resident Evil 2. The player controls the former elite agent Jill Valentine as she escapes from Raccoon City, which has been overrun by zombies."
+"syn": "Resident Evil 3: Nemesis is a 1999 survival horror game developed and published by Capcom  for the PlayStation. It takes place almost concurrently with the events of Resident Evil 2. The player controls the former elite agent Jill Valentine as she escapes from Raccoon City, which has been overrun by zombies.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "resident-evil-3-nemesis",
+"n": "Resident Evil 3: Nemesis",
+"pf": [
+"PC",
+"PlayStation",
+"GameCube",
+"Dreamcast"
+],
+"mc": 75,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Atmospheric",
+"Female Protagonist",
+"Zombies",
+"exclusive",
+"Survival Horror",
+"tank controls",
+"fixed camera"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/b9b/b9bee4017197d132b8c55da5e6e89c57.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/8ba/8ba6b04f3b8d66f6a21e412c9313548b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/5d5/5d5d9be3878ddb7d775026a427cb7e27.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/563/5636280bee1ba1b12e06ec63e383259c.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/83f/83fd0f6aa49b913b89385959e64d8719.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/931/931e8afaa88d05a7e7389c3b1fcf9d66.jpg"
+]
+}
 },
 "104377": {
 "avg": 15.3,
@@ -38,7 +152,41 @@
 "The Executioner": "covers/d/104377_the-executioner.jpg"
 },
 "chk": "2026-11-20",
-"syn": "The Evil Within is a 2014 survival horror game developed by Tango Gameworks and published by Bethesda Softworks. It was directed by Resident Evil series creator Shinji Mikami. The game centers on protagonist Sebastian Castellanos as he is pulled through a distorted world full of nightmarish locations and horrid creatures."
+"syn": "The Evil Within is a 2014 survival horror game developed by Tango Gameworks and published by Bethesda Softworks. It was directed by Resident Evil series creator Shinji Mikami. The game centers on protagonist Sebastian Castellanos as he is pulled through a distorted world full of nightmarish locations and horrid creatures.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "the-evil-within",
+"n": "The Evil Within",
+"pf": [
+"PC",
+"Xbox One",
+"PlayStation 4",
+"Xbox 360",
+"PlayStation 3"
+],
+"mc": 68,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Full controller support",
+"Steam Cloud",
+"Atmospheric",
+"steam-trading-cards",
+"Story Rich",
+"Open World",
+"Third Person",
+"Horror"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/e55/e5556d6b7316595542760d7d06f994a5.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/53e/53e5e79b872c9370756af893a9218584.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/4e6/4e652595daaf9d62e950dda6fd5bbc88.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/088/08859dcb39f841f42f2b267ef811f370.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/640/6401236ce89df564f38031bbee58b6cb.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/235/235c5e4e85c5155b3037963b242bb076.jpg"
+]
+}
 },
 "104386": {
 "avg": 9.9,
@@ -51,7 +199,42 @@
 "Winters’ Expansion": "covers/d/104386_winters-expansion.jpg"
 },
 "chk": "2026-11-19",
-"syn": "Resident Evil Village  is a 2021 survival horror game developed and published by Capcom. It is the sequel to Resident Evil 7: Biohazard (2017). Players control Ethan Winters, who searches for his kidnapped daughter in a mysterious European village filled with mutant creatures, which also holds secrets around the Umbrella Corporation."
+"syn": "Resident Evil Village  is a 2021 survival horror game developed and published by Capcom. It is the sequel to Resident Evil 7: Biohazard (2017). Players control Ethan Winters, who searches for his kidnapped daughter in a mysterious European village filled with mutant creatures, which also holds secrets around the Umbrella Corporation.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "resident-evil-village",
+"n": "Resident Evil: Village",
+"pf": [
+"PC",
+"PlayStation 5",
+"Xbox One",
+"PlayStation 4",
+"Xbox Series S/X",
+"Nintendo Switch",
+"iOS"
+],
+"mc": 83,
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Multiplayer",
+"Full controller support",
+"Atmospheric",
+"Story Rich",
+"Open World",
+"First-Person",
+"Horror",
+"FPS"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/278/27848db6aeab58d7db5d33fe91722365.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/456/4567bcc213eb9cede4acf9fc483f67a8.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/121/121886081065b3b2124c917f70ff9659.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/2ef/2ef1a6c044a2877cdb170a125f97bb97.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/9b5/9b54295cadb720c76bc7999e94b17ebd.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/221/221300277ed18c035c6b7aa0a9598f3e.jpg"
+]
+}
 },
 "104431": {
 "avg": 8.9,
@@ -62,7 +245,39 @@
 "dimg": {
 "The Ghost Survivors": "covers/d/104431_the-ghost-survivors.jpg"
 },
-"syn": "Resident Evil 2 is a 2019 survival horror game developed and published by Capcom. A remake of the 1998 game Resident Evil 2, it was released for PlayStation 4, Windows, and Xbox One in January 2019 and for Amazon Luna, PlayStation 5, Xbox Series X/S in June 2022, with a cloud version for Nintendo Switch released the following November. Versions for iOS, iPadOS, and macOS were released in December 2024, and a version for Nintendo Switch 2 released in October of 2026."
+"syn": "Resident Evil 2 is a 2019 survival horror game developed and published by Capcom. A remake of the 1998 game Resident Evil 2, it was released for PlayStation 4, Windows, and Xbox One in January 2019 and for Amazon Luna, PlayStation 5, Xbox Series X/S in June 2022, with a cloud version for Nintendo Switch released the following November. Versions for iOS, iPadOS, and macOS were released in December 2024, and a version for Nintendo Switch 2 released in October of 2026.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "resident-evil-2-2019",
+"n": "Resident Evil 2",
+"pf": [
+"PC",
+"PlayStation 5",
+"Xbox One",
+"PlayStation 4",
+"Nintendo Switch",
+"macOS"
+],
+"mc": 91,
+"age": "Mature",
+"tags": [
+"Atmospheric",
+"Horror",
+"Action-Adventure",
+"Zombies",
+"Survival Horror",
+"Remake",
+"quest"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/9e6/9e6e83b37dfd176eab77a829c5c7a109.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/ca6/ca6629a8a4565b8ae7816ffcb4d38657.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/df4/df450d260b14fb77ac238d77fe98746d.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/fac/facb42731a6cc48e8fdfaef995f3ed71.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/4bf/4bf2b3c6822715ec3b01882e0cf97572.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/bdb/bdbf60136aad78a718679d2f1ac317f9.jpg"
+]
+}
 },
 "104440": {
 "avg": 16.2,
@@ -73,7 +288,40 @@
 "dimg": {
 "Separate Ways": "covers/d/104440_separate-ways.jpg"
 },
-"syn": "Resident Evil 4 is a 2023 survival horror game developed and published by Capcom. A remake of the 2005 game Resident Evil 4, it was released for PlayStation 4, PlayStation 5, Windows, and Xbox Series X/S on March 24, 2023. Versions for iOS, iPadOS, and macOS were released on December 20, 2023, and a version for Nintendo Switch 2 released on October 16, 2026."
+"syn": "Resident Evil 4 is a 2023 survival horror game developed and published by Capcom. A remake of the 2005 game Resident Evil 4, it was released for PlayStation 4, PlayStation 5, Windows, and Xbox Series X/S on March 24, 2023. Versions for iOS, iPadOS, and macOS were released on December 20, 2023, and a version for Nintendo Switch 2 released on October 16, 2026.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "resident-evil-4-2023",
+"n": "Resident Evil 4",
+"pf": [
+"PC",
+"PlayStation 5",
+"PlayStation 4",
+"Xbox Series S/X",
+"iOS"
+],
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Cloud",
+"Story Rich",
+"Third Person",
+"Horror",
+"Gore",
+"Survival",
+"Violent",
+"Action-Adventure",
+"Third-Person Shooter"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/26c/26c298b0426461ebbca4a17d14a8c87b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/33d/33dbe045a82988878cd865b80fcc6269.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/cdd/cdd81f8b87c0352e20ab9f8eefba7ddb.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/a73/a739f3814e9d57228bd6cdd406012911.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/44a/44a9d54fefbef2e21e6b3b8c1c54546b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/d55/d55e1c4da132fb3de2138586f1b75848.jpg"
+]
+}
 },
 "107187": {
 "avg": 10.3,
@@ -90,7 +338,40 @@
 "Cold Stream": "covers/d/107187_cold-stream.jpg",
 "The Last Stand": "covers/d/107187_the-last-stand.jpg"
 },
-"syn": "Left 4 Dead 2 is a 2009 first-person shooter game by Valve. The sequel to Left 4 Dead (2008) and the second game in the Left 4 Dead series, it was released for Windows and Xbox 360 in November 2009, Mac OS X in October 2010, and Linux in July 2013.\nLeft 4 Dead 2 builds upon cooperatively focused gameplay and Valve's proprietary Source engine, the same game engine used in the original Left 4 Dead."
+"syn": "Left 4 Dead 2 is a 2009 first-person shooter game by Valve. The sequel to Left 4 Dead (2008) and the second game in the Left 4 Dead series, it was released for Windows and Xbox 360 in November 2009, Mac OS X in October 2010, and Linux in July 2013.\nLeft 4 Dead 2 builds upon cooperatively focused gameplay and Valve's proprietary Source engine, the same game engine used in the original Left 4 Dead.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "left-4-dead-2",
+"n": "Left 4 Dead 2",
+"pf": [
+"PC",
+"macOS",
+"Linux",
+"Xbox 360"
+],
+"mc": 89,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Multiplayer",
+"Full controller support",
+"Steam Cloud",
+"steam-trading-cards",
+"Co-op",
+"cooperative",
+"First-Person",
+"Horror"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/4c0/4c043fd1a5ff78900483f2e82580fea0.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/c90/c9071628c238fbc20b366e2413dd8b4a.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/e29/e293b0f98092b8c0dbe24d66846088bb.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/168/16867bc76b385eb0fb749e41f7ada93d.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/fb9/fb917e562f311f48ff8d27632bd29a80.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/5f2/5f2ca569912add2a211b20ba3f576b97.jpg"
+]
+}
 },
 "107313": {
 "avg": 15.6,
@@ -105,7 +386,41 @@
 "The Trouble with Clones": "covers/d/107313_the-trouble-with-clones.jpg"
 },
 "chk": "2026-11-19",
-"syn": "Saints Row: The Third is a 2011 action-adventure game developed by Volition and published by THQ. It is the sequel to 2008's Saints Row 2 and the third installment in the Saints Row series. It was released on November 15, 2011, for Microsoft Windows, PlayStation 3, and Xbox 360, and May 10, 2019, for the Nintendo Switch. A remastered version of the game, titled Saints Row: The Third Remastered, was released by Deep Silver on May 22, 2020, for the PlayStation 4, Windows, and Xbox One, March 5, 20"
+"syn": "Saints Row: The Third is a 2011 action-adventure game developed by Volition and published by THQ. It is the sequel to 2008's Saints Row 2 and the third installment in the Saints Row series. It was released on November 15, 2011, for Microsoft Windows, PlayStation 3, and Xbox 360, and May 10, 2019, for the Nintendo Switch. A remastered version of the game, titled Saints Row: The Third Remastered, was released by Deep Silver on May 22, 2020, for the PlayStation 4, Windows, and Xbox One, March 5, 20",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "saints-row-the-third",
+"n": "Saints Row: The Third",
+"pf": [
+"PC",
+"Xbox One",
+"Linux",
+"Xbox 360",
+"PlayStation 3"
+],
+"mc": 84,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Multiplayer",
+"Great Soundtrack",
+"RPG",
+"Co-op",
+"Open World",
+"cooperative",
+"Third Person",
+"Partial Controller Support",
+"Online Co-Op"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/ac0/ac00b015e9c51f52a24631c44676f81b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/4e8/4e8cb89dc1ac9b3a9b68ad34f1dbc744.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/cc2/cc205478d728ad862c0e9da48df5db05.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/6a4/6a4976a45c96960e72d05362375908e4.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/e26/e26e0f29195d3682e6e9e9f5a74f6250.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/215/215fbd506ac8c1a24cb2bf9b9a4d5b92.jpg"
+]
+}
 },
 "107315": {
 "avg": 19.9,
@@ -118,12 +433,78 @@
 "Corporate Warfare": "miss:2026-11-08"
 },
 "chk": "2026-11-19",
-"syn": "Saints Row 2 is a 2008 action-adventure game developed by Volition and published by THQ. It is the sequel to 2006's Saints Row and the second installment in the Saints Row series. The game was released in October 2008 for the PlayStation 3 and Xbox 360, January 2009 for Microsoft Windows, and April 2016 for Linux. A mobile tie-in game was developed by G5 Entertainment and also released in October 2008."
+"syn": "Saints Row 2 is a 2008 action-adventure game developed by Volition and published by THQ. It is the sequel to 2006's Saints Row and the second installment in the Saints Row series. The game was released in October 2008 for the PlayStation 3 and Xbox 360, January 2009 for Microsoft Windows, and April 2016 for Linux. A mobile tie-in game was developed by G5 Entertainment and also released in October 2008.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "saints-row-2",
+"n": "Saints Row 2",
+"pf": [
+"PC",
+"Xbox One",
+"Linux",
+"Xbox 360",
+"PlayStation 3"
+],
+"mc": 78,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Multiplayer",
+"Steam Cloud",
+"Great Soundtrack",
+"Co-op",
+"Open World",
+"cooperative",
+"Third Person",
+"Online Co-Op",
+"Funny"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/8b9/8b98c409d0f92eee04a4539813e370a7.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/240/240071f110115884b39c4d6095746845.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/6a5/6a5500551128d104dc00d9f7dc4ea2b2.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/04c/04ca5c6bffe121f8b2e9fa1310b9f0cb.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/3fe/3fe3813cb01b1c94d9ef332844dda2a9.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/50a/50a4496ceb48e7adee856cf66843e44a.jpg"
+]
+}
 },
 "107317": {
 "avg": 17,
 "chk": "2026-11-19",
-"syn": "Saints Row is a 2006 action-adventure game developed by Volition and published by THQ exclusively for the Xbox 360.  It was released in North America on August 29, 2006, followed by an Australian release two days later and a European release on September 1, 2006. Set within the fictional city of Stilwater, based on Detroit, the single-player story follows a player-created character who joins the 3rd Street Saints gang after they save his life, and helps them rise to prominence by undermining ene"
+"syn": "Saints Row is a 2006 action-adventure game developed by Volition and published by THQ exclusively for the Xbox 360.  It was released in North America on August 29, 2006, followed by an Australian release two days later and a European release on September 1, 2006. Set within the fictional city of Stilwater, based on Detroit, the single-player story follows a player-created character who joins the 3rd Street Saints gang after they save his life, and helps them rise to prominence by undermining ene",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "saints-row",
+"n": "Saints Row",
+"pf": [
+"PC",
+"Xbox One",
+"Xbox 360"
+],
+"mc": 81,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Multiplayer",
+"Full controller support",
+"Steam Cloud",
+"Co-op",
+"Open World",
+"cooperative",
+"Third Person",
+"Online Co-Op"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/301/301c2bf772fe70c8301bf1f51067d912.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/4e2/4e22d985836f5c2dc087c52bf0b1df1b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/d90/d90b65cb2ba72a999b09d05347d9f1e0.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/e42/e42aa48840d8c3a2b101df0f462a3cea.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/df9/df9884cbc2f250dcb745ff349ff43c30.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/f31/f31ff37852c73ccbebe277711f1a6e2d.jpg"
+]
+}
 },
 "107319": {
 "avg": 15.3,
@@ -138,22 +519,151 @@
 "How the Saints Save Christmas": "miss:2026-11-08"
 },
 "chk": "2026-11-19",
-"syn": "Saints Row IV is a 2013 action-adventure game developed by Volition and published by Deep Silver. It is the sequel to 2011's Saints Row: The Third, the fourth game in the Saints Row series, and the final main installment of the original series that began with 2006's Saints Row. The game was released in August 2013 for Microsoft Windows, PlayStation 3, and Xbox 360, and was later ported to the PlayStation 4, Xbox One, and Linux in 2015."
+"syn": "Saints Row IV is a 2013 action-adventure game developed by Volition and published by Deep Silver. It is the sequel to 2011's Saints Row: The Third, the fourth game in the Saints Row series, and the final main installment of the original series that began with 2006's Saints Row. The game was released in August 2013 for Microsoft Windows, PlayStation 3, and Xbox 360, and was later ported to the PlayStation 4, Xbox One, and Linux in 2015.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "saints-row-iv",
+"n": "Saints Row IV",
+"pf": [
+"PC",
+"Xbox One",
+"PlayStation 4",
+"Linux",
+"Xbox 360",
+"PlayStation 3"
+],
+"mc": 86,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Multiplayer",
+"Full controller support",
+"Steam Cloud",
+"Great Soundtrack",
+"Co-op",
+"Open World",
+"cooperative",
+"Third Person",
+"Sci-fi"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/aa1/aa1d57309779e9ad7abcde1dd042305f.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/641/64161143c49291cd617ab899e932e93d.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/a63/a6399d85d923e0ca0e23991b1fcc78dc.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/ad7/ad7111f5bc7e199a60daddafc3fe3d44.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/3c7/3c7bcf78505f5c273e5514d296a6499e.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/745/745e20f00ca4753803ada13c3d7a475a.jpg"
+]
+}
 },
 "107639": {
 "avg": 11.6,
 "chk": "2026-11-16",
-"syn": ""
+"syn": "",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "doom-2",
+"n": "DOOM",
+"pf": [
+"PC",
+"PlayStation 4",
+"Xbox One",
+"Nintendo Switch",
+"Android",
+"Linux",
+"Xbox 360",
+"PlayStation 3",
+"PlayStation",
+"Game Boy Advance",
+"SNES",
+"SEGA Saturn",
+"SEGA 32X",
+"3DO",
+"Jaguar"
+],
+"mc": 83,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"First-Person",
+"Sci-fi",
+"Horror",
+"FPS",
+"Gore",
+"Classic",
+"Violent",
+"Mature",
+"1990's"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/ed8/ed891c2d8a68424565d3a23d46f665eb.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/a93/a930d68632e464389342740897f45e1d.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/f92/f92d7160c5694bd519bfc9fbcd364fec.jpg"
+]
+}
 },
 "108162": {
 "avg": 8,
 "chk": "2026-11-20",
-"syn": "Uncharted: Drake's Fortune is a 2007 action-adventure game developed by Naughty Dog and published by Sony Computer Entertainment for the PlayStation 3. It is the first game in the Uncharted series and follows Nathan Drake, the supposed descendant of explorer Sir Francis Drake, as he searches for the lost treasure of El Dorado with journalist Elena Fisher and mentor Victor Sullivan.\nThe development of Uncharted: Drake's Fortune began in 2005, and saw Naughty Dog altering their approach to develop"
+"syn": "Uncharted: Drake's Fortune is a 2007 action-adventure game developed by Naughty Dog and published by Sony Computer Entertainment for the PlayStation 3. It is the first game in the Uncharted series and follows Nathan Drake, the supposed descendant of explorer Sir Francis Drake, as he searches for the lost treasure of El Dorado with journalist Elena Fisher and mentor Victor Sullivan.\nThe development of Uncharted: Drake's Fortune began in 2005, and saw Naughty Dog altering their approach to develop",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "uncharted-drakes-fortune",
+"n": "Uncharted: Drake's Fortune",
+"pf": [
+"PlayStation 4",
+"PlayStation 3"
+],
+"mc": 88,
+"age": "Teen",
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/d83/d831b689b904655ac561438b9a7d7e5e.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/b79/b79014a98ac323be07c722c9af79b75d.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/24a/24a6c64b252ea8d01463c93c4865dfb1.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/a87/a87dc902f17812839d2c85a7214215ee.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/c4d/c4da16731d53edd054dfd7ef9dc5271e.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/19b/19b7d94704f32ab52eca02181258657b.jpg"
+]
+}
 },
 "108496": {
 "avg": 15.9,
 "chk": "2026-11-17",
-"syn": "Far Cry 3 is a 2012 first-person shooter game developed by Ubisoft Montreal and published by Ubisoft. It is the third main installment in the Far Cry series after Far Cry 2. The game takes place on the fictional Rook Islands, a tropical archipelago which can be freely explored by players."
+"syn": "Far Cry 3 is a 2012 first-person shooter game developed by Ubisoft Montreal and published by Ubisoft. It is the third main installment in the Far Cry series after Far Cry 2. The game takes place on the fictional Rook Islands, a tropical archipelago which can be freely explored by players.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "far-cry-3",
+"n": "Far Cry 3",
+"pf": [
+"PC",
+"Xbox One",
+"PlayStation 4",
+"Xbox 360",
+"PlayStation 3"
+],
+"mc": 88,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Multiplayer",
+"Atmospheric",
+"RPG",
+"Co-op",
+"Story Rich",
+"Open World",
+"cooperative",
+"First-Person",
+"Partial Controller Support"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/98e/98e4c2a0c3e84b3d2718f8801bba0fcc.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/87e/87e9ca5542b3e8da43d488c9252e20fe.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/0a9/0a9ff8bbfa49024159bcd884ce7128c3.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/971/971d3582a42ede482b9d90b47b50ac32.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/174/174333d080f475d5718219ef6e01d3f4.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/03d/03dcdb4292bcc6ccc2719c88202f4965.jpg"
+]
+}
 },
 "108583": {
 "avg": 22.2,
@@ -170,12 +680,78 @@
 "The Secret Armory of General Knoxx": "covers/d/108583_the-secret-armory-of-general-knoxx.jpg",
 "Claptrap's New Robot Revolution": "covers/d/108583_claptrap-s-new-robot-revolution.jpg"
 },
-"syn": "Borderlands is a 2009 action role-playing first-person shooter video game developed by Gearbox Software and published by 2K. It is the first game in the Borderlands series. The game was released worldwide in 23 October 2009 for the PlayStation 3, Xbox 360 and Microsoft Windows, with a Mac OS X version being released on December 3, 2010, by Feral Interactive. The game's story focuses on a group of four \"Vault Hunters\", who travel to the distant planet of Pandora to search for the \"Vault\", which i"
+"syn": "Borderlands is a 2009 action role-playing first-person shooter video game developed by Gearbox Software and published by 2K. It is the first game in the Borderlands series. The game was released worldwide in 23 October 2009 for the PlayStation 3, Xbox 360 and Microsoft Windows, with a Mac OS X version being released on December 3, 2010, by Feral Interactive. The game's story focuses on a group of four \"Vault Hunters\", who travel to the distant planet of Pandora to search for the \"Vault\", which i",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "borderlands",
+"n": "Borderlands",
+"pf": [
+"PC",
+"Xbox 360",
+"PlayStation 3"
+],
+"mc": 81,
+"age": "Adults Only",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Multiplayer",
+"Steam Cloud",
+"RPG",
+"Co-op",
+"Open World",
+"cooperative",
+"First-Person",
+"Sci-fi"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/153/153b36d06eaa5a3ff45cea30a572a169.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/3e8/3e8622a82c5c4fd1b7b33afa6e574fa3.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/64e/64e0e5c81cdff075721b8455c34c350c.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/669/6693c7ffd9e40cc380ce2dc1c7b2d518.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/47e/47eaf455aded5fe47efc9a5a35dd90a0.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/2cf/2cffe85c573b796a8071785a4c4f8847.jpg"
+]
+}
 },
 "109306": {
 "avg": 6.2,
 "chk": "2026-11-15",
-"syn": "Battlefield 4 is a 2013 first-person shooter game developed by DICE and published by Electronic Arts. The game was released in October and November for Microsoft Windows, PlayStation 3, Xbox 360, PlayStation 4, and Xbox One. It is the thirteenth installment in the Battlefield series and is the sequel of 2011's Battlefield 3, taking place six years later during the fictional \"War of 2020\"."
+"syn": "Battlefield 4 is a 2013 first-person shooter game developed by DICE and published by Electronic Arts. The game was released in October and November for Microsoft Windows, PlayStation 3, Xbox 360, PlayStation 4, and Xbox One. It is the thirteenth installment in the Battlefield series and is the sequel of 2011's Battlefield 3, taking place six years later during the fictional \"War of 2020\".",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "battlefield-4",
+"n": "Battlefield 4",
+"pf": [
+"PC",
+"Xbox One",
+"PlayStation 4",
+"Xbox 360",
+"PlayStation 3"
+],
+"mc": 81,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Multiplayer",
+"Full controller support",
+"First-Person",
+"FPS",
+"Violent",
+"PvP",
+"Space",
+"War"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/9a3/9a389b842ec49237f06538941f083c42.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/59a/59a40f464811011ea49e719bf0d4e756.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/18b/18b30c2551be61e30c7315e66ea42bb0.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/e9d/e9deabe5dd8a6fecac1358491bf628bb.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/c36/c36438fbeda36defb62d39fd73c4cb08.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/c63/c63d86519f64a717f73e0e3638658701.jpg"
+]
+}
 },
 "109380": {
 "avg": 51.7,
@@ -188,17 +764,129 @@
 "Blood and Wine": "covers/d/109380_blood-and-wine.jpg"
 },
 "chk": "2026-11-20",
-"syn": "The Witcher 3: Wild Hunt‍ is a 2015 action role-playing game developed and published by CD Projekt. It is the sequel to the 2011 game The Witcher 2: Assassins of Kings and the third game in The Witcher video game series, played in an open world with a third-person perspective. The games follow The Witcher series of fantasy novels by Polish author Andrzej Sapkowski."
+"syn": "The Witcher 3: Wild Hunt‍ is a 2015 action role-playing game developed and published by CD Projekt. It is the sequel to the 2011 game The Witcher 2: Assassins of Kings and the third game in The Witcher video game series, played in an open world with a third-person perspective. The games follow The Witcher series of fantasy novels by Polish author Andrzej Sapkowski.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "the-witcher-3-wild-hunt",
+"n": "The Witcher 3: Wild Hunt",
+"pf": [
+"PC",
+"PlayStation 5",
+"Xbox One",
+"PlayStation 4",
+"Xbox Series S/X",
+"Nintendo Switch",
+"macOS"
+],
+"mc": 92,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Full controller support",
+"Atmospheric",
+"Great Soundtrack",
+"RPG",
+"Story Rich",
+"Open World",
+"Third Person",
+"Fantasy",
+"Sandbox"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/1ac/1ac19f31974314855ad7be266adeb500.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/6a0/6a08afca95261a2fe221ea9e01d28762.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/cdd/cdd31b6b4a687425a87b5ce231ac89d7.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/862/862397b153221a625922d3bb66337834.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/166/166787c442a45f52f4f230c33fd7d605.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/f63/f6373ee614046d81503d63f167181803.jpg"
+]
+}
 },
 "109687": {
 "avg": 30.1,
 "chk": "2026-11-17",
-"syn": "Grand Theft Auto: San Andreas is a 2004 action-adventure game developed by Rockstar North and published by Rockstar Games. It is the fifth main game in the Grand Theft Auto series and the seventh overall entry, following 2002's Grand Theft Auto: Vice City. Set within the fictional U.S. state of San Andreas (based on California and Nevada) in 1992, the game follows Carl \"CJ\" Johnson, a former gangster who returns home following his mother's murder."
+"syn": "Grand Theft Auto: San Andreas is a 2004 action-adventure game developed by Rockstar North and published by Rockstar Games. It is the fifth main game in the Grand Theft Auto series and the seventh overall entry, following 2002's Grand Theft Auto: Vice City. Set within the fictional U.S. state of San Andreas (based on California and Nevada) in 1992, the game follows Carl \"CJ\" Johnson, a former gangster who returns home following his mother's murder.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "grand-theft-auto-san-andreas",
+"n": "Grand Theft Auto: San Andreas",
+"pf": [
+"PC",
+"Xbox One",
+"PlayStation 4",
+"iOS",
+"Android",
+"macOS",
+"Xbox 360",
+"Xbox",
+"PlayStation 3",
+"PlayStation 2"
+],
+"mc": 93,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Multiplayer",
+"Atmospheric",
+"Great Soundtrack",
+"Story Rich",
+"Open World",
+"Third Person",
+"Partial Controller Support",
+"Funny",
+"Classic"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/679/679c267107151f01696d3c8ea71ac650.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/560/560610b498ef079e1f45ec83b039cbc7.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/c8c/c8cf7ea395e6aa2e46abee36d9d2d699.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/191/191445072d9e85b6ad7ffed5152fc17a.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/bfe/bfe3c652960e2b6869c608a58d69d327.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/436/436134f55bd10cfd7a6fd1ded7487355.jpg"
+]
+}
 },
 "109689": {
 "avg": 16.6,
 "chk": "2026-11-17",
-"syn": "Grand Theft Auto: Vice City is a 2002 action-adventure game developed by Rockstar North and published by Rockstar Games. It is the fourth main game in the Grand Theft Auto series, following 2001's Grand Theft Auto III, and the sixth entry overall. Set in 1986 within the fictional Vice City (based on Miami), the single-player story follows gangster Tommy Vercetti's rise to power after being released from prison and becoming caught up in an ambushed drug deal."
+"syn": "Grand Theft Auto: Vice City is a 2002 action-adventure game developed by Rockstar North and published by Rockstar Games. It is the fourth main game in the Grand Theft Auto series, following 2001's Grand Theft Auto III, and the sixth entry overall. Set in 1986 within the fictional Vice City (based on Miami), the single-player story follows gangster Tommy Vercetti's rise to power after being released from prison and becoming caught up in an ambushed drug deal.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "grand-theft-auto-vice-city",
+"n": "Grand Theft Auto: Vice City",
+"pf": [
+"PC",
+"PlayStation 4",
+"iOS",
+"Android",
+"macOS",
+"Xbox",
+"PlayStation 2",
+"PS Vita"
+],
+"mc": 94,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Multiplayer",
+"Atmospheric",
+"Great Soundtrack",
+"Open World",
+"Third Person",
+"Partial Controller Support",
+"Funny",
+"Classic",
+"Sandbox"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/dfd/dfd73edec49df98ca9cd6736eeba1049.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/41b/41bab662e69407ebdea4f9c2620ea964.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/866/8669e298a904fce58ba84ab0a9205c01.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/579/57946b3f520595bf96c77e9c36ea5a9a.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/8d8/8d84dcd621ea9cc54ffec9ab6040f799.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/bd2/bd2b4586b6acabf7ee39400d3ad5fa66.jpg"
+]
+}
 },
 "109820": {
 "avg": 25.2,
@@ -211,7 +899,36 @@
 "Iki Island": "covers/d/109820_iki-island.jpg",
 "Legends": "covers/d/109820_legends.jpg"
 },
-"syn": "Ghost of Tsushima is a 2020 action-adventure game developed by Sucker Punch Productions and published by Sony Interactive Entertainment. The player controls Jin Sakai, a samurai on a quest to protect Tsushima Island during the first Mongol invasion of Japan. Jin must choose between following the warrior code to fight honorably, or by using practical but dishonorable methods of repelling the Mongols with minimal casualties."
+"syn": "Ghost of Tsushima is a 2020 action-adventure game developed by Sucker Punch Productions and published by Sony Interactive Entertainment. The player controls Jin Sakai, a samurai on a quest to protect Tsushima Island during the first Mongol invasion of Japan. Jin must choose between following the warrior code to fight honorably, or by using practical but dishonorable methods of repelling the Mongols with minimal casualties.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "ghost-of-tsushima",
+"n": "Ghost of Tsushima",
+"pf": [
+"PC",
+"PlayStation 5",
+"PlayStation 4"
+],
+"mc": 83,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Atmospheric",
+"RPG",
+"Open World",
+"Third Person",
+"Action-Adventure",
+"exclusive",
+"japanese"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/2e7/2e7a9e16cae5ba5daca74029981029c3.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/ba0/ba09edd0dc18e56a3b62aba32b9c3ed6.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/7a6/7a6d792781b4ee1414cdb0649a2e56ac.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/aa5/aa543c81d5f342a7d3aecc55df89f66e.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/547/5476a303d0ec920c29264ff18da5741a.jpg"
+]
+}
 },
 "109835": {
 "avg": 35.3,
@@ -226,7 +943,44 @@
 "Dragonborn": "covers/d/109835_dragonborn.jpg"
 },
 "chk": "2026-11-20",
-"syn": "The Elder Scrolls V: Skyrim is a 2011 action role-playing game developed by Bethesda Game Studios and published by Bethesda Softworks. It is the fifth main installment in The Elder Scrolls series, following The Elder Scrolls IV: Oblivion (2006), and was released worldwide for Windows, PlayStation 3, and Xbox 360 on November 11, 2011. Skyrim was developed using the Creation Engine."
+"syn": "The Elder Scrolls V: Skyrim is a 2011 action role-playing game developed by Bethesda Game Studios and published by Bethesda Softworks. It is the fifth main installment in The Elder Scrolls series, following The Elder Scrolls IV: Oblivion (2006), and was released worldwide for Windows, PlayStation 3, and Xbox 360 on November 11, 2011. Skyrim was developed using the Creation Engine.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "the-elder-scrolls-v-skyrim",
+"n": "The Elder Scrolls V: Skyrim",
+"pf": [
+"PC",
+"PlayStation 5",
+"Xbox One",
+"PlayStation 4",
+"Xbox Series S/X",
+"Nintendo Switch",
+"Xbox 360",
+"PlayStation 3"
+],
+"mc": 94,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Steam Cloud",
+"Atmospheric",
+"steam-trading-cards",
+"Great Soundtrack",
+"RPG",
+"Story Rich",
+"Open World",
+"First-Person"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/3bd/3bd2710bd1ffb6664fdea7b83afd067e.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/d4e/d4e9b13f54748584ccbd6f998094dade.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/599/59946a630e9c7871003763d63184404a.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/c5d/c5dad426038d7d12f933eedbeab48ff3.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/b32/b326fa01c82db82edd41ed299886ee44.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/091/091e95b49d5a22de036698fc731395a2.jpg"
+]
+}
 },
 "110041": {
 "avg": 14.3,
@@ -237,7 +991,37 @@
 "Left Behind": "covers/d/110041_left-behind.jpg"
 },
 "chk": "2026-11-20",
-"syn": "The Last of Us Part I is a 2022 action-adventure game developed by Naughty Dog and published by Sony Interactive Entertainment. A remake of the 2013 game The Last of Us, it features revised gameplay, including enhanced combat and exploration, and expanded accessibility options. Players control Joel, who is tasked with escorting the young Ellie across a post-apocalyptic United States and defend her against cannibalistic creatures infected by a mutated strain of the Cordyceps fungus."
+"syn": "The Last of Us Part I is a 2022 action-adventure game developed by Naughty Dog and published by Sony Interactive Entertainment. A remake of the 2013 game The Last of Us, it features revised gameplay, including enhanced combat and exploration, and expanded accessibility options. Players control Joel, who is tasked with escorting the young Ellie across a post-apocalyptic United States and defend her against cannibalistic creatures infected by a mutated strain of the Cordyceps fungus.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "the-last-of-us-part-i",
+"n": "The Last of Us Part I",
+"pf": [
+"PC",
+"PlayStation 5"
+],
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Multiplayer",
+"Full controller support",
+"Steam Cloud",
+"Atmospheric",
+"Great Soundtrack",
+"Story Rich",
+"Third Person",
+"Horror"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/723/7232dfba2a746be21a0e8548b5333dd7.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/eb5/eb5a0522dbb56b8f698ac3fa8b884341.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/b0f/b0f8ff8c24bc46ca70a20ee4b83d9569.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/276/276688cddf9531e6cbcccc3368dfa25f.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/585/585fd40ad660779a79e2853f3cd7a833.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/7cb/7cb256eecd9dd0bb54d4524dc2a9b7ee.jpg"
+]
+}
 },
 "110477": {
 "avg": 17,
@@ -250,12 +1034,75 @@
 "Bring Down the Sky": "miss:2026-11-08",
 "Pinnacle Station": "miss:2026-11-08"
 },
-"syn": "Mass Effect is a 2007 action role-playing game developed by BioWare and published by Microsoft Game Studios for the Xbox 360. It is the first game in the Mass Effect series, and takes place within the Milky Way galaxy in the year 2183, where civilization is threatened by a highly advanced machine race known as the Reapers. The player assumes the role of Commander Shepard, an elite human soldier who must stop a rogue agent from carrying out the Reapers' galactic invasion."
+"syn": "Mass Effect is a 2007 action role-playing game developed by BioWare and published by Microsoft Game Studios for the Xbox 360. It is the first game in the Mass Effect series, and takes place within the Milky Way galaxy in the year 2183, where civilization is threatened by a highly advanced machine race known as the Reapers. The player assumes the role of Commander Shepard, an elite human soldier who must stop a rogue agent from carrying out the Reapers' galactic invasion.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "mass-effect",
+"n": "Mass Effect",
+"pf": [
+"PC",
+"Xbox One",
+"Xbox 360",
+"PlayStation 3"
+],
+"mc": 89,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Atmospheric",
+"Great Soundtrack",
+"RPG",
+"Story Rich",
+"Open World",
+"Third Person",
+"Sci-fi",
+"Female Protagonist",
+"Action RPG"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/2c7/2c710533fe55e02facda408ce681640e.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/f42/f42d116fcc691213ac11f651e231b214.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/5db/5db5afc10fa39739c96c05f455f5d253.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/7af/7af44f9b67fe50d162d630f07ae6900b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/67e/67e4fa3122553e5ad52b97d0efecf0e1.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/196/196268519e753a7d53fbee7040fde318.jpg"
+]
+}
 },
 "111333": {
 "avg": 7.8,
 "chk": "2026-11-17",
-"syn": "Freedom Fighters is a 2003 third-person shooter video game for the PlayStation 2, GameCube, Xbox, and Windows. It was developed by IO Interactive and published by EA Games.\nThe game is set in an alternate history in which the Soviet Union has invaded and occupied New York City."
+"syn": "Freedom Fighters is a 2003 third-person shooter video game for the PlayStation 2, GameCube, Xbox, and Windows. It was developed by IO Interactive and published by EA Games.\nThe game is set in an alternate history in which the Soviet Union has invaded and occupied New York City.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "freedom-fighters",
+"n": "Freedom Fighters",
+"pf": [
+"PC",
+"Xbox",
+"PlayStation 2",
+"GameCube"
+],
+"age": "Teen",
+"tags": [
+"Singleplayer",
+"Multiplayer",
+"Steam Cloud",
+"Classic",
+"Third-Person Shooter",
+"3D",
+"combat",
+"Cold War"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/af8/af8c434903e3d13807e9dcf2e4ae68f0.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/5fb/5fb3e290836f7521643d5bb8752d624e.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/b8c/b8ca75d363216baf3ddd7bd5b101d00a.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/e57/e572c70721d8a904ceb87ed616af117d.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/115/115c25bf4f2c129953b240d61f70d36f.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/af2/af2e879a487238be3d7c42d61fd50993.jpg"
+]
+}
 },
 "112129": {
 "avg": 8,
@@ -266,7 +1113,39 @@
 "dimg": {
 "Path to War": "covers/d/112129_path-to-war.jpg"
 },
-"syn": "Red Faction: Armageddon is a 2011 third-person shooter video game developed by Volition and published by THQ in association with the TV network Syfy. It is the fourth and final installment in the Red Faction series, and was released for Microsoft Windows, PlayStation 3 and Xbox 360 in June 2011.\nCritics liked the new weaponry, but were puzzled at the change from an open world game to a linear shooter and that it abandoned the strong points of its predecessor."
+"syn": "Red Faction: Armageddon is a 2011 third-person shooter video game developed by Volition and published by THQ in association with the TV network Syfy. It is the fourth and final installment in the Red Faction series, and was released for Microsoft Windows, PlayStation 3 and Xbox 360 in June 2011.\nCritics liked the new weaponry, but were puzzled at the change from an open world game to a linear shooter and that it abandoned the strong points of its predecessor.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "red-faction-armageddon",
+"n": "Red Faction: Armageddon",
+"pf": [
+"PC",
+"Xbox 360",
+"PlayStation 3"
+],
+"mc": 75,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Multiplayer",
+"Steam Cloud",
+"Co-op",
+"Open World",
+"cooperative",
+"Third Person",
+"Sci-fi",
+"Partial Controller Support"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/34e/34ebf6abf955250f9a4a829f9fa24a9e.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/eb1/eb11af8210066472a300285d38e01e34.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/fee/fee8fe4f8f8b6e35384bb8a8afabddc4.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/1a6/1a698b588c17efbc54ac05002f56d4b6.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/4db/4dba669af417fd888ccd921f02446164.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/3b0/3b07c3f8fa0ba330214331fb92d00e0e.jpg"
+]
+}
 },
 "112219": {
 "avg": 3.4,
@@ -277,62 +1156,476 @@
 "dimg": {
 "Inheritance": "covers/d/112219_inheritance.jpg"
 },
-"syn": "Layers of Fear is a 2016 psychological horror adventure game developed by Bloober Team and published by Aspyr. It was released on Linux, Microsoft Windows, macOS, PlayStation 4, and Xbox One worldwide in February 2016.\nIn Layers of Fear, the player controls a psychologically disturbed painter who is trying to complete his magnum opus as he navigates a Victorian mansion revealing secrets about his past."
+"syn": "Layers of Fear is a 2016 psychological horror adventure game developed by Bloober Team and published by Aspyr. It was released on Linux, Microsoft Windows, macOS, PlayStation 4, and Xbox One worldwide in February 2016.\nIn Layers of Fear, the player controls a psychologically disturbed painter who is trying to complete his magnum opus as he navigates a Victorian mansion revealing secrets about his past.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "layers-of-fear",
+"n": "Layers of Fear",
+"pf": [
+"PC",
+"Xbox One",
+"PlayStation 4",
+"iOS",
+"macOS",
+"Linux"
+],
+"mc": 72,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Full controller support",
+"Steam Cloud",
+"Atmospheric",
+"steam-trading-cards",
+"Great Soundtrack",
+"Story Rich",
+"First-Person",
+"Partial Controller Support"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/f49/f4994fea6a84b578a92abd51b20da5f9.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/b2f/b2f0f53e5fdeb1c2da275a24a1f86baa.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/3c5/3c55efc4e3b008840dd2747fd8abbd72.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/e69/e695b7a3e93ac142d6f7a6c142f4dfad.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/fe5/fe54e15f23a2f9cffa9a8d113de874db.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/16c/16cae54a4aff2bc41a4a90221e00309f.jpg"
+]
+}
 },
 "112930": {
 "avg": 6.1,
 "chk": "2026-11-15",
-"syn": "Call of Duty: Modern Warfare 3 is a 2011 first-person shooter game developed by Infinity Ward and Sledgehammer Games and published by Activision. The game was released worldwide on November 8, 2011, for Microsoft Windows, the Xbox 360, PlayStation 3, Wii, and OS X. It is the sequel to Call of Duty: Modern Warfare 2 (2009), serving as the third and final installment in the original Modern Warfare trilogy and the eighth Call of Duty installment overall. A separate version for the Nintendo DS was d"
+"syn": "Call of Duty: Modern Warfare 3 is a 2011 first-person shooter game developed by Infinity Ward and Sledgehammer Games and published by Activision. The game was released worldwide on November 8, 2011, for Microsoft Windows, the Xbox 360, PlayStation 3, Wii, and OS X. It is the sequel to Call of Duty: Modern Warfare 2 (2009), serving as the third and final installment in the original Modern Warfare trilogy and the eighth Call of Duty installment overall. A separate version for the Nintendo DS was d",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "call-of-duty-modern-warfare-3",
+"n": "Call of Duty: Modern Warfare 3",
+"pf": [
+"PC",
+"Xbox One",
+"iOS",
+"macOS",
+"Xbox 360",
+"PlayStation 3",
+"Wii"
+],
+"mc": 85,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Multiplayer",
+"Steam Cloud",
+"Co-op",
+"cooperative",
+"First-Person",
+"FPS",
+"Online Co-Op",
+"Survival"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/2d0/2d088eaa8dfffa81caed030adb832f50.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/220/220ab5f4d052cab06b54d284e3e6ca85.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/795/795ddfe820efcef3c67d5170c08e4ffb.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/4ea/4ea0b45d4ef5b1ddb2fbee16aa58b061.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/780/7805e988c2ba06cff804f2ff56981d27.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/cd7/cd782cf22623a81cab4fcb7e8194e672.jpg"
+]
+}
 },
 "112932": {
 "avg": 6.9,
 "chk": "2026-11-15",
-"syn": "Call of Duty 4: Modern Warfare is a 2007 first-person shooter game developed by Infinity Ward and published by Activision. It is the fourth main installment in the Call of Duty series. The game breaks away from the World War II setting of previous entries and is instead set in modern times."
+"syn": "Call of Duty 4: Modern Warfare is a 2007 first-person shooter game developed by Infinity Ward and published by Activision. It is the fourth main installment in the Call of Duty series. The game breaks away from the World War II setting of previous entries and is instead set in modern times.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "modern-warfare",
+"n": "Call of Duty 4: Modern Warfare",
+"pf": [
+"PC",
+"Xbox One",
+"PlayStation 4",
+"Nintendo DS",
+"macOS",
+"Xbox 360",
+"PlayStation 3",
+"Wii"
+],
+"mc": 92,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Multiplayer",
+"Atmospheric",
+"Great Soundtrack",
+"Co-op",
+"Story Rich",
+"cooperative",
+"First-Person",
+"FPS",
+"Classic"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/e8e/e8e92ec1aff7d7767662614d6b47e1c6.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/3a7/3a716eecfb1b6cbc85d90c36534177a4.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/982/982c8f523d6d83159f6b9bbca20665d5.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/c9e/c9e72793428ed326cf1587c630cc02ca.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/9e1/9e1e7d81d2b3ae15091c0f038c14f369.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/de9/de931d605285d86431a07d9f5530230b.jpg"
+]
+}
 },
 "112941": {
 "avg": 6,
 "chk": "2026-11-15",
-"syn": "Call of Duty: Ghosts is a 2013 first-person shooter game developed by Infinity Ward and published by Activision. It is the tenth major installment in the Call of Duty series and the sixth developed by Infinity Ward. It was released for PlayStation 3, Wii U, Windows, Xbox 360, PlayStation 4, and Xbox One in November 2013."
+"syn": "Call of Duty: Ghosts is a 2013 first-person shooter game developed by Infinity Ward and published by Activision. It is the tenth major installment in the Call of Duty series and the sixth developed by Infinity Ward. It was released for PlayStation 3, Wii U, Windows, Xbox 360, PlayStation 4, and Xbox One in November 2013.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "call-of-duty-ghosts",
+"n": "Call of Duty: Ghosts",
+"pf": [
+"PC",
+"Xbox One",
+"PlayStation 4",
+"Xbox 360",
+"PlayStation 3",
+"Wii U"
+],
+"mc": 68,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Multiplayer",
+"Full controller support",
+"Steam Cloud",
+"Co-op",
+"cooperative",
+"First-Person",
+"FPS",
+"Online Co-Op"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/3f2/3f21894803ada962c35916a3c746cdc3.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/b9a/b9a5bc515240ea3c79e1168b87801026.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/4ff/4ff947b7d7dda31d8d38f07f0e2e6f6d.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/33d/33dc5d93122b1694d7cfc9ecf1ea41fa.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/fa6/fa6d1535c3360e02255adc1ccdec2177.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/995/995b74b5a90631fb7d32445ced766a5f.jpg"
+]
+}
 },
 "112948": {
 "avg": 7.1,
 "chk": "2026-11-15",
-"syn": "Call of Duty: Black Ops II is a 2012 first-person shooter game developed by Treyarch and published by Activision. It was released for Windows, PlayStation 3, and Xbox 360 on November 13, 2012, and for the Wii U on November 18 in North America and November 30 in PAL regions. Black Ops II is the ninth game in the Call of Duty franchise of video games, a sequel to the 2010 game Call of Duty: Black Ops and the first Call of Duty game for the Wii U. A corresponding game for the PlayStation Vita, Call"
+"syn": "Call of Duty: Black Ops II is a 2012 first-person shooter game developed by Treyarch and published by Activision. It was released for Windows, PlayStation 3, and Xbox 360 on November 13, 2012, and for the Wii U on November 18 in North America and November 30 in PAL regions. Black Ops II is the ninth game in the Call of Duty franchise of video games, a sequel to the 2010 game Call of Duty: Black Ops and the first Call of Duty game for the Wii U. A corresponding game for the PlayStation Vita, Call",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "cod-black-ops-ii",
+"n": "Call of Duty: Black Ops II",
+"pf": [
+"PC",
+"Xbox One",
+"Xbox 360",
+"PlayStation 3",
+"Wii U"
+],
+"mc": 74,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Multiplayer",
+"Full controller support",
+"Steam Cloud",
+"Atmospheric",
+"steam-trading-cards",
+"Great Soundtrack",
+"Co-op",
+"cooperative"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/c5c/c5c52956aaa535f92067f8dbb94ed792.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/898/898c3ea7d05d437208adf5c7098b87d4.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/490/490cd725bd80c0bc2359a0405ee21213.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/fd0/fd0fe49f4a55f6f1af36aaacf0d92051.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/b75/b7525f0077cf7d7ec6c055f2b51614ef.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/8f7/8f75918847ba00b554ed6ba2e9cef848.jpg"
+]
+}
 },
 "112951": {
 "avg": 7.1,
 "chk": "2026-11-15",
-"syn": "Call of Duty: Black Ops is a 2010 first-person shooter game developed by Treyarch and published by Activision. It was released worldwide in November 2010 for Microsoft Windows, the PlayStation 3, Wii, and Xbox 360, with a separate version for Nintendo DS developed by n-Space. Aspyr later ported the game to Mac OS X in September 2012."
+"syn": "Call of Duty: Black Ops is a 2010 first-person shooter game developed by Treyarch and published by Activision. It was released worldwide in November 2010 for Microsoft Windows, the PlayStation 3, Wii, and Xbox 360, with a separate version for Nintendo DS developed by n-Space. Aspyr later ported the game to Mac OS X in September 2012.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "call-of-duty-black-ops",
+"n": "Call of Duty: Black Ops",
+"pf": [
+"PC",
+"Xbox One",
+"iOS",
+"Nintendo DS",
+"macOS",
+"Xbox 360",
+"PlayStation 3",
+"Wii"
+],
+"mc": 81,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Multiplayer",
+"Co-op",
+"Story Rich",
+"cooperative",
+"First-Person",
+"Partial Controller Support",
+"Horror",
+"FPS"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/a02/a027c280854d5e2f5356f87665dd524a.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/6fb/6fba712fa9ca9ffada775b77e4dcff74.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/e8d/e8dfc3e3614f83b968898eb2adbd5e64.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/7be/7be0d2082caa1eebf28a901f0ccb3561.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/892/89281338b206f0d06bae96beb00aa9dd.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/9e7/9e7aa6f83ffdfc7ec57f78d1dcdaf0fa.jpg"
+]
+}
 },
 "112979": {
 "avg": 7,
 "chk": "2026-11-15",
-"syn": "Call of Duty: World at War is a 2008 first-person shooter game developed by Treyarch and published by Activision. It is the fifth main installment of the Call of Duty series and is the fourth entry in the series to be set during World War II. The game was announced by Activision in June 2008 and was released in November 2008 for the PlayStation 3, Windows, Xbox 360, and Wii. Other games under the World at War title were published for the Nintendo DS and the PlayStation 2, featuring different sto"
+"syn": "Call of Duty: World at War is a 2008 first-person shooter game developed by Treyarch and published by Activision. It is the fifth main installment of the Call of Duty series and is the fourth entry in the series to be set during World War II. The game was announced by Activision in June 2008 and was released in November 2008 for the PlayStation 3, Windows, Xbox 360, and Wii. Other games under the World at War title were published for the Nintendo DS and the PlayStation 2, featuring different sto",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "call-of-duty-world-at-war",
+"n": "Call of Duty: World at War",
+"pf": [
+"PC",
+"Xbox One",
+"Nintendo DS",
+"Xbox 360",
+"PlayStation 3",
+"Wii"
+],
+"mc": 83,
+"age": "Adults Only",
+"tags": [
+"Singleplayer",
+"Multiplayer",
+"Great Soundtrack",
+"Co-op",
+"cooperative",
+"First-Person",
+"Horror",
+"FPS",
+"Online Co-Op",
+"Gore"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/8a1/8a1f2cdaaaf8aa19441d890858d01d70.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/afe/afe6afc104621713ea0c8c5c5dc17149.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/b53/b535859c3a2a6f80f3c68398dbd39a79.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/baf/baf3982d7d0b65c4e74a38386641b07e.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/18d/18d0c96f64a6f2093a7097265b831ce9.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/b7b/b7bac2bff127258d92a266dd6a9adef7.jpg"
+]
+}
 },
 "112981": {
 "avg": 8,
 "chk": "2026-11-15",
-"syn": "Call of Duty 3 is a 2006 first-person shooter game developed by Treyarch and published by Activision. It is the third major installment in the Call of Duty series. It was released for PlayStation 2, Xbox, Xbox 360, PlayStation 3 and Wii."
+"syn": "Call of Duty 3 is a 2006 first-person shooter game developed by Treyarch and published by Activision. It is the third major installment in the Call of Duty series. It was released for PlayStation 2, Xbox, Xbox 360, PlayStation 3 and Wii.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "call-of-duty-3",
+"n": "Call of Duty 3",
+"pf": [
+"Xbox 360",
+"Xbox",
+"PlayStation 3",
+"PlayStation 2",
+"Wii"
+],
+"mc": 81,
+"age": "Teen",
+"tags": [
+"Singleplayer",
+"Multiplayer",
+"First-Person"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/22a/22ab34fe6daeb996fea1ad771f57e5c0.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/99d/99d8f1284c412698f29958b82a80e8a7.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/754/75445496cd5a7a9f6ed2ca955b5711fd.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/3db/3dbccdeca80815aaabd6be4a43d6b728.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/45f/45f6820d989a8fb934ef1f9a4a50d762.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/b10/b10e7b699322d31f7fba21db24c2a1c3.jpg"
+]
+}
 },
 "112988": {
 "avg": 8,
 "chk": "2026-11-15",
-"syn": "Call of Duty 2 is a 2005 first-person shooter game developed by Infinity Ward and published by Activision in most regions of the world. It is the second installment of the Call of Duty series. Announced by Activision on April 7, 2005, the game was released for Microsoft Windows on October 25, 2005, and as a launch title for the Xbox 360 on November 22, 2005."
+"syn": "Call of Duty 2 is a 2005 first-person shooter game developed by Infinity Ward and published by Activision in most regions of the world. It is the second installment of the Call of Duty series. Announced by Activision on April 7, 2005, the game was released for Microsoft Windows on October 25, 2005, and as a launch title for the Xbox 360 on November 22, 2005.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "call-of-duty-2",
+"n": "Call of Duty 2",
+"pf": [
+"PC",
+"Xbox One",
+"iOS",
+"macOS",
+"Xbox 360"
+],
+"mc": 86,
+"age": "Teen",
+"tags": [
+"Singleplayer",
+"Multiplayer",
+"Atmospheric",
+"Co-op",
+"Story Rich",
+"cooperative",
+"First-Person",
+"FPS",
+"Classic",
+"Zombies"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/de5/de518b36baf53aea7642a58ef773aee4.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/866/8669d6cc0334edfac9ba9ae065b11030.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/403/403b09e8ca249fa453d8105c81329f1c.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/30e/30e45fd7c807a58ad92e379bac6c90a7.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/216/2164ef7fc7cce8c1bfe664a408a01f6f.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/2a4/2a47536a5ee46af711975769ee1ad52c.jpg"
+]
+}
 },
 "112999": {
 "avg": 6.6,
 "chk": "2026-11-15",
-"syn": "Call of Duty: Modern Warfare 2 is a 2009 first-person shooter game developed by Infinity Ward and published by Activision. It is the sixth installment in the Call of Duty series and the direct sequel to Call of Duty 4: Modern Warfare. It was released worldwide on November 10, 2009, for Windows, PlayStation 3, and Xbox 360."
+"syn": "Call of Duty: Modern Warfare 2 is a 2009 first-person shooter game developed by Infinity Ward and published by Activision. It is the sixth installment in the Call of Duty series and the direct sequel to Call of Duty 4: Modern Warfare. It was released worldwide on November 10, 2009, for Windows, PlayStation 3, and Xbox 360.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "modern-warfare-2",
+"n": "Call of Duty: Modern Warfare 2",
+"pf": [
+"PC",
+"Xbox One",
+"macOS",
+"Xbox 360",
+"PlayStation 3"
+],
+"mc": 86,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Multiplayer",
+"Steam Cloud",
+"Atmospheric",
+"Great Soundtrack",
+"Co-op",
+"Story Rich",
+"cooperative",
+"First-Person"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/468/468450c797e2388adb27f43a9bfb545f.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/1d7/1d72fb0ca12c48ecd67806949bee047e.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/560/560b2add9ece92850b7f9913a5825557.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/f7e/f7e36079a094e963548b1f4a7bcad862.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/65d/65da9ca595bea8b6984f5e376c8cb6f8.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/00a/00a164bde7b8aa7dfc90b3b8a51caac6.jpg"
+]
+}
 },
 "114574": {
 "avg": 9.1,
 "chk": "2026-11-18",
-"syn": "Lego Star Wars III: The Clone Wars is a Lego-themed action-adventure video game developed by Traveller's Tales and published by LucasArts in March 2011 for the PlayStation 3, PlayStation Portable, Xbox 360, Wii, Nintendo DS, Microsoft Windows, and the Nintendo 3DS. It was one of the 3DS's launch titles. The game features missions and characters from the 2008 animated film Star Wars: The Clone Wars and its follow-up television series, as well as fan-favorites from the original Star Wars saga, in "
+"syn": "Lego Star Wars III: The Clone Wars is a Lego-themed action-adventure video game developed by Traveller's Tales and published by LucasArts in March 2011 for the PlayStation 3, PlayStation Portable, Xbox 360, Wii, Nintendo DS, Microsoft Windows, and the Nintendo 3DS. It was one of the 3DS's launch titles. The game features missions and characters from the 2008 animated film Star Wars: The Clone Wars and its follow-up television series, as well as fan-favorites from the original Star Wars saga, in ",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "lego-star-wars-iii",
+"n": "LEGO Star Wars III - The Clone Wars",
+"pf": [
+"PC",
+"Xbox One",
+"Nintendo 3DS",
+"Nintendo DS",
+"macOS",
+"Xbox 360",
+"PlayStation 3",
+"PSP",
+"Wii"
+],
+"mc": 76,
+"age": "Everyone 10+",
+"tags": [
+"Singleplayer",
+"Multiplayer",
+"Steam Cloud",
+"Co-op",
+"Open World",
+"cooperative",
+"Sci-fi",
+"Partial Controller Support",
+"Fantasy",
+"Funny"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/bca/bca2d95865dcacb14259ec4bb1f53993.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/af2/af2419e41f086406885a23404881fec6.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/dfd/dfd5085d2a9bf08b6700bc325c1d757e.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/911/9111187c5d7b2f02cff953f5922dcd52.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/e84/e840443076b66e38310fdbf5ba71ce35.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/e6d/e6dbb90d2a1737241992d7fd1a5e9c64.jpg"
+]
+}
 },
 "115744": {
 "avg": 9.2,
 "chk": "2026-11-16",
-"syn": "Crysis is a first-person shooter video game series created by Crytek. The series revolves around a group of military protagonists with \"nanosuits\", technologically advanced suits of armor that give them enhanced physical strength, speed, defense, and cloaking abilities. The protagonists face off against hostile North Korean soldiers, heavily armed mercenaries, and a race of technologically advanced aliens known as the Ceph, who arrived on Earth millions of years ago and have recently been awaken"
+"syn": "Crysis is a first-person shooter video game series created by Crytek. The series revolves around a group of military protagonists with \"nanosuits\", technologically advanced suits of armor that give them enhanced physical strength, speed, defense, and cloaking abilities. The protagonists face off against hostile North Korean soldiers, heavily armed mercenaries, and a race of technologically advanced aliens known as the Ceph, who arrived on Earth millions of years ago and have recently been awaken",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "crysis",
+"n": "Crysis",
+"pf": [
+"PC",
+"Xbox 360",
+"PlayStation 3"
+],
+"mc": 91,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Multiplayer",
+"Atmospheric",
+"Great Soundtrack",
+"Story Rich",
+"Open World",
+"First-Person",
+"Sci-fi",
+"FPS",
+"Classic"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/df9/df9deb424a11fddffd45d4ecd538e935.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/2b7/2b7d8654f13967ea8188f4a95f104c45.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/692/6923be35cd31eece101458acf0085c35.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/12d/12d7fcf5f8896076ea79247fb4fa6c34.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/b08/b081848ec03a98c85818484b10f37669.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/c0f/c0ffd66ccb33430b41287f0bee874ea4.jpg"
+]
+}
 },
 "116121": {
 "avg": 15.3,
@@ -347,12 +1640,61 @@
 "Zodiac Tournament": "covers/d/116121_zodiac-tournament.jpg"
 },
 "chk": "2026-11-19",
-"syn": "Sleeping Dogs is a 2012 action-adventure game developed by United Front Games and published by Square Enix. The game was released for PlayStation 3, Windows, and Xbox 360 in August 2012. Set in contemporary Hong Kong, the story follows Wei Shen, a Hong Kong-American police officer and martial artist who goes undercover and infiltrates the Sun On Yee Triad organization."
+"syn": "Sleeping Dogs is a 2012 action-adventure game developed by United Front Games and published by Square Enix. The game was released for PlayStation 3, Windows, and Xbox 360 in August 2012. Set in contemporary Hong Kong, the story follows Wei Shen, a Hong Kong-American police officer and martial artist who goes undercover and infiltrates the Sun On Yee Triad organization.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "sleeping-dogs",
+"n": "Sleeping Dogs",
+"pf": [
+"PC",
+"Xbox 360",
+"PlayStation 3"
+],
+"mc": 81,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Multiplayer",
+"Full controller support",
+"Atmospheric",
+"Great Soundtrack",
+"RPG",
+"Story Rich",
+"Open World",
+"Third Person",
+"Sandbox"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/c1b/c1bed5e437aee38b17f1776eda423ac9.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/bf9/bf990dd74de290ddabecb55fdf55051e.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/9eb/9eb1aeebb31b148c0a300596bea9386d.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/0bf/0bfd9229344aabf448d44f3504879b00.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/fd4/fd41d3927f501690be2ddcd155b054a3.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/05f/05f497a27b26113b13cd698ddc9d9c2b.jpg"
+]
+}
 },
 "116900": {
 "avg": 20.6,
 "chk": "2026-11-17",
-"syn": "God of War is a 2018 action-adventure game developed by Santa Monica Studio and published by Sony Interactive Entertainment. It was released worldwide for the PlayStation 4 in April 2018, with a Windows port released in January 2022. It is the eighth game in the God of War series and the sequel to 2010's God of War III.\nWhile previous games were based on Greek mythology, God of War transitioned to Norse mythology, and takes places in mythical ancient Scandinavia in the realm of Midgard."
+"syn": "God of War is a 2018 action-adventure game developed by Santa Monica Studio and published by Sony Interactive Entertainment. It was released worldwide for the PlayStation 4 in April 2018, with a Windows port released in January 2022. It is the eighth game in the God of War series and the sequel to 2010's God of War III.\nWhile previous games were based on Greek mythology, God of War transitioned to Norse mythology, and takes places in mythical ancient Scandinavia in the realm of Midgard.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "god-of-war-3",
+"n": "God Of War",
+"pf": [
+"Web"
+],
+"tags": [
+"fun",
+"Clicker",
+"my-first-game-jam-i-figured-out-how-to-enter",
+"pls-play"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/6c2/6c22cbdcb195414db8f60825034462ec.jpg"
+]
+}
 },
 "117196": {
 "avg": 9.7,
@@ -363,7 +1705,29 @@
 "dimg": {
 "RAAM's Shadow": "covers/d/117196_raam-s-shadow.jpg"
 },
-"syn": "Gears of War 3 is a 2011 third-person shooter video game developed by Epic Games and published by Microsoft Studios for the Xbox 360. It is the third installment of the Gears of War series, and final game in the original trilogy. Originally due for release on April 8, 2011, the game was delayed and eventually released on September 20, 2011."
+"syn": "Gears of War 3 is a 2011 third-person shooter video game developed by Epic Games and published by Microsoft Studios for the Xbox 360. It is the third installment of the Gears of War series, and final game in the original trilogy. Originally due for release on April 8, 2011, the game was delayed and eventually released on September 20, 2011.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "gears-of-war-3",
+"n": "Gears of War 3",
+"pf": [
+"Xbox One",
+"Xbox 360"
+],
+"mc": 91,
+"age": "Mature",
+"tags": [
+"exclusive"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/d3e/d3e429c9092fc5f7c3d3277e48bf703c.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/6cd/6cd9091d72bffcb65809d8ec32ce5393.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/52b/52bebb3c464f08eae9b5f2307f87f518.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/982/982898baad16e8fa96bf13c6dc5457d7.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/aa6/aa6476c56a6ced6c0db049fc138daad7.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/8d9/8d972f0f83d02ad0edc066ce4f982095.jpg"
+]
+}
 },
 "117817": {
 "avg": 17.6,
@@ -374,7 +1738,44 @@
 "dimg": {
 "Undead Nightmare": "covers/d/117817_undead-nightmare.jpg"
 },
-"syn": "Red Dead Redemption is a 2010 action-adventure game developed by Rockstar San Diego and published by Rockstar Games. A successor to 2004's Red Dead Revolver, it is the second game in the Red Dead series. Red Dead Redemption is set during the decline of the American frontier in the year 1911."
+"syn": "Red Dead Redemption is a 2010 action-adventure game developed by Rockstar San Diego and published by Rockstar Games. A successor to 2004's Red Dead Revolver, it is the second game in the Red Dead series. Red Dead Redemption is set during the decline of the American frontier in the year 1911.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "red-dead-redemption",
+"n": "Red Dead Redemption",
+"pf": [
+"PC",
+"PlayStation 5",
+"Xbox One",
+"PlayStation 4",
+"Xbox Series S/X",
+"Nintendo Switch",
+"Xbox 360",
+"PlayStation 3"
+],
+"mc": 95,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Multiplayer",
+"Full controller support",
+"Atmospheric",
+"Great Soundtrack",
+"Story Rich",
+"Open World",
+"Third Person",
+"Gore"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/cf4/cf4ff03cc16bf7ccff78c1fb38bcafc2.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/304/304ad0c33748eff98812f057592741b6.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/ef7/ef743c271d18cf643a47543bf73fcf78.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/8f7/8f76b9883f00955461bb4f57cbf64914.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/7aa/7aafdcf2cf8a9863673b767f368a3291.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/495/495b5bc877060900fcad68d5c6fb19b2.jpg"
+]
+}
 },
 "117831": {
 "avg": 27,
@@ -387,22 +1788,136 @@
 "The Lost and Damned": "covers/d/117831_the-lost-and-damned.jpg",
 "The Ballad of Gay Tony": "covers/d/117831_the-ballad-of-gay-tony.jpg"
 },
-"syn": "Grand Theft Auto IV is a 2008 action-adventure game developed by Rockstar North and published by Rockstar Games. It is the sixth main entry in the Grand Theft Auto series, following 2004's Grand Theft Auto: San Andreas, and the eleventh entry overall. Set in the fictional Liberty City, based on New York City, the single-player story follows Eastern European war veteran Niko Bellic and his attempts to escape his past while under pressure from high-profile criminals."
+"syn": "Grand Theft Auto IV is a 2008 action-adventure game developed by Rockstar North and published by Rockstar Games. It is the sixth main entry in the Grand Theft Auto series, following 2004's Grand Theft Auto: San Andreas, and the eleventh entry overall. Set in the fictional Liberty City, based on New York City, the single-player story follows Eastern European war veteran Niko Bellic and his attempts to escape his past while under pressure from high-profile criminals.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "grand-theft-auto-iv",
+"n": "Grand Theft Auto IV",
+"pf": [
+"PC",
+"Xbox One",
+"Xbox 360",
+"PlayStation 3"
+],
+"mc": 95,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Multiplayer",
+"Atmospheric",
+"Co-op",
+"Open World",
+"cooperative",
+"Third Person",
+"Partial Controller Support",
+"Funny",
+"Gore"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/07f/07f7cf80741ff306e4eca982c3e64ac8.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/fef/fefd51ec13aa33acbd796ef79bcef7cb.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/b78/b78ffd258d5793be704c380e572748bc.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/17c/17c85ab9dfc4fda8e1e5ba72932ef2bf.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/a12/a12ca99cc74c1e7eba7100b0891dd1e0.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/b25/b254f9729ae3f36a9ccffccaa01d5cf6.jpg"
+]
+}
 },
 "117835": {
 "avg": 50.8,
 "chk": "2026-11-18",
-"syn": "Red Dead Redemption 2 is a 2018 action-adventure game developed and published by Rockstar Games. The game is the third entry in the Red Dead series and a prequel to the 2010 game Red Dead Redemption. The story is set in a fictionalized representation of the United States in 1899 and follows the exploits of Arthur Morgan, an outlaw and member of the Van der Linde gang, who must face the challenges of a declining Wild West, while attempting to survive against government forces, rival gangs, and ot"
+"syn": "Red Dead Redemption 2 is a 2018 action-adventure game developed and published by Rockstar Games. The game is the third entry in the Red Dead series and a prequel to the 2010 game Red Dead Redemption. The story is set in a fictionalized representation of the United States in 1899 and follows the exploits of Arthur Morgan, an outlaw and member of the Van der Linde gang, who must face the challenges of a declining Wild West, while attempting to survive against government forces, rival gangs, and ot",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "red-dead-redemption-2",
+"n": "Red Dead Redemption 2",
+"pf": [
+"PC",
+"Xbox One",
+"PlayStation 4"
+],
+"mc": 96,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Multiplayer",
+"Atmospheric",
+"Great Soundtrack",
+"Co-op",
+"Story Rich",
+"Open World",
+"First-Person",
+"Third Person",
+"Partial Controller Support"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/7b8/7b8895a23e8ca0dbd9e1ba24696579d9.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/b8c/b8cee381079d58b981594ede46a3d6ca.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/fd6/fd6e41d4c30c098158568aef32dfed35.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/2ed/2ed3b2791b3bbed6b98bf362694aeb73.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/857/8573b9f4f06a0c112d6e39cdf3544881.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/985/985e3e1f1d1af1ab0797d43a95d472cc.jpg"
+]
+}
 },
 "118501": {
 "avg": 12.3,
 "chk": "2026-11-18",
-"syn": "Metal Gear Solid Delta: Snake Eater is a 2025 action-adventure stealth game developed and published by Konami. It is a remake of the 2004 game Metal Gear Solid 3: Snake Eater, the fifth main entry in the Metal Gear franchise and the first chronologically. Set in 1964, it follows a FOX operative codenamed Naked Snake, who must rescue a prominent Soviet rocket scientist and sabotage the Soviet nuclear superweapon Shagohod, while clearing the United States from Soviet suspicion amid Cold War tensio"
+"syn": "Metal Gear Solid Delta: Snake Eater is a 2025 action-adventure stealth game developed and published by Konami. It is a remake of the 2004 game Metal Gear Solid 3: Snake Eater, the fifth main entry in the Metal Gear franchise and the first chronologically. Set in 1964, it follows a FOX operative codenamed Naked Snake, who must rescue a prominent Soviet rocket scientist and sabotage the Soviet nuclear superweapon Shagohod, while clearing the United States from Soviet suspicion amid Cold War tensio",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "metal-gear-solid-delta-snake-eater",
+"n": "Metal Gear Solid Delta: Snake Eater",
+"pf": [
+"PC",
+"PlayStation 5",
+"Xbox Series S/X"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/00f/00f9a78414c515018deaefe9690fd019.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/f79/f7969e2faf11c8c70281d7011941ebe3.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/c19/c19a5ad99038d1097d7f2c09f942ebc9.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/e87/e87444aeff03a7322440dd7f2a3c01e3.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/2bd/2bd7630c420d07f8dcbed81319ab0299.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/972/972811deb820b886c173147a16151df7.jpg"
+]
+}
 },
 "118530": {
 "avg": 6.4,
 "chk": "2026-11-19",
-"syn": "Serious Sam: The First Encounter is a 2001 first-person shooter game developed by Croteam and published by Gathering of Developers. It is the first in the Serious Sam series. The game follows the soldier Sam \"Serious\" Stone, who is sent back in time to ancient Egypt in 1378 BCE to uncover information about the technologically advanced civilisation of the Sirians that could help humanity survive the attacks of extraterrestrial forces in the 22nd century."
+"syn": "Serious Sam: The First Encounter is a 2001 first-person shooter game developed by Croteam and published by Gathering of Developers. It is the first in the Serious Sam series. The game follows the soldier Sam \"Serious\" Stone, who is sent back in time to ancient Egypt in 1378 BCE to uncover information about the technologically advanced civilisation of the Sirians that could help humanity survive the attacks of extraterrestrial forces in the 22nd century.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "serious-sam-the-first-encounter",
+"n": "Serious Sam: The First Encounter",
+"pf": [
+"PC",
+"Nintendo Switch"
+],
+"mc": 87,
+"age": "Adults Only",
+"tags": [
+"Singleplayer",
+"Multiplayer",
+"Atmospheric",
+"Great Soundtrack",
+"Co-op",
+"cooperative",
+"First-Person",
+"Sci-fi",
+"FPS",
+"Funny"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/1d1/1d14d28fceb59724e525af6729bb7719.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/15c/15c9409484b98bc6074e3f0bedec145d.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/1ce/1cef8991250a0a23773f3c97cc9d961d.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/2eb/2ebc5fca01f9d263f185652024a1e5f8.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/264/2646f0444f65727a834577e50cc8fc7d.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/1ee/1ee43dec2f0c4da7cef3014d308c00a7.jpg"
+]
+}
 },
 "120096": {
 "avg": 8,
@@ -413,12 +1928,69 @@
 "dimg": {
 "Justine": "miss:2026-11-08"
 },
-"syn": "Amnesia: The Dark Descent is a 2010 survival horror adventure game developed and published by the Swedish game development studio Frictional Games. It was first released on 8 September 2010 for Microsoft Windows, Mac OS X, and Linux. Later, it was released to PlayStation 4 on 22 November 2016, Xbox One on 28 September 2018, and Nintendo Switch on 12 September 2019 as part of The Amnesia Collection."
+"syn": "Amnesia: The Dark Descent is a 2010 survival horror adventure game developed and published by the Swedish game development studio Frictional Games. It was first released on 8 September 2010 for Microsoft Windows, Mac OS X, and Linux. Later, it was released to PlayStation 4 on 22 November 2016, Xbox One on 28 September 2018, and Nintendo Switch on 12 September 2019 as part of The Amnesia Collection.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "amnesia-the-dark-descent",
+"n": "Amnesia: The Dark Descent",
+"pf": [
+"PC",
+"macOS",
+"Linux"
+],
+"mc": 85,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Full controller support",
+"Atmospheric",
+"Great Soundtrack",
+"Story Rich",
+"First-Person",
+"Horror",
+"Exploration",
+"Classic",
+"Survival"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/32b/32bde7545dff888358a7ce620c7b3063.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/f59/f597e6857aab3b1ba098d713524d1690.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/5fc/5fce282fa41e7d73d0e8b0c35da74391.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/8f8/8f88209c1fdc529c3af746c08a44ba6c.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/ff7/ff776252fbd6de18cfd197b57d6e6aac.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/42d/42d3c11b04e589565e5a9d2feae5023c.jpg"
+]
+}
 },
 "120192": {
 "avg": 1.5,
 "chk": "2026-11-20",
-"syn": "Tekken Tag Tournament 2 is a 2011 fighting game developed and published by Namco Bandai Games. Part of the Tekken series, it is the sequel to Tekken Tag Tournament (1999). The game debuted in Japanese arcades in September 2011 and received the Unlimited update in March 2012."
+"syn": "Tekken Tag Tournament 2 is a 2011 fighting game developed and published by Namco Bandai Games. Part of the Tekken series, it is the sequel to Tekken Tag Tournament (1999). The game debuted in Japanese arcades in September 2011 and received the Unlimited update in March 2012.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "tekken-tag-tournament-2",
+"n": "Tekken Tag Tournament 2",
+"pf": [
+"Xbox One",
+"Xbox 360",
+"PlayStation 3",
+"Wii U"
+],
+"mc": 83,
+"age": "Teen",
+"tags": [
+"online",
+"combos"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/83d/83df99491510fc96f8d5bdcd2d9576ae.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/45f/45fb9a8a206acb2e0d9fabf1a891cf37.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/b4f/b4fada0319970cefe12b889c465df446.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/438/4380b2438d9f10574f394a29adc430cd.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/fed/fed927297b0abbcf99c11299a3c9ed96.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/382/382fe5455f39169ddd0fa34adab005ce.jpg"
+]
+}
 },
 "120722": {
 "avg": 26.2,
@@ -429,12 +2001,82 @@
 "dimg": {
 "Phantom Liberty": "covers/d/120722_phantom-liberty.jpg"
 },
-"syn": "Cyberpunk 2077 is a 2020 action role-playing game developed by CD Projekt Red and published by CD Projekt. Based on and set in the fictional universe of Mike Pondsmith's Cyberpunk tabletop game series, Cyberpunk 2077 takes place in the dystopian metropolis of Night City in California. The player assumes the role of V (voiced by Gavin Drea or Cherami Leigh depending on the player character's gender), a cybernetically-enhanced mercenary who is reluctantly imbued with an experimental \"biochip\" cont"
+"syn": "Cyberpunk 2077 is a 2020 action role-playing game developed by CD Projekt Red and published by CD Projekt. Based on and set in the fictional universe of Mike Pondsmith's Cyberpunk tabletop game series, Cyberpunk 2077 takes place in the dystopian metropolis of Night City in California. The player assumes the role of V (voiced by Gavin Drea or Cherami Leigh depending on the player character's gender), a cybernetically-enhanced mercenary who is reluctantly imbued with an experimental \"biochip\" cont",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "cyberpunk-2077",
+"n": "Cyberpunk 2077",
+"pf": [
+"PC",
+"PlayStation 5",
+"Xbox One",
+"PlayStation 4",
+"Xbox Series S/X",
+"Nintendo Switch"
+],
+"mc": 73,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Atmospheric",
+"Great Soundtrack",
+"RPG",
+"Story Rich",
+"Open World",
+"First-Person",
+"Sci-fi",
+"FPS",
+"Exploration"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/814/814c25d6fd1fd34a4e6dade645a3bda7.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/2ab/2ab0b67e68b6ede6b19d80094b6f7f2a_qTSfS2g.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/cd2/cd22af9d6ac593440defac6082760e4a.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/9b5/9b51535beb9d9e416cb9aac874091334.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/d84/d84d3a16c1e2cb24dcf73e0108d78455.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/a55/a5583c11e4fd11a9eb5d52e8ddd41ac3.jpg"
+]
+}
 },
 "120728": {
 "avg": 7.4,
 "chk": "2026-11-19",
-"syn": "Road 96 is a 2021 adventure video game developed by DigixArt. Set in the fictional authoritarian nation of Petria in Summer 1996, the player controls a series of nameless teenagers attempting to flee the country by reaching its northern border as political tensions rise with its upcoming election. The player navigates procedurally-generated journeys composed of various segments in different locations, traveling between them by walking, hitchhiking, or using vehicles including buses, cars, and ta"
+"syn": "Road 96 is a 2021 adventure video game developed by DigixArt. Set in the fictional authoritarian nation of Petria in Summer 1996, the player controls a series of nameless teenagers attempting to flee the country by reaching its northern border as political tensions rise with its upcoming election. The player navigates procedurally-generated journeys composed of various segments in different locations, traveling between them by walking, hitchhiking, or using vehicles including buses, cars, and ta",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "road-96",
+"n": "Road 96",
+"pf": [
+"PC",
+"PlayStation 5",
+"Xbox One",
+"PlayStation 4",
+"Xbox Series S/X",
+"Nintendo Switch"
+],
+"mc": 78,
+"age": "Teen",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Full controller support",
+"Steam Cloud",
+"Atmospheric",
+"Story Rich",
+"Exploration",
+"Comedy",
+"Mystery",
+"Choices Matter"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/4bd/4bdece39f974588b74087808ed42d1b1.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/f01/f015f3efe35ae4954d85872b9789e546.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/2e6/2e6cc93e3fe10ff3126af250bf2e3e1b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/f47/f47dfadf45fef34b07059bc1c8d2de7d.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/16a/16a0d50857bc5e007c03f65472ae16e5.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/aca/aca70d6e497ea0e15e935d190d8b6187.jpg"
+]
+}
 },
 "121340": {
 "avg": 38.3,
@@ -447,7 +2089,39 @@
 "Echoes of the Fallen": "covers/d/121340_echoes-of-the-fallen.jpg",
 "The Rising Tide": "covers/d/121340_the-rising-tide.jpg"
 },
-"syn": "Final Fantasy XVI is a 2023 action role-playing game developed and published by Square Enix. The sixteenth main installment in the Final Fantasy series, it was first released for the PlayStation 5, with a Windows version released in September 2024, and an Xbox Series X/S version released in June 2025. The game features segmented open environments and an action-based combat system involving melee and magic-based attacks."
+"syn": "Final Fantasy XVI is a 2023 action role-playing game developed and published by Square Enix. The sixteenth main installment in the Final Fantasy series, it was first released for the PlayStation 5, with a Windows version released in September 2024, and an Xbox Series X/S version released in June 2025. The game features segmented open environments and an action-based combat system involving melee and magic-based attacks.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "final-fantasy-xvi",
+"n": "Final Fantasy XVI",
+"pf": [
+"PC",
+"PlayStation 5",
+"Xbox Series S/X"
+],
+"mc": 88,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Full controller support",
+"Steam Cloud",
+"Atmospheric",
+"Great Soundtrack",
+"RPG",
+"Story Rich",
+"Third Person",
+"Fantasy"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/bc2/bc255e09533797521b2ff1e364113a0b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/af2/af2426fc46c870b4fe3dfb0242f2f6cc_SDr2Q4j.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/20c/20caffc877526070d84dda7b79e6340c.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/934/93425eb39f7347f229a8ef4a6bc4cefc.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/ae8/ae88639668c1124b2b75eed1e8c44209.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/5bb/5bbe932d2fa06cc12825b006361bd4e5.jpg"
+]
+}
 },
 "123119": {
 "avg": 18.3,
@@ -460,12 +2134,48 @@
 "Crew Expendable": "covers/d/123119_crew-expendable.jpg",
 "Last Survivor": "covers/d/123119_last-survivor.jpg"
 },
-"syn": "Alien: Isolation is a 2014 survival horror game developed by Creative Assembly and published by Sega for PlayStation 3, PlayStation 4, Windows, Xbox 360, and Xbox One. Based on the Alien film series, the game is set 15 years after the original 1979 film, and follows the engineer Amanda Ripley, voiced by Andrea Deck. Amanda investigates the disappearance of her mother, Ellen Ripley, aboard the space station Sevastopol, which is in disarray due to years of corporate negligence and the threat of a "
+"syn": "Alien: Isolation is a 2014 survival horror game developed by Creative Assembly and published by Sega for PlayStation 3, PlayStation 4, Windows, Xbox 360, and Xbox One. Based on the Alien film series, the game is set 15 years after the original 1979 film, and follows the engineer Amanda Ripley, voiced by Andrea Deck. Amanda investigates the disappearance of her mother, Ellen Ripley, aboard the space station Sevastopol, which is in disarray due to years of corporate negligence and the threat of a ",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "alien-isolation",
+"n": "Alien: Isolation",
+"pf": [
+"PC",
+"Xbox One",
+"PlayStation 4",
+"Nintendo Switch",
+"iOS",
+"Android"
+],
+"mc": 81,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Full controller support",
+"Steam Cloud",
+"Atmospheric",
+"Great Soundtrack",
+"First-Person",
+"Sci-fi",
+"Horror",
+"FPS"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/df3/df311b578fbaa587c8ba2d768bcf18d7.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/b46/b46d5ddcbf7650df4d7eedf1e886bcdb.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/37a/37a8f38809062d7e68d32c537e23862d.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/89c/89c46fe1576b925f4c00cc9b6620877a.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/d06/d0612058778cdf798a747c80a491b55f.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/e12/e12d1635f074c536a16bc50a6b3f56cc.jpg"
+]
+}
 },
 "123796": {
 "avg": 61.2,
 "chk": "2026-11-20",
-"syn": "Yakuza, also known as Like a Dragon (Japanese: 龍が如く, Hepburn: Ryū ga Gotoku), is a video game series and media franchise created by Toshihiro Nagoshi for Sega. It incorporates elements of the action-adventure, beat 'em up, and role-playing genres.\nEach installment is typically a crime drama, with plot lines inspired by yakuza films and pre-millennial Japanese crime dramas."
+"syn": "Yakuza, also known as Like a Dragon (Japanese: 龍が如く, Hepburn: Ryū ga Gotoku), is a video game series and media franchise created by Toshihiro Nagoshi for Sega. It incorporates elements of the action-adventure, beat 'em up, and role-playing genres.\nEach installment is typically a crime drama, with plot lines inspired by yakuza films and pre-millennial Japanese crime dramas.",
+"rwchk": "2026-11-20"
 },
 "124925": {
 "avg": 28.5,
@@ -476,7 +2186,40 @@
 "dimg": {
 "The Forsaken Hollows": "covers/d/124925_the-forsaken-hollows.jpg"
 },
-"syn": "Elden Ring Nightreign is a 2025 action role-playing game developed by FromSoftware and published by Bandai Namco Entertainment. The game is a roguelike spin-off to Elden Ring, using many of its features and gameplay elements, and focuses on roguelike and cooperative mechanics. Players control Nightfarers on a quest to dispel the reign of night."
+"syn": "Elden Ring Nightreign is a 2025 action role-playing game developed by FromSoftware and published by Bandai Namco Entertainment. The game is a roguelike spin-off to Elden Ring, using many of its features and gameplay elements, and focuses on roguelike and cooperative mechanics. Players control Nightfarers on a quest to dispel the reign of night.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "elden-ring-nightreign",
+"n": "Elden Ring Nightreign",
+"pf": [
+"PC",
+"PlayStation 5",
+"Xbox One",
+"PlayStation 4",
+"Xbox Series S/X"
+],
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Multiplayer",
+"Steam Cloud",
+"RPG",
+"Co-op",
+"Story Rich",
+"Open World",
+"cooperative",
+"Third Person",
+"Online Co-Op"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/203/203c0f6c56dda05c25cd8dfa2e8520f9.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/860/86080fd4c83beb4fb0d462e057b1a5c9.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/715/71505c403e5afa188df4ead0f73a8ab2.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/fec/fec723ae8aa5feb391b9924c38734cb6.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/21d/21d3bfb13c3ecf3f47854626ee1956e2.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/6ae/6ae63a8569267845e0f9ae211765d1bd.jpg"
+]
+}
 },
 "125845": {
 "avg": 12.7,
@@ -499,12 +2242,67 @@
 "The Grand Caiman": "covers/d/125845_the-grand-caiman.jpg"
 },
 "chk": "2026-11-19",
-"syn": "Shadow of the Tomb Raider is a 2018 action-adventure game developed by Eidos-Montréal and published by Square Enix. As the sequel to Rise of the Tomb Raider (2015), it is the twelfth mainline entry in the Tomb Raider series and the final installment of the Survivor trilogy. The story follows Lara Croft as she ventures through the tropical regions of the Americas to the legendary city of Paititi, battling the paramilitary organization Trinity while racing to stop a Mayan apocalypse she inadverten"
+"syn": "Shadow of the Tomb Raider is a 2018 action-adventure game developed by Eidos-Montréal and published by Square Enix. As the sequel to Rise of the Tomb Raider (2015), it is the twelfth mainline entry in the Tomb Raider series and the final installment of the Survivor trilogy. The story follows Lara Croft as she ventures through the tropical regions of the Americas to the legendary city of Paititi, battling the paramilitary organization Trinity while racing to stop a Mayan apocalypse she inadverten",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "shadow-of-the-tomb-raider",
+"n": "Shadow of the Tomb Raider",
+"pf": [
+"PC",
+"Xbox One",
+"PlayStation 4",
+"macOS",
+"Linux"
+],
+"mc": 78,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Full controller support",
+"Steam Cloud",
+"Atmospheric",
+"steam-trading-cards",
+"Great Soundtrack",
+"Story Rich",
+"Open World",
+"Third Person"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/167/16728aa54b1130772b06cdcac128e056.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/3f7/3f711b42d24d9fdeb58faf1f69eccbe3.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/ef2/ef2be35eaf7e083cc5b51d2e2addf441.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/0d1/0d129ec2c410a11f4407ca469f92edda.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/bd5/bd51765bc9e33644cae768ee91c10e14.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/877/877d713525903c9f6019ad58b80650a6.jpg"
+]
+}
 },
 "125927": {
 "avg": 49,
 "chk": "2026-11-17",
-"syn": "Forza Motorsport 2 is a 2007 simulation racing video game developed by Turn 10 Studios for the Xbox 360 console. It is the second title in the Forza series, and is the sequel to the original Forza Motorsport (2005) and was followed by Forza Motorsport 3 (2009)."
+"syn": "Forza Motorsport 2 is a 2007 simulation racing video game developed by Turn 10 Studios for the Xbox 360 console. It is the second title in the Forza series, and is the sequel to the original Forza Motorsport (2005) and was followed by Forza Motorsport 3 (2009).",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "forza-motorsport-2",
+"n": "Forza Motorsport 2",
+"pf": [
+"Xbox 360"
+],
+"age": "Everyone",
+"tags": [
+"exclusive",
+"true exclusive"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/2d4/2d4d5bea081524f0a43ec06564a6560b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/f22/f22fc866bd6291725040040d8cbed96a.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/e4e/e4e77af937453bd5ea66d117624e1bc6.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/238/238446d53ef19d97c2b549b104a59961.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/2b7/2b718868f777b7a585df4bb305b89d6e.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/4f2/4f27b097ad04651269c737a37f5496f7.jpg"
+]
+}
 },
 "128405": {
 "avg": 11.2,
@@ -517,22 +2315,143 @@
 "The Signal": "covers/d/128405_the-signal.jpg",
 "The Writer": "covers/d/128405_the-writer.jpg"
 },
-"syn": "Alan Wake is a 2010 action-adventure game developed by Remedy Entertainment and published by Microsoft Game Studios. The game was released in May 2010 for the Xbox 360, with a Windows version following in February 2012 and a remastered version released for PlayStation 4, PlayStation 5, Xbox One, Xbox Series X/S, and Windows in October 2021, as well as a Nintendo Switch version in October 2022. The story follows bestselling crime thriller novelist Alan Wake as he tries to uncover the mystery behi"
+"syn": "Alan Wake is a 2010 action-adventure game developed by Remedy Entertainment and published by Microsoft Game Studios. The game was released in May 2010 for the Xbox 360, with a Windows version following in February 2012 and a remastered version released for PlayStation 4, PlayStation 5, Xbox One, Xbox Series X/S, and Windows in October 2021, as well as a Nintendo Switch version in October 2022. The story follows bestselling crime thriller novelist Alan Wake as he tries to uncover the mystery behi",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "alan-wake",
+"n": "Alan Wake",
+"pf": [
+"PC",
+"Xbox One",
+"Xbox 360"
+],
+"mc": 83,
+"age": "Teen",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Full controller support",
+"Steam Cloud",
+"Atmospheric",
+"steam-trading-cards",
+"Great Soundtrack",
+"Story Rich",
+"Open World",
+"Third Person"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/8d7/8d7d24df1418efdaba45128e2c855f62.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/5ac/5ac6dd243c0ed41fb1a0b5734bff55f1.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/ad2/ad2e4f73ac71839178ea01ab66d8bf6c.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/b28/b28fd421d570931d83b27213538689df.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/d1e/d1e49ff4902b1bc964262ffc2e08043d.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/02f/02f6cb8534d5434e94559cdcd35aeef7.jpg"
+]
+}
 },
 "130796": {
 "avg": 12.8,
 "chk": "2026-11-18",
-"syn": "It Takes Two is a 2021 cooperative action-adventure game developed by Hazelight Studios and published by Electronic Arts. It was released for PlayStation 4, PlayStation 5, Windows, Xbox One, and Xbox Series X/S in March 2021, for Nintendo Switch in November 2022, and for Nintendo Switch 2 in October 2026. The game follows Cody and May, a husband and wife on the brink of divorce whose daughter unknowingly transports their consciousnesses into handmade dolls, forcing to work together as they try t"
+"syn": "It Takes Two is a 2021 cooperative action-adventure game developed by Hazelight Studios and published by Electronic Arts. It was released for PlayStation 4, PlayStation 5, Windows, Xbox One, and Xbox Series X/S in March 2021, for Nintendo Switch in November 2022, and for Nintendo Switch 2 in October 2026. The game follows Cody and May, a husband and wife on the brink of divorce whose daughter unknowingly transports their consciousnesses into handmade dolls, forcing to work together as they try t",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "it-takes-two-2",
+"n": "It Takes Two",
+"pf": [
+"PC",
+"PlayStation 5",
+"Xbox One",
+"PlayStation 4",
+"Xbox Series S/X",
+"Nintendo Switch"
+],
+"mc": 88,
+"age": "Everyone 10+",
+"tags": [
+"Steam Achievements",
+"Multiplayer",
+"Full controller support",
+"Co-op",
+"Story Rich",
+"cooperative",
+"Online Co-Op",
+"Exploration",
+"Female Protagonist",
+"Split Screen"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/252/252844a85405a3147440806709a47f79.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/88a/88a0a4d7a1f4dbe78c2c34810afcaffa.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/bef/bef5d6085129fda4d26a2293b9edb30e.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/0f1/0f157efb373e3c5da268f2ecdb03701e.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/5f4/5f429ee02d86be1822963fd0a77a71ab.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/c01/c01d8a0c413b3a065ea52b80f1ad6212.jpg"
+]
+}
 },
 "130801": {
 "avg": 6.1,
 "chk": "2026-11-15",
-"syn": "Battlefield 3 is a 2011 first-person shooter game developed by DICE and published by Electronic Arts. It is the twelfth installment in the Battlefield series and a sequel to Battlefield 2 (2005). The game was released on Microsoft Windows, PlayStation 3 and Xbox 360 in October 2011."
+"syn": "Battlefield 3 is a 2011 first-person shooter game developed by DICE and published by Electronic Arts. It is the twelfth installment in the Battlefield series and a sequel to Battlefield 2 (2005). The game was released on Microsoft Windows, PlayStation 3 and Xbox 360 in October 2011.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "battlefield-3",
+"n": "Battlefield 3",
+"pf": [
+"PC",
+"Xbox One",
+"Xbox 360",
+"PlayStation 3"
+],
+"mc": 86,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Multiplayer",
+"Full controller support",
+"Atmospheric",
+"First-Person",
+"FPS",
+"Violent",
+"Tactical",
+"PvP",
+"War"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/c79/c795f6bdf481e6d8fa127947a8a039fc.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/983/983cf254c11db4b2d03051140e629ab2.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/787/787d5ee8e7a470215650e2c1efa1c35c.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/04a/04a85384c0e5a9893410cbcdaabc101c.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/e00/e00a3b21ff4154428e0b2f94fa1fc876.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/946/9462e72fdc1705fcbfc2e2619c24da68.jpg"
+]
+}
 },
 "131649": {
 "avg": 3.6,
 "chk": "2026-11-16",
-"syn": "Child of Eden is a 2011 musical rail shooter game developed by Q Entertainment and published by Ubisoft for Xbox 360 and PlayStation 3. Following the player's journey to purge a far-future internet of viruses, the gameplay features shooting numerous enemies from a first-person perspective, with scores based on performance and bonuses awarded for syncing groups of shots with each stage's musical track. In addition to standard controllers, each version has the option to use motion controls through"
+"syn": "Child of Eden is a 2011 musical rail shooter game developed by Q Entertainment and published by Ubisoft for Xbox 360 and PlayStation 3. Following the player's journey to purge a far-future internet of viruses, the gameplay features shooting numerous enemies from a first-person perspective, with scores based on performance and bonuses awarded for syncing groups of shots with each stage's musical track. In addition to standard controllers, each version has the option to use motion controls through",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "child-of-eden",
+"n": "Child of Eden",
+"pf": [
+"Xbox 360",
+"PlayStation 3"
+],
+"age": "Everyone 10+",
+"tags": [
+"Music"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/1ad/1ad984a7633eac9e0085ed8d6068b84d.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/611/611f91b00efb0a8be45d1cefa0ca0c28_nK4icnI.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/ea9/ea9ec599cbaf7eeb7de35b3f3e9ea278.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/6f6/6f693e70cf992524b71a06fc1766f2c6.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/109/1098988b1777f869bc44a07419c5be15.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/201/201db1334a20319fe14e4a4ebb745e97.jpg"
+]
+}
 },
 "134115": {
 "avg": 40.3,
@@ -557,7 +2476,41 @@
 "The Stone Prisoner": "miss:2026-11-08",
 "Warden's Keep": "miss:2026-11-08"
 },
-"syn": "Dragon Age: Origins is a 2009 role-playing video game developed by Canadian studio BioWare and published by Electronic Arts. It is the first game in the Dragon Age franchise. Set in the fictional kingdom of Ferelden during a period of civil strife, the game puts the player in the role of a warrior, mage, or rogue coming from an elven, human, or dwarven background."
+"syn": "Dragon Age: Origins is a 2009 role-playing video game developed by Canadian studio BioWare and published by Electronic Arts. It is the first game in the Dragon Age franchise. Set in the fictional kingdom of Ferelden during a period of civil strife, the game puts the player in the role of a warrior, mage, or rogue coming from an elven, human, or dwarven background.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "dragon-age-origins",
+"n": "Dragon Age: Origins",
+"pf": [
+"PC",
+"Xbox One",
+"macOS",
+"Xbox 360",
+"PlayStation 3"
+],
+"mc": 91,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Atmospheric",
+"RPG",
+"Story Rich",
+"Open World",
+"Third Person",
+"Fantasy",
+"Female Protagonist",
+"Tactical",
+"Character Customization"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/f92/f92cf56d384d56e18470eda48422d896.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/f92/f92a1b20875b76162c1fc7d35d4f9bc6.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/767/7675e3306961b5409702507551a268cc.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/887/8873e3286a5b435a2dd7e7bf068f57ff.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/0f0/0f0c2ae5781f67b59fd0e0699ca87eb9.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/c32/c329a2c90f2e345697810c1cb064280a.jpg"
+]
+}
 },
 "134669": {
 "avg": 12.6,
@@ -572,12 +2525,74 @@
 "Sabotage Under the Sun": "miss:2026-11-08"
 },
 "chk": "2026-11-19",
-"syn": "Saints Row is a 2022 action-adventure game developed by Volition and published by Deep Silver. It is a reboot of the Saints Row series, and the fifth main installment, following 2013's Saints Row IV. The game was released for PlayStation 4, PlayStation 5, Google Stadia, Windows, Xbox One, and Xbox Series X/S on August 23, 2022. Set within the fictional city of Santo Ileso, inspired by Las Vegas, the story follows a group of four friends who start their own outlaw gang called the Saints, which th"
+"syn": "Saints Row is a 2022 action-adventure game developed by Volition and published by Deep Silver. It is a reboot of the Saints Row series, and the fifth main installment, following 2013's Saints Row IV. The game was released for PlayStation 4, PlayStation 5, Google Stadia, Windows, Xbox One, and Xbox Series X/S on August 23, 2022. Set within the fictional city of Santo Ileso, inspired by Las Vegas, the story follows a group of four friends who start their own outlaw gang called the Saints, which th",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "saints-row",
+"n": "Saints Row",
+"pf": [
+"PC",
+"Xbox One",
+"Xbox 360"
+],
+"mc": 81,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Multiplayer",
+"Full controller support",
+"Steam Cloud",
+"Co-op",
+"Open World",
+"cooperative",
+"Third Person",
+"Online Co-Op"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/301/301c2bf772fe70c8301bf1f51067d912.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/4e2/4e22d985836f5c2dc087c52bf0b1df1b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/d90/d90b65cb2ba72a999b09d05347d9f1e0.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/e42/e42aa48840d8c3a2b101df0f462a3cea.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/df9/df9884cbc2f250dcb745ff349ff43c30.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/f31/f31ff37852c73ccbebe277711f1a6e2d.jpg"
+]
+}
 },
 "134739": {
 "avg": 29.3,
 "chk": "2026-11-16",
-"syn": "Clair Obscur: Expedition 33  is a 2025 role-playing video game developed by Sandfall Interactive and published by Kepler Interactive. Set in a dark fantasy Belle Époque-inspired universe, the game follows the members of Expedition 33 as they set out to destroy the Paintress, a mysterious entity causing the yearly \"Gommage\", which results in those at or above an ever-decreasing age being erased from existence. In Expedition 33, one controls a party of characters from a third-person perspective, e"
+"syn": "Clair Obscur: Expedition 33  is a 2025 role-playing video game developed by Sandfall Interactive and published by Kepler Interactive. Set in a dark fantasy Belle Époque-inspired universe, the game follows the members of Expedition 33 as they set out to destroy the Paintress, a mysterious entity causing the yearly \"Gommage\", which results in those at or above an ever-decreasing age being erased from existence. In Expedition 33, one controls a party of characters from a third-person perspective, e",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "clair-obscur-expedition-33",
+"n": "Clair Obscur: Expedition 33",
+"pf": [
+"PC",
+"PlayStation 5",
+"Xbox Series S/X"
+],
+"tags": [
+"Singleplayer",
+"Steam Cloud",
+"RPG",
+"Story Rich",
+"Third Person",
+"Fantasy",
+"Exploration",
+"Female Protagonist",
+"Action RPG",
+"Character Customization"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/1e4/1e4dcb884c03242be7dab30fad77d7b2.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/22c/22c350e84e9f320b389cdabf0c213f7f.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/d8c/d8ce62f48218d47440c1859366860562.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/72d/72da1f6013eb7b3f10c624dfeb3dd578.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/16b/16bca296df99c20d6d54d67b2e6ad71b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/7bb/7bb0c8b67c9add59d1a13ebb7da790b1.jpg"
+]
+}
 },
 "137649": {
 "dlc": [
@@ -588,7 +2603,8 @@
 "dimg": {
 "Episode INTERmission": "miss:2026-11-08"
 },
-"syn": "Final Fantasy VII Remake is a 2020 action role-playing game developed and published by Square Enix for the PlayStation 4. It is the first in a trilogy of games remaking Final Fantasy VII (1997), originally released for the PlayStation. An enhanced version, Final Fantasy VII Remake Intergrade, was released for PlayStation 5 and Windows in 2021, followed by ports for the Nintendo Switch 2 and Xbox Series X/S in 2026."
+"syn": "Final Fantasy VII Remake is a 2020 action role-playing game developed and published by Square Enix for the PlayStation 4. It is the first in a trilogy of games remaking Final Fantasy VII (1997), originally released for the PlayStation. An enhanced version, Final Fantasy VII Remake Intergrade, was released for PlayStation 5 and Windows in 2021, followed by ports for the Nintendo Switch 2 and Xbox Series X/S in 2026.",
+"rwchk": "2026-11-20"
 },
 "138994": {
 "dlc": [
@@ -603,7 +2619,37 @@
 "Frozen Empress": "covers/d/138994_frozen-empress.jpg",
 "Lord of Thunder": "covers/d/138994_lord-of-thunder.jpg"
 },
-"syn": "Code Vein is an action role-playing game developed by Bandai Namco Studios and Shift, and published by Bandai Namco Entertainment. It was released worldwide on September 27, 2019, for PlayStation 4, Windows, and Xbox One, and sold over three million copies but received mixed reviews from critics. A sequel, Code Vein II, released in 2026."
+"syn": "Code Vein is an action role-playing game developed by Bandai Namco Studios and Shift, and published by Bandai Namco Entertainment. It was released worldwide on September 27, 2019, for PlayStation 4, Windows, and Xbox One, and sold over three million copies but received mixed reviews from critics. A sequel, Code Vein II, released in 2026.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "code-vein",
+"n": "Code Vein",
+"pf": [
+"PC",
+"Xbox One",
+"PlayStation 4"
+],
+"mc": 72,
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Multiplayer",
+"RPG",
+"Co-op",
+"cooperative",
+"Third Person",
+"Partial Controller Support",
+"Online Co-Op",
+"Gore"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/ef3/ef327e0d43ecfc4add8732e98c426554.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/965/9651c74e8a62fefe5d805880ebf89fe4.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/cc9/cc93be6e10fc3fb2da814017fd154444.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/2cc/2cc7eb78b450f669e1d3209e89806f5b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/984/984e478a910eefbcc5a56e5b3959cb9b.jpg"
+]
+}
 },
 "139953": {
 "dlc": [
@@ -618,12 +2664,79 @@
 "Children of the Worm": "covers/d/139953_children-of-the-worm.jpg",
 "River of Blood": "covers/d/139953_river-of-blood.jpg"
 },
-"syn": "Back 4 Blood is a 2021 first-person shooter game developed by Turtle Rock Studios and published by Warner Bros. Games. It was released on October 12, 2021, for PlayStation 4, PlayStation 5, Windows, Xbox One, and Xbox Series X/S.\nThe game is considered to be a spiritual successor to the Left 4 Dead series, and carries over several key gameplay pillars, such as a strong emphasis on cooperative teamwork, and an AI system called the \"Game Director\", which dynamically modifies the environment, place"
+"syn": "Back 4 Blood is a 2021 first-person shooter game developed by Turtle Rock Studios and published by Warner Bros. Games. It was released on October 12, 2021, for PlayStation 4, PlayStation 5, Windows, Xbox One, and Xbox Series X/S.\nThe game is considered to be a spiritual successor to the Left 4 Dead series, and carries over several key gameplay pillars, such as a strong emphasis on cooperative teamwork, and an AI system called the \"Game Director\", which dynamically modifies the environment, place",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "back-4-blood",
+"n": "Back 4 Blood",
+"pf": [
+"PC",
+"PlayStation 5",
+"Xbox One",
+"PlayStation 4",
+"Xbox Series S/X"
+],
+"mc": 76,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Multiplayer",
+"Full controller support",
+"Co-op",
+"cooperative",
+"First-Person",
+"Horror",
+"FPS",
+"Online Co-Op",
+"Gore"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/780/78020fb32b36d6a050da58f7ce5962aa.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/cbc/cbc44871f26f87a681cfd80170b30797.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/4bb/4bb6c906fe93b2b425b5099288f65ff3.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/21c/21c6ce360a0844054ddb4c4a01647e2b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/7eb/7eb72159aa28df63fc11d67204124e60.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/4be/4be97d420d5d496ac0afe4b9f6935e72.jpg"
+]
+}
 },
 "149525": {
 "avg": 15.3,
 "chk": "2026-11-20",
-"syn": "WWE 2K17 is a professional wrestling video game developed by Yuke's and published by 2K for PlayStation 3, PlayStation 4, Xbox 360, Xbox One, and Microsoft Windows. It is the eighteenth game in the WWE game series (fourth under the WWE 2K banner), serving as the following from their previous game WWE 2K16 (released in 2015), and followed by WWE 2K18 (released in 2017). This is the fourth and final installment to be released for the PlayStation 3 and Xbox 360 platforms and on those platforms it s"
+"syn": "WWE 2K17 is a professional wrestling video game developed by Yuke's and published by 2K for PlayStation 3, PlayStation 4, Xbox 360, Xbox One, and Microsoft Windows. It is the eighteenth game in the WWE game series (fourth under the WWE 2K banner), serving as the following from their previous game WWE 2K16 (released in 2015), and followed by WWE 2K18 (released in 2017). This is the fourth and final installment to be released for the PlayStation 3 and Xbox 360 platforms and on those platforms it s",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "wwe-2k17",
+"n": "WWE 2K17",
+"pf": [
+"PC",
+"Xbox One",
+"PlayStation 4",
+"Xbox 360",
+"PlayStation 3"
+],
+"mc": 61,
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Multiplayer",
+"Full controller support",
+"Co-op",
+"Violent",
+"Split Screen",
+"Local Co-Op",
+"Anime",
+"Character Customization"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/62e/62eb4ca1ca19aaeabc6ccd6fbf544d54.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/d58/d587fbc5350d227076d67a93e0b86ffc.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/13b/13b8e4904f4d29975ee70667442c798b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/bc6/bc610c83cdc58a8f9167c62b31418b70.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/8da/8daefb78097906807560db54c1c01489.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/2fc/2fc23fbbb641282f83a529b497d6d28e.jpg"
+]
+}
 },
 "149672": {
 "avg": 60.1,
@@ -636,12 +2749,83 @@
 "Shadow of the Erdtree": "covers/d/149672_shadow-of-the-erdtree.jpg",
 "Tarnished Pack": "covers/d/149672_tarnished-pack.jpg"
 },
-"syn": "Elden Ring is a 2022 action role-playing game directed by Hidetaka Miyazaki with worldbuilding provided by the American fantasy writer George R. R. Martin. Developed by FromSoftware and published by Bandai Namco Entertainment, it was first released on February 25, 2022, for PlayStation 4, PlayStation 5, Windows, Xbox One, and Xbox Series X/S with a Nintendo Switch 2 version released on August 28, 2026. Set in the Lands Between, players control a customizable player character on a quest to repair"
+"syn": "Elden Ring is a 2022 action role-playing game directed by Hidetaka Miyazaki with worldbuilding provided by the American fantasy writer George R. R. Martin. Developed by FromSoftware and published by Bandai Namco Entertainment, it was first released on February 25, 2022, for PlayStation 4, PlayStation 5, Windows, Xbox One, and Xbox Series X/S with a Nintendo Switch 2 version released on August 28, 2026. Set in the Lands Between, players control a customizable player character on a quest to repair",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "elden-ring",
+"n": "Elden Ring",
+"pf": [
+"PC",
+"PlayStation 5",
+"Xbox One",
+"PlayStation 4",
+"Xbox Series S/X"
+],
+"mc": 95,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Multiplayer",
+"Full controller support",
+"Atmospheric",
+"Great Soundtrack",
+"RPG",
+"Co-op",
+"Open World",
+"cooperative"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/36f/36f941f72e2b2a41629f5fb3bd448688.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/290/29096848622521df7555850000236cb6.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/807/807685454ea8fb87363eedd49677f49b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/2ee/2eea4d4cce2836f689d9d39d2a4a94d5.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/de9/de9b28bdd0bdb9937c7f82e55f845bb6.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/3a2/3a2e5f31e2061bc566bcfd30fda56a17.jpg"
+]
+}
 },
 "152183": {
 "avg": 3.6,
 "chk": "2026-11-17",
-"syn": "Gris (Spanish pronunciation: [ɡɾis]) is a 2018 platform-adventure game by Spanish developer Nomada Studio and published by Devolver Digital. The game was released for macOS, Nintendo Switch, and Windows in December 2018, for iOS in August 2019, for PlayStation 4 in November 2019, for Android in April 2020, for Amazon Luna in November 2021, and for PlayStation 5, Xbox One and Xbox Series X/S in December 2022. The game has sold over 3 million copies."
+"syn": "Gris (Spanish pronunciation: [ɡɾis]) is a 2018 platform-adventure game by Spanish developer Nomada Studio and published by Devolver Digital. The game was released for macOS, Nintendo Switch, and Windows in December 2018, for iOS in August 2019, for PlayStation 4 in November 2019, for Android in April 2020, for Amazon Luna in November 2021, and for PlayStation 5, Xbox One and Xbox Series X/S in December 2022. The game has sold over 3 million copies.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "gris",
+"n": "Gris",
+"pf": [
+"PC",
+"PlayStation 5",
+"Xbox One",
+"PlayStation 4",
+"Xbox Series S/X",
+"Nintendo Switch",
+"iOS",
+"Android",
+"macOS"
+],
+"mc": 83,
+"age": "Everyone",
+"tags": [
+"Singleplayer",
+"Full controller support",
+"Atmospheric",
+"2D",
+"Female Protagonist",
+"Cute",
+"Relaxing",
+"Drama",
+"relaxation"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/b0e/b0ed818d2ece196dfc0cb7ab79f4df8d.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/f0e/f0e68be56b52323bd8678b1a8dcaba34_3Ebwgvv.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/5b2/5b2f233598f3ca9b7db2091c2d1f24e7.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/3d3/3d3399e8b4a1bfbdffd2e99ff3fa0530.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/d1c/d1c456026a57db469dcfe8e29d05b7bf.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/841/84149b3a7e65309cc1414890a50a60ce.jpg"
+]
+}
 },
 "156496": {
 "avg": 7.2,
@@ -652,7 +2836,37 @@
 "Wages of Sin": "covers/d/156496_wages-of-sin.jpg"
 },
 "chk": "2026-11-19",
-"syn": "Sin is a 1998 first-person shooter video game developed by Ritual Entertainment and published by Activision. It uses a modified version of the Quake II engine. Sin is set in the dystopian future of 2037, where John Blade, a commander in a security force named HardCorps in the megacity of Freeport, is tasked to rid the city of a recreational drug that may be tied to the rival biotechnology megacorporation, SinTek."
+"syn": "Sin is a 1998 first-person shooter video game developed by Ritual Entertainment and published by Activision. It uses a modified version of the Quake II engine. Sin is set in the dystopian future of 2037, where John Blade, a commander in a security force named HardCorps in the megacity of Freeport, is tasked to rid the city of a recreational drug that may be tied to the rival biotechnology megacorporation, SinTek.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "sin",
+"n": "SiN",
+"pf": [
+"PC",
+"Linux"
+],
+"age": "Mature",
+"tags": [
+"FPS",
+"Violent",
+"Futuristic",
+"Crime",
+"Heist",
+"weapons",
+"future",
+"guns",
+"violence",
+"criminals"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/bb6/bb69025ea94e0ba9b68bae1d6535f6c8.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/f4e/f4e40893a941d8edc426bba5b2d43fbb.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/6fd/6fd661321bc9e1176b885995791b8a71.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/3cc/3ccdf7007d519ea21b4814d505c3249c.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/deb/deb90187a31b5b0ef913273a8e353c1f.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/0c8/0c8def73d10714fc5c254aa7cc1bf25f.jpg"
+]
+}
 },
 "159647": {
 "dlc": [
@@ -663,7 +2877,30 @@
 "dimg": {
 "Part IV: Nirvana": "miss:2026-11-08"
 },
-"syn": "Asura's Wrath is a 2012 action video game developed by CyberConnect2 and published by Capcom for the PlayStation 3 and Xbox 360. Taking elements from Hindu and Buddhist mythologies and blending them with science fiction, the game follows the titular character, the demigod Asura, as he seeks revenge on the pantheon of other demigods who betrayed him.\nThe story is presented in the style and format of an episodic series of cinematic scenes, including opening and closing credits, with the gameplay s"
+"syn": "Asura's Wrath is a 2012 action video game developed by CyberConnect2 and published by Capcom for the PlayStation 3 and Xbox 360. Taking elements from Hindu and Buddhist mythologies and blending them with science fiction, the game follows the titular character, the demigod Asura, as he seeks revenge on the pantheon of other demigods who betrayed him.\nThe story is presented in the style and format of an episodic series of cinematic scenes, including opening and closing credits, with the gameplay s",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "asuras-wrath",
+"n": "ASURA'S WRATH",
+"pf": [
+"Xbox 360",
+"PlayStation 3"
+],
+"mc": 71,
+"age": "Teen",
+"tags": [
+"rage",
+"survive"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/378/3780eae445176fb1af2294a256de3163.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/e21/e217889ab38ffdf8deacb9667ca7655d.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/7f2/7f2331614feeaacc106a4d6f4f2d2267.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/50f/50fbd12ef37aea252506c41e6e5d7502.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/685/685b0930f5836f692ce0764f2c31b262.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/e80/e809d6c3a04fab50149102c046082659.jpg"
+]
+}
 },
 "165097": {
 "avg": 7.4,
@@ -674,22 +2911,140 @@
 "dimg": {
 "Team Sabre": "covers/d/165097_team-sabre.jpg"
 },
-"syn": "Delta Force: Black Hawk Down is a first-person shooter video game developed by NovaLogic. It was released for Microsoft Windows on March 25, 2003; for Mac OS X in July 2004; and for PlayStation 2 and Xbox on July 26, 2005. It is the 6th game of the Delta Force series."
+"syn": "Delta Force: Black Hawk Down is a first-person shooter video game developed by NovaLogic. It was released for Microsoft Windows on March 25, 2003; for Mac OS X in July 2004; and for PlayStation 2 and Xbox on July 26, 2005. It is the 6th game of the Delta Force series.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "delta-force-black-hawk-down",
+"n": "Delta Force: Black Hawk Down",
+"pf": [
+"PC",
+"macOS",
+"Xbox",
+"PlayStation 2"
+],
+"mc": 77,
+"age": "Teen",
+"tags": [
+"Singleplayer",
+"Multiplayer",
+"FPS",
+"Military"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/f11/f11e15f99c43b54f295d0f3ac5ff874c.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/acb/acbff9400dc393de9e6667c97dc07175.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/209/20964c54f852265cb4d59b3f8c93a4ac.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/392/392d7549becff1d65e60715de768ab9e.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/f6f/f6f800939637543654c97d9c7ee05b2f.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/d84/d8408799c53c569bd57bcce607d731b9.jpg"
+]
+}
 },
 "166131": {
 "avg": 8.6,
 "chk": "2026-11-18",
-"syn": "Lego Pirates of the Caribbean: The Video Game is a 2011 Lego-themed action-adventure video game, based on the Pirates of the Caribbean film series, developed by Traveller's Tales and published by Disney Interactive Studios for Xbox 360, PlayStation 3, PlayStation Portable, Wii, Nintendo DS, Nintendo 3DS, Microsoft Windows, and Mac OS X. The game was released to coincide with the release of Pirates of the Caribbean: On Stranger Tides, and retells the plot of the first four films in the Pirates Of"
+"syn": "Lego Pirates of the Caribbean: The Video Game is a 2011 Lego-themed action-adventure video game, based on the Pirates of the Caribbean film series, developed by Traveller's Tales and published by Disney Interactive Studios for Xbox 360, PlayStation 3, PlayStation Portable, Wii, Nintendo DS, Nintendo 3DS, Microsoft Windows, and Mac OS X. The game was released to coincide with the release of Pirates of the Caribbean: On Stranger Tides, and retells the plot of the first four films in the Pirates Of",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "lego-pirates-of-the-caribbean",
+"n": "LEGO Pirates of the Caribbean: The Video Game",
+"pf": [
+"PC",
+"Nintendo 3DS",
+"Nintendo DS",
+"macOS",
+"Xbox 360",
+"PlayStation 3",
+"PSP",
+"Wii"
+],
+"mc": 73,
+"age": "Everyone 10+",
+"tags": [
+"Singleplayer",
+"Multiplayer",
+"Full controller support",
+"Steam Cloud",
+"steam-trading-cards",
+"Open World",
+"Funny",
+"Comedy",
+"Split Screen",
+"Local Co-Op"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/46c/46cb97c9ce7769ed7cfffa109d119fd2.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/711/711f42e702acd5abceed11fec5fca47c.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/cf6/cf6cfe48295a27a2bf38f7fb04854740.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/688/68803542e66b67f6e716671ea888b2de.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/5ef/5efd27ccccaa2c6db9eb58ffeb4f8900.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/8b7/8b70a6c57fce5e16f6d8bd5bdda69855_sj9WrIO.jpg"
+]
+}
 },
 "176417": {
 "avg": 6.1,
 "chk": "2026-11-19",
-"syn": "Spec Ops: The Line is a 2012 third-person shooter video game developed by Yager Development and published by 2K. It is the seventh installment and a reboot of the Spec Ops series. The player controls Captain Martin Walker, who is sent into a post-environmental catastrophe Dubai with an elite Delta Force team on a recon mission. As the story progresses, Walker's sanity deteriorates as he experiences hallucinations and slowly realizes the horrors of war."
+"syn": "Spec Ops: The Line is a 2012 third-person shooter video game developed by Yager Development and published by 2K. It is the seventh installment and a reboot of the Spec Ops series. The player controls Captain Martin Walker, who is sent into a post-environmental catastrophe Dubai with an elite Delta Force team on a recon mission. As the story progresses, Walker's sanity deteriorates as he experiences hallucinations and slowly realizes the horrors of war.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "spec-ops-the-line",
+"n": "Spec Ops: The Line",
+"pf": [
+"PC",
+"Xbox One",
+"Xbox 360",
+"PlayStation 3"
+],
+"mc": 76,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Multiplayer",
+"Full controller support",
+"Steam Cloud",
+"Atmospheric",
+"Great Soundtrack",
+"Co-op",
+"Story Rich",
+"Third Person"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/a17/a17ff71c8774a3b70375a869b3881244.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/e5a/e5aaa5d242144ab80ef8264c96516dcc.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/f36/f36e756c36d36fe8ffe73a4b39acbebf.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/437/437ad0efe43adcad4284f5f48d03559f.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/9e2/9e26af47a676b061f288ff269e91a8f1.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/2d9/2d9a5dd6a25c04e49accca5358782152.jpg"
+]
+}
 },
 "191903": {
 "avg": 7.9,
 "chk": "2026-11-16",
-"syn": "Crackdown 2 is a 2010 action-adventure game developed by Ruffian Games and published by Microsoft Game Studios. It was released for the Xbox 360 in July  2010 and is a direct sequel to the 2007 video game Crackdown. A sequel, Crackdown 3, was released for the Xbox One and Microsoft Windows in February 2019."
+"syn": "Crackdown 2 is a 2010 action-adventure game developed by Ruffian Games and published by Microsoft Game Studios. It was released for the Xbox 360 in July  2010 and is a direct sequel to the 2007 video game Crackdown. A sequel, Crackdown 3, was released for the Xbox One and Microsoft Windows in February 2019.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "crackdown-2",
+"n": "Crackdown 2",
+"pf": [
+"Xbox One",
+"Xbox 360"
+],
+"age": "Mature",
+"tags": [
+"exclusive"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/a55/a5584369e77af28875a75ed6fcc20658.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/723/723ba748b53daf5eeddec1127c2cad8c.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/24e/24e9fba4d7d4cf69dca1e69ed52c7273.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/9cf/9cfa0432527f10f9bbc81c1d1cae68f3.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/836/8366044a4cb211b1d3eb6d9b74a938ed.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/390/390af33ea02828a2b611b4a44d8f3391.jpg"
+]
+}
 },
 "191940": {
 "avg": 9,
@@ -700,7 +3055,27 @@
 "dimg": {
 "Pigsy's Perfect 10": "miss:2026-11-08"
 },
-"syn": "Enslaved: Odyssey to the West is a 2010 action-adventure game developed by Ninja Theory and published by Namco Bandai Games. As a loose adaptation of the Chinese novel Journey to the West, the game is set 150 years in a future post-apocalyptic world following a global war. Only remnants of humanity survive, along with the still active war machines left over from the conflict."
+"syn": "Enslaved: Odyssey to the West is a 2010 action-adventure game developed by Ninja Theory and published by Namco Bandai Games. As a loose adaptation of the Chinese novel Journey to the West, the game is set 150 years in a future post-apocalyptic world following a global war. Only remnants of humanity survive, along with the still active war machines left over from the conflict.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "enslaved",
+"n": "Enslaved: Odyssey to the West",
+"pf": [
+"PC",
+"Xbox 360",
+"PlayStation 3"
+],
+"mc": 77,
+"age": "Teen",
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/5e5/5e525d23c0ddc7352a53a0575451d5b4.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/cae/caed75ea3158e66b850a36b5020fb8de.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/64f/64ffa5577fab1a508fa5b5c945e23e15.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/d7d/d7d4898983f84d4749e00bed7f892c53.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/e2a/e2ad79439c3fc807d088c1f6798fc748.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/fb6/fb631b8673876b94a8b8c1cfbcdf4f83.jpg"
+]
+}
 },
 "195471": {
 "dlc": [
@@ -711,96 +3086,587 @@
 "dimg": {
 "Dark Arisen": "covers/d/195471_dark-arisen.jpg"
 },
-"syn": "Dragon's Dogma is a 2012 action role-playing game developed and published by Capcom. First released for PlayStation 3 and Xbox 360, an enhanced version subtitled Dark Arisen was later released for the same consoles in 2013, with ports being released for Windows, PlayStation 4, Xbox One, and Nintendo Switch in the ensuing years. Set in Gransys, a high fantasy world inspired by Sicily, the player takes on the role of a human protagonist dubbed the Arisen on a quest to defeat the dragon Grigori, a "
+"syn": "Dragon's Dogma is a 2012 action role-playing game developed and published by Capcom. First released for PlayStation 3 and Xbox 360, an enhanced version subtitled Dark Arisen was later released for the same consoles in 2013, with ports being released for Windows, PlayStation 4, Xbox One, and Nintendo Switch in the ensuing years. Set in Gransys, a high fantasy world inspired by Sicily, the player takes on the role of a human protagonist dubbed the Arisen on a quest to defeat the dragon Grigori, a ",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "dragons-dogma",
+"n": "Dragon's Dogma",
+"pf": [
+"Xbox 360",
+"PlayStation 3"
+],
+"age": "Mature",
+"tags": [
+"Destruction",
+"fight"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/a79/a7963ae2c4138483ea34bbdbafdd9aac.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/f61/f614e582d21b2cc54a67f96d67602358.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/cd4/cd4a68f56f7f27536c160ae990294d5e.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/326/3267387ebd6aa4d39731380006f13d11.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/78b/78bf8c1d26205d42d24cde47f6881e3f.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/b50/b50955e5ace3cbff6b9ba4ae598d4003.jpg"
+]
+}
 },
 "198870": {
 "avg": 8.7,
 "chk": "2026-11-16",
-"syn": "Delta Force 2 is a tactical first-person shooter video game developed by NovaLogic and released in 1999, one year after its predecessor. It is the second game in the Delta Force series and was followed by Delta Force: Land Warrior one year later. The game was re-released in 2009 on Steam."
+"syn": "Delta Force 2 is a tactical first-person shooter video game developed by NovaLogic and released in 1999, one year after its predecessor. It is the second game in the Delta Force series and was followed by Delta Force: Land Warrior one year later. The game was re-released in 2009 on Steam.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "delta-force-2",
+"n": "Delta Force 2",
+"pf": [
+"PC"
+],
+"tags": [
+"Singleplayer",
+"Multiplayer",
+"FPS"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/e51/e51eadddbc1e42f81eb34424e1308109.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/ceb/cebf0e41a86107cabfb454bf6f40d4bd.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/a54/a54221e6f7a9cb9a424f97ca97891dbf.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/b43/b43a153c68241b0541ec4467a29d6208.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/991/991f70f0ad0cadad72a6026a8047b9f7.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/3aa/3aaa887e0e43c0994bcac8e7228b70b4.jpg"
+]
+}
 },
 "362263": {
 "avg": 8.1,
 "chk": "2026-11-18",
-"syn": "Project Gotham Racing 3 is a 2005 arcade-style racing video game developed by Bizarre Creations and published by Microsoft Game Studios as the third entry of the Project Gotham Racing series. It was released exclusively for the Xbox 360 as a launch title in November 2005. The game was rated by Official Xbox Magazine as Xbox 360 \"Game of the Year\" (2005), as well as \"Best 1st Person (Not Shooter) of the Year\", because of its realistic inside-car view."
+"syn": "Project Gotham Racing 3 is a 2005 arcade-style racing video game developed by Bizarre Creations and published by Microsoft Game Studios as the third entry of the Project Gotham Racing series. It was released exclusively for the Xbox 360 as a launch title in November 2005. The game was rated by Official Xbox Magazine as Xbox 360 \"Game of the Year\" (2005), as well as \"Best 1st Person (Not Shooter) of the Year\", because of its realistic inside-car view.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "project-gotham-racing-3",
+"n": "Project Gotham Racing 3",
+"pf": [
+"Xbox 360"
+],
+"mc": 88,
+"age": "Everyone 10+",
+"tags": [
+"exclusive",
+"true exclusive"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/c95/c958dd0891d1955364f5c06c937ce87b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/96e/96efa0083eaf7354031b6e660196d853.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/943/943226de0fd4cf86c7dac8ab0aedae81.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/1aa/1aa6f14d7031c296f4412e3df1a33e09.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/01c/01cdc882a98f7c922e7d2a0c78e0990e.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/7ac/7ac1a52efa325aa57ae350b6803b9f4e.jpg"
+]
+}
 },
 "414254": {
 "avg": 8.3,
 "chk": "2026-11-18",
-"syn": "Project I.G.I. (released in North America as Project I.G.I.: I'm Going In) is a tactical first-person shooter video game. It was developed by Innerloop Studios and released in December 2000 by Eidos Interactive. The game received mixed reviews due to shortcomings including a poorly programmed A.I., lack of a mid-game save option, and the lack of multiplayer features."
+"syn": "Project I.G.I. (released in North America as Project I.G.I.: I'm Going In) is a tactical first-person shooter video game. It was developed by Innerloop Studios and released in December 2000 by Eidos Interactive. The game received mixed reviews due to shortcomings including a poorly programmed A.I., lack of a mid-game save option, and the lack of multiplayer features.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "project-igi",
+"n": "Project I.G.I.: I’m Going In",
+"pf": [
+"PC"
+],
+"mc": 70,
+"age": "Mature",
+"tags": [
+"love"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/250/25020f4c58cb2e79a5ce3bcf0c889c45.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/f10/f10549e2b229c34b2d7a192f8189b0d4.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/521/52188c218ce92199a2a11e8f792acbb2.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/16e/16e6d3a7d7694b7ad7a497fecf74690c.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/182/182ea8f419af5d9db49bc364f13e2af2.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/2d1/2d168dc92a3f7f2b67c5f3789379110c.jpg"
+]
+}
 },
 "416842": {
 "avg": 10,
 "chk": "2026-11-17",
-"syn": "I.G.I.-2: Covert Strike, known in the PAL region as Project I.G.I. 2, is a 2003 tactical shooter video game developed by Innerloop Studios and released by Codemasters. The game is a stealth-based first-person shooter. It is the sequel to Innerloop's Project I.G.I.."
+"syn": "I.G.I.-2: Covert Strike, known in the PAL region as Project I.G.I. 2, is a 2003 tactical shooter video game developed by Innerloop Studios and released by Codemasters. The game is a stealth-based first-person shooter. It is the sequel to Innerloop's Project I.G.I..",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "igi-2-covert-strike",
+"n": "I.G.I. 2: Covert Strike",
+"pf": [
+"PC"
+],
+"mc": 64,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Multiplayer"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/297/297f024080f3e3f304368383e8e0c3f4.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/568/568e01f2b449a637f13b65c259ca9d79.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/953/953662f45f617d572d024bdf68a9302a.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/37b/37b260bd4bac3cc57d3c3f31a5a76e20.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/69f/69f6ec0c1cb23417b15da2f02038fb53.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/4a9/4a9cb54fe460ba225fd999c1338e6921.jpg"
+]
+}
 },
 "130795": {
 "chk": "2026-11-15",
 "avg": 6,
-"syn": "A Way Out is a 2018 cooperative action-adventure video game developed by Hazelight Studios and published by Electronic Arts. It is the second video game directed by Josef Fares after Brothers: A Tale of Two Sons. The game does not have a single-player option; it is playable on local or online split screen co-op between two players."
+"syn": "A Way Out is a 2018 cooperative action-adventure video game developed by Hazelight Studios and published by Electronic Arts. It is the second video game directed by Josef Fares after Brothers: A Tale of Two Sons. The game does not have a single-player option; it is playable on local or online split screen co-op between two players.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "a-way-out-2018",
+"n": "A Way Out",
+"pf": [
+"PC",
+"Xbox One",
+"PlayStation 4"
+],
+"mc": 78,
+"age": "Mature",
+"tags": [
+"Steam Achievements",
+"Multiplayer",
+"Full controller support",
+"Atmospheric",
+"Co-op",
+"Story Rich",
+"cooperative",
+"Third Person",
+"Online Co-Op",
+"Violent"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/9ab/9abb12bf62c4bca53f5d098cee0191bd.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/25d/25dec72d35336440318a3cfe5f536ca0.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/6ce/6cefb68df2a6932c4a0ce3eddc77acd6.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/aba/abaaa72ee767ff57d87a3ba89ed00973.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/1ec/1ec3f2701e9e171fe19f214d1194b56e.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/863/863bf8e020518c796d7768745e62a5ef.jpg"
+]
+}
 },
 "341711": {
 "chk": "2026-11-15",
 "avg": 6.1,
-"syn": "Battlefield 6 is a 2025 online-only first-person shooter video game developed by Battlefield Studios and published by Electronic Arts. Serving as the eighteenth installment in the Battlefield series, the game was released for PlayStation 5, Windows, and Xbox Series X/S on October 10, 2025. A free-to-play battle royale mode, titled RedSec, was released on October 28, 2025."
+"syn": "Battlefield 6 is a 2025 online-only first-person shooter video game developed by Battlefield Studios and published by Electronic Arts. Serving as the eighteenth installment in the Battlefield series, the game was released for PlayStation 5, Windows, and Xbox Series X/S on October 10, 2025. A free-to-play battle royale mode, titled RedSec, was released on October 28, 2025.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "battlefield-6-2",
+"n": "Battlefield 6",
+"pf": [
+"PC",
+"PlayStation 5",
+"Xbox Series S/X"
+],
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Multiplayer",
+"Full controller support",
+"Steam Cloud",
+"Atmospheric",
+"Co-op",
+"Story Rich",
+"cooperative",
+"FPS"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/7fa/7fa8e5918b722d7355e2612dcc93d1b8.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/c9f/c9f33e76b045ad6eeb50bbdc26f595f7.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/2a0/2a0736fdabcf19593db47c6ab131743a.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/95b/95bfd68b9ee557e3817cd19c976d1eec.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/98b/98bfcdaf313c0edb97882a751a459f55.jpg"
+]
+}
 },
 "441755": {
 "chk": "2026-11-15",
-"syn": ""
+"syn": "",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "blackwood",
+"n": "Blackwood",
+"pf": [
+"PC",
+"macOS"
+],
+"tags": [
+"Fantasy",
+"Romance",
+"Supernatural",
+"Vampire",
+"relationship",
+"LGBT",
+"Gay",
+"renpy",
+"queer"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/cf9/cf95aad45ff79255896bbd4aed879d00.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/434/43403a1b63aae6b00b076856d914bdac.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/41b/41b012b2ed1bc6e8365e71e4f569df86.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/8ed/8ede5bcc11e1309caccadb6592907773.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/b3d/b3d9ef3d3568647b5446f410d96b6e46.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/bb9/bb9d1a82810748a29ca8d9b837c973fa.jpg"
+]
+}
 },
 "196272": {
 "avg": 11,
 "chk": "2026-11-16",
-"syn": "Crackdown is a 2007 action-adventure game developed by Realtime Worlds and published by Microsoft Game Studios for the Xbox 360. Crackdown was conceived by Realtime Worlds' founder, David Jones, who also created Grand Theft Auto and Lemmings.\nSet in the fictional Pacific City, the player controls a biologically enhanced Agent, tasked with defeating three crime lords and their organized crime syndicates."
+"syn": "Crackdown is a 2007 action-adventure game developed by Realtime Worlds and published by Microsoft Game Studios for the Xbox 360. Crackdown was conceived by Realtime Worlds' founder, David Jones, who also created Grand Theft Auto and Lemmings.\nSet in the fictional Pacific City, the player controls a biologically enhanced Agent, tasked with defeating three crime lords and their organized crime syndicates.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "crackdown",
+"n": "Crackdown",
+"pf": [
+"Xbox One",
+"Xbox 360"
+],
+"age": "Mature",
+"tags": [
+"exclusive"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/702/7022219ccb9e5f7b95c7caf8d789df4d.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/583/583049bd8994040de2aa5b6c479b4ff6.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/bfc/bfc2c34b56946ba604a669ab9d22c4c4_2htObpm.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/818/818834f95bd6f175f5c6d7fc7d60e079.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/aec/aec3bca625718c6076cccb456bd3ae20.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/244/2446be679dd6977033e35cfeb786ded1.jpg"
+]
+}
 },
 "134386": {
 "avg": 11,
 "chk": "2026-11-16",
-"syn": "Dead Space is a 2008 survival horror game developed by EA Redwood Shores and published by Electronic Arts. It was released for PlayStation 3, Xbox 360, and Windows as the debut entry in the Dead Space series. Set on a mining spaceship overrun by deadly monsters called Necromorphs following the discovery of an artifact called the Marker, the player controls engineer Isaac Clarke as he navigates the spaceship and fights the Necromorphs while struggling with growing psychosis."
+"syn": "Dead Space is a 2008 survival horror game developed by EA Redwood Shores and published by Electronic Arts. It was released for PlayStation 3, Xbox 360, and Windows as the debut entry in the Dead Space series. Set on a mining spaceship overrun by deadly monsters called Necromorphs following the discovery of an artifact called the Marker, the player controls engineer Isaac Clarke as he navigates the spaceship and fights the Necromorphs while struggling with growing psychosis.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "dead-space-5",
+"n": "Dead Space",
+"pf": [
+"PC",
+"PlayStation 5",
+"Xbox Series S/X"
+],
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Full controller support",
+"Steam Cloud",
+"Atmospheric",
+"Third Person",
+"Sci-fi",
+"Horror",
+"Survival",
+"Violent"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/16b/16b2cb24c12e995b8842c6c1542e3aa1.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/ac9/ac93d0f12fe3681dc37becad9885ef5e.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/217/217828b40ae05d789a1bcd9fdb7bd9fa.jpg"
+]
+}
 },
 "172182": {
 "avg": 3,
 "chk": "2026-11-16",
-"syn": "Dead or Alive 6 is a 2019 fighting game developed by Team Ninja and published by Koei Tecmo. The game is the sixth main entry in the Dead or Alive fighting series following Dead or Alive 5 (2012) and runs on a new engine, offering new features and introducing new mechanics. It was released for PlayStation 4, Windows, and Xbox One on March 1, 2019, and was later released for arcades in Japan on July 18, 2019."
+"syn": "Dead or Alive 6 is a 2019 fighting game developed by Team Ninja and published by Koei Tecmo. The game is the sixth main entry in the Dead or Alive fighting series following Dead or Alive 5 (2012) and runs on a new engine, offering new features and introducing new mechanics. It was released for PlayStation 4, Windows, and Xbox One on March 1, 2019, and was later released for arcades in Japan on July 18, 2019.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "dead-or-alive-6",
+"n": "DEAD OR ALIVE 6",
+"pf": [
+"PC",
+"Xbox One",
+"PlayStation 4"
+],
+"mc": 74,
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Multiplayer",
+"Full controller support",
+"Steam Cloud",
+"Atmospheric",
+"Steam Leaderboards",
+"Female Protagonist",
+"Violent",
+"Online multiplayer"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/75e/75e6775abe7c55492b0a80e98f9567e6.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/a5d/a5ddd9dae24b5243708b1af642d9d43e.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/0bb/0bb0b9e0cbd804b3c363366564274364.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/e57/e57cd48e783d936e3ed1ab245c44c185.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/6e5/6e51a67eaa63d89afac29f3e02321173.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/052/0529fb426c8be1874e98d1c4a6878e46.jpg"
+]
+}
 },
 "193464": {
 "avg": 40.5,
 "chk": "2026-11-16",
-"syn": "Death Stranding is a 2019 action-adventure game developed by Kojima Productions and published by Sony Interactive Entertainment. It is co-written, co-produced, designed, and directed by Hideo Kojima, and is the first game from Kojima after his departure from Konami in 2015. It was first released for PlayStation 4 in November 2019, followed by a Windows port in July 2020."
+"syn": "Death Stranding is a 2019 action-adventure game developed by Kojima Productions and published by Sony Interactive Entertainment. It is co-written, co-produced, designed, and directed by Hideo Kojima, and is the first game from Kojima after his departure from Konami in 2015. It was first released for PlayStation 4 in November 2019, followed by a Windows port in July 2020.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "death-stranding",
+"n": "Death Stranding",
+"pf": [
+"PC",
+"PlayStation 4"
+],
+"mc": 84,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Atmospheric",
+"Great Soundtrack",
+"Story Rich",
+"Open World",
+"Third Person",
+"Sci-fi",
+"Partial Controller Support",
+"Horror",
+"Exploration"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/9da/9da640f5aa62f6fc00a4d1d255460737.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/3d2/3d2a4337cf7673b086a1623d9e5ed2f3.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/5f3/5f3bc8289f9545db69a30fc414e94186.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/2b7/2b731c32ebc308c30abe974cd1266648.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/460/4606e5ba14266eb2292cea7444e4239b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/2f1/2f10403f41e636dac29d1af2c5c1b982.jpg"
+]
+}
 },
 "257360": {
 "avg": 35.7,
 "chk": "2026-11-16",
-"syn": "Death Stranding 2: On the Beach is a 2025 action-adventure game developed by Kojima Productions and published by Sony Interactive Entertainment. It is co-written, co-produced, designed, and directed by Hideo Kojima. Serving as the sequel to Death Stranding (2019), On the Beach features the previous game's central characters, including Sam, Fragile, and Higgs, reprised by Norman Reedus, Léa Seydoux, and Troy Baker, respectively."
+"syn": "Death Stranding 2: On the Beach is a 2025 action-adventure game developed by Kojima Productions and published by Sony Interactive Entertainment. It is co-written, co-produced, designed, and directed by Hideo Kojima. Serving as the sequel to Death Stranding (2019), On the Beach features the previous game's central characters, including Sam, Fragile, and Higgs, reprised by Norman Reedus, Léa Seydoux, and Troy Baker, respectively.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "death-stranding-2",
+"n": "Death Stranding 2: On The Beach",
+"pf": [
+"PC",
+"PlayStation 5"
+],
+"age": "Mature",
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/7a9/7a97a649fde5f258651ae5e69abf0ed0.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/372/372b0916c1ce240a4406373c120abd8f.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/9c4/9c4d0e73de232433f8b977c39ca65d45.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/a25/a25a14bc153866bd1dc9f776426c7b5b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/8a8/8a87fa3c9a671416715d9ba29789cd7f.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/901/901efd17e514cede763eeb9837a80614.jpg"
+]
+}
 },
 "169913": {
 "avg": 8.6,
 "chk": "2026-11-16",
-"syn": "Dispatch is a 2025 episodic adventure game developed and published by the American developer AdHoc Studio. Described as a superhero workplace comedy, the game has the player take the role of Robert Robertson III, formerly the superhero Mecha Man, who has to take a job as a dispatcher for villains-turned-superheroes after his mecha suit is destroyed in battle. Its cast includes the voices of Aaron Paul, Jeffrey Wright, Erin Yvette, Laura Bailey, Travis Willingham, and Matthew Mercer, as well as c"
+"syn": "Dispatch is a 2025 episodic adventure game developed and published by the American developer AdHoc Studio. Described as a superhero workplace comedy, the game has the player take the role of Robert Robertson III, formerly the superhero Mecha Man, who has to take a job as a dispatcher for villains-turned-superheroes after his mecha suit is destroyed in battle. Its cast includes the voices of Aaron Paul, Jeffrey Wright, Erin Yvette, Laura Bailey, Travis Willingham, and Matthew Mercer, as well as c",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "dispatch-2",
+"n": "Dispatch",
+"pf": [
+"PC",
+"PlayStation 5",
+"Nintendo Switch"
+],
+"age": "Adults Only",
+"tags": [
+"Atmospheric",
+"Horror",
+"Pixel Graphics",
+"Dark",
+"creepy",
+"8-Bit",
+"ascii",
+"glitch"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/9a7/9a79e8f8376b1046f7fc316e6630e787.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/bd7/bd718dcaab5a69a4f1a2cac0f861e27e.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/c2f/c2fbfb2553264549c4991f0b3a8dcbe1.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/335/335a75b273e4744a7a445148c1247a13.jpg"
+]
+}
 },
 "251937": {
 "avg": 30.2,
 "chk": "2026-11-17",
-"syn": "Ghost of Yōtei is a 2025 action-adventure game developed by Sucker Punch Productions and published by Sony Interactive Entertainment. It is a standalone sequel to the 2020 game Ghost of Tsushima. Set in 1603 in Ezo, Japan, the story follows Atsu, a mercenary seeking vengeance against the \"Yōtei Six\" for slaughtering her family sixteen years prior."
+"syn": "Ghost of Yōtei is a 2025 action-adventure game developed by Sucker Punch Productions and published by Sony Interactive Entertainment. It is a standalone sequel to the 2020 game Ghost of Tsushima. Set in 1603 in Ezo, Japan, the story follows Atsu, a mercenary seeking vengeance against the \"Yōtei Six\" for slaughtering her family sixteen years prior.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "ghost-of-yotei",
+"n": "Ghost of Yotei",
+"pf": [
+"PlayStation 5"
+],
+"age": "Adults Only",
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/910/9109032812e26d6d4715fbde46ec9c3c.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/dfe/dfefb1a5ad7c0eedf9481609025aece5.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/864/86425464c5b85b956b3c8819a37e77e4.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/bdb/bdb8c547a3e778b7bd33f00971fc945c.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/f96/f96c5491397f8537d978c6a3ea4dbf17.jpg"
+]
+}
 },
 "137864": {
 "avg": 32.1,
 "chk": "2026-11-17",
-"syn": "Grand Theft Auto V is a 2013 action-adventure game developed by Rockstar North and published by Rockstar Games. It is the seventh main entry in the Grand Theft Auto series, following 2008's Grand Theft Auto IV, and the fifteenth entry overall. Set within the fictional state of San Andreas, based on Southern California, the single-player story follows three protagonists—retired bank robber Michael De Santa (Ned Luke), street gangster Franklin Clinton (Shawn Fonteno), and drug dealer and gunrunner"
+"syn": "Grand Theft Auto V is a 2013 action-adventure game developed by Rockstar North and published by Rockstar Games. It is the seventh main entry in the Grand Theft Auto series, following 2008's Grand Theft Auto IV, and the fifteenth entry overall. Set within the fictional state of San Andreas, based on Southern California, the single-player story follows three protagonists—retired bank robber Michael De Santa (Ned Luke), street gangster Franklin Clinton (Shawn Fonteno), and drug dealer and gunrunner",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "grand-theft-auto-v",
+"n": "Grand Theft Auto V",
+"pf": [
+"PC",
+"PlayStation 5",
+"Xbox One",
+"PlayStation 4",
+"Xbox Series S/X",
+"Xbox 360",
+"PlayStation 3"
+],
+"mc": 92,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Multiplayer",
+"Full controller support",
+"Atmospheric",
+"Great Soundtrack",
+"RPG",
+"Co-op",
+"Open World",
+"cooperative"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/f95/f9518b1d99210c0cae21fc09e95b4e31.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/a5c/a5c95ea539c87d5f538763e16e18fb99.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/a7e/a7e990bc574f4d34e03b5926361d1ee7.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/eb0/eb0a2c0de9194a635fc0cd04f5a29ae7.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/ec7/ec7f05fb82290fea9647b7879fe9a6bf.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/260/260559fbefce0b36c66ae5e280c7d774.jpg"
+]
+}
 },
 "161501": {
 "avg": 21.8,
 "chk": "2026-11-17",
-"syn": "Hell Is Us is an action-adventure game developed by Rogue Factor and published by Nacon. It was released for PlayStation 5, Windows, and Xbox Series X/S on September 4, 2025. A port for Nintendo Switch 2 is scheduled to release on October 8, 2026."
+"syn": "Hell Is Us is an action-adventure game developed by Rogue Factor and published by Nacon. It was released for PlayStation 5, Windows, and Xbox Series X/S on September 4, 2025. A port for Nintendo Switch 2 is scheduled to release on October 8, 2026.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "hell-is-us",
+"n": "Hell is Us",
+"pf": [
+"PC",
+"PlayStation 5",
+"Xbox Series S/X"
+],
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Cloud",
+"Atmospheric",
+"RPG",
+"Story Rich",
+"Open World",
+"Third Person",
+"Sci-fi",
+"Exploration",
+"Violent"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/746/74649954ceef11c460866e908e95cd49.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/431/431ef69b2a22271f4da549b3493d46e6.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/744/7449654ec8431d7e6565429b9416c993.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/be9/be969c310593270bd1589ef86175dc7d.jpg"
+]
+}
 },
 "139939": {
 "avg": 6.5,
 "chk": "2026-11-17",
-"syn": "Ico (stylized in all caps) is a 2001 action-adventure video game by Sony Computer Entertainment for the PlayStation 2. It was first released in September and December 2001 for North America and Japan, respectively, with a March 2002 release for Europe. It was first re-released in Europe with its spiritual successor, Shadow of the Colossus, in 2006."
+"syn": "Ico (stylized in all caps) is a 2001 action-adventure video game by Sony Computer Entertainment for the PlayStation 2. It was first released in September and December 2001 for North America and Japan, respectively, with a March 2002 release for Europe. It was first re-released in Europe with its spiritual successor, Shadow of the Colossus, in 2006.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "ico",
+"n": "ICO",
+"pf": [
+"PlayStation 3",
+"PlayStation 2"
+],
+"mc": 90,
+"age": "Teen",
+"tags": [
+"Atmospheric",
+"Action-Adventure"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/250/2504f443d65c0b35b2c567fea8ce9b77.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/bdc/bdc01ecfa6213afec31941fe5edda353.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/de0/de0b42091c0a86d7629f692d48971f80.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/5da/5da8d4de44e27a63ce972e8652a01b99.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/efa/efa9b766149f4a92808751c13dd01315.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/31c/31cd4d77197808dd1d22600c651ac22c.jpg"
+]
+}
 },
 "132055": {
 "avg": 3.6,
 "chk": "2026-11-17",
-"syn": "Inside (stylized in all caps) is a 2016 puzzle-platform horror game developed and published by Playdead. The game was released for the Xbox One in June 2016, Windows in July, and PlayStation 4 in August, followed by releases for iOS in December 2017, Nintendo Switch in June 2018, and macOS in June 2020. The player controls a boy in a dystopian world, solving environmental puzzles and avoiding death."
+"syn": "Inside (stylized in all caps) is a 2016 puzzle-platform horror game developed and published by Playdead. The game was released for the Xbox One in June 2016, Windows in July, and PlayStation 4 in August, followed by releases for iOS in December 2017, Nintendo Switch in June 2018, and macOS in June 2020. The player controls a boy in a dystopian world, solving environmental puzzles and avoiding death.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "inside",
+"n": "INSIDE",
+"pf": [
+"PC",
+"Xbox One",
+"PlayStation 4",
+"Nintendo Switch",
+"iOS",
+"macOS"
+],
+"mc": 87,
+"age": "Teen",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Full controller support",
+"Steam Cloud",
+"Atmospheric",
+"Great Soundtrack",
+"Story Rich",
+"Sci-fi",
+"Horror",
+"Stealth"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/3a0/3a049846766e09f8883badea6538e736.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/b58/b58b50e9da6b409fd223912039c4cba7.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/7d0/7d07f39a90bc1ed2dea7186580b49c7a.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/411/4116e5d3ccdf2bdcf6e4ee4eedf7caa2.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/e6b/e6b8b49e33a11f4ae875d1ce5b236cc8.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/eb2/eb2b33954421291b98e2ae11fba72f7d.jpg"
+]
+}
 },
 "152184": {
 "avg": 4.1,
@@ -811,21 +3677,92 @@
 "dimg": {
 "Prologue": "covers/d/152184_prologue.jpg"
 },
-"syn": "Neva is a 2024 puzzle-platform game developed by Nomada Studio and published by Devolver Digital. It follows a young woman named Alba who must travel with her wolf companion Neva across four seasons in a world corrupted by darkness. The game was released for Windows, macOS, Nintendo Switch, PlayStation 4, PlayStation 5 and Xbox Series X/S in October 2024."
+"syn": "Neva is a 2024 puzzle-platform game developed by Nomada Studio and published by Devolver Digital. It follows a young woman named Alba who must travel with her wolf companion Neva across four seasons in a world corrupted by darkness. The game was released for Windows, macOS, Nintendo Switch, PlayStation 4, PlayStation 5 and Xbox Series X/S in October 2024.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "neva-2",
+"n": "Neva",
+"pf": [
+"PC",
+"PlayStation 5",
+"PlayStation 4",
+"Xbox Series S/X",
+"Nintendo Switch",
+"macOS"
+],
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Full controller support",
+"Steam Cloud",
+"Atmospheric",
+"Great Soundtrack",
+"2D",
+"Female Protagonist",
+"Anime",
+"Colorful"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/7de/7deaff1818f5ae1d6ecb72f35a8ec2c1.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/bc1/bc12059ecdcb9709f4bc4b35b5c18856_FSPEIVC.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/f89/f899364f64e83da38f552e3fea16b125_6Wh2aAv.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/8d9/8d944744ce9fc7d307a008de166ae051.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/4f5/4f53dea6cdd1b50ff5dd035ffcb04a57.jpg"
+]
+}
 },
 "98523": {
 "chk": "2026-11-18",
-"syn": "OD‍ is an upcoming horror game developed by Kojima Productions and set to be published by Xbox Game Studios. It is set to be directed by Hideo Kojima, who additionally serves as co-writer alongside Jordan Peele. Starring Sophia Lillis, Hunter Schafer, and Udo Kier in a posthumous appearance, the game will \"explore the concept of testing your fear threshold, and what it means to OD on fear\"."
+"syn": "OD‍ is an upcoming horror game developed by Kojima Productions and set to be published by Xbox Game Studios. It is set to be directed by Hideo Kojima, who additionally serves as co-writer alongside Jordan Peele. Starring Sophia Lillis, Hunter Schafer, and Udo Kier in a posthumous appearance, the game will \"explore the concept of testing your fear threshold, and what it means to OD on fear\".",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "od",
+"n": "OD",
+"pf": [
+"Web"
+],
+"tags": [
+"Space",
+"Physics",
+"Music",
+"environment",
+"demo",
+"random",
+"beta",
+"browser"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/2ce/2ce720f530cad485d692aa0d81961c87.jpg"
+]
+}
 },
 "140733": {
 "avg": 7.3,
 "chk": "2026-11-18",
-"syn": "Outlast 2 (stylised as OU⸸LASTII) is a 2017 first-person psychological survival horror video game developed and published by Red Barrels. The sequel to Outlast (2013), it revolves around a cameraman named Blake Langermann, who works with his journalist wife, Lynn, to investigate the murder of a pregnant woman in northern Arizona. When they are separated in a helicopter crash, Blake has to find Lynn while travelling through a village inhabited by a deranged cult that believes the Judgement Day is"
+"syn": "Outlast 2 (stylised as OU⸸LASTII) is a 2017 first-person psychological survival horror video game developed and published by Red Barrels. The sequel to Outlast (2013), it revolves around a cameraman named Blake Langermann, who works with his journalist wife, Lynn, to investigate the murder of a pregnant woman in northern Arizona. When they are separated in a helicopter crash, Blake has to find Lynn while travelling through a village inhabited by a deranged cult that believes the Judgement Day is",
+"rwchk": "2026-11-20"
 },
 "1794162993282": {
 "avg": 22.1,
 "chk": "2026-11-18",
-"syn": "Phantom Blade Zero‍ is a wuxia action role-playing game developed and published by the Chinese studio S-Game. The player assumes the role of Soul, an elite assassin of the Order. He is framed for the murder of the Shadow Sovereign of the Order and hunted by members of the Order."
+"syn": "Phantom Blade Zero‍ is a wuxia action role-playing game developed and published by the Chinese studio S-Game. The player assumes the role of Soul, an elite assassin of the Order. He is framed for the murder of the Shadow Sovereign of the Order and hunted by members of the Order.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "phantom-blade-zero",
+"n": "Phantom Blade Zero",
+"pf": [
+"PC",
+"PlayStation 5"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/908/9082f658383685fc50abb03a260c424c.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/2f6/2f6a17ad1a8133fd19f3eb99dd634ca9.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/186/186b4516cf7a774988604628294845ed.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/2c4/2c4dcc8fe3fcfc9438a7bd99f5f39c7b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/cde/cde13fc895b2c74917bf3a551cdb2fee.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/aec/aec12da6a34d07a413ce91ed7e32976b.jpg"
+]
+}
 },
 "421183": {
 "avg": 12.9,
@@ -836,45 +3773,289 @@
 "dimg": {
 "THE ART OF ROMEO IS A DEAD MAN": "covers/d/421183_the-art-of-romeo-is-a-dead-man.jpg"
 },
-"syn": "Romeo Is a Dead Man is a 2026 action-adventure game developed and published by Grasshopper Manufacture released on February 11, 2026, for PlayStation 5, Windows, and Xbox Series X/S."
+"syn": "Romeo Is a Dead Man is a 2026 action-adventure game developed and published by Grasshopper Manufacture released on February 11, 2026, for PlayStation 5, Windows, and Xbox Series X/S.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "romeo-is-a-dead-man",
+"n": "Romeo is a Dead Man",
+"pf": [
+"PC",
+"PlayStation 5",
+"Xbox Series S/X"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/e0d/e0d18aa5b7c661f167ba787c1f3c36d6.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/0e4/0e4cfe122e981ca62690e880b51e9f9d.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/17b/17b4dbbfadc06f0f24e94f91aeae343f.jpg"
+]
+}
 },
 "142444": {
 "avg": 30.2,
 "chk": "2026-11-19",
-"syn": "Sekiro: Shadows Die Twice is a 2019 action-adventure game developed by FromSoftware. It was released in Japan by FromSoftware and internationally by Activision  for the PlayStation 4, Windows and Xbox One in March 2019 and for Stadia in October 2020. \nPlayers control Wolf, a shinobi who embarks on a quest to rescue his lord, and becomes embroiled into a conflict for Ashina's fate."
+"syn": "Sekiro: Shadows Die Twice is a 2019 action-adventure game developed by FromSoftware. It was released in Japan by FromSoftware and internationally by Activision  for the PlayStation 4, Windows and Xbox One in March 2019 and for Stadia in October 2020. \nPlayers control Wolf, a shinobi who embarks on a quest to rescue his lord, and becomes embroiled into a conflict for Ashina's fate.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "shadows-die-twice",
+"n": "Sekiro: Shadows Die Twice",
+"pf": [
+"PC",
+"Xbox One",
+"PlayStation 4"
+],
+"mc": 90,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Atmospheric",
+"Great Soundtrack",
+"RPG",
+"Story Rich",
+"Open World",
+"Third Person",
+"Partial Controller Support",
+"Exploration",
+"Difficult"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/198/198257c08163153e72a31bd61a6cd70b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/9b3/9b3add83516f3737b8054c7469be282a.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/64d/64d71a80b0033e091b35c3948046605b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/8d7/8d77b08c45b3232961b443677fa06a5f.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/a96/a96e960d87fc209488ef25da79b92a84.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/8ed/8edc8d65ba1c1ab001a3fb1bd6fdeeb6.jpg"
+]
+}
 },
 "167144": {
 "avg": 9.2,
 "chk": "2026-11-19",
-"syn": "Signalis is a 2022 survival horror video game developed by German studio rose-engine and published by Humble Games and Playism. The player controls an android named LSTR-512 (a.k.a. \"Elster\") as she aims to locate her ship's missing pilot amidst a supernatural event within a hostile mining facility."
+"syn": "Signalis is a 2022 survival horror video game developed by German studio rose-engine and published by Humble Games and Playism. The player controls an android named LSTR-512 (a.k.a. \"Elster\") as she aims to locate her ship's missing pilot amidst a supernatural event within a hostile mining facility.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "signalis",
+"n": "Signalis",
+"pf": [
+"PC",
+"Xbox One",
+"PlayStation 4",
+"Xbox Series S/X",
+"Nintendo Switch"
+],
+"mc": 82,
+"tags": [
+"Singleplayer",
+"Full controller support",
+"Sci-fi",
+"Horror",
+"Female Protagonist",
+"Violent",
+"Pixel Graphics",
+"Retro",
+"Anime",
+"Survival Horror"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/1ba/1ba77befb152970f5b21546aa1aef370.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/dde/dde918a415dc05de5335f707723e6f08.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/11f/11f517b83221d481fac6f98cf3366677.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/298/29887c49ca3032ad6c21c43ff7e875e0.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/0a3/0a337262e0cc880a5222cafa9128c6bd.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/81d/81d38f9d4f011debb22d25d4b8497960.jpg"
+]
+}
 },
 "146988": {
 "avg": 16.1,
 "chk": "2026-11-19",
-"syn": "Silent Hill 2 is a 2024 survival horror game developed by Bloober Team and published by Konami Digital Entertainment. It is a remake of the 2001 video game Silent Hill 2, originally developed by Team Silent, a group within Konami Computer Entertainment Tokyo (KCET). It is the first major installment in the Silent Hill series since Silent Hill: Downpour (2012)."
+"syn": "Silent Hill 2 is a 2024 survival horror game developed by Bloober Team and published by Konami Digital Entertainment. It is a remake of the 2001 video game Silent Hill 2, originally developed by Team Silent, a group within Konami Computer Entertainment Tokyo (KCET). It is the first major installment in the Silent Hill series since Silent Hill: Downpour (2012).",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "silent-hill-2-remake",
+"n": "Silent Hill 2",
+"pf": [
+"PC",
+"PlayStation 5",
+"Xbox Series S/X"
+],
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Atmospheric",
+"Great Soundtrack",
+"Story Rich",
+"Third Person",
+"Exploration",
+"Violent",
+"Survival Horror",
+"Cinematic",
+"Multiple Endings"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/b84/b84bf73824e8387369157ac7906421bd.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/85e/85e8aa29b80f1c126d740acc674ec7a1.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/dfe/dfec4b95e0100879f1f2da5c29761470.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/8b8/8b84a78f1fdab724272f60116174fa23.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/6bb/6bbd1d30d8cdb85abacb47fbb7c2d93f.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/b34/b34b5833595e77a8c16fb81fdf62ca52.jpg"
+]
+}
 },
 "140579": {
 "avg": 9.1,
 "chk": "2026-11-19",
-"syn": "Soma is a 2015 survival horror video game developed and published by Frictional Games. It follows Simon Jarrett, who finds himself on an underwater remote research facility under mysterious circumstances, which contains machinery that exhibit human characteristics such as possessing a personality and consciousness. He embarks upon discovering its history, while trying to make sense of his predicament and potential future."
+"syn": "Soma is a 2015 survival horror video game developed and published by Frictional Games. It follows Simon Jarrett, who finds himself on an underwater remote research facility under mysterious circumstances, which contains machinery that exhibit human characteristics such as possessing a personality and consciousness. He embarks upon discovering its history, while trying to make sense of his predicament and potential future.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "soma",
+"n": "SOMA",
+"pf": [
+"PC",
+"Xbox One",
+"PlayStation 4",
+"macOS",
+"Linux"
+],
+"mc": 84,
+"age": "Mature",
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Full controller support",
+"Steam Cloud",
+"Atmospheric",
+"steam-trading-cards",
+"Great Soundtrack",
+"Story Rich",
+"First-Person",
+"Sci-fi"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/716/716d7f6375deacddb2a8a02d5bb250cc.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/643/6437df18ef17b933be91eb8b39616733.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/93f/93fbfbff4c667caa9abb49fe8b481267.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/025/025aaed5d4cf059a2fef33b1b79c624b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/de8/de8441ed1d270cb0bb802a98556d6288.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/982/98290cf4aa121cda5e3988b71442f61d.jpg"
+]
+}
 },
 "195642": {
 "avg": 13.7,
 "chk": "2026-11-19",
-"syn": "Split Fiction is a 2025 action-adventure game developed by Hazelight Studios and published by Electronic Arts. As a cooperative multiplayer-only game, it follows authors Mio Hudson and Zoe Foster after they become imprisoned in the world of their stories when they are connected to a machine designed to steal creative ideas.\nSplit Fiction was released for PlayStation 5, Windows, and Xbox Series X/S on March 6, 2025, and was released on Nintendo Switch 2 on June 5."
+"syn": "Split Fiction is a 2025 action-adventure game developed by Hazelight Studios and published by Electronic Arts. As a cooperative multiplayer-only game, it follows authors Mio Hudson and Zoe Foster after they become imprisoned in the world of their stories when they are connected to a machine designed to steal creative ideas.\nSplit Fiction was released for PlayStation 5, Windows, and Xbox Series X/S on March 6, 2025, and was released on Nintendo Switch 2 on June 5.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "split-fiction",
+"n": "Split Fiction",
+"pf": [
+"PC",
+"PlayStation 5",
+"Xbox Series S/X"
+],
+"tags": [
+"Multiplayer",
+"Steam Cloud",
+"Co-op",
+"Story Rich",
+"cooperative",
+"Third Person",
+"Sci-fi",
+"Online Co-Op",
+"Fantasy",
+"Female Protagonist"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/dc1/dc10dd68a2e7472b7ed40feda3a16c54.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/ea9/ea9e37dc1b36db3401a6b308d766198b.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/e4b/e4bee3c261abe04f869b6f429852a00d.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/395/395fdacce19c05718a7df69a227c8580.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/640/640ae66a49a93b16ba5d2537e78b75c1.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/f5a/f5a69af83f67e75cb404b2dd334e2197.jpg"
+]
+}
 },
 "197208": {
 "avg": 22.7,
 "chk": "2026-11-19",
-"syn": "Stellar Blade (Korean: 스텔라 블레이드) is a 2024 action-adventure game developed by Shift Up. Players take control of the protagonist, Eve, as she embarks on a mission to save humanity from a relentless war against an alien race known as the Naytibas in a distant future. Throughout her journey, Eve is joined by her squad and other survivors as they fight to reclaim Earth."
+"syn": "Stellar Blade (Korean: 스텔라 블레이드) is a 2024 action-adventure game developed by Shift Up. Players take control of the protagonist, Eve, as she embarks on a mission to save humanity from a relentless war against an alien race known as the Naytibas in a distant future. Throughout her journey, Eve is joined by her squad and other survivors as they fight to reclaim Earth.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "project-eve-tba",
+"n": "Stellar Blade",
+"pf": [
+"PC",
+"PlayStation 5"
+],
+"tags": [
+"Singleplayer",
+"Steam Achievements",
+"Full controller support",
+"Steam Cloud",
+"Story Rich",
+"Third Person",
+"Sci-fi",
+"Female Protagonist",
+"Action-Adventure",
+"Action RPG"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/0c9/0c98c2913de0c48b57a49aacff794096.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/c5e/c5e5c6f19c0642b20e113b49a994e442.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/b22/b22c889fa194ddf811c528eb215bfcb5.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/4f0/4f068fe7cd517a475f78bd2712b7e9c1.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/f80/f8000e4f6b17a15a79a3c6eda3b7f535.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/543/543f315f253a026a974c98e995ef3874.jpg"
+]
+}
 },
 "130765": {
 "avg": 8,
 "chk": "2026-11-20",
-"syn": "Until Dawn is a 2015 interactive drama survival horror game developed by Supermassive Games and published by Sony Computer Entertainment. Players assume control of eight young adults who have to survive on Blackwood Mountain when their lives are threatened. The game features a butterfly effect system in which players must make choices that may change the story."
+"syn": "Until Dawn is a 2015 interactive drama survival horror game developed by Supermassive Games and published by Sony Computer Entertainment. Players assume control of eight young adults who have to survive on Blackwood Mountain when their lives are threatened. The game features a butterfly effect system in which players must make choices that may change the story.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "until-dawn",
+"n": "Until Dawn",
+"pf": [
+"PC",
+"PlayStation 4",
+"PlayStation 3"
+],
+"mc": 79,
+"age": "Mature",
+"tags": [
+"Horror",
+"exclusive"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/192/192cc281317e6e6f05e2c25b9c1adf89.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/6a6/6a6fd1929619c1d8041a9218bd7f1422.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/bd4/bd4bb34e0a0c2cf08cd1046122f18add.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/d55/d55f030eac579171ef44989826834f10.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/7c0/7c058dc4910d2073df0f942c675bd30a.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/c80/c80c38ef71014b5c4bd175a8e4649c7c.jpg"
+]
+}
 },
 "1794165211319": {
 "chk": "2026-11-18",
-"syn": "Onimusha: Way of the Sword (鬼武者 Way of the Sword) is a 2026 action-adventure game developed and published by Capcom. As the first mainline installment in the Onimusha series since Onimusha: Dawn of Dreams (2006), the game was released on September 4, 2026 for Nintendo Switch 2, PlayStation 5, Windows, and Xbox Series X/S. The game received generally favorable reviews and sold 1 million copies on its launch day."
+"syn": "Onimusha: Way of the Sword (鬼武者 Way of the Sword) is a 2026 action-adventure game developed and published by Capcom. As the first mainline installment in the Onimusha series since Onimusha: Dawn of Dreams (2006), the game was released on September 4, 2026 for Nintendo Switch 2, PlayStation 5, Windows, and Xbox Series X/S. The game received generally favorable reviews and sold 1 million copies on its launch day.",
+"rwchk": "2026-11-20",
+"rw": {
+"slug": "onimusha-way-of-the-sword",
+"n": "Onimusha: Way Of The Sword",
+"pf": [
+"PC",
+"PlayStation 5",
+"Xbox Series S/X"
+],
+"shots": [
+"https://media.rawg.io/media/resize/640/-/screenshots/a34/a3444739430f1b440bbef6d493a62585.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/184/18431ea009b07288111a9fb3743a2830.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/bb8/bb82117127b5839995ea4c7186354190.jpg",
+"https://media.rawg.io/media/resize/640/-/screenshots/965/9653d36f42d6a7a360c99963253384ff.jpg"
+]
+}
 }
 }
