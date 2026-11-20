@@ -919,7 +919,9 @@ window.__imgFail=el=>{const n=+(el.dataset.try||0);if(n<4){el.dataset.try=n+1;co
 document.addEventListener('load',e=>{if(e.target.tagName==='IMG')imgLoads++},true);
 /* our own lazy loader: native loading="lazy" was stalling on some devices */
 const lazyIO='IntersectionObserver' in window?new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const i=e.target;lazyIO.unobserve(i);if(i.dataset.src){i.src=i.dataset.src;i.removeAttribute('data-src')}}}),{rootMargin:'800px 400px'}):null;
-const lazyScan=()=>document.querySelectorAll('img[data-src]').forEach(i=>{if(i.__lz)return;i.__lz=1;if(lazyIO)lazyIO.observe(i);else{i.src=i.dataset.src;i.removeAttribute('data-src')}});
+// moving strips: load each cover while it is still about 5 covers away from showing (on both sides), so none appears blank
+const stripIO=mq=>mq.__io||(mq.__io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){const i=e.target;mq.__io.unobserve(i);if(i.dataset.src){i.src=i.dataset.src;i.removeAttribute('data-src')}}}),{root:mq,rootMargin:'0px 520px'}));
+const lazyScan=()=>document.querySelectorAll('img[data-src]').forEach(i=>{if(i.__lz)return;i.__lz=1;const mq='IntersectionObserver' in window&&i.closest('.mq');if(mq)stripIO(mq).observe(i);else if(lazyIO)lazyIO.observe(i);else{i.src=i.dataset.src;i.removeAttribute('data-src')}});
 new MutationObserver(lazyScan).observe(document.documentElement,{childList:true,subtree:true});
 
 /* ---------- data model ---------- */
