@@ -713,7 +713,11 @@ footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:v
   </div>
   <nav class="nav"><div class="nav-in" id="nav"></div></nav>
 </header>
-<main id="app"><p style="text-align:center;padding:80px 16px;opacity:.6">Loading your collection…</p></main>
+<main id="app"><div id="boot" style="text-align:center;padding:80px 16px"><p style="opacity:.6">Loading your collection…</p><div id="bootslow" style="display:none"><p style="opacity:.75">This is taking longer than usual.</p><button onclick="location.reload()" style="padding:8px 14px;margin:4px">Reload</button><button onclick="scClear()" style="padding:8px 14px;margin:4px">Clear saved copy and reload</button></div></div></main>
+<script>
+window.scClear=async function(){try{if(navigator.serviceWorker)for(const r of await navigator.serviceWorker.getRegistrations())await r.unregister();if(window.caches)for(const k of await caches.keys())await caches.delete(k)}catch(e){}location.reload()};
+setTimeout(function(){var s=document.getElementById('bootslow');if(s&&document.getElementById('boot'))s.style.display='block'},12000);
+</script>
 <footer id="foot"><p><b>Saturn Collections</b> is Rajeel Javed's (SatsugaiDeAtsu) personal collection of anime, manga, films, series, games, books and original stories.</p></footer>
 <div class="ov" id="ov" role="dialog" aria-modal="true"><div class="modal" id="modal"></div></div>
 
@@ -1678,6 +1682,7 @@ function editSetup(){
   ${ED.token?`<div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--line)"><b>Approved manga</b><p class="muted small" style="margin:4px 0 8px">Manga that MAL tags as Erotica only show up once you approve them here. Paste a MAL manga link or ID.</p>
   <div style="display:flex"><input id="ma_in" placeholder="https://myanimelist.net/manga/12345" style="flex:1;padding:8px;border:1px solid var(--line2);background:var(--panel);color:var(--ink)"><button class="btn" id="ma_add" style="border-radius:0">Approve</button></div>
   <div id="ma_list" class="small" style="margin-top:8px">${(SET.manga_allow||[]).map(id=>`<span class="chip" style="margin:0 6px 6px 0">${id} <a href="#" data-ma="${id}" aria-label="Remove ${id}" style="color:var(--s4)">✕</a></span>`).join('')||'<span class="muted">None yet.</span>'}</div><div id="ma_msg" class="small muted"></div></div>`:''}
+  <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--line)"><b>Clear saved copy</b><p class="muted small" style="margin:4px 0 8px">Removes the pictures and lists this browser has saved, then reloads fresh from the site. Your token and settings stay.</p><button class="btn" onclick="scClear()">Clear and reload</button></div>
   <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn pri" id="toksave">Save and turn on</button>${ED.token?'<button class="btn" id="tokoff">Turn off editing</button><button class="btn" id="tokdel">Forget token and hide editing on this device</button>':''}</div></div>`);
   const rn=$('#refnow');if(rn)rn.onclick=async()=>{rn.disabled=true;$('#refmsg').textContent='Starting…';try{await ghSave('data/mal_touch.json',{t:Date.now()},'Manual refresh');$('#refmsg').textContent='Started. Reload the site in about 5 minutes.'}catch(e){$('#refmsg').textContent='Could not start: '+e.message;rn.disabled=false}};
   $('#toksave').onclick=async()=>{const v=$('#tok').value.trim()||ED.token;if(!v){$('#tokerr').textContent='Paste a token first.';return}

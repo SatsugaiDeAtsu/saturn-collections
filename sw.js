@@ -1,36 +1,23 @@
-/* Saturn Collections: keeps pictures and icons on the device so pages open fast.
-   Lists (data/*.json) and the page itself always come fresh from the site first,
-   so edits show straight away; the saved copy is only used when offline. */
-const PICS='sc-pics-v2',PAGE='sc-page-v1';
+/* Saturn Collections: one simple rule.
+   Ask the site for the fresh copy. If it hasn't arrived after 4 seconds, show the saved copy
+   instead (the fresh one is still saved for next time). Anime/manga covers never change, so
+   once saved they are used straight away. */
+const C='sc-v3';
 self.addEventListener('install',()=>self.skipWaiting());
 self.addEventListener('activate',e=>e.waitUntil((async()=>{
-  for(const k of await caches.keys())if(![PICS,PAGE].includes(k))await caches.delete(k);
+  for(const k of await caches.keys())if(k!==C)await caches.delete(k);
   await self.clients.claim();
 })()));
 self.addEventListener('fetch',e=>{
   const r=e.request;if(r.method!=='GET')return;
-  const u=new URL(r.url);if(u.origin!==location.origin)return;
-  const p=u.pathname;
-  if(/\/(covers|assets)\//.test(p)&&!u.search){
-    // show the saved picture at once, refresh it quietly in the background
-    e.respondWith((async()=>{
-      const c=await caches.open(PICS),hit=await c.match(r);
-      // anime/manga/hall-of-fame copies never change under the same name: no refresh needed, so no extra requests
-      if(hit&&/\/covers\/(a|m|u)\//.test(p))return hit;
-      const net=fetch(r).then(res=>{if(res.ok)c.put(r,res.clone());return res}).catch(()=>hit);
-      if(hit){e.waitUntil(net);return hit}
-      return net;
-    })());
-    return;
-  }
-  if(r.mode==='navigate'||(/\/data\/[^/]+\.json$/.test(p)&&!u.search)||/\/(index\.html)?$/.test(p)){
-    e.respondWith((async()=>{
-      const c=await caches.open(PAGE),hit=await c.match(r,{ignoreSearch:r.mode==='navigate'});
-      const net=fetch(r,{cache:'no-cache'}).then(res=>{if(res.ok)c.put(r,res.clone());return res});
-      if(!hit)return net;
-      // slow connection: after 4 seconds show the saved copy; the fresh one still saves for next time
-      e.waitUntil(net.catch(()=>{}));
-      return Promise.race([net.catch(()=>hit),new Promise(ok=>setTimeout(()=>ok(hit),4000))]);
-    })());
-  }
+  const u=new URL(r.url);if(u.origin!==location.origin||u.search)return;
+  e.respondWith((async()=>{
+    const c=await caches.open(C),key=r.mode==='navigate'?new URL('./',location).href:r;
+    const hit=await c.match(key);
+    if(hit&&/\/covers\/(a|m|u)\//.test(u.pathname))return hit;
+    const net=fetch(r,{cache:'no-cache'}).then(res=>{if(res.ok)c.put(key,res.clone());return res});
+    if(!hit)return net;
+    e.waitUntil(net.catch(()=>{}));
+    return Promise.race([net.catch(()=>hit),new Promise(ok=>setTimeout(()=>ok(hit),4000))]);
+  })());
 });
