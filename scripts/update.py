@@ -2152,8 +2152,21 @@ def build_overview_files():
         # numbers for the Music box on the Overview
         rx = re.compile(settings.get('music_lists') or r'^[A-Z0-9]+\s*:')
         lists = [p for p in mu.get('playlists', []) if p.get('liked')] + sorted([p for p in mu.get('playlists', []) if p.get('own') and not p.get('liked') and rx.match(p.get('n', ''))], key=lambda p: p['n'])
-        uniq = {i for p in lists for i in p.get('items', [])}
         T = mu.get('tracks', {})
+        def base(n):  # one song = one title (remixes, live, acoustic and versions count once)
+            n = re.sub(r'\s*[\(\[【（][^\)\]】）]*[\)\]】）]', '', (n or '').lower())
+            n = re.sub(r'\s+[-–—~]\s+.*$', '', n)
+            return re.sub(r'[\W_]+', ' ', n).strip()
+        uniq, seenb = set(), set()
+        for p in lists:
+            for i in p.get('items', []):
+                t = T.get(i)
+                if not t:
+                    continue
+                k = base(t['n']) + '|' + ((t.get('ar') or [['']])[0][0] or '')
+                if k not in seenb:
+                    seenb.add(k)
+                    uniq.add(i)
         A = mu.get('artists', {})
         top1 = (mu['top']['artists'].get('short_term') or [None])[0]
         site['musicSum'] = {'songs': len(uniq), 'artists': len({a[0] for i in uniq for a in T.get(i, {}).get('ar', [])}),
@@ -2161,6 +2174,21 @@ def build_overview_files():
                             'lists': [[p['n'] if p.get('liked') else re.sub(r'^[A-Z0-9]+\s*:\s*', '', p['n']), len(p.get('items', []))] for p in lists],
                             'plays': (mu.get('lastfm') or {}).get('plays', 0), 'top': A.get(top1, {}).get('n', '') if top1 else '',
                             'pics': [A[i]['img'] for i in mu['top']['artists'].get('long_term', [])[:12] if A.get(i, {}).get('img')]}
+        # song covers for the moving strip: favourites and top songs first, then liked songs
+        cov, seen = [], set()
+        favs = load_json(os.path.join(DATA, 'music_favs.json'), {})
+        for t in [x for k in ('songs', 'anime', 'hof') for x in favs.get(k, [])] + [T.get(i, {}) for r in mu['top']['tracks'].values() for i in r] + [T.get(i, {}) for p in lists[:1] for i in p.get('items', [])]:
+            if t.get('img') and t['img'] not in seen and len(cov) < 60:
+                seen.add(t['img'])
+                cov.append([t.get('n', ''), t['img']])
+        site['musicSum']['covers'] = cov
+        # genres by number of songs, from each song's first artist's main Last.fm tag
+        gc = {}
+        for i in uniq:
+            a0 = ((T.get(i, {}).get('ar') or [['']])[0][0])
+            g = (A.get(a0, {}).get('lf') or ['Not tagged yet'])[0]
+            gc[g] = gc.get(g, 0) + 1
+        site['musicSum']['genres'] = sorted(gc.items(), key=lambda x: (x[0] == 'Not tagged yet', -x[1]))
     log('overview files built')
 
 
@@ -2208,8 +2236,46 @@ def update_music_pics():
     log(f'music pictures: +{got}')
 
 
+LF_SKIP = {'seen live', 'favorites', 'favourites', 'favorite', 'male vocalists', 'female vocalists', 'male vocalist', 'female vocalist', 'japanese', 'american',
+           'british', 'english', 'usa', 'uk', 'australian', 'canadian', 'german', 'korean', 'swedish', 'finnish', 'italian', 'french', 'pakistani', 'arabic',
+           'spanish', 'all', 'awesome', 'love', 'beautiful', 'cool', 'good', 'amazing', 'singer-songwriter', 'under 2000 listeners', 'vocal', 'vocalists', 'idol'}
+
+
+def update_music_genres():
+    """Main genre of each artist from their Last.fm tags (Spotify no longer gives genres). A batch each night, most-played-in-my-lists first."""
+    W = settings.get('workerUrl', '').rstrip('/')
+    path = os.path.join(DATA, 'music.json')
+    mu = load_json(path, {})
+    if not W or not mu.get('artists'):
+        return
+    count = {}
+    for p in mu.get('playlists', []):
+        for i in p.get('items', []):
+            a = (mu['tracks'].get(i, {}).get('ar') or [['']])[0][0]
+            count[a] = count.get(a, 0) + 1
+    todo = sorted([i for i, a in mu['artists'].items() if 'lf' not in a], key=lambda i: -count.get(i, 0))[:250]
+    got = 0
+    for aid in todo:
+        a = mu['artists'][aid]
+        try:
+            url = W + '/lastfm?' + urllib.parse.urlencode({'method': 'artist.getinfo', 'artist': a['n'], 'autocorrect': 1})
+            with urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': UA}), timeout=30) as r:
+                j = json.load(r)
+        except Exception as e:
+            log('genres failed', a['n'], e)
+            continue
+        tags = [t['name'].strip() for t in ((j.get('artist') or {}).get('tags') or {}).get('tag', []) if t.get('name')]
+        tags = [t for t in tags if t.lower() not in LF_SKIP and not re.match(r'^\d+s?$', t)]
+        a['lf'] = [t.title() if not re.search(r'[A-Z]', t[1:]) else t for t in tags[:3]]
+        got += 1
+        time.sleep(0.25)
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(mu, f, ensure_ascii=False, separators=(',', ':'))
+    log(f'music genres: +{got}, {sum(1 for a in mu["artists"].values() if a.get("lf"))} artists tagged')
+
+
 for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd), ('letterboxd films', update_letterboxd_watched),
-                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('music', update_music), ('music pictures', update_music_pics), ('book copies', mirror_book_covers), ('grouvee', update_grouvee), ('film ids', update_film_ids), ('film details', update_film_details), ('series', update_series), ('mal details', update_mal_details), ('summaries', update_summaries), ('book details', update_book_details), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('rawg', update_rawg), ('characters', update_char_info), ('people', update_people_info), ('extra manga', update_manga_extra), ('cover mirror', update_cover_mirror), ('overview files', build_overview_files)]:
+                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('music', update_music), ('music pictures', update_music_pics), ('music genres', update_music_genres), ('book copies', mirror_book_covers), ('grouvee', update_grouvee), ('film ids', update_film_ids), ('film details', update_film_details), ('series', update_series), ('mal details', update_mal_details), ('summaries', update_summaries), ('book details', update_book_details), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('rawg', update_rawg), ('characters', update_char_info), ('people', update_people_info), ('extra manga', update_manga_extra), ('cover mirror', update_cover_mirror), ('overview files', build_overview_files)]:
     try:
         fn()
         status[name] = 'ok'
