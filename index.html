@@ -74,7 +74,7 @@ h1,h2,h3,.brand{font-family:"Space Grotesk",Inter,sans-serif;letter-spacing:-.01
 .nav{background:var(--bar2);border-top:1px solid #000}
 .nav-in{max-width:1240px;margin:0 auto;display:flex;overflow-x:auto;scrollbar-width:none}
 .nav-in::-webkit-scrollbar{display:none}
-.nav a{padding:10px 18px;color:#c3aecb;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.06em;border-bottom:3px solid transparent;white-space:nowrap;display:flex;gap:8px;align-items:center}
+.nav a{padding:10px 12px;color:#c3aecb;font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.04em;border-bottom:3px solid transparent;white-space:nowrap;display:flex;gap:8px;align-items:center}
 .nav a:hover{color:#fff;background:rgba(255,255,255,.04)}
 .nav a.on{color:#fff;border-bottom-color:var(--c,#6f8fe0);background:rgba(255,255,255,.06)}
 .nav .dot{width:8px;height:8px;background:var(--c)}
@@ -103,7 +103,7 @@ main{max-width:1240px;margin:0 auto;padding:20px 16px 60px}
 .prof .links a:hover{border-color:var(--ink3);color:var(--ink)}
 
 /* stats */
-.stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+.stats{grid-template-columns:repeat(3,minmax(0,1fr))}.stats .mstat{grid-column:1/-1}
 .stat{border-top:3px solid var(--c);padding:14px;cursor:pointer;transition:border-color .15s}
 .stat:hover{background:var(--panel2)}
 .stat .lab{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--ink3);font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
@@ -506,13 +506,26 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 #mplayer iframe{width:100%;max-width:900px;display:block;margin:0 auto;border:0;border-radius:12px}#mplayer .x{position:absolute;right:8px;top:8px;border:1px solid var(--line2);background:var(--panel2);color:var(--ink);width:28px;height:28px;cursor:pointer}
 .ovmus{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}@media(max-width:820px){.ovmus{grid-template-columns:1fr}}
 .ovmus .martists{grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:10px;padding:12px 14px;margin:0}.ovmus .mart .nm{font-size:12px}
-.mlists{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:14px}
-.mlists button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:9px 12px;border:1px solid var(--line);background:var(--panel);color:var(--ink2);cursor:pointer;font:inherit;min-height:64px}
-.mlists button small{font-family:"JetBrains Mono";font-size:11px;color:var(--music)}.mlists button b{font-size:13px;line-height:1.25;color:var(--ink);overflow-wrap:anywhere}.mlists button .n{font-size:11px;color:var(--ink3);margin-top:auto}
-.mlists button:hover{border-color:var(--music)}.mlists button.on{border-color:var(--music);background:var(--panel2);box-shadow:inset 0 -3px 0 var(--music)}
-@media(max-width:520px){.mlists{grid-template-columns:1fr 1fr}}
+.mslide{display:flex;align-items:stretch;gap:6px;margin-top:14px}.marr{flex:0 0 32px;border:1px solid var(--line2);background:var(--panel);color:var(--ink);font-size:20px;cursor:pointer}.marr:hover{border-color:var(--music);color:var(--music)}
+.mlists{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;flex:1;padding:4px 2px}.mlists::-webkit-scrollbar{display:none}
+.mlists button{flex:0 0 auto;scroll-snap-align:start;display:flex;align-items:center;gap:8px;padding:5px 12px 5px 5px;border:1px solid var(--line);background:linear-gradient(135deg,var(--panel),var(--panel2));color:var(--ink2);cursor:pointer;font:inherit;font-size:13px;white-space:nowrap;border-radius:999px;transition:transform .15s,border-color .15s,box-shadow .2s}
+.mlists button img,.mlists .mlk{width:30px;height:30px;border-radius:50%;object-fit:cover;flex:0 0 auto}.mlists .mlk{display:grid;place-items:center;background:linear-gradient(135deg,#4b2fd6,#9fd9c6);color:#fff;font-size:14px}
+.mlists .ml{font-family:"JetBrains Mono";font-size:11px;color:var(--music);font-weight:700}.mlists b{color:var(--ink);font-weight:600}.mlists .n{font-family:"JetBrains Mono";font-size:11px;color:var(--ink3)}
+.mlists button:hover{transform:translateY(-2px);border-color:var(--music)}
+.mlists button.on{border-color:var(--music);background:linear-gradient(135deg,rgba(60,207,138,.22),rgba(60,207,138,.05));box-shadow:0 0 0 1px var(--music),0 4px 14px rgba(60,207,138,.25)}
+.mlists button.on img{animation:spinrec 6s linear infinite}@keyframes spinrec{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.mlists button.on img{animation:none}}
 .mtools{display:flex;gap:8px;align-items:center}.mtools .mfilter{flex:1}.mtools select{padding:9px 10px;border:1px solid var(--line2);background:var(--panel);color:var(--ink);margin:10px 0}
 .mrow .tt{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.cover.round{aspect-ratio:1;border-radius:50%;overflow:hidden}.cover.sq{aspect-ratio:1}
+.martc .cover.round{border:2px solid var(--line)}.martc:hover .cover.round{border-color:var(--music)}
+.mplayb{position:absolute;left:8px;bottom:8px;z-index:3;width:34px;height:34px;border-radius:50%;border:0;background:#1db954;color:#06130b;font-size:14px;cursor:pointer;opacity:0;transform:translateY(6px);transition:.2s;box-shadow:0 4px 12px rgba(0,0,0,.35)}
+.msongc:hover .mplayb,.msongc:focus-within .mplayb{opacity:1;transform:none}@media(hover:none){.mplayb{opacity:1;transform:none}}
+.msqr img{width:100%;aspect-ratio:1;object-fit:cover;display:block}
+.mseg.sm{margin:0}.mseg.sm button{padding:3px 9px;font-size:11px}
+.mcompact .mrow{grid-template-columns:24px 40px 1fr 46px auto}.mcompact .mrow .al{display:none}.mcompact .mrow img{width:40px;height:40px}
+.mseg button{transition:background .15s,border-color .15s}.mseg button.on{background:linear-gradient(135deg,rgba(60,207,138,.25),rgba(60,207,138,.06))}
+.mbtn.sp{transition:transform .15s,box-shadow .15s}.mbtn.sp:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(29,185,84,.35)}
 /* game screenshots */
 .gshots{display:flex;gap:8px;overflow-x:auto;margin:12px 0 4px;padding-bottom:6px;scroll-snap-type:x mandatory}.gshots a{flex:0 0 auto;scroll-snap-align:start}.gshots img{height:120px;width:auto;display:block;border:1px solid var(--line)}
 #editbtn.on{background:var(--accent);border-color:var(--accent)}
@@ -531,6 +544,9 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .banner .beat{transform-box:fill-box;transform-origin:center;animation:beat 1.4s ease-in-out infinite}
 @keyframes blink{50%{opacity:.15}}
 .banner .blink{animation:blink 1.6s steps(1) infinite}
+@keyframes eq{0%,100%{transform:scaleY(.25)}50%{transform:scaleY(1)}}.eq{transform-box:fill-box;transform-origin:bottom;animation:eq 1.1s ease-in-out infinite}
+@keyframes nfloat{0%,100%{transform:translateY(0);opacity:.9}50%{transform:translateY(-10px);opacity:.5}}.note1{animation:nfloat 3s ease-in-out infinite}.note2{animation:nfloat 3.6s ease-in-out infinite reverse}
+@media(prefers-reduced-motion:reduce){.eq,.note1,.note2{animation:none}}
 @keyframes quill{0%,100%{transform:rotate(0)}50%{transform:rotate(-4deg) translate(-4px,2px)}}
 .banner .quill{transform-box:fill-box;transform-origin:0% 100%;animation:quill 2.4s ease-in-out infinite}
 @keyframes sway{0%,100%{transform:rotate(0)}50%{transform:rotate(4deg)}}
@@ -840,6 +856,11 @@ const ART={
   <g class="quill"><path d="M150 150 C190 90 230 40 250 0 C235 50 210 100 165 160 Z" fill="#f2e9f5"/><path d="M150 150 L240 10" stroke="${c}" stroke-width="2"/><path d="M150 150 l-8 16 l14-8z" fill="#1c0e22"/></g>
   <rect x="200" y="120" width="44" height="40" fill="#1c0e22"/><rect x="208" y="110" width="28" height="12" fill="#1c0e22"/><rect x="200" y="130" width="44" height="6" fill="${c}"/>
   <circle cx="120" cy="170" r="6" fill="#1c0e22"/><circle cx="132" cy="178" r="3" fill="#1c0e22"/></g>`,
+ music:c=>`<g transform="translate(560 18)"><g class="float"><path d="M40 120 V90 a90 90 0 0 1 180 0 V120" fill="none" stroke="#efe6f5" stroke-width="12" stroke-linecap="round"/><path d="M40 120 V90 a90 90 0 0 1 180 0 V120" fill="none" stroke="${c}" stroke-width="4" stroke-linecap="round" opacity=".7"/>
+  <rect x="18" y="104" width="44" height="66" rx="18" fill="#1c0e22" stroke="#efe6f5" stroke-width="4"/><rect x="198" y="104" width="44" height="66" rx="18" fill="#1c0e22" stroke="#efe6f5" stroke-width="4"/><rect x="28" y="114" width="16" height="46" rx="8" fill="${c}"/><rect x="216" y="114" width="16" height="46" rx="8" fill="${c}"/></g>
+  ${[0,1,2,3,4].map(i=>`<rect class="eq" style="animation-delay:-${(i*.37).toFixed(2)}s" x="${92+i*16}" y="110" width="9" height="60" fill="${i%2?'#efe6f5':c}"/>`).join('')}
+  <g class="note1"><path d="M-20 60 v-38 l24 -6 v34" fill="none" stroke="#efe6f5" stroke-width="4"/><circle cx="-26" cy="62" r="7" fill="#efe6f5"/><circle cx="-2" cy="56" r="7" fill="#efe6f5"/></g>
+  <g class="note2"><path d="M262 40 v-30" stroke="${c}" stroke-width="4"/><path d="M262 10 q14 6 10 20" fill="none" stroke="${c}" stroke-width="4"/><circle cx="256" cy="42" r="7" fill="${c}"/></g></g>`,
  hof:c=>`<g transform="translate(600 30)"><g class="float"><clipPath id="crownClip"><path d="M10 120 L0 30 L45 70 L80 0 L115 70 L160 30 L150 120 Z"/></clipPath><path d="M10 120 L0 30 L45 70 L80 0 L115 70 L160 30 L150 120 Z" fill="${c}"/><path d="M10 120 L0 30 L45 70 L80 0 L80 120Z" fill="#fff" opacity=".18"/><rect x="10" y="120" width="140" height="18" fill="#f0c43c"/><g clip-path="url(#crownClip)"><rect class="shine" x="-60" y="0" width="40" height="140" fill="#fff" opacity=".35" transform="skewX(-20)"/></g>
   <circle class="twinkle" cx="80" cy="84" r="10" fill="#c8324f"/><circle cx="35" cy="98" r="6" fill="#6a2fc4"/><circle cx="125" cy="98" r="6" fill="#6a2fc4"/><circle cx="0" cy="30" r="6" fill="#fff2c9"/><circle cx="80" cy="0" r="7" fill="#fff2c9"/><circle cx="160" cy="30" r="6" fill="#fff2c9"/></g></g>
   ${[0,1,2,3,4,5].map(i=>`<ellipse cx="${560-i*2}" cy="${160-i*22}" rx="12" ry="5" fill="#f0c43c" opacity=".55" transform="rotate(${-40+i*8} ${560-i*2} ${160-i*22})"/><ellipse cx="${800+i*2}" cy="${160-i*22}" rx="12" ry="5" fill="#f0c43c" opacity=".55" transform="rotate(${40-i*8} ${800+i*2} ${160-i*22})"/>`).join('')}`,
@@ -939,7 +960,7 @@ const gBadge=g=>g.r?`<span class="badge">${g.r}/5</span>`:'';
 const dlcTile=(d,i,edit)=>`<${edit?'button type="button"':'div'} class="dlct${d.p?' on':''}" ${edit?`data-dp="${i}" aria-pressed="${d.p?'true':'false'}"`:''} title="${esc(d.n)}${d.p?' · played':''}">${cover(d.n,d.img||d.base,`${d.img?'':'<span class="dlctag">DLC</span>'}${d.p?'<span class="dlcok">✓</span>':''}`)}<span class="dn">${esc(d.n)}</span>${edit&&d.mine?`<span class="x" data-dx="${i}" role="button" aria-label="Remove">✕</span>`:''}</${edit?'button':'div'}>`;
 const games=D.games.map((g,i)=>Object.assign({i,n:norm(g.t+' '+(g.fr||[]).join(' '))},g,{img:g.img||(D.gameCovers||{})[g.id]||''},GDEF(g)));
 const stories=D.stories;
-const MED={overview:{c:'var(--accent)',name:'Edit mode'},hof:{c:'var(--gold)',name:'Hall of Fame'},manga:{c:'var(--manga)',name:'Manga'},books:{c:'var(--book)',name:'Books'},anime:{c:'var(--anime)',name:'Anime'},films:{c:'var(--film)',name:'Films'},games:{c:'var(--game)',name:'Games'},stories:{c:'var(--story)',name:'Stories'},music:{c:'var(--music)',name:'Music'},characters:{c:'#24a896',name:'Characters'},people:{c:'#d9a514',name:'People'},hofp:{c:'var(--gold)',name:'Hall of Fame'}};
+const MED={overview:{c:'var(--accent)',name:'Edit mode'},hof:{c:'var(--gold)',name:'Hall of Fame'},manga:{c:'var(--manga)',name:'Manga'},books:{c:'var(--book)',name:'Books'},anime:{c:'var(--anime)',name:'Anime'},films:{c:'var(--film)',name:'Films'},games:{c:'var(--game)',name:'Games'},stories:{c:'var(--story)',name:'Stories'},music:{c:'var(--music)',name:'Music'},singers:{c:'var(--music)',name:'Singers'},artists:{c:'var(--music)',name:'Artists'},characters:{c:'#24a896',name:'Characters'},people:{c:'#d9a514',name:'People'},hofp:{c:'var(--gold)',name:'Hall of Fame'}};
 const stars=r=>{if(!r)return'';const f=Math.floor(r);return '★'.repeat(f)+(r%1?'½':'')};
 const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:0;
 
@@ -1063,6 +1084,9 @@ function rOverview(){
       ${statusBar(Object.keys(BST).map(k=>[BST[k][0],books.filter(b=>b.st===k).length,BST[k][1]]).filter(p=>p[1]))}</a>
     <a class="box stat" href="#stories" style="--c:var(--story)">${art('stories')}<span class="ic">${ico('stories')}</span><div class="lab"><span>Writing</span><span>${works.reduce((s,w)=>s+(w.chn||['']).length,0)} chapters</span></div><div class="num">${wPub.length}</div><div class="sub">${fmt(words)} words written · ${wPinned().length} pinned</div>
       ${statusBar(WSEC.map(([k,l],i)=>[l,wPub.filter(w=>w.sec===k).length,['var(--story)','var(--s3)','var(--s2)','var(--s6)'][i]]))}</a>
+    ${(()=>{const M=D.musicSum;if(!M)return'';const PC=['#3ccf8a','#2fa7d6','#b48cff','#f0c43c','#f06f88','#f08a50','#7be0c0','#d4a062','#9aa6ff','#e07ad0','#66d17a'];
+      return `<a class="box stat mstat" href="#music" style="--c:var(--music)">${art('music')}<span class="ic">${ico('music')}</span><div class="lab"><span>Music</span><span>${M.plays?fmt(M.plays)+' plays counted':M.top?'Top now: '+esc(M.top):''}</span></div><div class="num">${fmt(M.songs)}</div><div class="sub">songs · ${fmt(M.artists)} artists · ${M.hours} h of music in my lists</div>
+      ${statusBar(M.lists.map((p,i)=>[p[0],p[1],PC[i%PC.length]]))}</a>`})()}
   </section>
   <div style="margin-top:14px">${wallBot}</div>
   <section class="grid two ovtop" style="margin-top:16px">
@@ -1075,6 +1099,7 @@ function rOverview(){
   ${favRow('Favorite games','games',ovFavItems('games'))}
   ${favRow('Favorite anime','anime',ovFavItems('anime'))}
   ${favRow('Favorite manga','manga',ovFavItems('manga'))}
+  ${favRow('Favorite singers','singers',ovFavItems('singers'))}
   ${showcase()}
   <div id="ov_music"></div>
   <div class="more"><a class="btn" href="#hof">Open the Hall of Fame →</a> <a class="btn" href="#wrapped">See your Wrapped →</a></div></div>
@@ -1179,7 +1204,7 @@ function favRow(title,k,items){
   setTimeout(()=>document.querySelectorAll(`[data-fk="${k}"]`).forEach(el=>el.onclick=()=>{if(Date.now()-(window.__favDragEnd||0)<500)return;items[+el.dataset.i].o()}));
   setTimeout(()=>{document.querySelectorAll(`[data-fadd="${k}"]`).forEach(el=>el.onclick=()=>addOvFav(k));bindFavDrag(k);document.querySelectorAll(`[data-fk="${k}"] [data-fdel]`).forEach(el=>el.onclick=e=>{e.stopPropagation();delOvFav(k,+el.dataset.fdel,el)})});
   if(!items.length&&!ED.on)return'';
-  return `<section class="box" style="margin-top:16px"><div class="box-h" style="border-top:3px solid ${MED[k].c}"><h2>${esc(title)}</h2><a class="link small" href="#${k}">View all</a></div><div class="box-b"><div class="grid favs">${items.map((it,i)=>`<div class="card" data-fk="${k}" data-i="${i}">${cover(it.t,it.img,(it.b?`<span class="badge">${esc(it.b)}</span>`:'')+(it.x||'')+(ED.on&&it.fi!=null?`<button type="button" class="favx" data-fdel="${it.fi}" title="Take off favourites" aria-label="Remove">✕</button><span class="favh" data-fdrag="${k}" title="Drag to reorder" aria-label="Drag to reorder">⠿</span>`:''))}<div class="meta"><div class="tt">${esc(it.t)}</div>${it.line||''}<div class="ss"><span>${esc(it.sub)}</span></div></div></div>`).join('')}${ED.on?`<button type="button" class="favadd" data-fadd="${k}" style="--c:${MED[k].c}" aria-label="Add a favourite"><span>+</span><small>Add</small></button>`:''}</div></div></section>`;
+  return `<section class="box" style="margin-top:16px"><div class="box-h" style="border-top:3px solid ${MED[k].c}"><h2>${esc(title)}</h2><a class="link small" href="#${k==='singers'?'music':k}">View all</a></div><div class="box-b"><div class="grid favs">${items.map((it,i)=>`<div class="card" data-fk="${k}" data-i="${i}">${cover(it.t,it.img,(it.b?`<span class="badge">${esc(it.b)}</span>`:'')+(it.x||'')+(ED.on&&it.fi!=null?`<button type="button" class="favx" data-fdel="${it.fi}" title="Take off favourites" aria-label="Remove">✕</button><span class="favh" data-fdrag="${k}" title="Drag to reorder" aria-label="Drag to reorder">⠿</span>`:''))}<div class="meta"><div class="tt">${esc(it.t)}</div>${it.line||''}<div class="ss"><span>${esc(it.sub)}</span></div></div></div>`).join('')}${ED.on?`<button type="button" class="favadd" data-fadd="${k}" style="--c:${MED[k].c}" aria-label="Add a favourite"><span>+</span><small>Add</small></button>`:''}</div></div></section>`;
 }
 
 
@@ -1223,12 +1248,14 @@ function genreRow(kind,key,tags){
 /* overview favourites: their own list (data/ovfavs.json), separate from the profile favourites shown in the Hall of Fame */
 function ovFavList(k){
   const O=D.ovFavs&&D.ovFavs[k];if(O)return O;
+  if(k==='singers')return [];
   if(k==='films')return D.lbFavUris.map(u=>filmUri[u]).filter(Boolean).map(f=>({t:f.t,y:f.y,img:f.img||''}));
   if(k==='games')return D.gvFav.map(n=>({t:n}));
   return (D.hof.malFavs[k]||[]).map(([id,t,sub])=>({id,t,sub}));
 }
 function ovFavItems(k){
   return ovFavList(k).map((x,fi)=>{
+    if(k==='singers')return {fi,t:x.t,img:x.img||'',sub:x.sub||'Singer',o:()=>openArtistAny(x)};
     if(k==='films'){const f=x.tv?films.concat(seriesOwn).find(o=>String(o.tv)===String(x.tv)):filmByKey[norm(x.t)+'|'+x.y]||films.find(o=>x.tmdb&&o.tmdb===x.tmdb);
       return f?{fi,t:f.t,img:f.img||f.tvimg||x.img||'',sub:f.tv?'Series':f.y,b:f.r?f.r+'★':'',o:()=>openFilm(f)}:{fi,t:x.t,img:x.img||'',sub:x.tv?'Series':x.y||'',o:()=>window.open(x.url||OUT.films(x.t),'_blank','noopener')}}
     if(k==='games'){const g=games.find(o=>o.id===x.id)||games.find(o=>o.t===x.t);
@@ -1239,7 +1266,7 @@ function ovFavItems(k){
 async function saveOvFavs(k,list,msg){
   toast('Saving…');
   try{let cur;try{cur=await ghLoad('data/ovfavs.json')}catch(e){cur={}}
-    ['films','games','anime','manga'].forEach(x=>{if(!cur[x])cur[x]=ovFavList(x)});cur[k]=list;
+    ['films','games','anime','manga','singers'].forEach(x=>{if(!cur[x])cur[x]=ovFavList(x)});cur[k]=list;
     await ghSave('data/ovfavs.json',cur,msg);D.ovFavs=cur;toast('Saved.');refreshFavRow(k);return true}
   catch(e){toast('Not saved: '+e.message,true);return false}
 }
@@ -1278,7 +1305,7 @@ function bindFavDrag(k){
     card.addEventListener('contextmenu',e=>{if(card.classList.contains('favdragging'))e.preventDefault()});
   });
 }
-const FAVT={films:'Favorite films',games:'Favorite games',anime:'Favorite anime',manga:'Favorite manga'};
+const FAVT={films:'Favorite films',games:'Favorite games',anime:'Favorite anime',manga:'Favorite manga',singers:'Favorite singers'};
 function refreshFavRow(k){
   const el=document.querySelector(`[data-fk="${k}"],[data-fadd="${k}"]`),sec=el&&el.closest('section');
   if(!sec||route!=='overview')return;
@@ -1290,6 +1317,7 @@ function delOvFav(k,i,el){
   const L=ovFavList(k).slice(),x=L.splice(i,1)[0];saveOvFavs(k,L,'Take '+(x&&x.t||'a favourite')+' off the overview');
 }
 function addOvFav(k){
+  if(k==='singers'){const have=ovFavList(k);return mSearchModal('artist','Add a favourite singer',x=>{if(have.some(h=>h.id===x.id))return toast('Already in your favourites.');saveOvFavs(k,[...have,{id:x.id,t:x.t,img:x.img||''}],'Add '+x.t+' to favourite singers').then(ok=>{if(ok)closeM()})})}
   const name={films:'film or series',games:'game',anime:'anime',manga:'manga'}[k];
   modal(k,'Add a favourite',`<div style="grid-column:1/-1"><h2>Add a favourite ${esc(name)}</h2>
   <form id="fv_f" style="display:flex;margin-top:12px"><input id="fv_q" placeholder="Search for a ${esc(name)}" style="flex:1;border:1px solid var(--line2);padding:10px 12px;background:var(--panel);outline:none"><button class="btn pri" style="border-radius:0">Search</button></form>
@@ -1500,6 +1528,7 @@ function coupleCards(list){
 function rHof(){
   HOFITEMS.length=0;
   if(hofSeg==='home')return rHofHome();
+  if(hofSeg==='music'&&(!MU||!MF)){$('#app').innerHTML='<div class="muted" style="padding:40px;text-align:center">Loading music…</div>';Promise.all([muLoad(),mfLoad()]).then(()=>{if(route==='hof'&&hofSeg==='music')rHof()});return}
   const H=D.hof,F=H.malFavs;
   const grid=items=>`<div class="hgrid">${items}</div>`;
   const groups=[];
@@ -1527,6 +1556,13 @@ function rHof(){
   }else if(hofSeg==='waifus'){
     G('g-wai','Waifus','A blog of its own: the goddess, the waifus, the battalion and more.','heart','#d24a7a',blogUrl(804810),
       wai.map(([t,d,it],i)=>sec('s-wai-'+i,t,d,grid(it.map(c=>hItem(c)).join('')))));
+  }else if(hofSeg==='music'){
+    const segb=(k)=>`<div class="mseg">${[['short_term','Last 4 weeks'],['medium_term','Last 6 months'],['long_term','All time']].map(([r,l])=>`<button data-hms="${k}:${r}" class="${hmS[k]===r?'on':''}">${l}</button>`).join('')}</div>`;
+    const note=k=>(MF.notes||{})[k]||'';
+    const fs=MFS.filter(([k])=>ED.on||(MF[k]||[]).length);
+    if(fs.length)G('g-mfav','Music favourites','The songs and singers I keep coming back to, picked by hand.','heart','#1f9d63','',fs.map(([k,l,kind])=>sec('s-mf-'+k,l,note(k),mfCards(k,kind))));
+    if(MU&&MU.top){G('g-mtop','Top artists','Who I listen to most on Spotify.','star','#1f9d63','',[sec('s-mta','Top artists','',segb('a')+`<div class="martists">${(MU.top.artists[hmS.a]||[]).map(mArtTile).join('')}</div>`)]);
+      G('g-mts','Top songs','What I play most on Spotify.','music','#1f9d63','',[sec('s-mts','Top songs','',segb('s')+`<div class="box mcompact">${(MU.top.tracks[hmS.s]||[]).map((id,i)=>mRow(id,i)).join('')}</div>`)])}
   }else if(hofSeg==='couples'){
     G('g-cou','Couples','Favourite anime couples, and two special cases.','couple','#e8733a',blogUrl(804809),[
       sec('s-cou','Favourite anime couples','The name says it all.',coupleCards(H.couples)),
@@ -1557,7 +1593,7 @@ function rHof(){
     G('g-bsh','My shelves','Shelves I keep.','books','#b07a38','',Object.keys(shelfNames).filter(k=>books.some(b=>b.sh.includes(k))).map(k=>sec('s-bsh-'+k,shelfNames[k],'',grid(books.filter(b=>b.sh.includes(k)).map(bc).join('')))));
   }
   const A=D.hof.about;
-  const segs=[['anime','Anime','var(--anime)'],['manga','Manga','var(--manga)'],['films','Films','var(--film)'],['games','Games','var(--game)'],['books','Books','var(--book)'],['chars','Characters','#24a896'],['waifus','Waifus','#d24a7a'],['couples','Couples','#e8733a']];
+  const segs=[['anime','Anime','var(--anime)'],['manga','Manga','var(--manga)'],['films','Films','var(--film)'],['games','Games','var(--game)'],['books','Books','var(--book)'],['music','Music','var(--music)'],['chars','Characters','#24a896'],['waifus','Waifus','#d24a7a'],['couples','Couples','#e8733a']];
   $('#app').innerHTML=`
   ${banner('hof',"Saturn's throne room",'',[[groups.length,'collections'],[groups.reduce((s,g)=>s+g.secs.length,0),'sections']],'Hall of Fame')}
   <section class="box hof-hero" style="grid-template-columns:1fr;padding:16px 20px"><div><p style="margin:0">${esc(A.paras[1])}</p>
@@ -1567,6 +1603,7 @@ function rHof(){
   ${groups.map(g=>`<div class="grp" id="${g.id}" style="--c:${g.c}">${artBg(g.c,g.title.length*7,'')}<div class="gi">${ico(g.icon)}</div><div><h2>${esc(g.title)}</h2>${g.desc?`<p>${esc(g.desc)}</p>`:''}</div>${g.src?`<a href="${g.src}" target="_blank" rel="noopener">Source ↗</a>`:''}</div>
     ${g.secs.map(s=>`<section class="box hsec ${s.cls||''}" id="${s.id}" style="--c:${/hate/i.test(s.title)?'var(--s4)':g.c}"><div class="box-h"><h2>${esc(s.title)}</h2></div>${s.desc?`<div class="desc">${esc(s.desc)}</div>`:''}<div class="box-b">${s.inner}</div></section>`).join('')}`).join('')}`;
   document.querySelectorAll('[data-seg]').forEach(b=>b.onclick=()=>{hofSeg=b.dataset.seg;rHof();window.scrollTo(0,0)});
+  if(hofSeg==='music'){mfBind();document.querySelectorAll('[data-hms]').forEach(b=>b.onclick=()=>{const [k,r]=b.dataset.hms.split(':');hmS[k]=r;const y=scrollY;rHof();scrollTo(0,y)})}
   document.querySelectorAll('[data-j]').forEach(a=>a.onclick=e=>{e.preventDefault();const el=document.getElementById(a.dataset.j);if(el)el.scrollIntoView({behavior:'smooth'})});
   document.querySelectorAll('[data-st]').forEach(el=>el.onclick=()=>openStudio(F.company[+el.dataset.st]));
   document.querySelectorAll('[data-h]').forEach(el=>el.onclick=()=>{const it=HOFITEMS[+el.dataset.h];
@@ -1598,7 +1635,8 @@ function hofTiles(){
     ['couples','Couples','#e8733a','couple',imgsCo,`${H.couples.length} couples`],
     ['films','Films','var(--film)','films',imgsF,`Top 4 · ${D.filmLists.length} lists · ${films.filter(f=>f.r===5).length} five stars`],
     ['games','Games','var(--game)','games',imgsG,`${D.gvFav.length} favourites`],
-    ['books','Books','var(--book)','books',imgsB,`${books.filter(b=>b.r>=5).length} five stars`]
+    ['books','Books','var(--book)','books',imgsB,`${books.filter(b=>b.r>=5).length} five stars`],
+    ['music','Music','var(--music)','music',(D.musicSum&&D.musicSum.pics)||[],'Favourite songs and singers, top artists and songs']
   ].map(([k,l,c,ic,imgs,sub])=>({k,l,c,ic,imgs:[...new Set(imgs.filter(Boolean).map(BIG))].map(x=>[Math.random(),x]).sort((a,b)=>a[0]-b[0]).map(p=>p[1]).slice(0,12),sub}));
 }
 function rHofHome(){
@@ -2213,13 +2251,15 @@ const mHrs=ms=>{const h=ms/3600000;return h>=1?Math.round(h*10)/10+' h':Math.rou
 function mPlay(kind,id){let p=$('#mplayer');if(!p){p=document.createElement('div');p.id='mplayer';document.body.appendChild(p)}
   p.innerHTML=`<iframe src="https://open.spotify.com/embed/${kind}/${id}?theme=0" height="${kind==='track'?80:352}" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe><button class="x" aria-label="Close player">✕</button>`;
   p.querySelector('.x').onclick=()=>p.remove();document.body.style.paddingBottom=(kind==='track'?100:372)+'px'}
+const MKN={t:{},a:{}};
 const mArtLinks=t=>(t.ar||[]).map(([id,n])=>id?`<a href="#" data-mar="${id}">${esc(n)}</a>`:esc(n)).join(', ');
-const mRow=(id,i,extra)=>{const t=MU.tracks[id];if(!t)return'';return `<div class="mrow"><span class="no">${i+1}</span>${t.img?`<img data-src="${esc(t.img)}" alt="" referrerpolicy="no-referrer">`:'<span></span>'}<div style="min-width:0"><div class="tt">${esc(t.n)}</div><div class="ar">${mArtLinks(t)}${extra?` · <span class="muted">${extra}</span>`:''}</div></div><div class="al">${esc(t.al||'')}</div><div class="du">${mDur(t.ms)}</div><div class="act2"><button class="mbtn" data-mplay="track:${id}" aria-label="Play ${esc(t.n)}">▶</button><a class="mbtn sp" href="${SPU('track',id)}" target="_blank" rel="noopener">Spotify ↗</a></div></div>`};
-const mArtTile=(id,i)=>{const a=MU.artists[id]||{n:'?'};return `<button class="mart" data-mar="${id}"><div class="pic">${a.img?`<img data-src="${esc(a.img)}" alt="" referrerpolicy="no-referrer">`:`<b>${esc(initials(a.n))}</b>`}</div><div class="nm">${esc(a.n)}</div>${i!=null?`<div class="rk">#${i+1}</div>`:''}</button>`};
+const mRow=(id,i,extra)=>{const t=MU.tracks[id]||MKN.t[id];if(!t)return'';MKN.t[id]=t;return `<div class="mrow"><span class="no">${i+1}</span>${t.img?`<img data-src="${esc(t.img)}" alt="" referrerpolicy="no-referrer">`:'<span></span>'}<div style="min-width:0"><div class="tt">${esc(t.n)}</div><div class="ar">${mArtLinks(t)}${extra?` · <span class="muted">${extra}</span>`:''}</div></div><div class="al">${esc(t.al||'')}</div><div class="du">${mDur(t.ms)}</div><div class="act2"><button class="mbtn" data-mplay="track:${id}" aria-label="Play ${esc(t.n)}">▶</button><a class="mbtn sp" href="${SPU('track',id)}" target="_blank" rel="noopener">Spotify ↗</a></div></div>`};
+const mArtTile=(id,i)=>{const a=MU.artists[id]||MKN.a[id]||{n:'?'};MKN.a[id]=a;return `<button class="mart" data-mar="${id}"><div class="pic">${a.img?`<img data-src="${esc(a.img)}" alt="" referrerpolicy="no-referrer">`:`<b>${esc(initials(a.n))}</b>`}</div><div class="nm">${esc(a.n)}</div>${i!=null?`<div class="rk">#${i+1}</div>`:''}</button>`};
 function mBind(root){root=root||document;
   root.querySelectorAll('[data-mplay]').forEach(b=>b.onclick=e=>{e.preventDefault();const [k,id]=b.dataset.mplay.split(':');mPlay(k,id)});
-  root.querySelectorAll('[data-mar]').forEach(b=>b.onclick=e=>{e.preventDefault();openArtist(b.dataset.mar)})}
-async function openArtist(id){await muLoad();const a=MU.artists[id]||{n:'Artist'};
+  root.querySelectorAll('[data-mar]').forEach(b=>b.onclick=e=>{e.preventDefault();openArtist(b.dataset.mar)});
+  root.querySelectorAll('[data-msong]').forEach(b=>b.onclick=e=>{if(e.target.closest('[data-mplay],a,.favx'))return;e.preventDefault();openSong(b.dataset.msong)})}
+async function openArtist(id,ext){await muLoad();const a=MU.artists[id]||MKN.a[id]||(ext&&{n:ext.t,img:ext.img})||{n:'Artist'};
   const songs=Object.entries(MU.tracks).filter(([,t])=>(t.ar||[]).some(x=>x[0]===id)).map(([k])=>k);
   const inL=MLIST().filter(p=>p.items.some(x=>songs.includes(x))).map(p=>p.n);
   const rk=['short_term','medium_term','long_term'].map((r,i)=>{const n=(MU.top.artists[r]||[]).indexOf(id);return n>=0?`#${n+1} ${['last 4 weeks','last 6 months','all time'][i]}`:''}).filter(Boolean);
@@ -2227,7 +2267,9 @@ async function openArtist(id){await muLoad();const a=MU.artists[id]||{n:'Artist'
   ${rk.length?`<div class="muted" style="margin:4px 0 10px">Your top artist: ${rk.join(' · ')}</div>`:''}
   <div class="kv"><div>Songs in your lists</div><div>${songs.length}</div>${inL.length?`<div>In playlists</div><div>${inL.map(n=>`<span class="tag">${esc(n)}</span>`).join('')}</div>`:''}</div>
   <div style="margin:14px 0;display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-mplay="artist:${id}">▶ Play</button><a class="btn pri" href="${SPU('artist',id)}" target="_blank" rel="noopener">Open on Spotify ↗</a></div>
-  ${songs.length?`<div class="sect" style="--c:var(--music)"><h2><i></i>Songs you have</h2>${songs.slice(0,50).map((s,i)=>mRow(s,i)).join('')}</div>`:''}</div>`);
+  ${OWNER()&&ED.on&&!ovFavList('singers').some(x=>x.id===id)?`<button class="btn" id="m_fsing">♥ Add to favourite singers</button>`:''}
+  ${songs.length?`<div class="sect" style="--c:var(--music);margin-top:14px"><h2><i></i>Songs you have</h2>${songs.slice(0,50).map((s,i)=>mRow(s,i)).join('')}</div>`:'<div class="muted small" style="margin-top:10px">None of their songs are in your playlists yet.</div>'}</div>`);
+  const fs=$('#m_fsing');if(fs)fs.onclick=()=>saveOvFavs('singers',[...ovFavList('singers'),{id,t:a.n,img:a.img||''}],'Add '+a.n+' to favourite singers').then(ok=>{if(ok)closeM()});
   mBind($('#modal'))}
 async function rMusic(){
   $('#app').innerHTML='<div class="muted" style="padding:40px;text-align:center">Loading music…</div>';
@@ -2236,9 +2278,8 @@ async function rMusic(){
   const L=MLIST(),S=muS;if(!S.tab)S.tab=L[0]?L[0].id:'top';
   const uniq=new Set(L.flatMap(p=>p.items)),totMs=[...uniq].reduce((s,id)=>s+((MU.tracks[id]||{}).ms||0),0);
   const lf=MU.lastfm||{};
-  const tabs=L.map(p=>`<button data-mt="${p.id}" class="${S.tab===p.id?'on':''}"><small>${p.liked?'♥':esc(p.n.split(':')[0])}</small><b>${esc(p.liked?p.n:mLabel(p.n))}</b><span class="n">${fmt(p.items.length)} songs</span></button>`).join('')+
-    [['top','Top artists','★'],['songs','Top songs','★'],['recent','Recently played','◷'],['more','More playlists','+']].map(([k,l,s])=>`<button data-mt="${k}" class="${S.tab===k?'on':''}"><small>${s}</small><b>${l}</b></button>`).join('');
-  const rngBar=`<div class="mseg">${[['short_term','Last 4 weeks'],['medium_term','Last 6 months'],['long_term','All time']].map(([k,l])=>`<button data-mr="${k}" class="${S.rng===k?'on':''}">${l}</button>`).join('')}</div>`;
+  if(!L.some(p=>p.id===S.tab))S.tab=L[0]?L[0].id:'';
+  const tabs=L.map(p=>`<button data-mt="${p.id}" class="${S.tab===p.id?'on':''}">${p.liked?'<span class="mlk">♥</span>':p.img?`<img src="${esc(p.img)}" alt="" referrerpolicy="no-referrer">`:''}<span class="ml">${p.liked?'♥':esc(p.n.split(':')[0])}</span><b>${esc(p.liked?p.n:mLabel(p.n))}</b><span class="n">${fmt(p.items.length)}</span></button>`).join('');
   let body='';const pl=L.find(p=>p.id===S.tab);
   if(pl){const q=norm(S.q),ad=pl.added||[],T=id=>MU.tracks[id]||{};
     let idx=pl.items.map((id,i)=>i).filter(i=>{if(!q)return true;const t=T(pl.items[i]);return norm(t.n+' '+(t.ar||[]).map(x=>x[1]).join(' ')+' '+t.al).includes(q)});
@@ -2250,25 +2291,74 @@ async function rMusic(){
       <div class="mtools"><input class="mfilter" id="mq" placeholder="Find a song or artist in this playlist" value="${esc(S.q)}"><select id="msort" aria-label="Sort songs">${MSORT.map(([k,l])=>`<option value="${k}"${S.sort===k?' selected':''}>${l}</option>`).join('')}</select></div>
       <div class="box">${items.slice(0,S.lim).map((id,i)=>mRow(id,i,(S.sort==='new'||S.sort==='old')&&adds[i]?'added '+fdate(adds[i]):'')).join('')||'<div class="box-b muted">No match.</div>'}</div>
       ${items.length>S.lim?`<div class="more"><button class="btn" id="mmore">Show more (${items.length-S.lim} left)</button></div>`:''}`}
-  else if(S.tab==='top')body=rngBar+`<div class="martists">${(MU.top.artists[S.rng]||[]).map(mArtTile).join('')}</div>`;
-  else if(S.tab==='songs')body=rngBar+`<div class="box">${(MU.top.tracks[S.rng]||[]).map((id,i)=>mRow(id,i)).join('')}</div>`;
-  else if(S.tab==='recent')body=`<div class="box" style="margin-top:14px">${(MU.log||MU.recent||[]).slice(0,100).map((r,i)=>mRow(r.id,i,r.t?mAgo(r.t):'')).join('')}</div>`;
-  else body=`<div class="mplgrid">${(MU.playlists||[]).filter(p=>!L.includes(p)).map(p=>`<button class="mpl" data-mplay="playlist:${p.id}">${p.img?`<img data-src="${esc(p.img)}" alt="" referrerpolicy="no-referrer">`:''}<div>${esc(p.n)}<small>${p.own?'Yours':'By '+esc(p.by||'Spotify')} · tap to play</small></div></button>`).join('')}</div>`;
+
   $('#app').innerHTML=`${banner('music','Music','What I listen to, sorted the way I sort it.',[[fmt(uniq.size),'songs'],[fmt(new Set([...uniq].flatMap(id=>((MU.tracks[id]||{}).ar||[]).map(x=>x[0]))).size),'artists'],[mHrs(totMs),'of music'],...(lf.plays?[[fmt(lf.plays),'plays counted']]:[])],'Music')}
-  <div class="mlists">${tabs}</div>${body}`;
+  <div class="mslide"><button class="marr" data-marr="-1" aria-label="Scroll left">‹</button><div class="mlists" id="mlists">${tabs}</div><button class="marr" data-marr="1" aria-label="Scroll right">›</button></div>${body}`;
+  {const ml=$('#mlists'),on=ml&&ml.querySelector('.on');if(on)ml.scrollLeft=on.offsetLeft-ml.clientWidth/2+on.offsetWidth/2;
+   document.querySelectorAll('[data-marr]').forEach(b=>b.onclick=()=>ml.scrollBy({left:+b.dataset.marr*ml.clientWidth*.8,behavior:'smooth'}))}
   document.querySelectorAll('[data-mt]').forEach(b=>b.onclick=()=>{S.tab=b.dataset.mt;S.q='';S.lim=100;rMusic()});
-  document.querySelectorAll('[data-mr]').forEach(b=>b.onclick=()=>{S.rng=b.dataset.mr;rMusic()});
   const mq=$('#mq');if(mq){mq.oninput=()=>{S.q=mq.value;S.lim=100;clearTimeout(mq.__t);mq.__t=setTimeout(()=>{rMusic().then(()=>{const n=$('#mq');n.focus();n.setSelectionRange(n.value.length,n.value.length)})},250)}}
   const mm=$('#mmore');if(mm)mm.onclick=()=>{S.lim+=200;rMusic()};
   const ms2=$('#msort');if(ms2)ms2.onchange=()=>{S.sort=ms2.value;store.set('msort',S.sort);S.lim=100;rMusic()};
   mBind();
 }
 const mAgo=t=>{const d=(Date.now()-new Date(t))/1000;return d<3600?Math.max(1,Math.round(d/60))+' min ago':d<86400?Math.round(d/3600)+' h ago':Math.round(d/86400)+' d ago'};
-async function ovMusic(){const box=$('#ov_music');if(!box)return;const MO=MU||await loadJ('data/ov_music.json');if(!MO||!MO.top||!$('#ov_music'))return;const MU0=MU;MU=MO;
-  const row=(r,l)=>`<div class="box"><div class="box-h"><h2>Top artists · ${l}</h2><a class="small" href="#music">Music →</a></div><div class="martists">${(MU.top.artists[r]||[]).slice(0,10).map(mArtTile).join('')}</div></div>`;
-  box.innerHTML=`<section class="ovmus">${row('short_term','last 4 weeks')}${row('long_term','all time')}</section>
-  <section class="box" style="margin-top:16px"><div class="box-h"><h2>Recently played</h2><span class="small muted">from Spotify</span></div>${(MU.log||MU.recent||[]).slice(0,6).map((r,i)=>mRow(r.id,i,r.t?mAgo(r.t):'')).join('')}</section>`;
-  mBind(box);MU=MU0}
+const ovMS={a:'short_term',s:'short_term'};
+async function ovMusic(){const box=$('#ov_music');if(!box)return;const MO=MU||await loadJ('data/ov_music.json');if(!MO||!MO.top||!$('#ov_music'))return;
+  const MU0=MU;MU=MO;
+  const seg=(k)=>`<div class="mseg sm">${[['short_term','4 weeks'],['long_term','All time']].map(([r,l])=>`<button data-ovm="${k}:${r}" class="${ovMS[k]===r?'on':''}">${l}</button>`).join('')}</div>`;
+  box.innerHTML=`<section class="ovmus"><div class="box"><div class="box-h"><h2>Top artists</h2>${seg('a')}</div><div class="martists">${(MO.top.artists[ovMS.a]||[]).slice(0,10).map(mArtTile).join('')}</div></div>
+  <div class="box"><div class="box-h"><h2>Top songs</h2>${seg('s')}</div><div class="mcompact">${((MO.top.tracks||{})[ovMS.s]||[]).slice(0,10).map((id,i)=>mRow(id,i)).join('')}</div></div></section>
+  <section class="box" style="margin-top:16px"><div class="box-h"><h2>Recently played</h2><a class="small" href="#music">Music →</a></div><div class="mcompact">${(MO.log||MO.recent||[]).slice(0,6).map((r,i)=>mRow(r.id,i,r.t?mAgo(r.t):'')).join('')}</div></section>`;
+  mBind(box);MU=MU0;
+  box.querySelectorAll('[data-ovm]').forEach(b=>b.onclick=()=>{const [k,r]=b.dataset.ovm.split(':');ovMS[k]=r;ovMusic()})}
+
+const openArtistAny=x=>openArtist(x.id,x);
+async function openSong(id){await muLoad();const t=MU.tracks[id]||MKN.t[id]||(MF&&mfAll().find(x=>x.id===id));if(!t)return window.open(SPU('track',id),'_blank','noopener');
+  const inL=MLIST().filter(p=>p.items.includes(id)).map(p=>p.liked?p.n:p.n);
+  modal('music','Song',`<div class="msqr">${t.img?`<img src="${esc(t.img)}" alt="" referrerpolicy="no-referrer">`:''}</div><div><h2>${esc(t.n)}</h2><div class="ar" style="margin:4px 0 10px">${mArtLinks(t)}</div>
+  <div class="kv">${t.al?`<div>Album</div><div>${esc(t.al)}${t.y?' · '+t.y:''}</div>`:''}<div>Length</div><div>${mDur(t.ms)}</div>${inL.length?`<div>In playlists</div><div>${inL.map(n=>`<span class="tag">${esc(n)}</span>`).join('')}</div>`:''}</div>
+  <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-mplay="track:${id}">▶ Play</button><a class="btn pri" href="${SPU('track',id)}" target="_blank" rel="noopener">Open on Spotify ↗</a></div></div>`);
+  mBind($('#modal'))}
+/* Spotify search through the helper: songs or artists */
+async function spSearch(type,q){if(!SET.workerUrl)return [];
+  const j=await fetch(`${SET.workerUrl}/spotify/api/search?q=${encodeURIComponent(q)}&type=${type}&limit=10`).then(r=>r.json());
+  const img=o=>((o&&o.images)||[])[0]?.url||'';
+  if(type==='artist')return ((j.artists||{}).items||[]).map(a=>({id:a.id,t:a.name,img:img(a)}));
+  return ((j.tracks||{}).items||[]).map(t=>({id:t.id,n:t.name,t:t.name,ar:(t.artists||[]).map(a=>[a.id,a.name]),al:(t.album||{}).name||'',img:img(t.album),ms:t.duration_ms||0,y:((t.album||{}).release_date||'').slice(0,4)}))}
+function mSearchModal(type,title,onPick){
+  modal('music',title,`<div style="grid-column:1/-1"><h2>${esc(title)}</h2>
+  <form id="ms_f" style="display:flex;margin-top:12px"><input id="ms_q" placeholder="Search ${type==='artist'?'an artist':'a song'}" style="flex:1;border:1px solid var(--line2);padding:10px 12px;background:var(--panel);outline:none"><button class="btn pri" style="border-radius:0">Search</button></form>
+  <div id="ms_res" style="margin-top:12px"><div class="small muted">Your own library shows first, then all of Spotify.</div></div></div>`);
+  const go=async()=>{const q=gv('ms_q');if(!q)return;const box=$('#ms_res');await muLoad();const n=norm(q),W=n.split(' ');const m=s=>W.every(w=>norm(s).includes(w));
+    const mine=type==='artist'?Object.entries(MU.artists).filter(([,a])=>m(a.n)).slice(0,12).map(([id,a])=>({id,t:a.n,img:a.img})):Object.entries(MU.tracks).filter(([,t])=>m(t.n+' '+(t.ar||[]).map(x=>x[1]).join(' '))).slice(0,12).map(([id,t])=>Object.assign({id,t:t.n},t));
+    const tile=(x,i,src)=>`<button type="button" class="ptile" data-ms="${src}:${i}">${cover(x.t,x.img||'','',type==='artist'?'round':'sq')}<span class="pn">${esc(x.t)}</span><span class="ps">${esc(type==='artist'?(src==='m'?'in your library':''):(x.ar||[]).map(a=>a[1]).join(', '))}</span></button>`;
+    box.innerHTML=`${mine.length?`<div class="small muted" style="margin-bottom:6px">In your library</div><div class="pgrid">${mine.map((x,i)=>tile(x,i,'m')).join('')}</div>`:''}<div id="ms_ext" style="margin-top:14px"><div class="muted small"><span class="spin"></span>Searching Spotify…</div></div>`;
+    const bind=(L,src)=>box.querySelectorAll(`[data-ms^="${src}:"]`).forEach(b=>b.onclick=()=>onPick(L[+b.dataset.ms.split(':')[1]]));bind(mine,'m');
+    let ext=[];try{ext=await spSearch(type,q)}catch(e){}
+    const ex=$('#ms_ext');if(!ex)return;ex.innerHTML=ext.length?`<div class="small muted" style="margin-bottom:6px">On Spotify</div><div class="pgrid">${ext.map((x,i)=>tile(x,i,'e')).join('')}</div>`:'<div class="muted small">Nothing more found on Spotify.</div>';bind(ext,'e')};
+  $('#ms_f').onsubmit=e=>{e.preventDefault();go()};$('#ms_q').focus()}
+/* Hall of Fame music favourites (data/music_favs.json) */
+let MF=null;const mfLoad=async()=>MF||(MF=await loadJ('data/music_favs.json')||{});
+const MFS=[['songs','Favourite songs','song'],['en','Favourite singers · English','artist'],['jp','Favourite singers · Japanese','artist'],['anime','Favourite anime songs','song'],['hof','Hall of Fame','song']];
+const mfAll=()=>MFS.filter(s=>s[2]==='song').flatMap(s=>MF[s[0]]||[]);
+async function saveMF(cur,msg){toast('Saving…');try{let base;try{base=await ghLoad('data/music_favs.json')}catch(e){base={}}Object.assign(base,cur);await ghSave('data/music_favs.json',base,msg);MF=base;toast('Saved.');rHof();return true}catch(e){toast('Not saved: '+e.message,true);return false}}
+function mfCards(key,kind){const L=MF[key]||[];
+  const card=(x,i)=>kind==='artist'?`<div class="card martc" data-mar="${esc(x.id)}">${cover(x.t,x.img||'',ED.on?`<button type="button" class="favx" data-mfdel="${key}:${i}" aria-label="Remove">✕</button>`:'','round')}<div class="meta"><div class="tt">${esc(x.t)}</div></div></div>`
+    :`<div class="card msongc" data-msong="${esc(x.id)}">${cover(x.n||x.t,x.img||'',`<button type="button" class="mplayb" data-mplay="track:${esc(x.id)}" aria-label="Play">▶</button>`+(ED.on?`<button type="button" class="favx" data-mfdel="${key}:${i}" aria-label="Remove">✕</button>`:''),'sq')}<div class="meta"><div class="tt">${esc(x.n||x.t)}</div><div class="ss"><span>${esc((x.ar||[]).map(a=>a[1]).join(', '))}</span></div></div></div>`;
+  return `<div class="hgrid">${L.map(card).join('')}${ED.on?`<button type="button" class="card favadd" data-mfadd="${key}"><div class="cover sq"><b>+</b></div><div class="meta"><div class="tt">Add</div></div></button>`:''}</div>`+(ED.on?`<div style="margin-top:8px"><button class="btn" data-mfnote="${key}">✎ ${MF.notes&&MF.notes[key]?'Edit':'Add'} a note</button></div>`:'')}
+function mfBind(){
+  document.querySelectorAll('[data-mfadd]').forEach(b=>b.onclick=()=>{const key=b.dataset.mfadd,kind=MFS.find(s=>s[0]===key)[2];
+    mSearchModal(kind,'Add to '+MFS.find(s=>s[0]===key)[1],x=>{const L=MF[key]||[];if(L.some(y=>y.id===x.id))return toast('Already there.');
+      const it=kind==='artist'?{id:x.id,t:x.t,img:x.img||''}:{id:x.id,n:x.n||x.t,ar:x.ar||[],al:x.al||'',img:x.img||'',ms:x.ms||0,y:x.y||''};
+      saveMF({[key]:[...L,it]},'Music favourites: add '+(it.t||it.n)).then(ok=>{if(ok)closeM()})})});
+  document.querySelectorAll('[data-mfdel]').forEach(b=>b.onclick=e=>{e.stopPropagation();const [key,i]=b.dataset.mfdel.split(':');const L=(MF[key]||[]).slice(),x=L[+i];
+    if(b.dataset.sure!=='1'){b.dataset.sure='1';b.textContent='Remove?';b.classList.add('sure');setTimeout(()=>{if(b.isConnected){b.dataset.sure='';b.textContent='✕';b.classList.remove('sure')}},3000);return}
+    L.splice(+i,1);saveMF({[key]:L},'Music favourites: remove '+(x&&(x.t||x.n)||''))});
+  document.querySelectorAll('[data-mfnote]').forEach(b=>b.onclick=()=>{const key=b.dataset.mfnote,cur=(MF.notes||{})[key]||'';const v=prompt('A short note for this section (leave empty to remove):',cur);if(v===null)return;
+    saveMF({notes:Object.assign({},MF.notes||{},{[key]:v.trim()})},'Music favourites: note')});
+  mBind()}
+const hmS={a:'short_term',s:'short_term'};
 /* now playing badge in the header */
 async function nowPlaying(){if(!SET.workerUrl)return;const b=$('#npb');if(!b)return;
   try{const j=await fetch(SET.workerUrl+'/spotify/now').then(r=>r.json());
@@ -2715,8 +2805,9 @@ function rSearch(){
   ${sec('games',L.games,(g,i)=>`<div class="card" data-l="games:${i}">${cover(g.t,g.img||'',gBadge(g)+gDlcStack(g))}<div class="meta"><div class="tt">${esc(g.t)}</div>${gDlcLine(g)}<div class="ss"><span>${esc(g.shelf)}</span></div></div></div>`)}
   ${L.stories.length?`<div class="sect" style="--c:var(--story)"><h2><i></i>Writing <span class="muted mono">${L.stories.length}</span></h2><div class="cgrid" style="margin-top:0">${L.stories.slice(0,12).map(w=>`<div class="card" data-wr="${esc(w.id)}">${wcover(w)}<div class="meta"><div class="tt">${esc(w.t)}</div><div class="ss"><span>${esc(wKind(w))}</span><span>${wMin(w)} min</span></div></div></div>`).join('')}</div></div>`:''}
   </div></div>
+  <div id="s_mus"></div>
   <div class="box" style="margin-top:16px"><div class="box-h"><h2>Search everywhere</h2><span class="small muted" id="xmode"></span></div>
-  <div class="tabs" style="border:0;border-bottom:1px solid var(--line)">${['anime','manga','films','games','books','characters','people'].map(k=>`<button data-x="${k}" class="${S.ext===k?'on':''}" style="--c:${MED[k].c}">${k==='films'?'Films & series':MED[k].name}</button>`).join('')}</div>
+  <div class="tabs" style="border:0;border-bottom:1px solid var(--line)">${['anime','manga','films','games','books','characters','people','artists'].map(k=>`<button data-x="${k}" class="${S.ext===k?'on':''}" style="--c:${MED[k].c}">${k==='films'?'Films & series':MED[k].name}</button>`).join('')}</div>
   <div class="box-b" id="xbody"></div>
   <div class="small muted srccred">Where results come from: anime and manga from MyAnimeList; characters and people from MyAnimeList through Jikan; films and series from TMDB (The Movie Database); games from IGDB; books from Goodreads, Google Books or Open Library. Your own collection comes from MyAnimeList, Letterboxd, Medium and this site.</div></div>`;
   document.querySelectorAll('[data-wr]').forEach(el=>el.onclick=()=>openWork(L.stories.find(x=>x.id===el.dataset.wr)));
@@ -2724,6 +2815,10 @@ function rSearch(){
   document.querySelectorAll('[data-l]').forEach(el=>el.onclick=()=>{const [k,i]=el.dataset.l.split(':');const x=L[k][+i];({anime:openAnime,manga:openManga,books:openBook,films:openFilm,games:openGame})[k](x)});
   document.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{S.ext=b.dataset.x;document.querySelectorAll('[data-x]').forEach(x=>x.classList.toggle('on',x===b));extSearch()});
   extSearch();
+  muLoad().then(()=>{const el=$('#s_mus');if(!el||!MU||!MU.artists)return;const W=norm(S.q).split(' ').filter(Boolean);const m=s=>W.every(w=>norm(s).includes(w));
+    const A=Object.entries(MU.artists).filter(([,a])=>m(a.n)).slice(0,12),T=Object.entries(MU.tracks).filter(([,t])=>m(t.n)).slice(0,8);
+    if(!A.length&&!T.length)return;
+    el.innerHTML=`<div class="box" style="margin-top:16px"><div class="box-h" style="border-top:3px solid var(--music)"><h2>In your music</h2></div><div class="box-b">${A.length?`<div class="martists" style="margin-top:0">${A.map(([id])=>mArtTile(id)).join('')}</div>`:''}${T.length?`<div class="mcompact" style="margin-top:12px">${T.map(([id],i)=>mRow(id,i)).join('')}</div>`:''}</div></div>`;mBind(el)});
 }
 
 /* external search: direct APIs when the page can reach them, Claude otherwise */
@@ -2737,13 +2832,14 @@ async function detectMode(){
 }
 const OUT={manga:q=>`https://myanimelist.net/manga.php?q=${encodeURIComponent(q)}`,books:q=>`https://www.goodreads.com/search?q=${encodeURIComponent(q)}`,anime:q=>`https://myanimelist.net/anime.php?q=${encodeURIComponent(q)}`,films:q=>`https://letterboxd.com/search/films/${encodeURIComponent(q)}/`,games:q=>`https://howlongtobeat.com/?q=${encodeURIComponent(q)}`};
 const OUTN={manga:'MyAnimeList',books:'Goodreads',anime:'MyAnimeList',films:'Letterboxd',games:'HowLongToBeat',characters:'MyAnimeList',people:'MyAnimeList'};
-OUT.characters=q=>`https://myanimelist.net/character.php?q=${encodeURIComponent(q)}`;OUT.people=q=>`https://myanimelist.net/people.php?q=${encodeURIComponent(q)}`;
+OUT.artists=q=>`https://open.spotify.com/search/${encodeURIComponent(q)}/artists`;OUTN.artists='Spotify';OUT.characters=q=>`https://myanimelist.net/character.php?q=${encodeURIComponent(q)}`;OUT.people=q=>`https://myanimelist.net/people.php?q=${encodeURIComponent(q)}`;
 const lev=(a,b)=>{if(Math.abs(a.length-b.length)>2)return 9;const d=Array.from({length:a.length+1},(_,i)=>[i]);for(let j=1;j<=b.length;j++)d[0][j]=j;for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)d[i][j]=Math.min(d[i-1][j]+1,d[i][j-1]+1,d[i-1][j-1]+(a[i-1]===b[j-1]?0:1));return d[a.length][b.length]};
 /* keep results that actually contain what was typed (a small typo is fine), so loose matches don't drown the real ones */
 const closeTo=(q,r)=>{const W=norm(q).split(' ').filter(w=>w.length>1);if(!W.length)return true;const T=norm([r.t,r.alt,r.a].filter(Boolean).join(' ')).split(' ');
   return W.every(w=>T.some(x=>x===w||x.startsWith(w)||(w.length>=4&&x.length>=4&&lev(w,x)<=(w.length>=7?2:1))))};
-const SRC={anime:'MyAnimeList',manga:'MyAnimeList',films:'TMDB',games:'IGDB',books:'Goodreads',characters:'MyAnimeList (through Jikan)',people:'MyAnimeList (through Jikan)'};
+const SRC={anime:'MyAnimeList',manga:'MyAnimeList',films:'TMDB',games:'IGDB',books:'Goodreads',characters:'MyAnimeList (through Jikan)',people:'MyAnimeList (through Jikan)',artists:'Spotify'};
 async function viaApi(kind,q){
+  if(kind==='artists')return (await spSearch('artist',q)).map(a=>({spId:a.id,t:a.t,img:a.img,y:'',meta:'Artist',sum:''}));
   if((kind==='anime'||kind==='manga')&&SET.workerUrl){
     // MAL's search sometimes fails for a moment: try up to 4 times before giving up
     let r=null,err=null;
@@ -2844,11 +2940,11 @@ function showExt(res,kind,q){
   const box=$('#xbody');
   let note='';
   if(kind==='books'&&res.length){const near=res.filter(r=>closeTo(q,r));if(near.length)res=near;else{note=`<div class="note" style="margin:0 0 10px">Nothing matches “${esc(q)}” closely. These are the nearest results.</div>`;res=res.slice(0,5)}}
-  const own=r=>r.tv?films.concat(seriesOwn).find(f=>String(f.tv)===String(r.tv)):(kind==='characters'||kind==='people')?null:ownMatch(kind,r.t,+r.y);
+  const own=r=>r.tv?films.concat(seriesOwn).find(f=>String(f.tv)===String(r.tv)):(kind==='characters'||kind==='people'||kind==='artists')?null:ownMatch(kind,r.t,+r.y);
   if(!res.length){box.innerHTML=`<div class="muted">No ${MED[kind].name.toLowerCase()} found for “${esc(q)}”.</div>${outLinks(kind,q)}`;return}
   box.innerHTML=`${note}<div class="sres" style="margin-top:0">${res.map((r,i)=>{const o=own(r);return `<div class="xr" data-r="${i}">${cover(r.t,r.img)}<div><div class="tt">${esc(r.t)}${o?'<span class="own">In your list</span>':''}${r.tv?'<span class="own" style="background:var(--panel2);color:var(--ink2)">Series</span>':''}</div>${r.alt?`<div class="small muted">${esc(r.alt)}</div>`:''}<div class="small muted">${esc([r.y,r.meta].filter(Boolean).join(' · '))}</div><p>${esc(r.sum)}</p></div></div>`}).join('')}</div>
   ${mode==='claude'?'<div class="note">These results come from Claude\'s knowledge, so very new releases may be missing. Open one to jump to it on '+OUTN[kind]+'.</div>':`<div class="small muted" style="margin-top:8px">Results from ${esc(SRC[kind]||'')}.</div>`}${outLinks(kind,q)}`;
-  box.querySelectorAll('[data-r]').forEach(el=>el.onclick=()=>{const r=res[+el.dataset.r];const o=own(r);if(o){({anime:openAnime,manga:openManga,books:openBook,films:openFilm,games:openGame})[kind](o);return}
+  box.querySelectorAll('[data-r]').forEach(el=>el.onclick=()=>{const r=res[+el.dataset.r];if(kind==='artists')return openArtist(r.spId,{t:r.t,img:r.img});const o=own(r);if(o){({anime:openAnime,manga:openManga,books:openBook,films:openFilm,games:openGame})[kind](o);return}
     if((kind==='characters'||kind==='people')&&hofPeople().some(p=>p.k===(kind==='people'?'p':'c')&&p.id===r.malId))return openMal({k:kind==='people'?'p':'c',id:r.malId,name:r.t,pic:r.img});
     openExt(kind,r)});
 }

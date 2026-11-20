@@ -2142,17 +2142,74 @@ def build_overview_files():
     dump('ov_film.json', {'f': {i: {f: v[f] for f in ('rt', 'g') if f in v} for i, v in fd.get('f', {}).items()}, 'col': {}})
     mu = load_json(os.path.join(DATA, 'music.json'), {})
     if mu.get('top'):
-        top = {'artists': {r: mu['top']['artists'].get(r, [])[:10] for r in ('short_term', 'long_term')}, 'tracks': {}}
+        top = {'artists': {r: mu['top']['artists'].get(r, [])[:10] for r in ('short_term', 'long_term')},
+               'tracks': {r: mu['top']['tracks'].get(r, [])[:10] for r in ('short_term', 'long_term')}}
         rec = (mu.get('log') or mu.get('recent') or [])[:6]
-        ids = {r['id'] for r in rec if r.get('id')}
+        ids = {r['id'] for r in rec if r.get('id')} | {i for r in top['tracks'].values() for i in r}
         tr = {i: mu['tracks'][i] for i in ids if i in mu.get('tracks', {})}
         ar = {i: mu['artists'][i] for r in top['artists'].values() for i in r if i in mu.get('artists', {})}
         dump('ov_music.json', {'top': top, 'log': rec, 'tracks': tr, 'artists': ar, 'playlists': []})
+        # numbers for the Music box on the Overview
+        rx = re.compile(settings.get('music_lists') or r'^[A-Z0-9]+\s*:')
+        lists = [p for p in mu.get('playlists', []) if p.get('liked')] + sorted([p for p in mu.get('playlists', []) if p.get('own') and not p.get('liked') and rx.match(p.get('n', ''))], key=lambda p: p['n'])
+        uniq = {i for p in lists for i in p.get('items', [])}
+        T = mu.get('tracks', {})
+        A = mu.get('artists', {})
+        top1 = (mu['top']['artists'].get('short_term') or [None])[0]
+        site['musicSum'] = {'songs': len(uniq), 'artists': len({a[0] for i in uniq for a in T.get(i, {}).get('ar', [])}),
+                            'hours': round(sum(T.get(i, {}).get('ms', 0) for i in uniq) / 3600000),
+                            'lists': [[p['n'] if p.get('liked') else re.sub(r'^[A-Z0-9]+\s*:\s*', '', p['n']), len(p.get('items', []))] for p in lists],
+                            'plays': (mu.get('lastfm') or {}).get('plays', 0), 'top': A.get(top1, {}).get('n', '') if top1 else '',
+                            'pics': [A[i]['img'] for i in mu['top']['artists'].get('long_term', [])[:12] if A.get(i, {}).get('img')]}
     log('overview files built')
 
 
+def update_music_pics():
+    """Artist pictures: Spotify only sends them for top artists, so fetch the rest a few at a time (favourites first)."""
+    W = settings.get('workerUrl', '').rstrip('/')
+    mpath = os.path.join(DATA, 'music.json')
+    mu = load_json(mpath, {})
+    if not W or not mu.get('artists'):
+        return
+    fpath, opath = os.path.join(DATA, 'music_favs.json'), os.path.join(DATA, 'ovfavs.json')
+    mf, ov = load_json(fpath, {}), load_json(opath, {})
+    favs = [x for k in ('en', 'jp') for x in mf.get(k, [])] + ov.get('singers', [])
+    count = {}
+    for p in mu.get('playlists', []):
+        for i in p.get('items', []):
+            for a in mu.get('tracks', {}).get(i, {}).get('ar', []):
+                count[a[0]] = count.get(a[0], 0) + 1
+    want = [x['id'] for x in favs if not x.get('img')] + sorted([i for i, a in mu['artists'].items() if not a.get('img')], key=lambda i: -count.get(i, 0))
+    got, seen = 0, set()
+    for aid in want:
+        if aid in seen or not aid or got >= 80:
+            continue
+        seen.add(aid)
+        try:
+            with urllib.request.urlopen(urllib.request.Request(f'{W}/spotify/api/artists/{aid}', headers={'User-Agent': UA}), timeout=30) as r:
+                a = json.load(r)
+        except Exception as e:
+            log('music pics failed', aid, e)
+            continue
+        img = ((a.get('images') or [{}])[0]).get('url', '')
+        if not img:
+            continue
+        got += 1
+        if aid in mu['artists']:
+            mu['artists'][aid]['img'] = img
+        for x in favs:
+            if x.get('id') == aid:
+                x['img'] = img
+        time.sleep(0.2)
+    for path, obj in ((mpath, mu), (fpath, mf), (opath, ov)):
+        if obj:
+            with open(path, 'w', encoding='utf-8') as f:
+                json.dump(obj, f, ensure_ascii=False, separators=(',', ':') if path == mpath else (',', ':'))
+    log(f'music pictures: +{got}')
+
+
 for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd), ('letterboxd films', update_letterboxd_watched),
-                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('music', update_music), ('book copies', mirror_book_covers), ('grouvee', update_grouvee), ('film ids', update_film_ids), ('film details', update_film_details), ('series', update_series), ('mal details', update_mal_details), ('summaries', update_summaries), ('book details', update_book_details), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('rawg', update_rawg), ('characters', update_char_info), ('people', update_people_info), ('extra manga', update_manga_extra), ('cover mirror', update_cover_mirror), ('overview files', build_overview_files)]:
+                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('music', update_music), ('music pictures', update_music_pics), ('book copies', mirror_book_covers), ('grouvee', update_grouvee), ('film ids', update_film_ids), ('film details', update_film_details), ('series', update_series), ('mal details', update_mal_details), ('summaries', update_summaries), ('book details', update_book_details), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('rawg', update_rawg), ('characters', update_char_info), ('people', update_people_info), ('extra manga', update_manga_extra), ('cover mirror', update_cover_mirror), ('overview files', build_overview_files)]:
     try:
         fn()
         status[name] = 'ok'
