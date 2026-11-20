@@ -2269,7 +2269,7 @@ async function artistDisc(id,onProg){
   const key='disc_'+id,c=store.get(key,null);if(c&&Date.now()-c.t<864e5)return c.L;
   const W=SET.workerUrl;const J=u=>fetch(W+'/spotify/api'+u).then(r=>r.ok?r.json():Promise.reject(r.status));
   let albums=[],off=0;
-  while(off<500){const j=await J(`/artists/${id}/albums?include_groups=album,single&limit=50&offset=${off}`);albums.push(...(j.items||[]));if(!j.next)break;off+=50}
+  while(off<600){const j=await J(`/artists/${id}/albums?include_groups=album,single&limit=10&offset=${off}`);albums.push(...(j.items||[]));if(!j.next)break;off+=10}
   const L=[],seen=new Set();let done=0;
   const one=async a=>{try{const al=await J('/albums/'+a.id);const img=((al.images||[])[0]||{}).url||'';
     ((al.tracks||{}).items||[]).forEach(t=>{if(!(t.artists||[]).some(x=>x.id===id))return;const b=mBase(t.name);if(!b||seen.has(b))return;seen.add(b);
@@ -2302,7 +2302,7 @@ async function openArtist(id,ext){await muLoad();const a=MU.artists[id]||MKN.a[i
     const tot=new Set([...L.map(t=>t.b),...mineB]).size;out=L.filter(t=>!mineB.has(t.b));
     const el=$('#m_tot');if(el)el.textContent='/ '+tot+' songs released';const on=$('#m_outn');if(on)on.textContent=out.length;
     if(cur==='out')show('out')}
-  catch(e){const el=$('#m_tot');if(el)el.textContent=''}
+  catch(e){const el=$('#m_tot');if(el)el.textContent='/ couldn\'t count right now';const on=$('#m_outn');if(on)on.textContent='–'}
 }
 
 async function rMusic(){
