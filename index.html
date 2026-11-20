@@ -2249,15 +2249,10 @@ const MLIST=()=>{const rx=new RegExp(SET.music_lists||'^[A-Z0-9]+\\s*:');const p
 const mLabel=n=>n.replace(/^[A-Z0-9]+\s*:\s*/,'').trim();
 const mDur=ms=>{const s=Math.round((ms||0)/1000);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
 const mHrs=ms=>{const h=ms/3600000;return h>=1?Math.round(h*10)/10+' h':Math.round(ms/60000)+' min'};
-let SPC=null,SPCp=null;
-const spApi=()=>SPCp||(SPCp=new Promise(ok=>{window.onSpotifyIframeApiReady=api=>ok(api);const s=document.createElement('script');s.src='https://open.spotify.com/embed/iframe-api/v1';s.async=true;document.head.appendChild(s)}));
-function mPlay(kind,id){let p=$('#mplayer');const uri=`spotify:${kind}:${id}`,ht=kind==='track'?80:352;
-  if(!p){p=document.createElement('div');p.id='mplayer';p.innerHTML='<div id="mpl_in"></div><button class="x" aria-label="Close player">✕</button>';document.body.appendChild(p);
-    p.querySelector('.x').onclick=()=>{try{SPC&&SPC.destroy()}catch(e){}SPC=null;p.remove();document.body.style.paddingBottom=''}}
-  document.body.style.paddingBottom=(ht+20)+'px';
-  if(SPC){SPC.loadUri(uri);try{SPC.setIFrameDimensions&&SPC.setIFrameDimensions('100%',ht)}catch(e){}setTimeout(()=>{try{SPC.play()}catch(e){}},700);return}
-  spApi().then(api=>{const el=document.getElementById('mpl_in');if(!el)return;
-    api.createController(el,{uri,width:'100%',height:ht,theme:'dark'},c=>{SPC=c;c.addListener('ready',()=>c.play())})})}
+/* plain Spotify embed: plays full songs (with a seek bar) when signed in to Spotify in this browser */
+function mPlay(kind,id){let p=$('#mplayer');if(!p){p=document.createElement('div');p.id='mplayer';document.body.appendChild(p)}
+  p.innerHTML=`<iframe src="https://open.spotify.com/embed/${kind}/${id}?theme=0" height="${kind==='track'?80:352}" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe><button class="x" aria-label="Close player">✕</button>`;
+  p.querySelector('.x').onclick=()=>{p.remove();document.body.style.paddingBottom=''};document.body.style.paddingBottom=(kind==='track'?100:372)+'px'}
 const MKN={t:{},a:{}};
 const mArtLinks=t=>(t.ar||[]).map(([id,n])=>id?`<a href="#" data-mar="${id}">${esc(n)}</a>`:esc(n)).join(', ');
 const mRow=(id,i,extra)=>{const t=MU.tracks[id]||MKN.t[id];if(!t)return'';MKN.t[id]=t;return `<div class="mrow"><span class="no">${i+1}</span>${t.img?`<img data-src="${esc(t.img)}" alt="" referrerpolicy="no-referrer">`:'<span></span>'}<div style="min-width:0"><div class="tt">${esc(t.n)}</div><div class="ar">${mArtLinks(t)}${extra?` · <span class="muted">${extra}</span>`:''}</div></div><div class="al">${esc(t.al||'')}</div><div class="du">${mDur(t.ms)}</div><div class="act2"><button class="mbtn" data-mplay="track:${id}" aria-label="Play ${esc(t.n)}">▶</button><a class="mbtn sp" href="${SPU('track',id)}" target="_blank" rel="noopener">Spotify ↗</a></div></div>`};
