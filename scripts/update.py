@@ -2021,6 +2021,7 @@ def update_spotify(sp, me, out):
                         x = tr(it.get('item') or it.get('track'))
                         if x:
                             o['items'].append(x)
+                            o.setdefault('added', []).append((it.get('added_at') or '')[:10])
                     if not k.get('next'):
                         break
                     o2 += 100
@@ -2028,6 +2029,23 @@ def update_spotify(sp, me, out):
         if not j.get('next'):
             break
         off += 50
+    # Liked Songs (shown first on the Music page)
+    liked = {'id': 'liked', 'n': 'Liked Songs', 'img': '', 'desc': '', 'own': True, 'liked': True, 'items': [], 'added': []}
+    try:
+        o3 = 0
+        while o3 < 10000:
+            k = sp('/me/tracks', limit=50, offset=o3)
+            for it in k.get('items', []):
+                x = tr(it.get('track'))
+                if x:
+                    liked['items'].append(x)
+                    liked['added'].append((it.get('added_at') or '')[:10])
+            if not k.get('next'):
+                break
+            o3 += 50
+        pls.insert(0, liked)
+    except Exception as e:
+        log('music: liked songs failed', e)
     fol = []
     try:
         fol = [ar(a) for a in sp('/me/following', type='artist', limit=50).get('artists', {}).get('items', [])]
@@ -2111,8 +2129,30 @@ def update_rawg():
     log(f'rawg: checked {done}, matched {got}')
 
 
+def build_overview_files():
+    """Small copies of the big detail files, holding only what the Overview page uses, so it opens faster."""
+    def dump(name, obj):
+        with open(os.path.join(DATA, name), 'w', encoding='utf-8') as f:
+            json.dump(obj, f, ensure_ascii=False, separators=(',', ':'))
+    md = load_json(os.path.join(DATA, 'mal_details.json'), {})
+    keep = ('ty', 'sd', 'g', 'st', 'n', 'dur', 'bc', 'x')
+    own = {'a': {str(a[0]) for a in site.get('anime', [])}, 'm': {str(m[0]) for m in site.get('manga', [])}}
+    dump('ov_mal.json', {k: {i: {f: v[f] for f in keep if f in v} for i, v in d.items() if i in own.get(k, ())} for k, d in md.items() if isinstance(d, dict)})
+    fd = load_json(os.path.join(DATA, 'film_details.json'), {})
+    dump('ov_film.json', {'f': {i: {f: v[f] for f in ('rt', 'g') if f in v} for i, v in fd.get('f', {}).items()}, 'col': {}})
+    mu = load_json(os.path.join(DATA, 'music.json'), {})
+    if mu.get('top'):
+        top = {'artists': {r: mu['top']['artists'].get(r, [])[:10] for r in ('short_term', 'long_term')}, 'tracks': {}}
+        rec = (mu.get('log') or mu.get('recent') or [])[:6]
+        ids = {r['id'] for r in rec if r.get('id')}
+        tr = {i: mu['tracks'][i] for i in ids if i in mu.get('tracks', {})}
+        ar = {i: mu['artists'][i] for r in top['artists'].values() for i in r if i in mu.get('artists', {})}
+        dump('ov_music.json', {'top': top, 'log': rec, 'tracks': tr, 'artists': ar, 'playlists': []})
+    log('overview files built')
+
+
 for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd), ('letterboxd films', update_letterboxd_watched),
-                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('music', update_music), ('book copies', mirror_book_covers), ('grouvee', update_grouvee), ('film ids', update_film_ids), ('film details', update_film_details), ('series', update_series), ('mal details', update_mal_details), ('summaries', update_summaries), ('book details', update_book_details), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('rawg', update_rawg), ('characters', update_char_info), ('people', update_people_info), ('extra manga', update_manga_extra), ('cover mirror', update_cover_mirror)]:
+                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('music', update_music), ('book copies', mirror_book_covers), ('grouvee', update_grouvee), ('film ids', update_film_ids), ('film details', update_film_details), ('series', update_series), ('mal details', update_mal_details), ('summaries', update_summaries), ('book details', update_book_details), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('rawg', update_rawg), ('characters', update_char_info), ('people', update_people_info), ('extra manga', update_manga_extra), ('cover mirror', update_cover_mirror), ('overview files', build_overview_files)]:
     try:
         fn()
         status[name] = 'ok'

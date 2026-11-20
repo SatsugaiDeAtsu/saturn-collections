@@ -506,6 +506,13 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 #mplayer iframe{width:100%;max-width:900px;display:block;margin:0 auto;border:0;border-radius:12px}#mplayer .x{position:absolute;right:8px;top:8px;border:1px solid var(--line2);background:var(--panel2);color:var(--ink);width:28px;height:28px;cursor:pointer}
 .ovmus{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}@media(max-width:820px){.ovmus{grid-template-columns:1fr}}
 .ovmus .martists{grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:10px;padding:12px 14px;margin:0}.ovmus .mart .nm{font-size:12px}
+.mlists{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:14px}
+.mlists button{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;padding:9px 12px;border:1px solid var(--line);background:var(--panel);color:var(--ink2);cursor:pointer;font:inherit;min-height:64px}
+.mlists button small{font-family:"JetBrains Mono";font-size:11px;color:var(--music)}.mlists button b{font-size:13px;line-height:1.25;color:var(--ink);overflow-wrap:anywhere}.mlists button .n{font-size:11px;color:var(--ink3);margin-top:auto}
+.mlists button:hover{border-color:var(--music)}.mlists button.on{border-color:var(--music);background:var(--panel2);box-shadow:inset 0 -3px 0 var(--music)}
+@media(max-width:520px){.mlists{grid-template-columns:1fr 1fr}}
+.mtools{display:flex;gap:8px;align-items:center}.mtools .mfilter{flex:1}.mtools select{padding:9px 10px;border:1px solid var(--line2);background:var(--panel);color:var(--ink);margin:10px 0}
+.mrow .tt{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
 /* game screenshots */
 .gshots{display:flex;gap:8px;overflow-x:auto;margin:12px 0 4px;padding-bottom:6px;scroll-snap-type:x mandatory}.gshots a{flex:0 0 auto;scroll-snap-align:start}.gshots img{height:120px;width:auto;display:block;border:1px solid var(--line)}
 #editbtn.on{background:var(--accent);border-color:var(--accent)}
@@ -1085,13 +1092,14 @@ const FAVS={};
 /* ---------- overview extras: up next, airing, continue the series, time spent, pick for me ---------- */
 async function overviewExtra(){
   const box=$('#ov_more');if(!box)return;
-  if(!_MD)_MD=await loadJ('data/mal_details.json')||{a:{},m:{}};
-  if(!_FD)_FD=await loadJ('data/film_details.json')||{f:{},col:{}};
+  // the overview only needs a small part of the big detail files, kept in data/ov_*.json
+  const [oM,oF]=await Promise.all([_MD||loadJ('data/ov_mal.json').then(x=>x||loadJ('data/mal_details.json')),_FD||loadJ('data/ov_film.json').then(x=>x||loadJ('data/film_details.json'))]);
+  const OM=oM||{a:{},m:{}},OF=oF||{f:{},col:{}};
   if($('#ov_more')!==box)return;
-  const MD=_MD;const A=id=>MD.a[id]||{};
+  const MD=OM;const A=id=>MD.a[id]||{};
   // ---- time spent (manga: 5 min a chapter; books: 50 pages an hour) ----
   const aH=anime.reduce((s,a)=>{const d=A(a.id);const eps=a.st===2?(a.eps||d.n||a.ep):a.ep;return s+(d.dur?eps*d.dur/3600*(1+(a.rw||0)):0)},0);
-  const fH=films.filter(f=>f.s==='w').reduce((s,f)=>{const d=_FD.f[f.tmdb];return s+(d&&d.rt?d.rt/60*(1+(f.rw||0)):0)},0);
+  const fH=films.filter(f=>f.s==='w').reduce((s,f)=>{const d=OF.f[f.tmdb];return s+(d&&d.rt?d.rt/60*(1+(f.rw||0)):0)},0);
   const gH=games.reduce((s,g)=>s+(g.hrs||0),0);
   const mH=manga.reduce((s,m)=>s+(m.st===2?(m.chs||m.ch):m.ch)*(1+(m.rw||0)),0)*5/60;
   const bH=books.filter(b=>b.st==='read').reduce((s,b)=>s+(+b.p||0),0)/50;
@@ -1121,7 +1129,7 @@ async function overviewExtra(){
   const cnt=(L,k,names)=>Object.entries(names).map(([v,n])=>[n,L.filter(x=>String(x[k])===v).length]).filter(x=>x[1]).map(([n,v])=>`${v} ${n}`).join(' · ');
   const aL=anime.filter(a=>a.st!==6),mL=manga.filter(m=>m.st!==6),fL=films.filter(f=>f.s==='w'&&!f.tv),gL=games.filter(g=>g.shelf!=='Backlog'&&g.shelf!=='Wish List'),bL=books.filter(b=>b.st!=='toread');
   const G={anime:theme(aL,'anime',a=>a.id,a=>A(a.id).g||a.g),manga:theme(mL,'manga',m=>m.id,m=>(MD.m[m.id]||{}).g||m.g),
-    films:theme(fL,'films',f=>f.tmdb||f.u,f=>(_FD.f[f.tmdb]||{}).g||[]),games:theme(gL,'games',g=>g.id,g=>g.g||[]),
+    films:theme(fL,'films',f=>f.tmdb||f.u,f=>(OF.f[f.tmdb]||{}).g||[]),games:theme(gL,'games',g=>g.id,g=>g.g||[]),
     books:theme(bL,'books',b=>b.id,b=>((D.bookMeta||{})[b.id]||{}).gg||[])};
   const GS={anime:cnt(aL,'st',{1:'watching',2:'completed',3:'on hold',4:'dropped'}),manga:cnt(mL,'st',{1:'reading',2:'completed',3:'on hold',4:'dropped'}),films:`${fmt(fL.length)} films watched`,
     games:cnt(gL,'shelf',{Played:'played',Playing:'playing',Replaying:'replaying',Retired:'retired'}),books:cnt(bL,'st',{read:'read',reading:'reading',dnf:'not finished',hold:'on hold'})};
@@ -2195,9 +2203,10 @@ function openGame(g){
 
 /* ---------- music: Spotify (+ Last.fm counts) ---------- */
 let MU=null;const muLoad=async()=>MU||(MU=await loadJ('data/music.json'));
-const muS={tab:'',rng:'short_term',q:'',lim:100};
+const muS={tab:'',rng:'short_term',q:'',lim:100,sort:store.get('msort','pl')};
+const MSORT=[['pl','Playlist order'],['new','Recently added'],['old','Oldest added'],['t','Title'],['ar','Artist'],['al','Album'],['len','Length']];
 const SPU=(k,id)=>`https://open.spotify.com/${k}/${id}`;
-const MLIST=()=>{const rx=new RegExp(SET.music_lists||'^[A-Z0-9]+\\s*:');return (MU.playlists||[]).filter(p=>p.own&&rx.test(p.n)).sort((a,b)=>a.n.localeCompare(b.n))};
+const MLIST=()=>{const rx=new RegExp(SET.music_lists||'^[A-Z0-9]+\\s*:');const pl=MU.playlists||[];return [...pl.filter(p=>p.liked),...pl.filter(p=>p.own&&!p.liked&&rx.test(p.n)).sort((a,b)=>a.n.localeCompare(b.n))]};
 const mLabel=n=>n.replace(/^[A-Z0-9]+\s*:\s*/,'').trim();
 const mDur=ms=>{const s=Math.round((ms||0)/1000);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
 const mHrs=ms=>{const h=ms/3600000;return h>=1?Math.round(h*10)/10+' h':Math.round(ms/60000)+' min'};
@@ -2210,7 +2219,7 @@ const mArtTile=(id,i)=>{const a=MU.artists[id]||{n:'?'};return `<button class="m
 function mBind(root){root=root||document;
   root.querySelectorAll('[data-mplay]').forEach(b=>b.onclick=e=>{e.preventDefault();const [k,id]=b.dataset.mplay.split(':');mPlay(k,id)});
   root.querySelectorAll('[data-mar]').forEach(b=>b.onclick=e=>{e.preventDefault();openArtist(b.dataset.mar)})}
-function openArtist(id){const a=MU.artists[id]||{n:'Artist'};
+async function openArtist(id){await muLoad();const a=MU.artists[id]||{n:'Artist'};
   const songs=Object.entries(MU.tracks).filter(([,t])=>(t.ar||[]).some(x=>x[0]===id)).map(([k])=>k);
   const inL=MLIST().filter(p=>p.items.some(x=>songs.includes(x))).map(p=>p.n);
   const rk=['short_term','medium_term','long_term'].map((r,i)=>{const n=(MU.top.artists[r]||[]).indexOf(id);return n>=0?`#${n+1} ${['last 4 weeks','last 6 months','all time'][i]}`:''}).filter(Boolean);
@@ -2227,35 +2236,39 @@ async function rMusic(){
   const L=MLIST(),S=muS;if(!S.tab)S.tab=L[0]?L[0].id:'top';
   const uniq=new Set(L.flatMap(p=>p.items)),totMs=[...uniq].reduce((s,id)=>s+((MU.tracks[id]||{}).ms||0),0);
   const lf=MU.lastfm||{};
-  const tabs=L.map(p=>`<button data-mt="${p.id}" class="${S.tab===p.id?'on':''}" style="--c:var(--music)">${esc(mLabel(p.n))}<span class="n">${p.items.length}</span></button>`).join('')+
-    [['top','Top artists'],['songs','Top songs'],['recent','Recently played'],['more','More playlists']].map(([k,l])=>`<button data-mt="${k}" class="${S.tab===k?'on':''}" style="--c:var(--music)">${l}</button>`).join('');
+  const tabs=L.map(p=>`<button data-mt="${p.id}" class="${S.tab===p.id?'on':''}"><small>${p.liked?'♥':esc(p.n.split(':')[0])}</small><b>${esc(p.liked?p.n:mLabel(p.n))}</b><span class="n">${fmt(p.items.length)} songs</span></button>`).join('')+
+    [['top','Top artists','★'],['songs','Top songs','★'],['recent','Recently played','◷'],['more','More playlists','+']].map(([k,l,s])=>`<button data-mt="${k}" class="${S.tab===k?'on':''}"><small>${s}</small><b>${l}</b></button>`).join('');
   const rngBar=`<div class="mseg">${[['short_term','Last 4 weeks'],['medium_term','Last 6 months'],['long_term','All time']].map(([k,l])=>`<button data-mr="${k}" class="${S.rng===k?'on':''}">${l}</button>`).join('')}</div>`;
   let body='';const pl=L.find(p=>p.id===S.tab);
-  if(pl){const q=norm(S.q),items=pl.items.filter(id=>{if(!q)return true;const t=MU.tracks[id]||{};return norm(t.n+' '+(t.ar||[]).map(x=>x[1]).join(' ')+' '+t.al).includes(q)});
+  if(pl){const q=norm(S.q),ad=pl.added||[],T=id=>MU.tracks[id]||{};
+    let idx=pl.items.map((id,i)=>i).filter(i=>{if(!q)return true;const t=T(pl.items[i]);return norm(t.n+' '+(t.ar||[]).map(x=>x[1]).join(' ')+' '+t.al).includes(q)});
+    const by={new:(a,b)=>(ad[b]||'').localeCompare(ad[a]||''),old:(a,b)=>(ad[a]||'').localeCompare(ad[b]||''),t:(a,b)=>(T(pl.items[a]).n||'').localeCompare(T(pl.items[b]).n||''),ar:(a,b)=>((T(pl.items[a]).ar||[[0,'']])[0][1]||'').localeCompare((T(pl.items[b]).ar||[[0,'']])[0][1]||''),al:(a,b)=>(T(pl.items[a]).al||'').localeCompare(T(pl.items[b]).al||''),len:(a,b)=>(T(pl.items[b]).ms||0)-(T(pl.items[a]).ms||0)}[S.sort];
+    if(by)idx.sort(by);const items=idx.map(i=>pl.items[i]),adds=idx.map(i=>ad[i]);
     const ms=pl.items.reduce((s,id)=>s+((MU.tracks[id]||{}).ms||0),0);
-    body=`<div class="mhead">${pl.img?`<img src="${esc(pl.img)}" alt="" referrerpolicy="no-referrer">`:''}<div><div class="kick muted small">${esc(pl.n.split(':')[0])}</div><h2>${esc(mLabel(pl.n))}</h2><div class="muted small">${pl.items.length} songs · ${mHrs(ms)}</div>
-      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-mplay="playlist:${pl.id}">▶ Play playlist</button><a class="btn pri" href="${SPU('playlist',pl.id)}" target="_blank" rel="noopener">Open on Spotify ↗</a></div></div></div>
-      <input class="mfilter" id="mq" placeholder="Find a song or artist in this playlist" value="${esc(S.q)}">
-      <div class="box">${items.slice(0,S.lim).map((id,i)=>mRow(id,i)).join('')||'<div class="box-b muted">No match.</div>'}</div>
+    body=`<div class="mhead">${pl.img?`<img src="${esc(pl.img)}" alt="" referrerpolicy="no-referrer">`:''}<div><div class="kick muted small">${pl.liked?'♥':esc(pl.n.split(':')[0])}</div><h2>${esc(pl.liked?pl.n:mLabel(pl.n))}</h2><div class="muted small">${pl.items.length} songs · ${mHrs(ms)}</div>
+      <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">${pl.liked?'':`<button class="btn" data-mplay="playlist:${pl.id}">▶ Play playlist</button>`}<a class="btn pri" href="${pl.liked?'https://open.spotify.com/collection/tracks':SPU('playlist',pl.id)}" target="_blank" rel="noopener">Open on Spotify ↗</a></div></div></div>
+      <div class="mtools"><input class="mfilter" id="mq" placeholder="Find a song or artist in this playlist" value="${esc(S.q)}"><select id="msort" aria-label="Sort songs">${MSORT.map(([k,l])=>`<option value="${k}"${S.sort===k?' selected':''}>${l}</option>`).join('')}</select></div>
+      <div class="box">${items.slice(0,S.lim).map((id,i)=>mRow(id,i,(S.sort==='new'||S.sort==='old')&&adds[i]?'added '+fdate(adds[i]):'')).join('')||'<div class="box-b muted">No match.</div>'}</div>
       ${items.length>S.lim?`<div class="more"><button class="btn" id="mmore">Show more (${items.length-S.lim} left)</button></div>`:''}`}
   else if(S.tab==='top')body=rngBar+`<div class="martists">${(MU.top.artists[S.rng]||[]).map(mArtTile).join('')}</div>`;
   else if(S.tab==='songs')body=rngBar+`<div class="box">${(MU.top.tracks[S.rng]||[]).map((id,i)=>mRow(id,i)).join('')}</div>`;
   else if(S.tab==='recent')body=`<div class="box" style="margin-top:14px">${(MU.log||MU.recent||[]).slice(0,100).map((r,i)=>mRow(r.id,i,r.t?mAgo(r.t):'')).join('')}</div>`;
   else body=`<div class="mplgrid">${(MU.playlists||[]).filter(p=>!L.includes(p)).map(p=>`<button class="mpl" data-mplay="playlist:${p.id}">${p.img?`<img data-src="${esc(p.img)}" alt="" referrerpolicy="no-referrer">`:''}<div>${esc(p.n)}<small>${p.own?'Yours':'By '+esc(p.by||'Spotify')} · tap to play</small></div></button>`).join('')}</div>`;
   $('#app').innerHTML=`${banner('music','Music','What I listen to, sorted the way I sort it.',[[fmt(uniq.size),'songs'],[fmt(new Set([...uniq].flatMap(id=>((MU.tracks[id]||{}).ar||[]).map(x=>x[0]))).size),'artists'],[mHrs(totMs),'of music'],...(lf.plays?[[fmt(lf.plays),'plays counted']]:[])],'Music')}
-  <div class="tabs" style="margin-top:14px">${tabs}</div>${body}`;
+  <div class="mlists">${tabs}</div>${body}`;
   document.querySelectorAll('[data-mt]').forEach(b=>b.onclick=()=>{S.tab=b.dataset.mt;S.q='';S.lim=100;rMusic()});
   document.querySelectorAll('[data-mr]').forEach(b=>b.onclick=()=>{S.rng=b.dataset.mr;rMusic()});
   const mq=$('#mq');if(mq){mq.oninput=()=>{S.q=mq.value;S.lim=100;clearTimeout(mq.__t);mq.__t=setTimeout(()=>{rMusic().then(()=>{const n=$('#mq');n.focus();n.setSelectionRange(n.value.length,n.value.length)})},250)}}
   const mm=$('#mmore');if(mm)mm.onclick=()=>{S.lim+=200;rMusic()};
+  const ms2=$('#msort');if(ms2)ms2.onchange=()=>{S.sort=ms2.value;store.set('msort',S.sort);S.lim=100;rMusic()};
   mBind();
 }
 const mAgo=t=>{const d=(Date.now()-new Date(t))/1000;return d<3600?Math.max(1,Math.round(d/60))+' min ago':d<86400?Math.round(d/3600)+' h ago':Math.round(d/86400)+' d ago'};
-async function ovMusic(){const box=$('#ov_music');if(!box)return;await muLoad();if(!MU||!MU.top||!$('#ov_music'))return;
+async function ovMusic(){const box=$('#ov_music');if(!box)return;const MO=MU||await loadJ('data/ov_music.json');if(!MO||!MO.top||!$('#ov_music'))return;const MU0=MU;MU=MO;
   const row=(r,l)=>`<div class="box"><div class="box-h"><h2>Top artists · ${l}</h2><a class="small" href="#music">Music →</a></div><div class="martists">${(MU.top.artists[r]||[]).slice(0,10).map(mArtTile).join('')}</div></div>`;
   box.innerHTML=`<section class="ovmus">${row('short_term','last 4 weeks')}${row('long_term','all time')}</section>
   <section class="box" style="margin-top:16px"><div class="box-h"><h2>Recently played</h2><span class="small muted">from Spotify</span></div>${(MU.log||MU.recent||[]).slice(0,6).map((r,i)=>mRow(r.id,i,r.t?mAgo(r.t):'')).join('')}</section>`;
-  mBind(box)}
+  mBind(box);MU=MU0}
 /* now playing badge in the header */
 async function nowPlaying(){if(!SET.workerUrl)return;const b=$('#npb');if(!b)return;
   try{const j=await fetch(SET.workerUrl+'/spotify/now').then(r=>r.json());
