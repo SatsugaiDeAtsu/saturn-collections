@@ -902,7 +902,7 @@ def update_dlc_pictures():
             m.pop('dimg', None)
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(meta, f, ensure_ascii=False, indent=0)
-    site['gameMeta'] = {k: {x: v[x] for x in ('avg', 'dlc', 'syn') if v.get(x)} | ({'dimg': {n: p for n, p in v['dimg'].items() if p.startswith('covers/')}} if v.get('dimg') else {})
+    site['gameMeta'] = {k: {x: v[x] for x in ('avg', 'dlc', 'syn', 'rw') if v.get(x)} | ({'dimg': {n: p for n, p in v['dimg'].items() if p.startswith('covers/')}} if v.get('dimg') else {})
                         for k, v in meta.items()}
     log(f'dlc pictures: +{got}')
 
@@ -1198,7 +1198,7 @@ def update_game_meta():
         time.sleep(0.7)
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(meta, f, ensure_ascii=False, indent=0)
-    site['gameMeta'] = {k: {x: v[x] for x in ('avg', 'dlc', 'syn') if v.get(x)} for k, v in meta.items()}
+    site['gameMeta'] = {k: {x: v[x] for x in ('avg', 'dlc', 'syn', 'rw') if v.get(x)} for k, v in meta.items()}
     log(f'game meta: checked {done}, new DLC: {added}')
 
 
@@ -2059,8 +2059,60 @@ def update_lastfm(W, out):
         log(f"last.fm: {out.get('lastfm', {}).get('plays', 0)} plays")
 
 
+def update_rawg():
+    """Platforms, Metacritic score, age rating, tags and screenshots for each game, from RAWG. Each game is checked once
+    a month. Kept in data/game_meta.json under "rw"."""
+    key = settings.get('rawgKey')
+    if not key:
+        return
+    path = os.path.join(DATA, 'game_meta.json')
+    meta = load_json(path, {})
+    games = load_json(os.path.join(DATA, 'games.json'), {}).get('games', [])
+    month_ago = (datetime.now(timezone.utc) - timedelta(days=30)).strftime('%Y-%m-%d')
+    today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+    nm = lambda t: re.sub(r'[^a-z0-9]+', '', (t or '').lower())
+    done = got = 0
+    for g in games:
+        m = meta.setdefault(str(g['id']), {})
+        if m.get('rwchk', '') > month_ago or done >= 150:
+            continue
+        done += 1
+        try:
+            q = urllib.parse.urlencode({'key': key, 'search': g['t'], 'page_size': 8, 'search_precise': 'true'})
+            with urllib.request.urlopen(urllib.request.Request('https://api.rawg.io/api/games?' + q, headers={'User-Agent': UA}), timeout=30) as r:
+                res = json.load(r).get('results', [])
+        except Exception as e:
+            log('rawg failed', g['t'], e)
+            time.sleep(1)
+            continue
+        m['rwchk'] = today
+        y = (g.get('rel') or '')[:4]
+        pick = next((x for x in res if nm(x.get('name')) == nm(g['t'])), None) \
+            or next((x for x in res if y and (x.get('released') or '')[:4] == y and nm(g['t']) in nm(x.get('name'))), None)
+        if not pick:
+            continue
+        shots = [x['image'].replace('/media/games/', '/media/resize/640/-/games/').replace('/media/screenshots/', '/media/resize/640/-/screenshots/')
+                 for x in pick.get('short_screenshots', [])[1:7] if x.get('image')]
+        m['rw'] = {k: v for k, v in {
+            'slug': pick.get('slug'), 'n': pick.get('name'),
+            'pf': [p['platform']['name'] for p in (pick.get('platforms') or []) if p.get('platform')],
+            'mc': pick.get('metacritic') or 0,
+            'age': (pick.get('esrb_rating') or {}).get('name', ''),
+            'tags': [t['name'] for t in (pick.get('tags') or []) if t.get('language') == 'eng'][:10],
+            'shots': shots}.items() if v}
+        got += 1
+        time.sleep(0.3)
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(meta, f, ensure_ascii=False, indent=0)
+    gm = site.setdefault('gameMeta', {})
+    for k, v in meta.items():
+        if v.get('rw'):
+            gm.setdefault(k, {})['rw'] = v['rw']
+    log(f'rawg: checked {done}, matched {got}')
+
+
 for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd), ('letterboxd films', update_letterboxd_watched),
-                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('music', update_music), ('book copies', mirror_book_covers), ('grouvee', update_grouvee), ('film ids', update_film_ids), ('film details', update_film_details), ('series', update_series), ('mal details', update_mal_details), ('summaries', update_summaries), ('book details', update_book_details), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('characters', update_char_info), ('people', update_people_info), ('extra manga', update_manga_extra), ('cover mirror', update_cover_mirror)]:
+                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('music', update_music), ('book copies', mirror_book_covers), ('grouvee', update_grouvee), ('film ids', update_film_ids), ('film details', update_film_details), ('series', update_series), ('mal details', update_mal_details), ('summaries', update_summaries), ('book details', update_book_details), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('rawg', update_rawg), ('characters', update_char_info), ('people', update_people_info), ('extra manga', update_manga_extra), ('cover mirror', update_cover_mirror)]:
     try:
         fn()
         status[name] = 'ok'
