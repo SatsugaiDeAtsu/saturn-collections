@@ -1960,14 +1960,24 @@ def update_music():
         url = W + '/spotify/api' + path + ('?' + urllib.parse.urlencode(q) if q else '')
         with urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': UA}), timeout=40) as r:
             return json.load(r)
+    out = load_json(os.path.join(DATA, 'music.json'), {})
     try:
         me = sp('/me')
         if not me.get('id'):
             raise ValueError(str(me)[:120])
     except Exception as e:
-        log('music: Spotify not connected yet', e)
-        return
-    out = load_json(os.path.join(DATA, 'music.json'), {})
+        body = e.read().decode('utf-8', 'replace')[:300] if hasattr(e, 'read') else ''
+        log('music: Spotify not connected yet', e, body)
+        me = None
+    if me:
+        update_spotify(sp, me, out)
+    update_lastfm(W, out)
+    out['generated'] = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+    with open(os.path.join(DATA, 'music.json'), 'w', encoding='utf-8') as f:
+        json.dump(out, f, ensure_ascii=False, separators=(',', ':'))
+
+
+def update_spotify(sp, me, out):
     tracks, artists = {}, out.get('artists', {})
     img = lambda o: ((o or {}).get('images') or [{}])[0].get('url', '')
 
@@ -2025,6 +2035,10 @@ def update_music():
         log('music: followed artists failed', e)
     out.update({'me': {'n': me.get('display_name', ''), 'img': img(me), 'id': me.get('id')}, 'top': top, 'recent': recent, 'log': plog,
                 'playlists': pls, 'followed': fol, 'tracks': {**out.get('tracks', {}), **tracks}, 'artists': artists})
+    log(f"music: {len(pls)} playlists, {len(tracks)} songs, {len(artists)} artists, {len(plog)} plays logged")
+
+
+def update_lastfm(W, out):
     # Last.fm: full play counts (only if a username is set in data/settings.json as "lastfm")
     U = settings.get('lastfm')
     if U:
@@ -2040,11 +2054,9 @@ def update_music():
                 L['tracks_' + per] = [[t['name'], t['artist']['name'], int(t['playcount'])] for t in lf('user.gettoptracks', period=per, limit=200).get('toptracks', {}).get('track', [])]
             out['lastfm'] = L
         except Exception as e:
-            log('music: last.fm failed', e)
-    out['generated'] = datetime.now(timezone.utc).strftime('%Y-%m-%d')
-    with open(os.path.join(DATA, 'music.json'), 'w', encoding='utf-8') as f:
-        json.dump(out, f, ensure_ascii=False, separators=(',', ':'))
-    log(f"music: {len(pls)} playlists, {len(tracks)} songs, {len(artists)} artists, {len(plog)} plays logged")
+            body = e.read().decode('utf-8', 'replace')[:300] if hasattr(e, 'read') else ''
+            log('music: last.fm failed', e, body)
+        log(f"last.fm: {out.get('lastfm', {}).get('plays', 0)} plays")
 
 
 for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd), ('letterboxd films', update_letterboxd_watched),
