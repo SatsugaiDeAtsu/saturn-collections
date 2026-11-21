@@ -13,6 +13,7 @@ T, A = {}, {}
 years, months, hours, wd, days = {}, collections.Counter(), [0]*24, [0]*7, set()
 yT, yA = collections.defaultdict(collections.Counter), collections.defaultdict(collections.Counter)
 yP = collections.Counter()
+yTP = collections.defaultdict(collections.Counter)
 for r in rows:
     tid = r['spotify_track_uri'].split(':')[-1]
     ms = r['ms_played']; play = ms >= 30000
@@ -23,13 +24,21 @@ for r in rows:
     an = t[5]
     a = A.setdefault(an, [0, 0, d]); a[0] += ms; a[1] += play
     months[d[:7]] += ms; hours[lt.hour] += ms; wd[lt.weekday()] += ms; days.add(d)
-    yT[y][tid] += ms; yA[y][an] += ms; yP[y] += play
+    yT[y][tid] += ms; yA[y][an] += ms; yP[y] += play; yTP[y][tid] += play
 for y in sorted(yT):
     years[y] = {'ms': sum(yT[y].values()), 'plays': yP[y], 'songs': len(yT[y]), 'artists': len(yA[y]),
-                'ta': [[n, ms] for n, ms in yA[y].most_common(15)], 'tt': [[i, ms] for i, ms in yT[y].most_common(15)]}
+                'ta': [[n, ms] for n, ms in yA[y].most_common(15)], 'tt': [[i, yT[y][i], p] for i, p in sorted(yTP[y].items(), key=lambda x: (-x[1], -yT[y][x[0]]))[:15]]}
 res = {'from': rows[0]['ts'][:10], 'end': rows[-1]['ts'], 'tot': {'ms': sum(t[0] for t in T.values()), 'plays': sum(t[1] for t in T.values()),
        'songs': len(T), 'artists': len(A), 'days': len(days)},
        'years': years, 'months': dict(sorted(months.items())), 'hours': hours, 'wd': wd,
        'tracks': {i: t for i, t in T.items()}, 'artists': {n: a for n, a in A.items()}}
+# keep covers already fetched for songs
+try:
+    old = json.load(open(out, encoding='utf-8')).get('tracks', {})
+    for i, t in res['tracks'].items():
+        if len(old.get(i, [])) > 7:
+            t[7:9] = old[i][7:9]
+except Exception:
+    pass
 json.dump(res, open(out, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
 print(res['tot'], len(json.dumps(res, ensure_ascii=False)) // 1024, 'KB')

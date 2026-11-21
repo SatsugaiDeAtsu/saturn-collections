@@ -2155,11 +2155,30 @@ def build_overview_files():
     if mu.get('top'):
         top = {'artists': {r: mu['top']['artists'].get(r, [])[:10] for r in ('short_term', 'long_term')},
                'tracks': {r: mu['top']['tracks'].get(r, [])[:10] for r in ('short_term', 'long_term')}}
-        rec = (mu.get('log') or mu.get('recent') or [])[:6]
+        rec = (mu.get('log') or mu.get('recent') or [])[:50]
         ids = {r['id'] for r in rec if r.get('id')} | {i for r in top['tracks'].values() for i in r}
         tr = {i: mu['tracks'][i] for i in ids if i in mu.get('tracks', {})}
         ar = {i: mu['artists'][i] for r in top['artists'].values() for i in r if i in mu.get('artists', {})}
-        dump('ov_music.json', {'top': top, 'log': rec, 'tracks': tr, 'artists': ar, 'playlists': []})
+        # listening history for the Overview: plays and hours for the songs and artists shown, plus most played / most listened
+        mh = load_json(os.path.join(DATA, 'music_history.json'), {})
+        hist, hh = None, {'t': {}, 'a': {}}
+        if mh.get('tracks'):
+            HT, HA = mh['tracks'], mh['artists']
+            hs = [i for i, _ in sorted(HT.items(), key=lambda x: (-x[1][1], -x[1][0]))[:10]]
+            name2id = {a['n']: i for i, a in mu.get('artists', {}).items()}
+            ha = [name2id[n] for n, _ in sorted(HA.items(), key=lambda x: -x[1][0]) if n in name2id][:10]
+            hist = {'s': hs, 'a': ha}
+            for i in hs:
+                if i not in tr and i in HT:
+                    t = HT[i]
+                    img = t[7] if len(t) > 7 else ''
+                    tr[i] = {'n': t[4], 'ar': [[name2id.get(t[5], ''), t[5]]], 'al': t[6], 'img': img if img.startswith('http') or not img else 'https://i.scdn.co/image/' + img, 'ms': t[8] if len(t) > 8 else 0}
+            for i in ha:
+                ar[i] = mu['artists'][i]
+            ids = set(tr) | {x for r in top['tracks'].values() for x in r}
+            hh['t'] = {i: HT[i][:2] for i in ids if i in HT}
+            hh['a'] = {mu['artists'][i]['n']: HA[mu['artists'][i]['n']][:2] for i in ar if mu['artists'].get(i, {}).get('n') in HA}
+        dump('ov_music.json', {'top': top, 'log': rec, 'tracks': tr, 'artists': ar, 'playlists': [], 'hist': hist, 'h': hh})
         # numbers for the Music box on the Overview
         rx = re.compile(settings.get('music_lists') or r'^[A-Z0-9]+\s*:')
         lists = [p for p in mu.get('playlists', []) if p.get('liked')] + sorted([p for p in mu.get('playlists', []) if p.get('own') and not p.get('liked') and rx.match(p.get('n', ''))], key=lambda p: p['n'])
@@ -2259,7 +2278,7 @@ def update_music_pics():
                 continue
             k = mu.get('tracks', {}).get(tid)
             if k and k.get('img'):
-                t[7:9] = [k['img'], k.get('ms', 0)]
+                t[7:9] = [k['img'].replace('https://i.scdn.co/image/', ''), k.get('ms', 0)]
                 continue
             try:
                 with urllib.request.urlopen(urllib.request.Request(f'{W}/spotify/api/tracks/{tid}', headers={'User-Agent': UA}), timeout=30) as r:
@@ -2267,7 +2286,7 @@ def update_music_pics():
             except Exception as e:
                 log('song cover failed', tid, e)
                 continue
-            t[7:9] = [((j.get('album') or {}).get('images') or [{}])[0].get('url', ''), j.get('duration_ms', 0)]
+            t[7:9] = [((j.get('album') or {}).get('images') or [{}])[0].get('url', '').replace('https://i.scdn.co/image/', ''), j.get('duration_ms', 0)]
             hgot += 1
             time.sleep(0.2)
         with open(hpath, 'w', encoding='utf-8') as f:
