@@ -2051,6 +2051,17 @@ def update_spotify(sp, me, out):
         fol = [ar(a) for a in sp('/me/following', type='artist', limit=50).get('artists', {}).get('items', [])]
     except Exception as e:
         log('music: followed artists failed', e)
+    # artists kept out of music numbers (settings.json "music_exclude")
+    EXC = set(settings.get('music_exclude', []))
+    if EXC:
+        bad_a = {i for i, a in artists.items() if a.get('n') in EXC}
+        bad_t = {i for i, t in tracks.items() if any(x[1] in EXC for x in t.get('ar', []))}
+        for r in top['artists']:
+            top['artists'][r] = [i for i in top['artists'][r] if i not in bad_a]
+        for r in top['tracks']:
+            top['tracks'][r] = [i for i in top['tracks'][r] if i not in bad_t]
+        recent = [x for x in recent if x['id'] not in bad_t]
+        plog = [x for x in plog if x['id'] not in bad_t]
     out.update({'me': {'n': me.get('display_name', ''), 'img': img(me), 'id': me.get('id')}, 'top': top, 'recent': recent, 'log': plog,
                 'playlists': pls, 'followed': fol, 'tracks': {**out.get('tracks', {}), **tracks}, 'artists': artists})
     log(f"music: {len(pls)} playlists, {len(tracks)} songs, {len(artists)} artists, {len(plog)} plays logged")

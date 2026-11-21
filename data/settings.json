@@ -9,7 +9,7 @@
   142683,
   131446
  ],
- "note": "manga_allow: MAL IDs of Erotica-tagged manga to show (Hentai is never shown). tmdbKey/rawgKey: public keys used for posters and live search. hof_add: extra characters to add to a Hall of Fame couple, by couple name (for ones not linked in the MAL blog). lastfm: Last.fm username. music_lists: pattern for your own playlists that become Music sections (names like \"D: Rock n Roll in Saturn\").",
+ "note": "manga_allow: MAL IDs of Erotica-tagged manga to show (Hentai is never shown). tmdbKey/rawgKey: public keys used for posters and live search. hof_add: extra characters to add to a Hall of Fame couple, by couple name (for ones not linked in the MAL blog). lastfm: Last.fm username. music_lists: pattern for your own playlists that become Music sections (names like \"D: Rock n Roll in Saturn\"). music_exclude: artists kept out of all music numbers (Quran recitations, talks).",
  "tmdbKey": "09f862cbedfccb987aa9955017c3984b",
  "rawgKey": "25924f2dd2454c07a3a6c68a7bf9dd6d",
  "hof_add": {},
@@ -17,5 +17,11 @@
  "workerUrl": "https://saturn-mal.vananimestia.workers.dev",
  "igdb": false,
  "lastfm": "satsugaideatsu",
- "music_lists": "^[A-Z0-9]+\\s*:"
+ "music_lists": "^[A-Z0-9]+\\s*:",
+ "music_exclude": [
+  "مشاري بن راشد العفاسي",
+  "Mishary Rashid Alafasy",
+  "Nouman Ali Khan",
+  "عبدالرحمن مسعد"
+ ]
 }

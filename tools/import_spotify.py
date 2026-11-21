@@ -2,10 +2,11 @@
 import json, glob, sys, os, collections
 from datetime import datetime, timedelta
 src, out = sys.argv[1], sys.argv[2]
+EXC = set(json.load(open(sys.argv[3], encoding='utf-8')).get('music_exclude', [])) if len(sys.argv) > 3 else set()
 rows = []
 for f in sorted(glob.glob(os.path.join(src, 'Streaming_History_Audio_*.json'))):
     rows += json.load(open(f, encoding='utf-8'))
-rows = [r for r in rows if r.get('spotify_track_uri') and r.get('ms_played', 0) > 0]
+rows = [r for r in rows if r.get('spotify_track_uri') and r.get('ms_played', 0) > 0 and (r.get('master_metadata_album_artist_name') or '') not in EXC]
 rows.sort(key=lambda r: r['ts'])
 PK = timedelta(hours=5)  # Pakistan time for hour-of-day and day boundaries
 T, A = {}, {}
