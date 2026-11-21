@@ -19,6 +19,7 @@ socket.getaddrinfo = lambda *a, **k: [r for r in _gai(*a, **k) if r[0] == socket
 import urllib.request, urllib.parse
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone, timedelta
+import email.utils
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(ROOT, 'data')
@@ -301,8 +302,12 @@ def update_letterboxd():
             f['rwd'].append(wd)
             f['rw'] = max(f.get('rw', 0), len(f['rwd']))
         if wd:
-            if wd > f.get('wd', ''):
+            if wd >= f.get('wd', ''):
                 f['wd'] = wd
+                try:  # the time it was logged, so Recent activity can order it against anime and the rest
+                    f['lt'] = email.utils.parsedate_to_datetime(it.findtext('pubDate')).astimezone(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
+                except Exception:
+                    pass
             if not f.get('d'):
                 f['d'] = wd
         rt = it.findtext('letterboxd:memberRating', '', LBNS)
