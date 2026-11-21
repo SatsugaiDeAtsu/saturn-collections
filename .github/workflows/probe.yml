@@ -1,0 +1,9 @@
+name: probe
+on: workflow_dispatch
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          W=https://saturn-mal.vananimestia.workers.dev/spotify/api
+          for u in "/search?q=Tame%20impala&type=artist&limit=10" "/search?q=Tame%20impala&type=artist&limit=5" "/me/player/recently-played?limit=50" "/artists/42pWilgI9MEZARoTtGHNR4/albums?include_groups=album,single&limit=10&offset=0"; do echo "== $u"; curl -s -D - -H "Origin: https://satsugaideatsu.github.io" "$W$u" | head -c 700; echo; done
