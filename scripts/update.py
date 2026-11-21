@@ -2198,6 +2198,12 @@ def build_overview_files():
             def info(i):
                 t = tr.get(i) or T0.get(i) or {}
                 return t.get('n'), ((t.get('ar') or [['', '']])[0] or ['', ''])[1]
+            for r in mu.get('log', []):
+                if r.get('t', '') > mh.get('end', '') and r.get('id') in T0:
+                    t = T0[r['id']]
+                    x = agg.setdefault(hk(t['n'], (t.get('ar') or [['', '']])[0][1]), [0, 0])
+                    x[0] += t.get('ms', 0)
+                    x[1] += 1
             hh['t'] = {}
             for i in ids:
                 n, a = info(i)
@@ -2317,7 +2323,7 @@ def update_music_pics():
                 continue
             t[7:9] = [((j.get('album') or {}).get('images') or [{}])[0].get('url', '').replace('https://i.scdn.co/image/', ''), j.get('duration_ms', 0)]
             hgot += 1
-            time.sleep(0.2)
+            time.sleep(0.5)
         with open(hpath, 'w', encoding='utf-8') as f:
             json.dump(mh, f, ensure_ascii=False, separators=(',', ':'))
         log(f'history song covers: +{hgot}')
