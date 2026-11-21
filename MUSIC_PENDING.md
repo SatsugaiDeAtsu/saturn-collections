@@ -1,4 +1,12 @@
-# Music: things to update when the Spotify data download arrives
+# Music: Spotify data download
+
+**Imported 2026-11-21** (history 2021-06-10 to 2026-11-19): data/music_history.json, totals only (no IP/country/device).
+Done: total hours (Overview Music box, Music banner), Time spent row, plays/hours on song rows, artist and song pages,
+Listening stats page (years, months, hour of day, weekdays, year-by-year tops, all-time tops), Hall of Fame 'Since 2021' option,
+Wrapped music section per year, nightly plays after the download are added on top. To re-import a newer download:
+`python3 import_spotify.py "<unzipped folder>" data/music_history.json`.
+
+## Original checklist
 
 Spotify's "Extended streaming history" (requested 2026-11-20) gives every play with exact listening time.
 When the email arrives, download the zip and send it over. Then:

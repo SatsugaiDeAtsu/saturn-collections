@@ -527,6 +527,7 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .mseg button{transition:background .15s,border-color .15s}.mseg button.on{background:linear-gradient(135deg,rgba(60,207,138,.25),rgba(60,207,138,.06))}
 .mbtn.sp{transition:transform .15s,box-shadow .15s}.mbtn.sp:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(29,185,84,.35)}
 .mscroll{max-height:290px;overflow-y:auto;border:1px solid var(--line);margin-top:6px}.mscroll .mrow{grid-template-columns:24px 40px 1fr 46px auto}.mscroll .mrow .al{display:none}.mscroll .mrow img{width:40px;height:40px}
+.mplays{margin-left:8px;font-family:"JetBrains Mono";font-size:10.5px;color:var(--music);white-space:nowrap}
 /* game screenshots */
 .gshots{display:flex;gap:8px;overflow-x:auto;margin:12px 0 4px;padding-bottom:6px;scroll-snap-type:x mandatory}.gshots a{flex:0 0 auto;scroll-snap-align:start}.gshots img{height:120px;width:auto;display:block;border:1px solid var(--line)}
 #editbtn.on{background:var(--accent);border-color:var(--accent)}
@@ -655,9 +656,9 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .unx .ut .cover{aspect-ratio:2/3}.unx .un{font-weight:600;font-size:13.5px;line-height:1.3}.unx .us{font-size:12px;color:var(--ink3);margin-top:2px}
 .upb{height:4px;background:var(--line);margin-top:6px;grid-column:2}.upb i{display:block;height:100%}
 .unx .ui{display:flex;flex-direction:column}.unx .plus{padding:6px 10px;font-weight:800}
-.tspent{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.tspent>div{border-top:3px solid var(--c);background:var(--panel2);padding:10px}
+.tspent{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.tspent>.tall{grid-column:span 2}.tspent>div{border-top:3px solid var(--c);background:var(--panel2);padding:10px}
 .tspent b{display:block;font-size:20px;font-family:var(--mono, inherit)}.tspent b small{display:block;font-size:11px;color:var(--ink3);font-weight:500}.tspent span{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--c);font-weight:700}
-@media (max-width:440px){.tspent{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:440px){.tspent{grid-template-columns:repeat(2,1fr)}}@media (max-width:1100px) and (min-width:441px){.tspent{grid-template-columns:repeat(2,1fr)}}
 .relgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:12px}
 .reltile{display:flex;flex-direction:column;gap:3px;background:none;border:0;padding:0;color:var(--ink);text-align:left;cursor:pointer;font:inherit}
 .reltile .cover{aspect-ratio:2/3;transition:transform .15s,box-shadow .15s}.reltile:hover .cover{transform:translateY(-2px);box-shadow:0 6px 16px -6px var(--c,#000)}
@@ -1088,7 +1089,7 @@ function rOverview(){
     <a class="box stat" href="#stories" style="--c:var(--story)">${art('stories')}<span class="ic">${ico('stories')}</span><div class="lab"><span>Writing</span><span>${works.reduce((s,w)=>s+(w.chn||['']).length,0)} chapters</span></div><div class="num">${wPub.length}</div><div class="sub">${fmt(words)} words written · ${wPinned().length} pinned</div>
       ${statusBar(WSEC.map(([k,l],i)=>[l,wPub.filter(w=>w.sec===k).length,['var(--story)','var(--s3)','var(--s2)','var(--s6)'][i]]))}</a>
     ${(()=>{const M=D.musicSum;if(!M)return'';const PC=['#3ccf8a','#2fa7d6','#b48cff','#f0c43c','#f06f88','#f08a50','#7be0c0','#d4a062','#9aa6ff','#e07ad0','#66d17a'];
-      return `<a class="box stat mstat" href="#music" style="--c:var(--music)">${art('music')}<span class="ic">${ico('music')}</span><div class="lab"><span>Music</span><span>${M.plays?fmt(M.plays)+' plays counted':M.top?'Top now: '+esc(M.top):''}</span></div><div class="num">${fmt(M.songs)}</div><div class="sub">songs · ${fmt(M.artists)} artists · ${M.hours} h of music in my lists</div>
+      return `<a class="box stat mstat" href="#music" style="--c:var(--music)">${art('music')}<span class="ic">${ico('music')}</span><div class="lab"><span>Music</span><span>${M.plays?fmt(M.plays)+' plays counted':M.top?'Top now: '+esc(M.top):''}</span></div><div class="num">${fmt(M.songs)}</div><div class="sub">songs · ${fmt(M.artists)} artists${M.lms?` · <b>${fmt(Math.round(M.lms/3600000))} h listened</b> since ${M.since}`:` · ${M.hours} h of music in my lists`}</div>
       ${statusBar(M.lists.map((p,i)=>[p[0],p[1],PC[i%PC.length]]))}</a>`})()}
   </section>
   <div style="margin-top:14px">${wallBot}</div>
@@ -1131,10 +1132,11 @@ async function overviewExtra(){
   const gH=games.reduce((s,g)=>s+(g.hrs||0),0);
   const mH=manga.reduce((s,m)=>s+(m.st===2?(m.chs||m.ch):m.ch)*(1+(m.rw||0)),0)*5/60;
   const bH=books.filter(b=>b.st==='read').reduce((s,b)=>s+(+b.p||0),0)/50;
+  const uH=((D.musicSum||{}).lms||0)/3600000;
   const dh=(h,note)=>`${fmt(Math.round(h))} h<small>${(h/24).toFixed(1)} days${note?' · '+note:''}</small>`;
   const tb=$('#ov_time .tspent');
   if(tb)tb.innerHTML=`<div style="--c:var(--anime)"><b>${dh(aH)}</b><span>Anime</span></div><div style="--c:var(--manga)"><b>${dh(mH)}</b><span>Manga</span></div><div style="--c:var(--film)"><b>${dh(fH)}</b><span>Films</span></div>
-    <div style="--c:var(--game)"><b>${dh(gH)}</b><span>Games</span></div><div style="--c:var(--book)"><b>${dh(bH)}</b><span>Books</span></div><div style="--c:var(--accent)"><b>${dh(aH+mH+fH+gH+bH)}</b><span>Altogether</span></div>
+    <div style="--c:var(--game)"><b>${dh(gH)}</b><span>Games</span></div><div style="--c:var(--book)"><b>${dh(bH)}</b><span>Books</span></div>${uH?`<div style="--c:var(--music)"><b>${dh(uH,fmt((D.musicSum||{}).lplays||0)+' plays')}</b><span>Music</span></div>`:''}<div style="--c:var(--accent)" class="tall"><b>${dh(aH+mH+fH+gH+bH+uH)}</b><span>Altogether</span></div>
 `;
   const pm=$('#pickme');if(pm)pm.onclick=pickForMe;
   // ---- continue the series ----
@@ -1531,7 +1533,7 @@ function coupleCards(list){
 function rHof(){
   HOFITEMS.length=0;
   if(hofSeg==='home')return rHofHome();
-  if(hofSeg==='music'&&(!MU||!MF)){$('#app').innerHTML='<div class="muted" style="padding:40px;text-align:center">Loading music…</div>';Promise.all([muLoad(),mfLoad()]).then(()=>{if(route==='hof'&&hofSeg==='music')rHof()});return}
+  if(hofSeg==='music'&&(!MU||!MF||!MH)){$('#app').innerHTML='<div class="muted" style="padding:40px;text-align:center">Loading music…</div>';Promise.all([muLoad(),mfLoad(),mhLoad()]).then(()=>{if(route==='hof'&&hofSeg==='music')rHof()});return}
   const H=D.hof,F=H.malFavs;
   const grid=items=>`<div class="hgrid">${items}</div>`;
   const groups=[];
@@ -1560,12 +1562,12 @@ function rHof(){
     G('g-wai','Waifus','A blog of its own: the goddess, the waifus, the battalion and more.','heart','#d24a7a',blogUrl(804810),
       wai.map(([t,d,it],i)=>sec('s-wai-'+i,t,d,grid(it.map(c=>hItem(c)).join('')))));
   }else if(hofSeg==='music'){
-    const segb=(k)=>`<div class="mseg">${[['short_term','Last 4 weeks'],['medium_term','Last 6 months'],['long_term','All time']].map(([r,l])=>`<button data-hms="${k}:${r}" class="${hmS[k]===r?'on':''}">${l}</button>`).join('')}</div>`;
+    const segb=(k)=>`<div class="mseg">${[['short_term','Last 4 weeks'],['medium_term','Last 6 months'],['long_term','Spotify all time'],...(MH&&MH.tot?[['hist','Since '+MH.from.slice(0,4)+' (hours)']]:[])].map(([r,l])=>`<button data-hms="${k}:${r}" class="${hmS[k]===r?'on':''}">${l}</button>`).join('')}</div>`;
     const note=k=>(MF.notes||{})[k]||'';
     const fs=MFS.filter(([k])=>ED.on||(MF[k]||[]).length);
     if(fs.length)G('g-mfav','Music favourites','The songs and singers I keep coming back to, picked by hand.','heart','#1f9d63','',fs.map(([k,l,kind])=>sec('s-mf-'+k,l,note(k),mfCards(k,kind))));
-    if(MU&&MU.top){G('g-mtop','Top artists','Who I listen to most on Spotify.','star','#1f9d63','',[sec('s-mta','Top artists','',segb('a')+`<div class="martists">${(MU.top.artists[hmS.a]||[]).map(mArtTile).join('')}</div>`)]);
-      G('g-mts','Top songs','What I play most on Spotify.','music','#1f9d63','',[sec('s-mts','Top songs','',segb('s')+`<div class="box mcompact">${(MU.top.tracks[hmS.s]||[]).map((id,i)=>mRow(id,i)).join('')}</div>`)])}
+    if(MU&&MU.top){G('g-mtop','Top artists','Who I listen to most on Spotify.','star','#1f9d63','',[sec('s-mta','Top artists','',segb('a')+(hmS.a==='hist'?`<div class="martists">${Object.entries(MH.artists).sort((a,b)=>b[1][0]-a[1][0]).slice(0,50).map(([n,v],i)=>{const id=Object.keys(MU.artists).find(k=>MU.artists[k].n===n);return id?mArtTile(id,i).replace('</button>',`<div class="rk">${mhH(v[0])}</div></button>`):`<div class="mart"><div class="pic"><b>${esc(initials(n))}</b></div><div class="nm">${esc(n)}</div><div class="rk">#${i+1} · ${mhH(v[0])}</div></div>`}).join('')}</div>`:`<div class="martists">${(MU.top.artists[hmS.a]||[]).map(mArtTile).join('')}</div>`))]);
+      G('g-mts','Top songs','What I play most on Spotify.','music','#1f9d63','',[sec('s-mts','Top songs','',segb('s')+`<div class="box mcompact">${(hmS.s==='hist'?Object.entries(MH.tracks).sort((a,b)=>b[1][0]-a[1][0]).slice(0,50).map(([id])=>{mhKnow(id);return id}):(MU.top.tracks[hmS.s]||[])).map((id,i)=>mRow(id,i)).join('')}</div>`)])}
   }else if(hofSeg==='couples'){
     G('g-cou','Couples','Favourite anime couples, and two special cases.','couple','#e8733a',blogUrl(804809),[
       sec('s-cou','Favourite anime couples','The name says it all.',coupleCards(H.couples)),
@@ -1932,7 +1934,7 @@ let wrYear=null;
 function rWrapped(){
   const yOf=d=>d?+String(d).slice(0,4):0;
   const aY=a=>a.up?new Date(a.up*1000).getUTCFullYear():0;
-  const years=[...new Set([...films.map(f=>yOf(f.wd)),...books.map(b=>yOf(b.dr)),...games.map(g=>yOf(g.added)),...anime.filter(a=>a.st===2).map(aY)])].filter(y=>y>2000).sort((a,b)=>b-a);
+  const years=[...new Set([...((D.musicSum||{}).hyears||[]),...films.map(f=>yOf(f.wd)),...books.map(b=>yOf(b.dr)),...games.map(g=>yOf(g.added)),...anime.filter(a=>a.st===2).map(aY)])].filter(y=>y>2000).sort((a,b)=>b-a);
   if(!wrYear||!years.includes(wrYear))wrYear=years[0];
   const Y=wrYear;
   const fa=anime.filter(a=>a.st===2&&aY(a)===Y), ff=films.filter(f=>yOf(f.wd)===Y), fb=books.filter(b=>b.st==='read'&&yOf(b.dr)===Y), fg=games.filter(g=>yOf(g.added)===Y&&g.shelf==='Played');
@@ -1956,9 +1958,14 @@ function rWrapped(){
     <div class="box"><div class="box-h"><h3>Month by month</h3><span class="small muted">anime and films finished</span></div><div class="box-b">${dist(months,MON.map(m=>m[0]),'var(--accent)')}</div></div>
     <div class="box"><div class="box-h"><h3>Top genres</h3><span class="small muted">anime completed in ${Y}</span></div><div class="box-b">${topG.length?topG.map(([g,n])=>`<div class="hbar" style="--c:var(--anime)"><span>${esc(g)}</span><div class="tr"><i style="width:${n/gm*100}%"></i></div><span class="mono muted">${n}</span></div>`).join(''):'<div class="muted">No anime completed this year.</div>'}</div></div>
   </section>
+  <div id="wr_music"></div>
   <div class="note">Anime are counted by the date you last updated them on MAL, so a show finished earlier but updated this year shows up here.</div>`;
   document.querySelectorAll('[data-y]').forEach(b=>b.onclick=()=>{wrYear=+b.dataset.y;rWrapped()});
   document.querySelectorAll('[data-wr]').forEach(el=>el.onclick=()=>best[+el.dataset.wr].o());
+  Promise.all([muLoad(),mhLoad()]).then(()=>{const el=$('#wr_music');if(!el||!MH||!MH.years||!MH.years[Y])return;const R=MH.years[Y];R.tt.forEach(([id])=>mhKnow(id));
+    const art=n=>{const id=Object.keys(MU.artists).find(k=>MU.artists[k].n===n);return id?`<a href="#" data-mar="${id}">${esc(n)}</a>`:esc(n)};
+    el.innerHTML=`<section class="box" style="margin-top:16px"><div class="box-h" style="border-top:3px solid var(--music)"><h2>Music in ${Y}</h2><span class="small muted">${mhH(R.ms)} · ${fmt(R.plays)} plays · ${fmt(R.songs)} songs · ${fmt(R.artists)} artists</span></div>
+    <div class="box-b"><section class="grid two"><div><h3 style="margin-bottom:8px">Top artists</h3>${hbarsM(R.ta.slice(0,5).map(([n,ms],i)=>[`${i+1}. ${art(n)}`,ms,mhH(ms)]),'var(--music)')}</div><div><h3 style="margin-bottom:8px">Top songs</h3><div class="mcompact">${R.tt.slice(0,5).map(([id],i)=>mRow(id,i)).join('')}</div></div></section></div></section>`;mBind(el)});
 }
 
 /* ---------- MAL connection (through the Cloudflare helper) ---------- */
@@ -2242,6 +2249,46 @@ function openGame(g){
   genreRow('games',g.id,g.g||[]);
 }
 
+/* ---------- listening history (Spotify download, data/music_history.json: totals only) ---------- */
+let MH=null;const mhLoad=async()=>MH||(MH=await loadJ('data/music_history.json'));
+const mhH=ms=>{const h=ms/3600000;return h>=10?fmt(Math.round(h))+' h':h>=1?(Math.round(h*10)/10)+' h':Math.max(1,Math.round(ms/60000))+' min'};
+const mhT=id=>MH&&MH.tracks&&MH.tracks[id];
+const mhA=n=>{if(!MH||!n)return null;if(MH.artists[n])return MH.artists[n];const k=norm(n);const e=Object.entries(MH.artists).find(([x])=>norm(x)===k);return e?e[1]:null};
+const mhStat=id=>{const h=mhT(id);return h&&h[1]?`<span class="mplays">${fmt(h[1])} plays · ${mhH(h[0])}</span>`:''};
+// a song from the history that is not in my playlists: make it showable
+const mhKnow=id=>{if(MU&&MU.tracks[id]||MKN.t[id])return;const h=mhT(id);if(!h)return;const aid=MU&&Object.keys(MU.artists).find(k=>MU.artists[k].n===h[5]);MKN.t[id]={n:h[4],ar:[[aid||'',h[5]]],al:h[6],img:h[7]||'',ms:h[8]||0}};
+const hbarsM=(L,c)=>{const mx=Math.max(1,...L.map(x=>x[1]));return `<div class="hbars">${L.map(([g,n,lab])=>`<div class="hbar" style="--c:${c}"><span>${g}</span><div class="tr"><i style="width:${n/mx*100}%"></i></div><span class="mono muted">${lab||n}</span></div>`).join('')}</div>`};
+const msS={y:''};
+function mStatsBody(){
+  if(!MH||!MH.tot)return '<div class="muted" style="padding:20px">Listening history not loaded.</div>';
+  const T=MH.tot,ys=Object.keys(MH.years).sort();if(!msS.y)msS.y=ys[ys.length-1];const Y=MH.years[msS.y];
+  const art=n=>{const id=MU&&Object.keys(MU.artists).find(k=>MU.artists[k].n===n);return id?`<a href="#" data-mar="${id}">${esc(n)}</a>`:esc(n)};
+  const top=(L,k)=>L.map(([x,ms],i)=>k==='a'?[`${i+1}. ${art(x)}`,ms,mhH(ms)]:null).filter(Boolean);
+  const allA=Object.entries(MH.artists).sort((a,b)=>b[1][0]-a[1][0]).slice(0,20).map(([n,v],i)=>[`${i+1}. ${art(n)}`,v[0],mhH(v[0])]);
+  const allT=Object.entries(MH.tracks).sort((a,b)=>b[1][0]-a[1][0]).slice(0,30).map(([id])=>id);allT.forEach(mhKnow);Y.tt.forEach(([id])=>mhKnow(id));
+  const last24=Object.entries(MH.months).slice(-24);
+  return `<div class="wr-hero" style="margin-top:14px">
+    <div class="box wr-num" style="--c:var(--music)"><b>${fmt(Math.round(T.ms/3600000))}</b><span>hours listened</span><div class="small muted">${(T.ms/864e5).toFixed(1)} days of music</div></div>
+    <div class="box wr-num" style="--c:var(--music)"><b>${fmt(T.plays)}</b><span>plays</span><div class="small muted">30 seconds or more</div></div>
+    <div class="box wr-num" style="--c:var(--music)"><b>${fmt(T.songs)}</b><span>songs heard</span><div class="small muted">${fmt(T.artists)} artists</div></div>
+    <div class="box wr-num" style="--c:var(--music)"><b>${fmt(T.days)}</b><span>days with music</span><div class="small muted">since ${fdate(MH.from)}</div></div>
+  </div>
+  <section class="grid two" style="margin-top:16px">
+    <div class="box"><div class="box-h"><h3>Hours by year</h3></div><div class="box-b">${hbarsM(ys.map(y=>[y,MH.years[y].ms,mhH(MH.years[y].ms)]),'var(--music)')}</div></div>
+    <div class="box"><div class="box-h"><h3>Last 24 months</h3><span class="small muted">hours</span></div><div class="box-b">${dist(last24.map(([,ms])=>Math.round(ms/3600000)),last24.map(([m])=>MON[+m.slice(5)-1][0]),'var(--music)')}</div></div>
+    <div class="box"><div class="box-h"><h3>Time of day</h3><span class="small muted">Pakistan time</span></div><div class="box-b">${dist(MH.hours.map(ms=>Math.round(ms/3600000)),MH.hours.map((_,i)=>i%6?'':i),'var(--music)')}</div></div>
+    <div class="box"><div class="box-h"><h3>Day of the week</h3></div><div class="box-b">${hbarsM(['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map((d,i)=>[d,MH.wd[i],mhH(MH.wd[i])]),'var(--music)')}</div></div>
+  </section>
+  <section class="box" style="margin-top:16px"><div class="box-h"><h2>Year by year</h2></div><div class="box-b">
+    <div class="wr-years" style="margin:0 0 12px">${ys.map(y=>`<button data-msy="${y}" class="${y===msS.y?'on':''}">${y}</button>`).join('')}</div>
+    <div class="small muted" style="margin-bottom:10px">${mhH(Y.ms)} · ${fmt(Y.plays)} plays · ${fmt(Y.songs)} songs · ${fmt(Y.artists)} artists</div>
+    <section class="grid two"><div><h3 style="margin-bottom:8px">Top artists</h3>${hbarsM(Y.ta.slice(0,10).map(([n,ms],i)=>[`${i+1}. ${art(n)}`,ms,mhH(ms)]),'var(--music)')}</div>
+    <div><h3 style="margin-bottom:8px">Top songs</h3><div class="mcompact">${Y.tt.slice(0,10).map(([id],i)=>mRow(id,i)).join('')}</div></div></section></div></section>
+  <section class="grid two" style="margin-top:16px">
+    <div class="box"><div class="box-h"><h2>Most listened artists</h2><span class="small muted">since ${MH.from.slice(0,4)}</span></div><div class="box-b">${hbarsM(allA,'var(--music)')}</div></div>
+    <div class="box"><div class="box-h"><h2>Most listened songs</h2><span class="small muted">since ${MH.from.slice(0,4)}</span></div><div class="mscroll" style="max-height:640px;border:0">${allT.map((id,i)=>mRow(id,i)).join('')}</div></div>
+  </section>
+  <div class="note">From Spotify's full listening history (up to ${fdate(MH.end.slice(0,10))}). A play counts when a song ran 30 seconds or more, the same rule Spotify uses.</div>`}
 /* ---------- music: Spotify (+ Last.fm counts) ---------- */
 let MU=null;const muLoad=async()=>MU||(MU=await loadJ('data/music.json'));
 const muS={tab:'',rng:'short_term',q:'',lim:100,sort:store.get('msort','pl')};
@@ -2257,7 +2304,7 @@ function mPlay(kind,id){let p=$('#mplayer');if(!p){p=document.createElement('div
   p.querySelector('.x').onclick=()=>{p.remove();document.body.style.paddingBottom=''};document.body.style.paddingBottom=(kind==='track'?100:372)+'px'}
 const MKN={t:{},a:{}};
 const mArtLinks=t=>(t.ar||[]).map(([id,n])=>id?`<a href="#" data-mar="${id}">${esc(n)}</a>`:esc(n)).join(', ');
-const mRow=(id,i,extra)=>{const t=MU.tracks[id]||MKN.t[id];if(!t)return'';MKN.t[id]=t;return `<div class="mrow"><span class="no">${i+1}</span>${t.img?`<img data-src="${esc(t.img)}" alt="" referrerpolicy="no-referrer">`:'<span></span>'}<div style="min-width:0"><div class="tt">${esc(t.n)}</div><div class="ar">${mArtLinks(t)}${extra?` · <span class="muted">${extra}</span>`:''}</div></div><div class="al">${esc(t.al||'')}</div><div class="du">${mDur(t.ms)}</div><div class="act2"><button class="mbtn" data-mplay="track:${id}" aria-label="Play ${esc(t.n)}">▶</button><a class="mbtn sp" href="${SPU('track',id)}" target="_blank" rel="noopener">Spotify ↗</a></div></div>`};
+const mRow=(id,i,extra)=>{const t=MU.tracks[id]||MKN.t[id];if(!t)return'';MKN.t[id]=t;return `<div class="mrow"><span class="no">${i+1}</span>${t.img?`<img data-src="${esc(t.img)}" alt="" referrerpolicy="no-referrer">`:'<span></span>'}<div style="min-width:0"><div class="tt">${esc(t.n)}</div><div class="ar">${mArtLinks(t)}${extra?` · <span class="muted">${extra}</span>`:''}${mhStat(id)}</div></div><div class="al">${esc(t.al||'')}</div><div class="du">${t.ms?mDur(t.ms):''}</div><div class="act2"><button class="mbtn" data-mplay="track:${id}" aria-label="Play ${esc(t.n)}">▶</button><a class="mbtn sp" href="${SPU('track',id)}" target="_blank" rel="noopener">Spotify ↗</a></div></div>`};
 const mArtTile=(id,i)=>{const a=MU.artists[id]||MKN.a[id]||{n:'?'};MKN.a[id]=a;return `<button class="mart" data-mar="${id}"><div class="pic">${a.img?`<img data-src="${esc(a.img)}" alt="" referrerpolicy="no-referrer">`:`<b>${esc(initials(a.n))}</b>`}</div><div class="nm">${esc(a.n)}</div>${i!=null?`<div class="rk">#${i+1}</div>`:''}</button>`};
 function mBind(root){root=root||document;
   root.querySelectorAll('[data-mplay]').forEach(b=>b.onclick=e=>{e.preventDefault();const [k,id]=b.dataset.mplay.split(':');mPlay(k,id)});
@@ -2280,14 +2327,14 @@ async function artistDisc(id,onProg){
   albums.sort((a,b)=>(a.album_type==='album'?0:1)-(b.album_type==='album'?0:1)||(a.release_date||'').localeCompare(b.release_date||''));
   for(let i=0;i<albums.length;i+=4)await Promise.all(albums.slice(i,i+4).map(one));
   store.set(key,{t:Date.now(),L});return L}
-async function openArtist(id,ext){await muLoad();const a=MU.artists[id]||MKN.a[id]||(ext&&{n:ext.t,img:ext.img})||{n:'Artist'};
+async function openArtist(id,ext){await Promise.all([muLoad(),mhLoad()]);const a=MU.artists[id]||MKN.a[id]||(ext&&{n:ext.t,img:ext.img})||{n:'Artist'};
   const mine=mUniq(Object.entries(MU.tracks).filter(([,t])=>(t.ar||[]).some(x=>x[0]===id)).map(([k])=>k));
   const mineB=new Set(mine.map(s=>mBase((MU.tracks[s]||{}).n)));
   const inL=MLIST().filter(p=>p.items.some(x=>mine.includes(x))).map(p=>p.n);
   const rk=['short_term','medium_term','long_term'].map((r,i)=>{const n=(MU.top.artists[r]||[]).indexOf(id);return n>=0?`#${n+1} ${['last 4 weeks','last 6 months','all time'][i]}`:''}).filter(Boolean);
   modal('music','Artist',`<div class="mart" style="cursor:default;max-width:220px"><div class="pic">${a.img?`<img src="${esc(a.img)}" alt="" referrerpolicy="no-referrer">`:`<b>${esc(initials(a.n))}</b>`}</div></div><div><h2>${esc(a.n)}</h2>
   ${rk.length?`<div class="muted" style="margin:4px 0 10px">Your top artist: ${rk.join(' · ')}</div>`:''}
-  <div class="kv"><div>Songs in your playlists</div><div><b>${mine.length}</b> <span class="muted" id="m_tot">/ counting…</span></div>${inL.length?`<div>In playlists</div><div>${inL.map(n=>`<span class="tag">${esc(n)}</span>`).join('')}</div>`:''}</div>
+  <div class="kv"><div>Songs in your playlists</div><div><b>${mine.length}</b> <span class="muted" id="m_tot">/ counting…</span></div>${(()=>{const x=mhA(a.n);return x?`<div>Listened</div><div><b>${mhH(x[0])}</b> · ${fmt(x[1])} plays · since ${fdate(x[2])}</div>`:''})()}${inL.length?`<div>In playlists</div><div>${inL.map(n=>`<span class="tag">${esc(n)}</span>`).join('')}</div>`:''}</div>
   <div style="margin:14px 0;display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-mplay="artist:${id}">▶ Play</button><a class="btn pri" href="${SPU('artist',id)}" target="_blank" rel="noopener">Open on Spotify ↗</a>${OWNER()&&ED.on&&!ovFavList('singers').some(x=>x.id===id)?`<button class="btn" id="m_fsing">♥ Add to favourite singers</button>`:''}</div>
   <div class="mseg"><button class="on" data-al="in">In your playlists <span class="mono">${mine.length}</span></button><button data-al="out">Not in your playlists <span class="mono" id="m_outn">…</span></button></div>
   <div class="mscroll" id="m_list"></div></div>`);
@@ -2309,14 +2356,14 @@ async function openArtist(id,ext){await muLoad();const a=MU.artists[id]||MKN.a[i
 
 async function rMusic(){
   $('#app').innerHTML='<div class="muted" style="padding:40px;text-align:center">Loading music…</div>';
-  await muLoad();if(route!=='music')return;
+  await Promise.all([muLoad(),mhLoad()]);if(route!=='music')return;
   if(!MU||!MU.tracks){$('#app').innerHTML=banner('music','Music','Not connected to Spotify yet.',[],'Music');return}
   const L=MLIST(),S=muS;if(!S.tab)S.tab=L[0]?L[0].id:'top';
   const uniq=new Set(mUniq([...new Set(L.flatMap(p=>p.items))])),totMs=[...uniq].reduce((s,id)=>s+((MU.tracks[id]||{}).ms||0),0);
   const lf=MU.lastfm||{};
-  if(!L.some(p=>p.id===S.tab))S.tab=L[0]?L[0].id:'';
-  const tabs=L.map(p=>`<button data-mt="${p.id}" class="${S.tab===p.id?'on':''}">${p.liked?'<span class="mlk">♥</span>':p.img?`<img src="${esc(p.img)}" alt="" referrerpolicy="no-referrer">`:''}<span class="ml">${p.liked?'♥':esc(p.n.split(':')[0])}</span><b>${esc(p.liked?p.n:mLabel(p.n))}</b><span class="n">${fmt(p.items.length)}</span></button>`).join('');
-  let body='';const pl=L.find(p=>p.id===S.tab);
+  if(S.tab!=='stats'&&!L.some(p=>p.id===S.tab))S.tab=L[0]?L[0].id:'';
+  const tabs=(MH&&MH.tot?`<button data-mt="stats" class="${S.tab==='stats'?'on':''}"><span class="mlk" style="background:linear-gradient(135deg,#1f9d63,#f0c43c)">📊</span><b>Listening stats</b></button>`:'')+L.map(p=>`<button data-mt="${p.id}" class="${S.tab===p.id?'on':''}">${p.liked?'<span class="mlk">♥</span>':p.img?`<img src="${esc(p.img)}" alt="" referrerpolicy="no-referrer">`:''}<span class="ml">${p.liked?'♥':esc(p.n.split(':')[0])}</span><b>${esc(p.liked?p.n:mLabel(p.n))}</b><span class="n">${fmt(p.items.length)}</span></button>`).join('');
+  let body=S.tab==='stats'?mStatsBody():'';const pl=L.find(p=>p.id===S.tab);
   if(pl){const q=norm(S.q),ad=pl.added||[],T=id=>MU.tracks[id]||{};
     let idx=pl.items.map((id,i)=>i).filter(i=>{if(!q)return true;const t=T(pl.items[i]);return norm(t.n+' '+(t.ar||[]).map(x=>x[1]).join(' ')+' '+t.al).includes(q)});
     const by={new:(a,b)=>(ad[b]||'').localeCompare(ad[a]||''),old:(a,b)=>(ad[a]||'').localeCompare(ad[b]||''),t:(a,b)=>(T(pl.items[a]).n||'').localeCompare(T(pl.items[b]).n||''),ar:(a,b)=>((T(pl.items[a]).ar||[[0,'']])[0][1]||'').localeCompare((T(pl.items[b]).ar||[[0,'']])[0][1]||''),al:(a,b)=>(T(pl.items[a]).al||'').localeCompare(T(pl.items[b]).al||''),len:(a,b)=>(T(pl.items[b]).ms||0)-(T(pl.items[a]).ms||0)}[S.sort];
@@ -2328,7 +2375,7 @@ async function rMusic(){
       <div class="box">${items.slice(0,S.lim).map((id,i)=>mRow(id,i,(S.sort==='new'||S.sort==='old')&&adds[i]?'added '+fdate(adds[i]):'')).join('')||'<div class="box-b muted">No match.</div>'}</div>
       ${items.length>S.lim?`<div class="more"><button class="btn" id="mmore">Show more (${items.length-S.lim} left)</button></div>`:''}`}
 
-  $('#app').innerHTML=`${banner('music','Music','What I listen to, sorted the way I sort it.',[[fmt(uniq.size),'songs'],[fmt(new Set([...uniq].flatMap(id=>((MU.tracks[id]||{}).ar||[]).map(x=>x[0]))).size),'artists'],[mHrs(totMs),'of music'],...(lf.plays?[[fmt(lf.plays),'plays counted']]:[])],'Music')}
+  $('#app').innerHTML=`${banner('music','Music','What I listen to, sorted the way I sort it.',[[fmt(uniq.size),'songs'],[fmt(new Set([...uniq].flatMap(id=>((MU.tracks[id]||{}).ar||[]).map(x=>x[0]))).size),'artists'],[mHrs(totMs),'of music'],...(MH&&MH.tot?[[fmt(Math.round(MH.tot.ms/3600000))+' h','listened since '+MH.from.slice(0,4)]]:lf.plays?[[fmt(lf.plays),'plays counted']]:[])],'Music')}
   <div class="mslide"><button class="marr" data-marr="-1" aria-label="Scroll left">‹</button><div class="mlists" id="mlists">${tabs}</div><button class="marr" data-marr="1" aria-label="Scroll right">›</button></div>${body}`;
   {const ml=$('#mlists'),on=ml&&ml.querySelector('.on');if(on)ml.scrollLeft=on.offsetLeft-ml.clientWidth/2+on.offsetWidth/2;
    document.querySelectorAll('[data-marr]').forEach(b=>b.onclick=()=>ml.scrollBy({left:+b.dataset.marr*ml.clientWidth*.8,behavior:'smooth'}))}
@@ -2336,6 +2383,7 @@ async function rMusic(){
   const mq=$('#mq');if(mq){mq.oninput=()=>{S.q=mq.value;S.lim=100;clearTimeout(mq.__t);mq.__t=setTimeout(()=>{rMusic().then(()=>{const n=$('#mq');n.focus();n.setSelectionRange(n.value.length,n.value.length)})},250)}}
   const mm=$('#mmore');if(mm)mm.onclick=()=>{S.lim+=200;rMusic()};
   const ms2=$('#msort');if(ms2)ms2.onchange=()=>{S.sort=ms2.value;store.set('msort',S.sort);S.lim=100;rMusic()};
+  document.querySelectorAll('[data-msy]').forEach(b=>b.onclick=()=>{msS.y=b.dataset.msy;const y=scrollY;rMusic().then(()=>scrollTo(0,y))});
   mBind();
 }
 const mAgo=t=>{const d=(Date.now()-new Date(t))/1000;return d<3600?Math.max(1,Math.round(d/60))+' min ago':d<86400?Math.round(d/3600)+' h ago':Math.round(d/86400)+' d ago'};
@@ -2350,10 +2398,10 @@ async function ovMusic(){const box=$('#ov_music');if(!box)return;const MO=MU||aw
   box.querySelectorAll('[data-ovm]').forEach(b=>b.onclick=()=>{const [k,r]=b.dataset.ovm.split(':');ovMS[k]=r;ovMusic()})}
 
 const openArtistAny=x=>openArtist(x.id,x);
-async function openSong(id){await muLoad();const t=MU.tracks[id]||MKN.t[id]||(MF&&mfAll().find(x=>x.id===id));if(!t)return window.open(SPU('track',id),'_blank','noopener');
+async function openSong(id){await Promise.all([muLoad(),mhLoad()]);const t=MU.tracks[id]||MKN.t[id]||(MF&&mfAll().find(x=>x.id===id));if(!t)return window.open(SPU('track',id),'_blank','noopener');
   const inL=MLIST().filter(p=>p.items.includes(id)).map(p=>p.liked?p.n:p.n);
   modal('music','Song',`<div class="msqr">${t.img?`<img src="${esc(t.img)}" alt="" referrerpolicy="no-referrer">`:''}</div><div><h2>${esc(t.n)}</h2><div class="ar" style="margin:4px 0 10px">${mArtLinks(t)}</div>
-  <div class="kv">${t.al?`<div>Album</div><div>${esc(t.al)}${t.y?' · '+t.y:''}</div>`:''}<div>Length</div><div>${mDur(t.ms)}</div>${inL.length?`<div>In playlists</div><div>${inL.map(n=>`<span class="tag">${esc(n)}</span>`).join('')}</div>`:''}</div>
+  <div class="kv">${t.al?`<div>Album</div><div>${esc(t.al)}${t.y?' · '+t.y:''}</div>`:''}${t.ms?`<div>Length</div><div>${mDur(t.ms)}</div>`:''}${(()=>{const x=mhT(id);return x?`<div>Listened</div><div><b>${fmt(x[1])} plays</b> · ${mhH(x[0])}</div><div>First played</div><div>${fdate(x[2])}</div><div>Last played</div><div>${fdate(x[3])}</div>`:''})()}${inL.length?`<div>In playlists</div><div>${inL.map(n=>`<span class="tag">${esc(n)}</span>`).join('')}</div>`:''}</div>
   <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-mplay="track:${id}">▶ Play</button><a class="btn pri" href="${SPU('track',id)}" target="_blank" rel="noopener">Open on Spotify ↗</a></div></div>`);
   mBind($('#modal'))}
 /* Spotify search through the helper: songs or artists */

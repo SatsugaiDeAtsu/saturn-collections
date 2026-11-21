@@ -2182,6 +2182,13 @@ def build_overview_files():
                 seen.add(t['img'])
                 cov.append([t.get('n', ''), t['img']])
         site['musicSum']['covers'] = cov
+        # listening time: the Spotify history download, plus plays logged each night since it ended
+        mh = load_json(os.path.join(DATA, 'music_history.json'), {})
+        if mh.get('tot'):
+            extra = [r for r in mu.get('log', []) if r.get('t', '') > mh.get('end', '') and r.get('id')]
+            ems = sum(T.get(r['id'], {}).get('ms', 0) for r in extra)
+            site['musicSum'].update({'lms': mh['tot']['ms'] + ems, 'lplays': mh['tot']['plays'] + len(extra), 'since': mh.get('from', '')[:4],
+                                     'lsongs': mh['tot']['songs'], 'ldays': mh['tot']['days'], 'hyears': [int(y) for y in mh.get('years', {})]})
         # genres by number of songs, from each song's first artist's main Last.fm tag
         gc = {}
         for i in uniq:
@@ -2229,6 +2236,32 @@ def update_music_pics():
             if x.get('id') == aid:
                 x['img'] = img
         time.sleep(0.2)
+    # covers for songs from the listening history that are not in my playlists (most listened first)
+    hpath = os.path.join(DATA, 'music_history.json')
+    mh = load_json(hpath, {})
+    hgot = 0
+    if mh.get('tracks'):
+        for tid, t in sorted(mh['tracks'].items(), key=lambda x: -x[1][0]):
+            if hgot >= 150:
+                break
+            if len(t) > 7 and t[7]:
+                continue
+            k = mu.get('tracks', {}).get(tid)
+            if k and k.get('img'):
+                t[7:9] = [k['img'], k.get('ms', 0)]
+                continue
+            try:
+                with urllib.request.urlopen(urllib.request.Request(f'{W}/spotify/api/tracks/{tid}', headers={'User-Agent': UA}), timeout=30) as r:
+                    j = json.load(r)
+            except Exception as e:
+                log('song cover failed', tid, e)
+                continue
+            t[7:9] = [((j.get('album') or {}).get('images') or [{}])[0].get('url', ''), j.get('duration_ms', 0)]
+            hgot += 1
+            time.sleep(0.2)
+        with open(hpath, 'w', encoding='utf-8') as f:
+            json.dump(mh, f, ensure_ascii=False, separators=(',', ':'))
+        log(f'history song covers: +{hgot}')
     for path, obj in ((mpath, mu), (fpath, mf), (opath, ov)):
         if obj:
             with open(path, 'w', encoding='utf-8') as f:
