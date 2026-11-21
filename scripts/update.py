@@ -2159,12 +2159,25 @@ def build_overview_files():
         ids = {r['id'] for r in rec if r.get('id')} | {i for r in top['tracks'].values() for i in r}
         tr = {i: mu['tracks'][i] for i in ids if i in mu.get('tracks', {})}
         ar = {i: mu['artists'][i] for r in top['artists'].values() for i in r if i in mu.get('artists', {})}
+        T0 = mu.get('tracks', {})
         # listening history for the Overview: plays and hours for the songs and artists shown, plus most played / most listened
         mh = load_json(os.path.join(DATA, 'music_history.json'), {})
         hist, hh = None, {'t': {}, 'a': {}}
         if mh.get('tracks'):
             HT, HA = mh['tracks'], mh['artists']
-            hs = [i for i, _ in sorted(HT.items(), key=lambda x: (-x[1][1], -x[1][0]))[:10]]
+            def hk(n, a):
+                n = re.sub(r'\s*[\(\[【（][^\)\]】）]*[\)\]】）]', '', (n or '').lower())
+                n = re.sub(r'\s+[-–—~]\s+.*$', '', n)
+                return re.sub(r'[\W_]+', ' ', n).strip() + '|' + re.sub(r'[\W_]+', ' ', (a or '').lower()).strip()
+            agg, best = {}, {}
+            for i, t in HT.items():
+                k = hk(t[4], t[5])
+                x = agg.setdefault(k, [0, 0])
+                x[0] += t[0]
+                x[1] += t[1]
+                if t[1] > best.get(k, ('', -1))[1]:
+                    best[k] = (i, t[1])
+            hs = [best[k][0] for k, _ in sorted(agg.items(), key=lambda x: (-x[1][1], -x[1][0]))[:10]]
             name2id = {a['n']: i for i, a in mu.get('artists', {}).items()}
             ha = [name2id[n] for n, _ in sorted(HA.items(), key=lambda x: -x[1][0]) if n in name2id][:10]
             hist = {'s': hs, 'a': ha}
@@ -2176,7 +2189,18 @@ def build_overview_files():
             for i in ha:
                 ar[i] = mu['artists'][i]
             ids = set(tr) | {x for r in top['tracks'].values() for x in r}
-            hh['t'] = {i: HT[i][:2] for i in ids if i in HT}
+
+            def info(i):
+                t = tr.get(i) or T0.get(i) or {}
+                return t.get('n'), ((t.get('ar') or [['', '']])[0] or ['', ''])[1]
+            hh['t'] = {}
+            for i in ids:
+                n, a = info(i)
+                v = agg.get(hk(n, a)) if n else None
+                if not v and i in HT:
+                    v = agg.get(hk(HT[i][4], HT[i][5]))
+                if v:
+                    hh['t'][i] = v
             hh['a'] = {mu['artists'][i]['n']: HA[mu['artists'][i]['n']][:2] for i in ar if mu['artists'].get(i, {}).get('n') in HA}
         dump('ov_music.json', {'top': top, 'log': rec, 'tracks': tr, 'artists': ar, 'playlists': [], 'hist': hist, 'h': hh})
         # numbers for the Music box on the Overview

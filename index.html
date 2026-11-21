@@ -1568,7 +1568,7 @@ function rHof(){
     const fs=MFS.filter(([k])=>ED.on||(MF[k]||[]).length);
     if(fs.length)G('g-mfav','Music favourites','The songs and singers I keep coming back to, picked by hand.','heart','#1f9d63','',fs.map(([k,l,kind])=>sec('s-mf-'+k,l,note(k),mfCards(k,kind))));
     if(MU&&MU.top){G('g-mtop','Top artists',"Spotify's ranking mixes how much and how recently I listen. Most listened is the real total of hours since 2021.",'star','#1f9d63','',[sec('s-mta','Top artists','',segb('a')+(hmS.a==='hist'?`<div class="martists">${Object.entries(MH.artists).sort((a,b)=>b[1][0]-a[1][0]).slice(0,50).map(([n,v],i)=>{const id=Object.keys(MU.artists).find(k=>MU.artists[k].n===n);return id?mArtTile(id,i).replace('</button>',`<div class="rk">${mhH(v[0])}</div></button>`):`<div class="mart"><div class="pic"><b>${esc(initials(n))}</b></div><div class="nm">${esc(n)}</div><div class="rk">#${i+1} · ${mhH(v[0])}</div></div>`}).join('')}</div>`:`<div class="martists">${(MU.top.artists[hmS.a]||[]).map(mArtTile).join('')}</div>`))]);
-      G('g-mts','Top songs',"Spotify's ranking mixes how much and how recently I play. Most played counts real plays since 2021.",'music','#1f9d63','',[sec('s-mts','Top songs','',segb('s')+`<div class="box mcompact">${(hmS.s==='hist'?Object.entries(MH.tracks).sort((a,b)=>b[1][1]-a[1][1]||b[1][0]-a[1][0]).slice(0,50).map(([id])=>{mhKnow(id);return id}):(MU.top.tracks[hmS.s]||[])).map((id,i)=>mRow(id,i)).join('')}</div>`)])}
+      G('g-mts','Top songs',"Spotify's ranking mixes how much and how recently I play. Most played counts real plays since 2021.",'music','#1f9d63','',[sec('s-mts','Top songs','',segb('s')+`<div class="box mcompact">${(hmS.s==='hist'?MH.songs.slice(0,50).map(x=>{mhKnow(x.id);return x.id}):(MU.top.tracks[hmS.s]||[])).map((id,i)=>mRow(id,i)).join('')}</div>`)])}
   }else if(hofSeg==='couples'){
     G('g-cou','Couples','Favourite anime couples, and two special cases.','couple','#e8733a',blogUrl(804809),[
       sec('s-cou','Favourite anime couples','The name says it all.',coupleCards(H.couples)),
@@ -2251,13 +2251,21 @@ function openGame(g){
 }
 
 /* ---------- listening history (Spotify download, data/music_history.json: totals only) ---------- */
-let MH=null;const mhLoad=async()=>MH||(MH=await loadJ('data/music_history.json'));
+let MH=null;const mhLoad=async()=>MH||(MH=mhIndex(await loadJ('data/music_history.json')));
+// the same song can have several Spotify IDs (album, single, re-release): add them up by title + artist
+const mhKey=(n,a)=>mBase(n)+'|'+norm(a||'');
+function mhIndex(m){if(!m||!m.tracks)return m;const K={};
+  for(const [id,t] of Object.entries(m.tracks)){const k=mhKey(t[4],t[5]);const x=K[k]||(K[k]={ms:0,p:0,f:t[2],l:t[3],id,best:-1});x.ms+=t[0];x.p+=t[1];if(t[2]<x.f)x.f=t[2];if(t[3]>x.l)x.l=t[3];if(t[1]>x.best){x.best=t[1];x.id=id}}
+  m.byKey=K;m.songs=Object.values(K).sort((a,b)=>b.p-a.p||b.ms-a.ms);return m}
 const mhH=ms=>{const h=ms/3600000;return h>=10?fmt(Math.round(h))+' h':h>=1?(Math.round(h*10)/10)+' h':Math.max(1,Math.round(ms/60000))+' min'};
-const mhT=id=>MH&&MH.tracks&&MH.tracks[id];
+const mhT=id=>{if(!MH||!MH.tracks)return null;const t=(MU&&MU.tracks[id])||MKN.t[id];
+  if(MH.byKey&&t){for(const ar of (t.ar||[[0,'']])){const x=MH.byKey[mhKey(t.n,ar[1])];if(x)return [x.ms,x.p,x.f,x.l]}}
+  if(MH.byKey&&MH.tracks[id]){const h=MH.tracks[id];const x=MH.byKey[mhKey(h[4],h[5])];if(x)return [x.ms,x.p,x.f,x.l]}
+  return MH.tracks[id]||null};
 const mhA=n=>{if(!MH||!n)return null;if(MH.artists[n])return MH.artists[n];const k=norm(n);const e=Object.entries(MH.artists).find(([x])=>norm(x)===k);return e?e[1]:null};
-const mhStat=id=>{const h=mhT(id);return h&&h[1]?`<span class="mplays">${fmt(h[1])} plays · ${mhH(h[0])}</span>`:''};
+const mhStat=(id,quiet)=>{if(!MH||!MH.tracks)return'';const h=mhT(id);if(!(h&&h[1])&&(quiet||!MH.byKey))return'';return h&&h[1]?`<span class="mplays">${fmt(h[1])} play${h[1]===1?'':'s'} · ${mhH(h[0])}</span>`:`<span class="mplays" style="opacity:.55">not played yet</span>`};
 // a song from the history that is not in my playlists: make it showable
-const mhKnow=id=>{if(MU&&MU.tracks[id]||MKN.t[id])return;const h=mhT(id);if(!h)return;const aid=MU&&Object.keys(MU.artists).find(k=>MU.artists[k].n===h[5]);MKN.t[id]={n:h[4],ar:[[aid||'',h[5]]],al:h[6],img:h[7]?(/^http/.test(h[7])?h[7]:'https://i.scdn.co/image/'+h[7]):'',ms:h[8]||0}};
+const mhKnow=id=>{if(MU&&MU.tracks[id]||MKN.t[id])return;const h=MH&&MH.tracks&&MH.tracks[id];if(!h)return;const aid=MU&&Object.keys(MU.artists).find(k=>MU.artists[k].n===h[5]);MKN.t[id]={n:h[4],ar:[[aid||'',h[5]]],al:h[6],img:h[7]?(/^http/.test(h[7])?h[7]:'https://i.scdn.co/image/'+h[7]):'',ms:h[8]||0}};
 const hbarsM=(L,c)=>{const mx=Math.max(1,...L.map(x=>x[1]));return `<div class="hbars">${L.map(([g,n,lab])=>`<div class="hbar" style="--c:${c}"><span>${g}</span><div class="tr"><i style="width:${n/mx*100}%"></i></div><span class="mono muted">${lab||n}</span></div>`).join('')}</div>`};
 const msS={y:''};
 function mStatsBody(){
@@ -2266,7 +2274,7 @@ function mStatsBody(){
   const art=n=>{const id=MU&&Object.keys(MU.artists).find(k=>MU.artists[k].n===n);return id?`<a href="#" data-mar="${id}">${esc(n)}</a>`:esc(n)};
   const top=(L,k)=>L.map(([x,ms],i)=>k==='a'?[`${i+1}. ${art(x)}`,ms,mhH(ms)]:null).filter(Boolean);
   const allA=Object.entries(MH.artists).sort((a,b)=>b[1][0]-a[1][0]).slice(0,20).map(([n,v],i)=>[`${i+1}. ${art(n)}`,v[0],mhH(v[0])]);
-  const allT=Object.entries(MH.tracks).sort((a,b)=>b[1][1]-a[1][1]||b[1][0]-a[1][0]).slice(0,30).map(([id])=>id);allT.forEach(mhKnow);Y.tt.forEach(([id])=>mhKnow(id));
+  const allT=MH.songs.slice(0,30).map(x=>x.id);allT.forEach(mhKnow);Y.tt.forEach(([id])=>mhKnow(id));
   const last24=Object.entries(MH.months).slice(-24);
   return `<div class="wr-hero" style="margin-top:14px">
     <div class="box wr-num" style="--c:var(--music)"><b>${fmt(Math.round(T.ms/3600000))}</b><span>hours listened</span><div class="small muted">${(T.ms/864e5).toFixed(1)} days of music</div></div>
@@ -2305,7 +2313,7 @@ function mPlay(kind,id){let p=$('#mplayer');if(!p){p=document.createElement('div
   p.querySelector('.x').onclick=()=>{p.remove();document.body.style.paddingBottom=''};document.body.style.paddingBottom=(kind==='track'?100:372)+'px'}
 const MKN={t:{},a:{}};
 const mArtLinks=t=>(t.ar||[]).map(([id,n])=>id?`<a href="#" data-mar="${id}">${esc(n)}</a>`:esc(n)).join(', ');
-const mRow=(id,i,extra)=>{const t=MU.tracks[id]||MKN.t[id];if(!t)return'';MKN.t[id]=t;return `<div class="mrow"><span class="no">${i+1}</span>${t.img?`<img data-src="${esc(t.img)}" alt="" referrerpolicy="no-referrer">`:'<span></span>'}<div style="min-width:0"><div class="tt">${esc(t.n)}</div><div class="ar">${mArtLinks(t)}${extra?` · <span class="muted">${extra}</span>`:''}${mhStat(id)}</div></div><div class="al">${esc(t.al||'')}</div><div class="du">${t.ms?mDur(t.ms):''}</div><div class="act2"><button class="mbtn" data-mplay="track:${id}" aria-label="Play ${esc(t.n)}">▶</button><a class="mbtn sp" href="${SPU('track',id)}" target="_blank" rel="noopener" aria-label="Open on Spotify"><span class="spt">Spotify </span>↗</a></div></div>`};
+const mRow=(id,i,extra)=>{const t=MU.tracks[id]||MKN.t[id];if(!t)return'';MKN.t[id]=t;return `<div class="mrow"><span class="no">${i+1}</span>${t.img?`<img data-src="${esc(t.img)}" alt="" referrerpolicy="no-referrer">`:'<span></span>'}<div style="min-width:0"><div class="tt">${esc(t.n)}</div><div class="ar">${mArtLinks(t)}${extra?` · <span class="muted">${extra}</span>`:''}${mhStat(id,!!extra)}</div></div><div class="al">${esc(t.al||'')}</div><div class="du">${t.ms?mDur(t.ms):''}</div><div class="act2"><button class="mbtn" data-mplay="track:${id}" aria-label="Play ${esc(t.n)}">▶</button><a class="mbtn sp" href="${SPU('track',id)}" target="_blank" rel="noopener" aria-label="Open on Spotify"><span class="spt">Spotify </span>↗</a></div></div>`};
 const mArtTile=(id,i)=>{const a=MU.artists[id]||MKN.a[id]||{n:'?'};MKN.a[id]=a;return `<button class="mart" data-mar="${id}"><div class="pic">${a.img?`<img data-src="${esc(a.img)}" alt="" referrerpolicy="no-referrer">`:`<b>${esc(initials(a.n))}</b>`}</div><div class="nm">${esc(a.n)}</div>${i!=null?`<div class="rk">#${i+1}${(()=>{const x=mhA(a.n);return x?' · '+mhH(x[0]):''})()}</div>`:''}</button>`};
 function mBind(root){root=root||document;
   root.querySelectorAll('[data-mplay]').forEach(b=>b.onclick=e=>{e.preventDefault();const [k,id]=b.dataset.mplay.split(':');mPlay(k,id)});
