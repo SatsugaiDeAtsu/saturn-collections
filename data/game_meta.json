@@ -36,7 +36,7 @@
 ],
 "chk": "2026-11-17",
 "dimg": {
-"Road to Ruin": "miss:2026-11-08"
+"Road to Ruin": "miss:2026-11-22"
 },
 "syn": "Gears of War 2 is a 2008 third-person shooter video game developed by Epic Games and published by Microsoft Game Studios for the Xbox 360. It is the second installment of the Gears of War series, with lead design by Cliff Bleszinski. The game was released in North America, Europe and Australia on November 7, 2008, and was released in Japan on July 30, 2009.",
 "rwchk": "2026-11-20",
@@ -334,7 +334,7 @@
 "chk": "2026-11-18",
 "dimg": {
 "The Passing": "covers/d/107187_the-passing.jpg",
-"The Sacrifice": "miss:2026-11-08",
+"The Sacrifice": "miss:2026-11-22",
 "Cold Stream": "covers/d/107187_cold-stream.jpg",
 "The Last Stand": "covers/d/107187_the-last-stand.jpg"
 },
@@ -429,8 +429,8 @@
 "Corporate Warfare"
 ],
 "dimg": {
-"Ultor Exposed": "miss:2026-11-08",
-"Corporate Warfare": "miss:2026-11-08"
+"Ultor Exposed": "miss:2026-11-22",
+"Corporate Warfare": "miss:2026-11-22"
 },
 "chk": "2026-11-19",
 "syn": "Saints Row 2 is a 2008 action-adventure game developed by Volition and published by THQ. It is the sequel to 2006's Saints Row and the second installment in the Saints Row series. The game was released in October 2008 for the PlayStation 3 and Xbox 360, January 2009 for Microsoft Windows, and April 2016 for Linux. A mobile tie-in game was developed by G5 Entertainment and also released in October 2008.",
@@ -516,7 +516,7 @@
 "dimg": {
 "Gat out of Hell": "covers/d/107319_gat-out-of-hell.jpg",
 "Enter the Dominatrix": "covers/d/107319_enter-the-dominatrix.jpg",
-"How the Saints Save Christmas": "miss:2026-11-08"
+"How the Saints Save Christmas": "miss:2026-11-22"
 },
 "chk": "2026-11-19",
 "syn": "Saints Row IV is a 2013 action-adventure game developed by Volition and published by Deep Silver. It is the sequel to 2011's Saints Row: The Third, the fourth game in the Saints Row series, and the final main installment of the original series that began with 2006's Saints Row. The game was released in August 2013 for Microsoft Windows, PlayStation 3, and Xbox 360, and was later ported to the PlayStation 4, Xbox One, and Linux in 2015.",
@@ -673,7 +673,7 @@
 "The Secret Armory of General Knoxx",
 "Claptrap's New Robot Revolution"
 ],
-"chk": "2026-11-15",
+"chk": "2026-11-22",
 "dimg": {
 "The Zombie Island of Dr. Ned": "covers/d/108583_the-zombie-island-of-dr-ned.jpg",
 "Mad Moxxi's Underdome Riot": "covers/d/108583_mad-moxxi-s-underdome-riot.jpg",
@@ -716,7 +716,7 @@
 },
 "109306": {
 "avg": 6.2,
-"chk": "2026-11-15",
+"chk": "2026-11-22",
 "syn": "Battlefield 4 is a 2013 first-person shooter game developed by DICE and published by Electronic Arts. The game was released in October and November for Microsoft Windows, PlayStation 3, Xbox 360, PlayStation 4, and Xbox One. It is the thirteenth installment in the Battlefield series and is the sequel of 2011's Battlefield 3, taking place six years later during the fictional \"War of 2020\".",
 "rwchk": "2026-11-20",
 "rw": {
@@ -1031,8 +1031,8 @@
 ],
 "chk": "2026-11-18",
 "dimg": {
-"Bring Down the Sky": "miss:2026-11-08",
-"Pinnacle Station": "miss:2026-11-08"
+"Bring Down the Sky": "miss:2026-11-22",
+"Pinnacle Station": "miss:2026-11-22"
 },
 "syn": "Mass Effect is a 2007 action role-playing game developed by BioWare and published by Microsoft Game Studios for the Xbox 360. It is the first game in the Mass Effect series, and takes place within the Milky Way galaxy in the year 2183, where civilization is threatened by a highly advanced machine race known as the Reapers. The player assumes the role of Commander Shepard, an elite human soldier who must stop a rogue agent from carrying out the Reapers' galactic invasion.",
 "rwchk": "2026-11-20",
@@ -1195,7 +1195,7 @@
 },
 "112930": {
 "avg": 6.1,
-"chk": "2026-11-15",
+"chk": "2026-11-22",
 "syn": "Call of Duty: Modern Warfare 3 is a 2011 first-person shooter game developed by Infinity Ward and Sledgehammer Games and published by Activision. The game was released worldwide on November 8, 2011, for Microsoft Windows, the Xbox 360, PlayStation 3, Wii, and OS X. It is the sequel to Call of Duty: Modern Warfare 2 (2009), serving as the third and final installment in the original Modern Warfare trilogy and the eighth Call of Duty installment overall. A separate version for the Nintendo DS was d",
 "rwchk": "2026-11-20",
 "rw": {
@@ -1236,7 +1236,7 @@
 },
 "112932": {
 "avg": 6.9,
-"chk": "2026-11-15",
+"chk": "2026-11-22",
 "syn": "Call of Duty 4: Modern Warfare is a 2007 first-person shooter game developed by Infinity Ward and published by Activision. It is the fourth main installment in the Call of Duty series. The game breaks away from the World War II setting of previous entries and is instead set in modern times.",
 "rwchk": "2026-11-20",
 "rw": {
@@ -1278,7 +1278,7 @@
 },
 "112941": {
 "avg": 6,
-"chk": "2026-11-15",
+"chk": "2026-11-22",
 "syn": "Call of Duty: Ghosts is a 2013 first-person shooter game developed by Infinity Ward and published by Activision. It is the tenth major installment in the Call of Duty series and the sixth developed by Infinity Ward. It was released for PlayStation 3, Wii U, Windows, Xbox 360, PlayStation 4, and Xbox One in November 2013.",
 "rwchk": "2026-11-20",
 "rw": {
@@ -1318,7 +1318,7 @@
 },
 "112948": {
 "avg": 7.1,
-"chk": "2026-11-15",
+"chk": "2026-11-22",
 "syn": "Call of Duty: Black Ops II is a 2012 first-person shooter game developed by Treyarch and published by Activision. It was released for Windows, PlayStation 3, and Xbox 360 on November 13, 2012, and for the Wii U on November 18 in North America and November 30 in PAL regions. Black Ops II is the ninth game in the Call of Duty franchise of video games, a sequel to the 2010 game Call of Duty: Black Ops and the first Call of Duty game for the Wii U. A corresponding game for the PlayStation Vita, Call",
 "rwchk": "2026-11-20",
 "rw": {
@@ -1357,7 +1357,7 @@
 },
 "112951": {
 "avg": 7.1,
-"chk": "2026-11-15",
+"chk": "2026-11-22",
 "syn": "Call of Duty: Black Ops is a 2010 first-person shooter game developed by Treyarch and published by Activision. It was released worldwide in November 2010 for Microsoft Windows, the PlayStation 3, Wii, and Xbox 360, with a separate version for Nintendo DS developed by n-Space. Aspyr later ported the game to Mac OS X in September 2012.",
 "rwchk": "2026-11-20",
 "rw": {
@@ -1399,7 +1399,7 @@
 },
 "112979": {
 "avg": 7,
-"chk": "2026-11-15",
+"chk": "2026-11-22",
 "syn": "Call of Duty: World at War is a 2008 first-person shooter game developed by Treyarch and published by Activision. It is the fifth main installment of the Call of Duty series and is the fourth entry in the series to be set during World War II. The game was announced by Activision in June 2008 and was released in November 2008 for the PlayStation 3, Windows, Xbox 360, and Wii. Other games under the World at War title were published for the Nintendo DS and the PlayStation 2, featuring different sto",
 "rwchk": "2026-11-20",
 "rw": {
@@ -1439,7 +1439,7 @@
 },
 "112981": {
 "avg": 8,
-"chk": "2026-11-15",
+"chk": "2026-11-22",
 "syn": "Call of Duty 3 is a 2006 first-person shooter game developed by Treyarch and published by Activision. It is the third major installment in the Call of Duty series. It was released for PlayStation 2, Xbox, Xbox 360, PlayStation 3 and Wii.",
 "rwchk": "2026-11-20",
 "rw": {
@@ -1471,7 +1471,7 @@
 },
 "112988": {
 "avg": 8,
-"chk": "2026-11-15",
+"chk": "2026-11-22",
 "syn": "Call of Duty 2 is a 2005 first-person shooter game developed by Infinity Ward and published by Activision in most regions of the world. It is the second installment of the Call of Duty series. Announced by Activision on April 7, 2005, the game was released for Microsoft Windows on October 25, 2005, and as a launch title for the Xbox 360 on November 22, 2005.",
 "rwchk": "2026-11-20",
 "rw": {
@@ -1510,7 +1510,7 @@
 },
 "112999": {
 "avg": 6.6,
-"chk": "2026-11-15",
+"chk": "2026-11-22",
 "syn": "Call of Duty: Modern Warfare 2 is a 2009 first-person shooter game developed by Infinity Ward and published by Activision. It is the sixth installment in the Call of Duty series and the direct sequel to Call of Duty 4: Modern Warfare. It was released worldwide on November 10, 2009, for Windows, PlayStation 3, and Xbox 360.",
 "rwchk": "2026-11-20",
 "rw": {
@@ -1636,7 +1636,7 @@
 ],
 "dimg": {
 "Nightmare in North Point": "covers/d/116121_nightmare-in-north-point.jpg",
-"The Year of the Snake": "miss:2026-11-08",
+"The Year of the Snake": "miss:2026-11-22",
 "Zodiac Tournament": "covers/d/116121_zodiac-tournament.jpg"
 },
 "chk": "2026-11-19",
@@ -1924,9 +1924,9 @@
 "dlc": [
 "Justine"
 ],
-"chk": "2026-11-15",
+"chk": "2026-11-22",
 "dimg": {
-"Justine": "miss:2026-11-08"
+"Justine": "miss:2026-11-22"
 },
 "syn": "Amnesia: The Dark Descent is a 2010 survival horror adventure game developed and published by the Swedish game development studio Frictional Games. It was first released on 8 September 2010 for Microsoft Windows, Mac OS X, and Linux. Later, it was released to PlayStation 4 on 22 November 2016, Xbox One on 28 September 2018, and Nintendo Switch on 12 September 2019 as part of The Amnesia Collection.",
 "rwchk": "2026-11-20",
@@ -2129,7 +2129,7 @@
 "Crew Expendable",
 "Last Survivor"
 ],
-"chk": "2026-11-15",
+"chk": "2026-11-22",
 "dimg": {
 "Crew Expendable": "covers/d/123119_crew-expendable.jpg",
 "Last Survivor": "covers/d/123119_last-survivor.jpg"
@@ -2310,7 +2310,7 @@
 "The Signal",
 "The Writer"
 ],
-"chk": "2026-11-15",
+"chk": "2026-11-22",
 "dimg": {
 "The Signal": "covers/d/128405_the-signal.jpg",
 "The Writer": "covers/d/128405_the-writer.jpg"
@@ -2391,7 +2391,7 @@
 },
 "130801": {
 "avg": 6.1,
-"chk": "2026-11-15",
+"chk": "2026-11-22",
 "syn": "Battlefield 3 is a 2011 first-person shooter game developed by DICE and published by Electronic Arts. It is the twelfth installment in the Battlefield series and a sequel to Battlefield 2 (2005). The game was released on Microsoft Windows, PlayStation 3 and Xbox 360 in October 2011.",
 "rwchk": "2026-11-20",
 "rw": {
@@ -2468,13 +2468,13 @@
 "chk": "2026-11-16",
 "dimg": {
 "Awakening": "covers/d/134115_awakening.jpg",
-"Witch Hunt": "miss:2026-11-08",
-"Leliana's Song": "miss:2026-11-08",
-"The Golems of Amgarrak": "miss:2026-11-08",
-"Return to Ostagar": "miss:2026-11-08",
-"The Darkspawn Chronicles": "miss:2026-11-08",
-"The Stone Prisoner": "miss:2026-11-08",
-"Warden's Keep": "miss:2026-11-08"
+"Witch Hunt": "miss:2026-11-22",
+"Leliana's Song": "miss:2026-11-22",
+"The Golems of Amgarrak": "miss:2026-11-22",
+"Return to Ostagar": "miss:2026-11-22",
+"The Darkspawn Chronicles": "miss:2026-11-22",
+"The Stone Prisoner": "miss:2026-11-22",
+"Warden's Keep": "miss:2026-11-22"
 },
 "syn": "Dragon Age: Origins is a 2009 role-playing video game developed by Canadian studio BioWare and published by Electronic Arts. It is the first game in the Dragon Age franchise. Set in the fictional kingdom of Ferelden during a period of civil strife, the game puts the player in the role of a warrior, mage, or rogue coming from an elven, human, or dwarven background.",
 "rwchk": "2026-11-20",
@@ -2521,8 +2521,8 @@
 ],
 "dimg": {
 "The Heist and the Hazardous": "covers/d/134669_the-heist-and-the-hazardous.jpg",
-"Doc Ketchum's Murderous Mischief": "miss:2026-11-08",
-"Sabotage Under the Sun": "miss:2026-11-08"
+"Doc Ketchum's Murderous Mischief": "miss:2026-11-22",
+"Sabotage Under the Sun": "miss:2026-11-22"
 },
 "chk": "2026-11-19",
 "syn": "Saints Row is a 2022 action-adventure game developed by Volition and published by Deep Silver. It is a reboot of the Saints Row series, and the fifth main installment, following 2013's Saints Row IV. The game was released for PlayStation 4, PlayStation 5, Google Stadia, Windows, Xbox One, and Xbox Series X/S on August 23, 2022. Set within the fictional city of Santo Ileso, inspired by Las Vegas, the story follows a group of four friends who start their own outlaw gang called the Saints, which th",
@@ -2601,7 +2601,7 @@
 "avg": 32.3,
 "chk": "2026-11-17",
 "dimg": {
-"Episode INTERmission": "miss:2026-11-08"
+"Episode INTERmission": "miss:2026-11-22"
 },
 "syn": "Final Fantasy VII Remake is a 2020 action role-playing game developed and published by Square Enix for the PlayStation 4. It is the first in a trilogy of games remaking Final Fantasy VII (1997), originally released for the PlayStation. An enhanced version, Final Fantasy VII Remake Intergrade, was released for PlayStation 5 and Windows in 2021, followed by ports for the Nintendo Switch 2 and Xbox Series X/S in 2026.",
 "rwchk": "2026-11-20"
@@ -2657,7 +2657,7 @@
 "Children of the Worm",
 "River of Blood"
 ],
-"chk": "2026-11-15",
+"chk": "2026-11-22",
 "avg": 12.1,
 "dimg": {
 "Tunnels of Terror": "covers/d/139953_tunnels-of-terror.jpg",
@@ -2872,10 +2872,10 @@
 "dlc": [
 "Part IV: Nirvana"
 ],
-"chk": "2026-11-15",
+"chk": "2026-11-22",
 "avg": 7,
 "dimg": {
-"Part IV: Nirvana": "miss:2026-11-08"
+"Part IV: Nirvana": "miss:2026-11-22"
 },
 "syn": "Asura's Wrath is a 2012 action video game developed by CyberConnect2 and published by Capcom for the PlayStation 3 and Xbox 360. Taking elements from Hindu and Buddhist mythologies and blending them with science fiction, the game follows the titular character, the demigod Asura, as he seeks revenge on the pantheon of other demigods who betrayed him.\nThe story is presented in the style and format of an episodic series of cinematic scenes, including opening and closing credits, with the gameplay s",
 "rwchk": "2026-11-20",
@@ -3053,7 +3053,7 @@
 ],
 "chk": "2026-11-16",
 "dimg": {
-"Pigsy's Perfect 10": "miss:2026-11-08"
+"Pigsy's Perfect 10": "miss:2026-11-22"
 },
 "syn": "Enslaved: Odyssey to the West is a 2010 action-adventure game developed by Ninja Theory and published by Namco Bandai Games. As a loose adaptation of the Chinese novel Journey to the West, the game is set 150 years in a future post-apocalyptic world following a global war. Only remnants of humanity survive, along with the still active war machines left over from the conflict.",
 "rwchk": "2026-11-20",
@@ -3217,7 +3217,7 @@
 }
 },
 "130795": {
-"chk": "2026-11-15",
+"chk": "2026-11-22",
 "avg": 6,
 "syn": "A Way Out is a 2018 cooperative action-adventure video game developed by Hazelight Studios and published by Electronic Arts. It is the second video game directed by Josef Fares after Brothers: A Tale of Two Sons. The game does not have a single-player option; it is playable on local or online split screen co-op between two players.",
 "rwchk": "2026-11-20",
@@ -3254,7 +3254,7 @@
 }
 },
 "341711": {
-"chk": "2026-11-15",
+"chk": "2026-11-22",
 "avg": 6.1,
 "syn": "Battlefield 6 is a 2025 online-only first-person shooter video game developed by Battlefield Studios and published by Electronic Arts. Serving as the eighteenth installment in the Battlefield series, the game was released for PlayStation 5, Windows, and Xbox Series X/S on October 10, 2025. A free-to-play battle royale mode, titled RedSec, was released on October 28, 2025.",
 "rwchk": "2026-11-20",
@@ -3288,7 +3288,7 @@
 }
 },
 "441755": {
-"chk": "2026-11-15",
+"chk": "2026-11-22",
 "syn": "",
 "rwchk": "2026-11-20",
 "rw": {
