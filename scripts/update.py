@@ -337,7 +337,7 @@ def update_letterboxd_watched():
     today = datetime.now(timezone.utc).strftime('%Y-%m-%d')
     seen = added = moved = 0
     for page in range(1, 60):
-        url = f'https://letterboxd.com/{LETTERBOXD_USER}/films/by/date/' + (f'page/{page}/' if page > 1 else '')
+        url = f'https://letterboxd.com/{LETTERBOXD_USER}/films/' + (f'page/{page}/' if page > 1 else '')
         h = None
         for tr in range(4 if page == 1 else 1):  # Letterboxd often refuses later pages to scripts; page 1 holds the newest 72
             try:
