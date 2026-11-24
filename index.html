@@ -2022,7 +2022,10 @@ async function malUnqueue(done){if(!done.length)return;let cur;try{cur=await ghL
 async function malFlush(manual){const Q=(D.malQ||[]).slice();if(!Q.length||!MALA.on||!ED.token){if(manual)toast(!Q.length?'Nothing waiting.':!MALA.on?'This device is not connected to MAL: pencil → Connect MyAnimeList, then Sync now.':'Turn editing on first.',true);return}
   const done=[];let err='';for(const it of Q){try{await malSave(it.k,it.id,it.b,it.del);done.push(it)}catch(e){err=e.message||String(e);break}}
   if(done.length){await malUnqueue(done).catch(()=>{});malApplyQ();render();toast(`Synced ${done.length} change${done.length>1?'s':''} to MyAnimeList.`)}
-  else if(manual)toast('Not synced yet. MAL said: '+err+(/expired|Connect/i.test(err)?' (pencil → Connect MyAnimeList)':''),true)}
+  else if(manual){
+    // MAL is often unreachable from some regions while working fine elsewhere: hand it to the sync job on GitHub
+    if(D.malSync&&!/expired|Connect/i.test(err)){try{let cur=await ghLoad(MQF);cur.nudge=Date.now();await ghSave(MQF,cur,'MAL sync: try from GitHub');toast('MAL is not reachable from here right now, so GitHub will send it. Check again in about 2 minutes.')}catch(e){toast('Not synced yet: '+e.message,true)}}
+    else toast('Not synced yet. MAL said: '+err+(/expired|Connect/i.test(err)?' (pencil → Connect MyAnimeList)':D.malSync?'':' · Set up hourly sync so GitHub can send it instead.'),true)}}
 async function malSave(kind,id,body,del){
   const tok=await malToken();
   const r=await fetch(`${SET.workerUrl}/list/${kind}/${id}`,{method:del?'DELETE':'PATCH',headers:{'Content-Type':'application/json',Authorization:'Bearer '+tok},body:del?undefined:JSON.stringify(body)});
