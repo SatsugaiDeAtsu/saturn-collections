@@ -2175,9 +2175,12 @@ async function animeSongs(a){
   const op=d.op||[],ed=d.ed||[];if(!op.length&&!ed.length)return;
   await Promise.all([muLoad(),mhLoad()]);
   const box=$('#m_mus');if(!box)return;
-  const idx={};if(MU&&MU.tracks)for(const [id,t] of Object.entries(MU.tracks)){const k=mBase(t.n);if(k&&!idx[k])idx[k]=id}
-  if(MH&&MH.tracks)for(const [id,t] of Object.entries(MH.tracks)){const k=mBase(t[4]);if(k&&!idx[k])idx[k]=id}
-  const row=(s,i,kind)=>{const p=themeParse(s);const id=idx[mBase(p.t)]||(p.alt&&idx[mBase(p.alt)]);if(id)mhKnow(id);const q=encodeURIComponent(p.t+' '+p.ar.replace(/\s*\(.*?\)/g,''));
+  // match by song title AND artist (a title alone can belong to many songs)
+  const idx={},add=(k,id,ar)=>{(idx[k]=idx[k]||[]).push({id,ar:norm(ar)})};
+  if(MU&&MU.tracks)for(const [id,t] of Object.entries(MU.tracks)){const k=mBase(t.n);if(k)(t.ar||[]).forEach(a=>add(k,id,a[1]))}
+  if(MH&&MH.tracks)for(const [id,t] of Object.entries(MH.tracks)){const k=mBase(t[4]);if(k)add(k,id,t[5])}
+  const find=(titles,artist)=>{const A=norm(artist);if(!A)return null;for(const t of titles){for(const c of (idx[mBase(t)]||[])){if(c.ar&&(A.includes(c.ar)||c.ar.includes(A.split(' (')[0])))return c.id}}return null};
+  const row=(s,i,kind)=>{const p=themeParse(s);const id=find([p.t,p.alt].filter(Boolean),p.ar);if(id)mhKnow(id);const q=encodeURIComponent(p.t+' '+p.ar.replace(/\s*\(.*?\)/g,''));
     const h=id?mhT(id):null;
     return `<div class="mrow"><span class="no">${kind}${i+1}</span><span></span><div style="min-width:0"><div class="tt">${esc(p.t)}${p.alt?` <span class="muted">(${esc(p.alt)})</span>`:''}</div><div class="ar">${esc(p.ar)}${p.eps?` · <span class="muted">${esc(p.eps)}</span>`:''}${id&&h&&h[1]?`<span class="mplays">${fmt(h[1])} plays · ${mhH(h[0])}</span>`:''}</div></div><div class="al"></div><div class="du"></div>
       <div class="act2">${id?`<button class="mbtn" data-mplay="track:${id}" aria-label="Play">▶</button><a class="mbtn sp" href="${SPU('track',id)}" target="_blank" rel="noopener"><span class="spt">Spotify </span>↗</a>`:`<a class="mbtn" href="https://open.spotify.com/search/${q}" target="_blank" rel="noopener">Find on Spotify ↗</a>`}</div></div>`};
