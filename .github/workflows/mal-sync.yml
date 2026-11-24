@@ -6,6 +6,7 @@ on:
   push:
     paths:
       - 'data/mal_queue.json'   # the site saved a change MAL did not take: try from here straight away
+      - 'data/mal_sync_code.json'   # finishing the hourly-sync sign-in
 permissions:
   contents: write
   actions: write
@@ -29,7 +30,7 @@ jobs:
       - name: Save
         run: |
           git config user.name "saturn-bot"; git config user.email "saturn-bot@users.noreply.github.com"
-          git add data/mal_queue.json data/mal_sync.json 2>/dev/null || true
+          git add -A data/mal_queue.json data/mal_sync.json data/mal_sync_code.json 2>/dev/null || git add -A data
           git diff --cached --quiet || (git commit -m "MAL sync" && git pull --rebase -q && git push -q)
       - name: Refresh the site after syncing
         if: steps.s.outputs.synced != '' && steps.s.outputs.synced != '0'

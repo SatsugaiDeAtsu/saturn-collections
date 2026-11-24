@@ -10,7 +10,7 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
 
 DATA = os.path.join(os.path.dirname(__file__), '..', 'data')
-QF, SF = os.path.join(DATA, 'mal_queue.json'), os.path.join(DATA, 'mal_sync.json')
+QF, SF, CF = os.path.join(DATA, 'mal_queue.json'), os.path.join(DATA, 'mal_sync.json'), os.path.join(DATA, 'mal_sync_code.json')
 CID, CSEC, PASS = os.environ.get('MAL_CLIENT_ID', ''), os.environ.get('MAL_CLIENT_SECRET', ''), os.environ.get('MAL_SYNC_KEY', '')
 load = lambda p, d: json.load(open(p, encoding='utf-8')) if os.path.exists(p) else d
 
@@ -43,7 +43,32 @@ def call(url, method='GET', data=None, tok=None, form=False):
         return json.loads(t)
 
 
+def finish_setup():
+    """The site saved a MAL sign-in code (locked): swap it for a sign-in here, where MAL is reachable."""
+    c = load(CF, None)
+    if not c:
+        return
+    os.remove(CF)
+    try:
+        d = json.loads(unlock(c))
+    except Exception:
+        print('could not unlock the sign-in code: the passphrase typed on the site must match MAL_SYNC_KEY. Set up hourly sync again.')
+        return
+    try:
+        j = call('https://myanimelist.net/v1/oauth2/token', 'POST', {'client_id': CID, 'client_secret': CSEC, 'grant_type': 'authorization_code',
+                                                                     'code': d['code'], 'code_verifier': d['v'], 'redirect_uri': d['r']})
+    except Exception as e:
+        print('MAL did not accept the sign-in code (it may have expired): set up hourly sync again.', e)
+        return
+    json.dump(lock(j['refresh_token']), open(SF, 'w', encoding='utf-8'))
+    print('hourly sync set up')
+
+
 def main():
+    if not (CID and CSEC and PASS):
+        print('missing secrets MAL_CLIENT_ID / MAL_CLIENT_SECRET / MAL_SYNC_KEY')
+        sys.exit(1)
+    finish_setup()
     q = load(QF, {}).get('q', [])
     s = load(SF, None)
     if not s:
