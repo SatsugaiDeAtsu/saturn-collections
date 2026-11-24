@@ -1027,6 +1027,14 @@ def update_mal_details():
             else:
                 fails += 1
                 log('mal details failed', kind, mid, e)
+                if not cur:  # MAL is down and we have nothing yet: borrow the descriptive bits from AniList for now
+                    try:
+                        o = anilist_detail(kind, mid)
+                        if o:
+                            o['c'] = ''  # empty date, so MAL's own details replace it on the next good run
+                            det[k][str(mid)] = o
+                    except Exception as e2:
+                        log('anilist backup failed', kind, mid, e2)
         time.sleep(0.8)
     # anime <-> manga links: MAL's official data leaves these out, so read them from the MAL page itself
     t1, jn = time.time(), 0
@@ -2403,7 +2411,80 @@ def update_anime_themes():
     log(f'anime songs: +{got}')
 
 
-for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd), ('letterboxd films', update_letterboxd_watched),
+def anilist_detail(kind, mid):
+    """Backup only, when MAL is down: title, cover, type, dates, episodes, genres and synopsis by MAL id. Never AniList scores."""
+    q = ('query($id:Int,$t:MediaType){Media(idMal:$id,type:$t){title{romaji english} format startDate{year month day} status episodes duration '
+         'chapters volumes genres description(asHtml:false) coverImage{large} studios(isMain:true){nodes{name}}}}')
+    req = urllib.request.Request('https://graphql.anilist.co', data=json.dumps({'query': q, 'variables': {'id': int(mid), 't': 'ANIME' if kind == 'anime' else 'MANGA'}}).encode(),
+                                 headers={'Content-Type': 'application/json', 'Accept': 'application/json', 'User-Agent': UA})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        m = (json.load(r).get('data') or {}).get('Media')
+    if not m:
+        return None
+    sd = m.get('startDate') or {}
+    o = {'t': m['title'].get('english') or m['title'].get('romaji'), 'ty': (m.get('format') or '').lower(), 'al': 1,
+         'sd': '-'.join(f'{x:02d}' if i else str(x) for i, x in enumerate([sd.get('year'), sd.get('month'), sd.get('day')]) if x),
+         'img': '', 'g': m.get('genres') or [], 'st': {'RELEASING': 'currently_airing', 'FINISHED': 'finished_airing', 'NOT_YET_RELEASED': 'not_yet_aired'}.get(m.get('status'), ''),
+         'ra': [], 'rm': [], '_nb': []}
+    syn = re.sub(r'<[^>]+>', '', m.get('description') or '').strip()
+    if syn:
+        o['syn'] = syn[:420]
+    if kind == 'anime':
+        o['n'], o['dur'] = m.get('episodes') or 0, (m.get('duration') or 0) * 60
+        o['stu'] = [x['name'] for x in ((m.get('studios') or {}).get('nodes') or [])][:3]
+    else:
+        o['n'], o['v'] = m.get('chapters') or 0, m.get('volumes') or 0
+    return o
+
+
+def apply_mal_queue():
+    """Edits made on the site while MAL was down: keep them on top of what MAL says until MAL has them (newest change wins)."""
+    q = load_json(os.path.join(DATA, 'mal_queue.json'), {}).get('q', [])
+    if not q:
+        return
+    ST = {'watching': 1, 'reading': 1, 'completed': 2, 'on_hold': 3, 'dropped': 4, 'plan_to_watch': 6, 'plan_to_read': 6}
+    kept = 0
+    for it in q:
+        L = site.get(it['k'], [])
+        row = next((r for r in L if r[0] == it['id']), None)
+        up_i = 12 if it['k'] == 'anime' else 16
+        if row and len(row) > up_i and row[up_i] * 1000 >= it['t']:
+            continue  # MAL already has this change, or a newer one made on MAL
+        kept += 1
+        if it.get('del'):
+            if row:
+                L.remove(row)
+            continue
+        sv = it.get('s') or {}
+        if not row and it.get('info'):
+            inf = it['info']
+            if it['k'] == 'anime':
+                row = [it['id'], inf.get('t', ''), '', 6, 0, 0, inf.get('n', 0), inf.get('type', ''), inf.get('img', ''), str(inf.get('y', '')), [], 0, 0, 0, 0]
+            else:
+                row = [it['id'], inf.get('t', ''), '', 6, 0, 0, inf.get('n', 0), 0, inf.get('v', 0), inf.get('type', ''), inf.get('img', ''), str(inf.get('y', '')), [], 0, 0, 0, 0]
+            L.append(row)
+        if not row:
+            continue
+        if 'st' in sv:
+            row[3] = sv['st']
+        if 'sc' in sv:
+            row[4] = sv['sc']
+        if it['k'] == 'anime':
+            if 'ep' in sv:
+                row[5] = sv['ep']
+            if 'rw' in sv and len(row) > 13:
+                row[13] = sv['rw']
+        else:
+            if 'ch' in sv:
+                row[5] = sv['ch']
+            if 'vol' in sv:
+                row[7] = sv['vol']
+            if 'rw' in sv and len(row) > 14:
+                row[14] = sv['rw']
+    log(f'MAL waiting list: {kept} change(s) still waiting for MAL')
+
+
+for name, fn in [('anime', update_anime), ('manga', update_manga), ('mal waiting list', apply_mal_queue), ('letterboxd', update_letterboxd), ('letterboxd films', update_letterboxd_watched),
                  ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('anime songs', update_anime_themes), ('music', update_music), ('music pictures', update_music_pics), ('music genres', update_music_genres), ('book copies', mirror_book_covers), ('grouvee', update_grouvee), ('film ids', update_film_ids), ('film details', update_film_details), ('series', update_series), ('mal details', update_mal_details), ('summaries', update_summaries), ('book details', update_book_details), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('rawg', update_rawg), ('characters', update_char_info), ('people', update_people_info), ('extra manga', update_manga_extra), ('cover mirror', update_cover_mirror), ('overview files', build_overview_files)]:
     try:
         fn()

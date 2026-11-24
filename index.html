@@ -780,7 +780,7 @@ setTimeout(function(){var s=document.getElementById('bootslow');if(s&&document.g
 <script>
 (async function(){
 "use strict";
-let D,SET={};try{const j=u=>fetch(u,{cache:'no-cache'}).then(r=>r.json());const [a,g,b,s,q,wr,mx,se,ov,th,fl]=await Promise.all([j('data/site.json'),j('data/games.json'),j('data/books.json'),j('data/settings.json').catch(()=>({})),j('data/quotes.json').catch(()=>({quotes:[]})),j('data/writing.json').catch(()=>({works:[]})),j('data/manga_extra.json').catch(()=>({items:[]})),j('data/series.json').catch(()=>({series:[]})),j('data/ovfavs.json').catch(()=>null),j('data/themes.json').catch(()=>({})),j('data/films_local.json').catch(()=>({films:[]}))]);D=Object.assign(a,g,b,q,wr);D.mangaExtra=mx.items||[];D.ovFavs=ov;D.themes=th||{};D.series=se.series||[];D.filmsLocal=(fl&&fl.films)||[];SET=s}catch(e){document.getElementById('app').innerHTML='<div class="empty">Could not load data/site.json.</div>';return}
+let D,SET={};try{const j=u=>fetch(u,{cache:'no-cache'}).then(r=>r.json());const [a,g,b,s,q,wr,mx,se,ov,th,fl,mq,msy]=await Promise.all([j('data/site.json'),j('data/games.json'),j('data/books.json'),j('data/settings.json').catch(()=>({})),j('data/quotes.json').catch(()=>({quotes:[]})),j('data/writing.json').catch(()=>({works:[]})),j('data/manga_extra.json').catch(()=>({items:[]})),j('data/series.json').catch(()=>({series:[]})),j('data/ovfavs.json').catch(()=>null),j('data/themes.json').catch(()=>({})),j('data/films_local.json').catch(()=>({films:[]})),j('data/mal_queue.json').catch(()=>({q:[]})),j('data/mal_sync.json').catch(()=>null)]);D=Object.assign(a,g,b,q,wr);D.mangaExtra=mx.items||[];D.ovFavs=ov;D.themes=th||{};D.series=se.series||[];D.filmsLocal=(fl&&fl.films)||[];D.malQ=(mq&&mq.q)||[];D.malSync=!!(msy&&msy.ct);SET=s}catch(e){document.getElementById('app').innerHTML='<div class="empty">Could not load data/site.json.</div>';return}
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm=s=>String(s||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
@@ -932,7 +932,7 @@ const AST={1:['Watching','var(--s1)'],2:['Completed','var(--s2)'],3:['On-Hold','
 const TAGS=D.animeTags||{};
 ((D.mir||{}).u||[]).forEach(x=>MIRU.add(x));
 const MIRA=new Set((D.mir||{}).a||[]),MIRM=new Set((D.mir||{}).m||[]);
-const anime=D.anime.map(a=>({tags:TAGS[a[0]]||'',id:a[0],t:a[1],alt:a[2],st:a[3],sc:a[4],ep:a[5],eps:a[6],type:a[7],img:MIRA.has(a[0])?`covers/a/${a[0]}.jpg`:a[8]?`https://cdn.myanimelist.net/images/anime/${a[8]}.jpg`:'',y:a[9],g:a[10].map(i=>D.animeGenres[i]),mal:a[11],up:a[12],rw:a[13]||0,rwing:a[14]||0,n:norm(a[1]+' '+a[2])}));
+const anime=D.anime.map(a=>({tags:TAGS[a[0]]||'',id:a[0],t:a[1],alt:a[2],st:a[3],sc:a[4],ep:a[5],eps:a[6],type:a[7],img:MIRA.has(a[0])?`covers/a/${a[0]}.jpg`:/^http/.test(a[8]||'')?a[8]:a[8]?`https://cdn.myanimelist.net/images/anime/${a[8]}.jpg`:'',y:a[9],g:a[10].map(i=>D.animeGenres[i]),mal:a[11],up:a[12],rw:a[13]||0,rwing:a[14]||0,n:norm(a[1]+' '+a[2])}));
 const filmByKey={};
 const films=D.films.map((f,i)=>{const o=Object.assign({},f,{i,logs:f.n,rw:f.rw||0,n:norm(f.t)});filmByKey[norm(f.t)+'|'+f.y]=o;return o});
 /* films added by hand on this site (data/films_local.json); one Letterboxd already has is skipped */
@@ -1351,8 +1351,9 @@ function addOvFav(k){
 const MST={1:['Reading','var(--s1)'],2:['Completed','var(--s2)'],3:['On-Hold','var(--s3)'],4:['Dropped','var(--s4)'],6:['Plan to Read','var(--s6)']};
 const MTAGS=D.mangaTags||{};
 const XMANGA=x=>({tags:x.note||'',id:x.id,t:x.t,alt:x.alt||'',st:x.st||6,sc:x.sc||0,ch:x.ch||0,chs:x.chs||0,vol:x.vol||0,vols:x.vols||0,type:x.ty||'Novel',img:x.img||'',y:x.y||0,g:x.g||[],mal:0,rw:x.rw||0,rwing:0,up:x.up||0,n:norm(x.t+' '+(x.alt||'')+' '+(x.en||'')),local:1,au:x.au||'',jt:x.jt||'',d:x.d||''});
-const manga=D.manga.map(m=>({tags:MTAGS[m[0]]||'',id:m[0],t:m[1],alt:m[2],st:m[3],sc:m[4],ch:m[5],chs:m[6],vol:m[7],vols:m[8],type:m[9],img:MIRM.has(m[0])?`covers/m/${m[0]}.jpg`:m[10]?`https://cdn.myanimelist.net/images/manga/${m[10]}.jpg`:'',y:m[11],g:m[12].map(i=>D.mangaGenres[i]),mal:m[13],rw:m[14]||0,rwing:m[15]||0,up:m[16]||0,n:norm(m[1]+' '+m[2])}));
+const manga=D.manga.map(m=>({tags:MTAGS[m[0]]||'',id:m[0],t:m[1],alt:m[2],st:m[3],sc:m[4],ch:m[5],chs:m[6],vol:m[7],vols:m[8],type:m[9],img:MIRM.has(m[0])?`covers/m/${m[0]}.jpg`:/^http/.test(m[10]||'')?m[10]:m[10]?`https://cdn.myanimelist.net/images/manga/${m[10]}.jpg`:'',y:m[11],g:m[12].map(i=>D.mangaGenres[i]),mal:m[13],rw:m[14]||0,rwing:m[15]||0,up:m[16]||0,n:norm(m[1]+' '+m[2])}));
 (D.mangaExtra||[]).forEach(x=>manga.push(XMANGA(x)));
+malApplyQ();
 function rManga(){
   const sc=manga.filter(m=>m.sc>0);
   const types=[...new Set(manga.map(m=>m.type))].sort();
@@ -1473,6 +1474,7 @@ function openManga(m){
   modal('manga','Manga',`${cover(m.t,m.img)}<div><h2>${esc(m.t)}</h2>${m.alt?`<div class="muted">${esc(m.alt)}</div>`:''}
   <div class="bigscore"><div><b>${m.sc||'–'}</b><small>Your score</small></div><div><b>${m.mal?m.mal.toFixed(2):'–'}</b><small>MAL score</small></div><div><b style="color:${MST[m.st][1]}">■</b><small>${MST[m.st][0]}</small></div></div>
   <div class="kv"><div>Type</div><div>${esc(m.type)}</div>${m.local&&!m.chs?'':`<div>Chapters</div><div>${m.ch} read of ${m.chs||'?'}</div>`}${m.vols||m.vol?`<div>Volumes</div><div>${m.vol} read of ${m.vols||'?'}</div>`:''}<div>Reread</div><div>${m.rw} time${m.rw===1?'':'s'}${m.rwing?' · rereading now':''}</div><div>Published</div><div>${m.y||'–'}</div><div>Genres</div><div>${m.g.map(g=>`<span class="tag">${esc(g)}</span>`).join('')||'–'}</div></div>
+  ${m.pend?'<div class="note" style="margin-top:10px">⏳ Your latest change is saved here and waiting for MyAnimeList to come back.</div>':''}
   <div id="m_x"></div>
   ${m.tags?`<div class="review" style="--c:var(--manga)">${esc(m.tags)}</div>`:''}
   <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?'<button class="btn pri" id="m_edit">Edit</button>':''}${m.local?`<span class="small muted" style="align-self:center">Not on MyAnimeList, so it's kept on this site.</span>`:`<a class="btn${ED.on?'':' pri'}" href="https://myanimelist.net/manga/${m.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a>`}</div></div>`);
@@ -1763,6 +1765,7 @@ function editSetup(){
   <input id="tok" type="password" placeholder="github_pat_..." style="width:100%;padding:10px;border:1px solid var(--line2);background:var(--panel)" value="">
   <div id="tokerr" class="small" style="color:var(--s4);margin-top:6px"></div>
   <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--line)"><b>MyAnimeList</b><p class="muted small" style="margin:4px 0 8px">${MALA.on?'Connected. Anime and manga edits go straight to MAL.':'Connect once so anime and manga edits save to MAL.'}</p><button class="btn" id="malc">${MALA.on?'Reconnect MAL':'Connect MAL'}</button>${MALA.on?' <button class="btn" id="malx">Disconnect</button>':''}</div>
+  ${ED.token?`<div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--line)"><b>MAL sync</b><p class="muted small" style="margin:4px 0 8px">${(D.malQ||[]).length?`⏳ ${(D.malQ||[]).length} change${(D.malQ||[]).length>1?'s':''} waiting for MyAnimeList.`:'Nothing waiting. Everything is on MyAnimeList.'} ${D.malSync?'Hourly sync is on.':'Hourly sync is not set up yet.'}</p><button class="btn" id="mq_now">Sync now</button> <button class="btn" id="mq_hour">${D.malSync?'Reconnect':'Set up'} hourly sync</button></div>`:''}
   ${ED.token?`<div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--line)"><b>Refresh now</b><p class="muted small" style="margin:4px 0 8px">Pull the latest from MAL, Letterboxd, your blogs and Medium without waiting for the nightly update. Takes about 3 to 5 minutes, then reload the page.</p><button class="btn" id="refnow">Refresh my data</button> <span id="refmsg" class="small muted"></span></div>`:''}
   ${ED.token?`<div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--line)"><b>Approved manga</b><p class="muted small" style="margin:4px 0 8px">Manga that MAL tags as Erotica only show up once you approve them here. Paste a MAL manga link or ID.</p>
   <div style="display:flex"><input id="ma_in" placeholder="https://myanimelist.net/manga/12345" style="flex:1;padding:8px;border:1px solid var(--line2);background:var(--panel);color:var(--ink)"><button class="btn" id="ma_add" style="border-radius:0">Approve</button></div>
@@ -1781,6 +1784,7 @@ function editSetup(){
   const maa=$('#ma_add');if(maa)maa.onclick=()=>{const m=(gv('ma_in').match(/(?:manga\/)?(\d+)/)||[])[1];if(!m){$('#ma_msg').textContent='Paste a MAL manga link or its number.';return}
     const id=+m;const L=SET.manga_allow||[];if(L.includes(id)){$('#ma_msg').textContent='Already approved.';return}saveAllow([...L,id],'Approve manga '+id)};
   document.querySelectorAll('[data-ma]').forEach(a=>a.onclick=e=>{e.preventDefault();const id=+a.dataset.ma;saveAllow((SET.manga_allow||[]).filter(x=>x!==id),'Unapprove manga '+id)});
+  {const a=$('#mq_now');if(a)a.onclick=()=>malFlush(true);const b=$('#mq_hour');if(b)b.onclick=()=>{store.set('mal_sync_setup',1);malConnect()}}
   $('#malc').onclick=malConnect;const mx=$('#malx');if(mx)mx.onclick=()=>{MALA.t=null;closeM();toast('MAL disconnected on this device')};
   const off=$('#tokoff');if(off)off.onclick=()=>{ED.on=false;closeM();syncEditBtn();render()};
   const del=$('#tokdel');if(del)del.onclick=()=>{ED.token='';ED.on=false;store.set('owner',false);store.set('drpw','');DR=null;try{sessionStorage.removeItem('sc_drpw')}catch(x){}closeM();syncEditBtn();render();toast('Token removed from this browser')};
@@ -1978,17 +1982,42 @@ function malConnect(){
   const st=Math.random().toString(36).slice(2);store.set('mal_pkce',{v,st});
   location.href=`https://myanimelist.net/v1/oauth2/authorize?response_type=code&client_id=${SET.malClientId}&code_challenge=${v}&code_challenge_method=plain&state=${st}&redirect_uri=${encodeURIComponent(SITE_URL)}`;
 }
+/* the hourly sync's own MAL sign-in, locked with the passphrase you saved in GitHub as MAL_SYNC_KEY */
+async function malSyncSave(rt){
+  const pass=prompt('Type the same passphrase you saved in GitHub as MAL_SYNC_KEY:');if(!pass){toast('Hourly sync not set up (no passphrase).',true);return}
+  const enc=new TextEncoder(),salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));
+  const base=await crypto.subtle.importKey('raw',enc.encode(pass),'PBKDF2',false,['deriveKey']);
+  const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:200000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt']);
+  const ct=new Uint8Array(await crypto.subtle.encrypt({name:'AES-GCM',iv},key,enc.encode(rt)));
+  const b64=u=>btoa(String.fromCharCode(...u));
+  try{await ghSave('data/mal_sync.json',{salt:b64(salt),iv:b64(iv),ct:b64(ct),t:Date.now()},'Hourly MAL sync: sign-in (locked)');D.malSync=1;toast('Hourly MAL sync is set up.')}catch(e){toast('Could not save: '+e.message,true)}}
 async function malFinish(){
   const p=new URLSearchParams(location.search);const code=p.get('code'),st=p.get('state');if(!code)return;
   history.replaceState(null,'',location.pathname+location.hash);
   const pk=store.get('mal_pkce',null);if(!pk||pk.st!==st){toast('MAL sign-in expired. Try again.',true);return}
   try{const r=await fetch(SET.workerUrl+'/token',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({code,code_verifier:pk.v,redirect_uri:SITE_URL})});const j=await r.json();
-    if(!r.ok||!j.access_token)throw new Error(j.message||j.error||'MAL said no');MALA.t={...j,exp:Date.now()+(j.expires_in-60)*1000};toast('MyAnimeList connected')}
+    if(!r.ok||!j.access_token)throw new Error(j.message||j.error||'MAL said no');
+    if(store.get('mal_sync_setup',0)){store.set('mal_sync_setup',0);await malSyncSave(j.refresh_token);return}
+    MALA.t={...j,exp:Date.now()+(j.expires_in-60)*1000};toast('MyAnimeList connected')}
   catch(e){toast('MAL sign-in failed: '+e.message,true)}
 }
 async function malToken(){const a=MALA.t;if(!a)throw new Error('Connect MAL first (pencil button).');if(Date.now()<a.exp)return a.access_token;
   const r=await fetch(SET.workerUrl+'/token',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({refresh_token:a.refresh_token})});const j=await r.json();
   if(!r.ok||!j.access_token){MALA.t=null;throw new Error('MAL sign-in expired. Connect again.')}MALA.t={...j,exp:Date.now()+(j.expires_in-60)*1000};return j.access_token}
+/* ---------- site first, MAL second: edits save here, and wait for MAL if it is down ---------- */
+const MQF='data/mal_queue.json';
+function malApplyQ(){(D.malQ||[]).forEach(it=>{const L=it.k==='anime'?anime:manga;let x=L.find(e=>e.id===it.id);
+  if(it.del){if(x)L.splice(L.indexOf(x),1);return}
+  if(!x&&it.info){x=Object.assign({id:it.id,t:it.info.t,alt:'',img:it.info.img||'',type:it.info.type||'',y:it.info.y||'',g:it.info.g||[],mal:0,rw:0,rwing:0,tags:'',n:norm(it.info.t)},it.k==='anime'?{ep:0,eps:it.info.n||0}:{ch:0,chs:it.info.n||0,vol:0,vols:it.info.v||0});L.push(x)}
+  if(x){Object.assign(x,it.s||{});x.pend=1}})}
+async function malQueue(it){let cur;try{cur=await ghLoad(MQF)}catch(e){cur={q:[]}}cur.q=(cur.q||[]).filter(x=>!(x.k===it.k&&x.id===it.id));cur.q.push(it);
+  await ghSave(MQF,cur,'MAL waiting list: '+(it.info&&it.info.t||it.k+' '+it.id));D.malQ=cur.q}
+async function malUnqueue(done){if(!done.length)return;let cur;try{cur=await ghLoad(MQF)}catch(e){return}
+  cur.q=(cur.q||[]).filter(x=>!done.some(d=>d.k===x.k&&d.id===x.id&&d.t===x.t));await ghSave(MQF,cur,'MAL waiting list: synced '+done.length);D.malQ=cur.q}
+// try to send everything waiting (when the site is opened in edit mode)
+async function malFlush(manual){const Q=(D.malQ||[]).slice();if(!Q.length||!MALA.on||!ED.token){if(manual)toast(Q.length?'Connect MAL first.':'Nothing waiting.');return}
+  const done=[];for(const it of Q){try{await malSave(it.k,it.id,it.b,it.del);done.push(it)}catch(e){break}}
+  if(done.length){await malUnqueue(done).catch(()=>{});toast(`Synced ${done.length} change${done.length>1?'s':''} to MyAnimeList.`)}else if(manual)toast('MyAnimeList is still not answering. It will keep trying.',true)}
 async function malSave(kind,id,body,del){
   const tok=await malToken();
   const r=await fetch(`${SET.workerUrl}/list/${kind}/${id}`,{method:del?'DELETE':'PATCH',headers:{'Content-Type':'application/json',Authorization:'Bearer '+tok},body:del?undefined:JSON.stringify(body)});
@@ -2016,13 +2045,20 @@ function editMal(kind,x,fromSearch){
     if(isA){body.num_watched_episodes=+gv('m_ep')||0;body.num_times_rewatched=+gv('m_rw')||0}else{body.num_chapters_read=+gv('m_ch')||0;body.num_volumes_read=+gv('m_vol')||0;body.num_times_reread=+gv('m_rw')||0}
     if(st===2){if(isA){if(tot&&body.num_watched_episodes<tot)body.num_watched_episodes=tot}else{if(tot&&body.num_chapters_read<tot)body.num_chapters_read=tot;if(totV&&body.num_volumes_read<totV)body.num_volumes_read=totV}}
     $('#m_save').textContent='Saving…';
-    try{await malSave(kind,x.id||x.malId,body);
-      if(!isNew){Object.assign(x,{st,sc,tags:body.tags},isA?{ep:body.num_watched_episodes,rw:body.num_times_rewatched,up:Math.floor(Date.now()/1000)}:{ch:body.num_chapters_read,vol:body.num_volumes_read,rw:body.num_times_reread})}
+    const id=x.id||x.malId,sv=Object.assign({st,sc,tags:body.tags},isA?{ep:body.num_watched_episodes,rw:body.num_times_rewatched}:{ch:body.num_chapters_read,vol:body.num_volumes_read,rw:body.num_times_reread},{up:Math.floor(Date.now()/1000)});
+    try{await malSave(kind,id,body);
+      if(!isNew)Object.assign(x,sv);delete x.pend;
       closeM();render();toast('Saved to MyAnimeList. The site catches up in a couple of minutes.')}
-    catch(e){$('#m_err').textContent=e.message;$('#m_save').textContent=isNew?'Add to my list':'Save to MAL'}
+    catch(e){
+      if(!ED.token){$('#m_err').textContent=e.message;$('#m_save').textContent=isNew?'Add to my list':'Save to MAL';return}
+      // MAL did not take it: keep it on the site and let MAL catch up later
+      const info=isNew?{t:x.t,img:x.img||'',type:x.type||x.meta||'',y:x.y||'',n:tot||0,v:totV||0,g:x.g||[]}:null;
+      try{await malQueue({k:kind,id,b:body,s:sv,t:Date.now(),info});malApplyQ();closeM();render();toast('Saved on your site. MyAnimeList isn\'t answering, so it will catch up automatically.')}
+      catch(e2){$('#m_err').textContent='Could not save: '+e2.message;$('#m_save').textContent=isNew?'Add to my list':'Save to MAL'}}
   };
   const d=$('#m_del');if(d)d.onclick=async()=>{if(d.dataset.sure!=='1'){d.dataset.sure='1';d.textContent='Tap again to remove';return}
-    try{await malSave(kind,x.id,null,true);const L=isA?anime:manga;const i=L.indexOf(x);if(i>=0)L.splice(i,1);closeM();render();toast('Removed from MyAnimeList')}catch(e){$('#m_err').textContent=e.message}};
+    try{await malSave(kind,x.id,null,true);const L=isA?anime:manga;const i=L.indexOf(x);if(i>=0)L.splice(i,1);closeM();render();toast('Removed from MyAnimeList')}
+    catch(e){if(!ED.token){$('#m_err').textContent=e.message;return}try{await malQueue({k:kind,id:x.id,del:true,t:Date.now()});malApplyQ();closeM();render();toast('Removed on your site. MyAnimeList will catch up automatically.')}catch(e2){$('#m_err').textContent=e2.message}}};
 }
 
 function editLocalManga(x){
@@ -2109,6 +2145,7 @@ function openAnime(a){
   modal('anime','Anime',`${cover(a.t,a.img)}<div><h2>${esc(a.t)}</h2>${a.alt?`<div class="muted">${esc(a.alt)}</div>`:''}
   <div class="bigscore"><div><b>${a.sc||'–'}</b><small>Your score</small></div><div><b>${a.mal?a.mal.toFixed(2):'–'}</b><small>MAL score</small></div><div><b style="color:${AST[a.st][1]}">■</b><small>${AST[a.st][0]}</small></div></div>
   <div class="kv"><div>Type</div><div>${esc(a.type)}</div><div>Episodes</div><div>${a.st===2&&a.eps?a.eps:a.ep} watched of ${a.eps||'?'}</div><div>Rewatched</div><div>${a.rw} time${a.rw===1?'':'s'}${a.rwing?' · rewatching now':''}</div><div>Aired</div><div>${a.y||'–'}</div><div>Genres</div><div>${a.g.map(g=>`<span class="tag">${esc(g)}</span>`).join('')||'–'}</div>${a.up?`<div>Updated</div><div>${fdate(new Date(a.up*1000).toISOString())}</div>`:''}</div>
+  ${a.pend?'<div class="note" style="margin-top:10px">⏳ Your latest change is saved here and waiting for MyAnimeList to come back.</div>':''}
   <div id="m_x"></div>
   ${a.tags?`<div class="review" style="--c:var(--anime)">${esc(a.tags)}</div>`:''}
   <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?'<button class="btn pri" id="m_edit">Edit</button>':''}<a class="btn${ED.on?'':' pri'}" href="https://myanimelist.net/anime/${a.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
@@ -2959,6 +2996,12 @@ const lev=(a,b)=>{if(Math.abs(a.length-b.length)>2)return 9;const d=Array.from({
 const closeTo=(q,r)=>{const W=norm(q).split(' ').filter(w=>w.length>1);if(!W.length)return true;const T=norm([r.t,r.alt,r.a].filter(Boolean).join(' ')).split(' ');
   return W.every(w=>T.some(x=>x===w||x.startsWith(w)||(w.length>=4&&x.length>=4&&lev(w,x)<=(w.length>=7?2:1))))};
 const SRC={anime:'MyAnimeList',manga:'MyAnimeList',films:'TMDB',games:'IGDB',books:'Goodreads',characters:'MyAnimeList (through Jikan)',people:'MyAnimeList (through Jikan)',artists:'Spotify'};
+/* AniList: only a backup for search when MAL is down. Titles, covers, episodes and genres; never AniList's scores or favourites */
+async function anilistSearch(kind,q){
+  const Q=`query($s:String){Page(perPage:16){media(search:$s,type:${kind==='anime'?'ANIME':'MANGA'},isAdult:false){idMal title{romaji english} format episodes chapters volumes startDate{year} coverImage{large} genres description(asHtml:false)}}}`;
+  const j=await fetch('https://graphql.anilist.co',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({query:Q,variables:{s:q}})}).then(r=>r.json());
+  return (((j.data||{}).Page||{}).media||[]).filter(m=>m.idMal).map(m=>({malId:m.idMal,t:m.title.english||m.title.romaji,alt:m.title.english&&m.title.english!==m.title.romaji?m.title.romaji:'',y:(m.startDate||{}).year||'',
+    meta:[(m.format||'').replace('_',' '),m.episodes?m.episodes+' eps':'',m.chapters?m.chapters+' ch':'','details via AniList'].filter(Boolean).join(' · '),sum:(m.description||'').replace(/<[^>]+>/g,'').slice(0,600),img:(m.coverImage||{}).large||'',url:`https://myanimelist.net/${kind}/${m.idMal}`,g:m.genres||[],n:m.episodes||m.chapters||0,v:m.volumes||0,al:1}))}
 async function viaApi(kind,q){
   if(kind==='artists')return (await spSearch('artist',q)).map(a=>({spId:a.id,t:a.t,img:a.img,y:'',meta:'Artist',sum:''}));
   if((kind==='anime'||kind==='manga')&&SET.workerUrl){
@@ -2968,7 +3011,7 @@ async function viaApi(kind,q){
       try{const res=await fetch(`${SET.workerUrl}/search?type=${kind}&q=${encodeURIComponent(q)}${i?'&_='+i:''}`,{cache:'no-store'});const j=await res.json();if(res.ok&&j&&Array.isArray(j.data)){r=j;break}err=new Error((j&&(j.message||j.error))||('MAL said '+res.status))}catch(e){err=e}
       await new Promise(ok=>setTimeout(ok,[600,1200,2500][i]||0));
     }
-    if(!r)throw err||new Error('MAL search failed');
+    if(!r){const al=await anilistSearch(kind,q).catch(()=>null);if(al&&al.length)return al;throw err||new Error('MAL search failed')}
     return (r.data||[]).map(({node:n})=>({malId:n.id,t:(n.alternative_titles&&n.alternative_titles.en)||n.title,alt:(n.alternative_titles&&n.alternative_titles.en&&n.alternative_titles.en!==n.title)?n.title:'',y:(n.start_season&&n.start_season.year)||(n.start_date||'').slice(0,4),meta:[(n.media_type||'').toUpperCase().replace('_',' '),n.num_episodes?n.num_episodes+' eps':'',n.num_chapters?n.num_chapters+' ch':'',n.mean?'MAL '+n.mean:''].filter(Boolean).join(' · '),sum:n.synopsis||'',img:n.main_picture&&(n.main_picture.large||n.main_picture.medium),url:`https://myanimelist.net/${kind}/${n.id}`,g:(n.genres||[]).map(g=>g.name)}));
   }
   if(kind==='manga'){
@@ -3073,7 +3116,7 @@ function openExt(kind,r){
   const canAdd=OWNER()&&((kind==='anime'||kind==='manga')?!!r.malId:kind==='films'?!!(r.tv||r.mv):(kind==='books'||kind==='games'));
   setTimeout(()=>{const b=$('#x_add');if(!b)return;b.onclick=()=>{
     if(!ED.on){toast(ED.token?'Turn editing on first (pencil button at the top).':'Set up editing first (pencil button at the top).',true);editSetup();return}
-    if(kind==='anime'||kind==='manga')return editMal(kind,{malId:r.malId,t:r.t,eps:0,chs:0});
+    if(kind==='anime'||kind==='manga')return editMal(kind,{malId:r.malId,t:r.t,img:r.img||'',type:(r.meta||'').split(' · ')[0],y:r.y||'',g:r.g||[],eps:kind==='anime'?(r.n||0):0,chs:kind==='manga'?(r.n||0):0,vols:r.v||0});
     if(kind==='films'&&r.tv)return editSeries({id:r.tv,t:r.t,y:r.y,img:r.img||'',st:'l'});
     if(kind==='films')return editFilmLocal({__new:1,t:r.t,y:+r.y||0,tmdb:r.mv,img:r.img||'',s:'w'});
     const y=String(r.y||'');
@@ -3091,6 +3134,7 @@ function openExt(kind,r){
 $('#foot').innerHTML=`<p style="margin:0 0 6px"><b>Saturn Collections</b> is Rajeel Javed's (SatsugaiDeAtsu) personal collection of anime, manga, films, series, games, books and original stories.</p>Saturn Collections · data from MyAnimeList, Letterboxd, Goodreads, Grouvee, Medium, TMDB, HowLongToBeat and Wikipedia · last refreshed ${fdate(D.generated)}${OWNER()&&bad.length?`<div style="margin-top:6px;color:var(--s4)">Last update had trouble with: ${bad.map(([k,v])=>`<b>${esc(k)}</b> <span class="muted">(${esc(String(v).slice(0,90))})</span>`).join(' · ')}. The previous data is still shown.</div>`:''}${OWNER()&&(D.repoMB||0)>500?`<div style="margin-top:6px;color:var(--s3)">Storage is at ${D.repoMB} MB. Time for the picture clean-up we talked about.</div>`:''}`;}
 syncEditBtn();
 malFinish();
+if(ED.on&&(D.malQ||[]).length)setTimeout(()=>malFlush(false),3000);
 go();
 })();
 </script>
