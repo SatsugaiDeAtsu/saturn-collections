@@ -1,0 +1,7 @@
+name: probe
+on: workflow_dispatch
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - run: curl -s https://medium.com/feed/@rajeeljaved | python3 -c "import sys,re;t=sys.stdin.read();print(re.findall(r'<item><title><!\[CDATA\[(.*?)\]\]></title><link>(.*?)</link>',t)[:3]);print(re.findall(r'<pubDate>(.*?)</pubDate>',t)[:3])"
