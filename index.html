@@ -529,6 +529,7 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .mscroll{max-height:290px;overflow-y:auto;border:1px solid var(--line);margin-top:6px}.mscroll .mrow{grid-template-columns:24px 40px 1fr 46px auto}.mscroll .mrow .al{display:none}.mscroll .mrow img{width:40px;height:40px}
 .mplays{margin-left:8px;font-family:"JetBrains Mono";font-size:10.5px;color:var(--music);white-space:nowrap}
 @media(max-width:560px){.mrow .spt{display:none}.mrow{gap:6px;padding:6px}.mrow .du{display:none}.mcompact .mrow,.mscroll .mrow{grid-template-columns:20px 40px minmax(0,1fr) auto}.mplays{display:block;margin-left:0}.mseg{flex-wrap:wrap}}
+.mrow .no{white-space:nowrap}
 /* game screenshots */
 .gshots{display:flex;gap:8px;overflow-x:auto;margin:12px 0 4px;padding-bottom:6px;scroll-snap-type:x mandatory}.gshots a{flex:0 0 auto;scroll-snap-align:start}.gshots img{height:120px;width:auto;display:block;border:1px solid var(--line)}
 #editbtn.on{background:var(--accent);border-color:var(--accent)}
@@ -1563,12 +1564,12 @@ function rHof(){
     G('g-wai','Waifus','A blog of its own: the goddess, the waifus, the battalion and more.','heart','#d24a7a',blogUrl(804810),
       wai.map(([t,d,it],i)=>sec('s-wai-'+i,t,d,grid(it.map(c=>hItem(c)).join('')))));
   }else if(hofSeg==='music'){
-    const segb=(k)=>`<div class="mseg">${[['short_term','Last 4 weeks'],['medium_term','Last 6 months'],['long_term',"Spotify's ranking"],...(MH&&MH.tot?[['hist',k==='s'?'Most played':'Most listened']]:[])].map(([r,l])=>`<button data-hms="${k}:${r}" class="${hmS[k]===r?'on':''}">${l}</button>`).join('')}</div>`;
+    const segb=(k)=>`<div class="mseg">${[['short_term','Last 4 weeks'],['medium_term','Last 6 months'],['long_term',"Spotify's ranking"],...(MH&&MH.tot?[['hist','All Time']]:[])].map(([r,l])=>`<button data-hms="${k}:${r}" class="${hmS[k]===r?'on':''}">${l}</button>`).join('')}</div>`;
     const note=k=>(MF.notes||{})[k]||'';
     const fs=MFS.filter(([k])=>ED.on||(MF[k]||[]).length);
     if(fs.length)G('g-mfav','Music favourites','The songs and singers I keep coming back to, picked by hand.','heart','#1f9d63','',fs.map(([k,l,kind])=>sec('s-mf-'+k,l,note(k),mfCards(k,kind))));
-    if(MU&&MU.top){G('g-mtop','Top artists',"Spotify's ranking mixes how much and how recently I listen. Most listened is the real total of hours since 2021.",'star','#1f9d63','',[sec('s-mta','Top artists','',segb('a')+(hmS.a==='hist'?`<div class="martists">${Object.entries(MH.artists).sort((a,b)=>b[1][0]-a[1][0]).slice(0,50).map(([n,v],i)=>{const id=Object.keys(MU.artists).find(k=>MU.artists[k].n===n);return id?mArtTile(id,i).replace('</button>',`<div class="rk">${mhH(v[0])}</div></button>`):`<div class="mart"><div class="pic"><b>${esc(initials(n))}</b></div><div class="nm">${esc(n)}</div><div class="rk">#${i+1} · ${mhH(v[0])}</div></div>`}).join('')}</div>`:`<div class="martists">${(MU.top.artists[hmS.a]||[]).map(mArtTile).join('')}</div>`))]);
-      G('g-mts','Top songs',"Spotify's ranking mixes how much and how recently I play. Most played counts real plays since 2021.",'music','#1f9d63','',[sec('s-mts','Top songs','',segb('s')+`<div class="box mcompact">${(hmS.s==='hist'?MH.songs.slice(0,50).map(x=>{mhKnow(x.id);return x.id}):(MU.top.tracks[hmS.s]||[])).map((id,i)=>mRow(id,i)).join('')}</div>`)])}
+    if(MU&&MU.top){G('g-mtop','Top artists',"Spotify's ranking mixes how much and how recently I listen. All Time is the real total of hours since 2021.",'star','#1f9d63','',[sec('s-mta','Top artists','',segb('a')+(hmS.a==='hist'?`<div class="martists">${Object.entries(MH.artists).sort((a,b)=>b[1][0]-a[1][0]).slice(0,50).map(([n,v],i)=>{const id=Object.keys(MU.artists).find(k=>MU.artists[k].n===n);return id?mArtTile(id,i).replace('</button>',`<div class="rk">${mhH(v[0])}</div></button>`):`<div class="mart"><div class="pic"><b>${esc(initials(n))}</b></div><div class="nm">${esc(n)}</div><div class="rk">#${i+1} · ${mhH(v[0])}</div></div>`}).join('')}</div>`:`<div class="martists">${(MU.top.artists[hmS.a]||[]).map(mArtTile).join('')}</div>`))]);
+      G('g-mts','Top songs',"Spotify's ranking mixes how much and how recently I play. All Time counts real plays since 2021.",'music','#1f9d63','',[sec('s-mts','Top songs','',segb('s')+`<div class="box mcompact">${(hmS.s==='hist'?MH.songs.slice(0,50).map(x=>{mhKnow(x.id);return x.id}):(MU.top.tracks[hmS.s]||[])).map((id,i)=>mRow(id,i)).join('')}</div>`)])}
   }else if(hofSeg==='couples'){
     G('g-cou','Couples','Favourite anime couples, and two special cases.','couple','#e8733a',blogUrl(804809),[
       sec('s-cou','Favourite anime couples','The name says it all.',coupleCards(H.couples)),
@@ -2112,8 +2113,27 @@ function openAnime(a){
   ${a.tags?`<div class="review" style="--c:var(--anime)">${esc(a.tags)}</div>`:''}
   <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?'<button class="btn pri" id="m_edit">Edit</button>':''}<a class="btn${ED.on?'':' pri'}" href="https://myanimelist.net/anime/${a.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
   const me=$('#m_edit');if(me)me.onclick=()=>editMal('anime',a);
-  malExtra('a',a);
+  malExtra('a',a);animeSongs(a);
 }
+/* openings and endings (from MAL), matched to my Spotify music */
+function themeParse(s){const m=String(s).match(/^(?:#?\d+:\s*)?"(.+?)"\s*(?:by\s+(.+?))?\s*(\((?:eps?|episodes?)[^)]*\))?\s*$/i);
+  if(!m)return {t:s,ar:'',eps:''};let t=m[1],ar=(m[2]||'').replace(/\s*\((?:eps?|episodes?)[^)]*\)\s*$/i,'').trim();
+  const jp=t.match(/^(.*?)\s*\(([^)]+)\)$/);return {t:jp?jp[1]:t,alt:jp?jp[2]:'',ar,eps:(m[3]||'').replace(/[()]/g,'')}}
+async function animeSongs(a){
+  await new Promise(ok=>setTimeout(ok,50));
+  if(!_MD)_MD=await loadJ('data/mal_details.json')||{a:{},m:{}};const d=(_MD.a||{})[a.id]||{};
+  const op=d.op||[],ed=d.ed||[];if(!op.length&&!ed.length)return;
+  await Promise.all([muLoad(),mhLoad()]);
+  const box=$('#m_x');if(!box)return;
+  const idx={};if(MU&&MU.tracks)for(const [id,t] of Object.entries(MU.tracks)){const k=mBase(t.n);if(k&&!idx[k])idx[k]=id}
+  if(MH&&MH.tracks)for(const [id,t] of Object.entries(MH.tracks)){const k=mBase(t[4]);if(k&&!idx[k])idx[k]=id}
+  const row=(s,i,kind)=>{const p=themeParse(s);const id=idx[mBase(p.t)]||(p.alt&&idx[mBase(p.alt)]);if(id)mhKnow(id);const q=encodeURIComponent(p.t+' '+p.ar.replace(/\s*\(.*?\)/g,''));
+    const h=id?mhT(id):null;
+    return `<div class="mrow"><span class="no">${kind}${i+1}</span><span></span><div style="min-width:0"><div class="tt">${esc(p.t)}${p.alt?` <span class="muted">(${esc(p.alt)})</span>`:''}</div><div class="ar">${esc(p.ar)}${p.eps?` · <span class="muted">${esc(p.eps)}</span>`:''}${id&&h&&h[1]?`<span class="mplays">${fmt(h[1])} plays · ${mhH(h[0])}</span>`:''}</div></div><div class="al"></div><div class="du"></div>
+      <div class="act2">${id?`<button class="mbtn" data-mplay="track:${id}" aria-label="Play">▶</button><a class="mbtn sp" href="${SPU('track',id)}" target="_blank" rel="noopener"><span class="spt">Spotify </span>↗</a>`:`<a class="mbtn" href="https://open.spotify.com/search/${q}" target="_blank" rel="noopener">Find on Spotify ↗</a>`}</div></div>`};
+  const el=document.createElement('div');el.className='sect';el.style.cssText='--c:var(--music);margin-top:14px';
+  el.innerHTML=`<h2><i></i>Openings &amp; endings</h2><div class="mscroll mcompact" style="max-height:330px">${op.map((s,i)=>row(s,i,'OP')).join('')}${ed.map((s,i)=>row(s,i,'ED')).join('')}</div>`;
+  box.after(el);mBind(el)}
 
 /* ---------- films ---------- */
 function rFilms(){
@@ -2406,8 +2426,8 @@ async function ovMusic(){const box=$('#ov_music');if(!box)return;const MO=MU||aw
   if(!ovRecent&&SET.workerUrl){try{let j=null;for(let k=0;k<2&&!j;k++){j=await fetch(SET.workerUrl+'/spotify/api/me/player/recently-played?limit=50').then(r=>r.ok?r.json():null);if(!j)await new Promise(ok=>setTimeout(ok,1500))}const EXC=new Set(SET.music_exclude||[]);
     if(j&&j.items){ovRecent=j.items.filter(it=>it.track&&!(it.track.artists||[]).some(a=>EXC.has(a.name))).map(it=>{const t=it.track;MKN.t[t.id]=MKN.t[t.id]||{n:t.name,ar:(t.artists||[]).map(a=>[a.id,a.name]),al:(t.album||{}).name||'',img:((t.album||{}).images||[])[0]?.url||'',ms:t.duration_ms||0};return {t:it.played_at,id:t.id}})}}catch(e){}}
   const rec=ovRecent||MO.log||MO.recent||[];
-  const R=[['short_term','4 weeks'],['medium_term','6 months'],['long_term',"Spotify's"],...(MO.hist?[['hist','Most played']]:[])];
-  const seg=(k)=>`<div class="mseg sm">${R.map(([r,l])=>`<button data-ovm="${k}:${r}" class="${ovMS[k]===r?'on':''}">${k==='a'&&r==='hist'?'Most listened':l}</button>`).join('')}</div>`;
+  const R=[['short_term','4 weeks'],['medium_term','6 months'],['long_term',"Spotify's"],...(MO.hist?[['hist','All Time']]:[])];
+  const seg=(k)=>`<div class="mseg sm">${R.map(([r,l])=>`<button data-ovm="${k}:${r}" class="${ovMS[k]===r?'on':''}">${l}</button>`).join('')}</div>`;
   const AL=ovMS.a==='hist'?MO.hist.a:(MO.top.artists[ovMS.a]||[]),SL=ovMS.s==='hist'?MO.hist.s:((MO.top.tracks||{})[ovMS.s]||[]);
   box.innerHTML=`<section class="ovmus"><div class="box"><div class="box-h"><h2>Top artists</h2>${seg('a')}</div><div class="martists">${AL.slice(0,10).map(mArtTile).join('')}</div></div>
   <div class="box"><div class="box-h"><h2>Top songs</h2>${seg('s')}</div><div class="mcompact">${SL.slice(0,10).map((id,i)=>mRow(id,i)).join('')}</div></div></section>

@@ -918,7 +918,7 @@ REL_KEEP = {'sequel', 'prequel', 'side_story', 'parent_story', 'alternative_vers
 
 def mal_detail(kind, mid, cid):
     f = ('id,title,alternative_titles,main_picture,media_type,start_date,status,genres,related_anime,related_manga,synopsis,mean,'
-         + ('num_episodes,average_episode_duration,broadcast,studios,start_season,source' if kind == 'anime' else 'num_chapters,num_volumes,authors{first_name,last_name}'))
+         + ('num_episodes,average_episode_duration,broadcast,studios,start_season,source,opening_themes,ending_themes' if kind == 'anime' else 'num_chapters,num_volumes,authors{first_name,last_name}'))
     req = urllib.request.Request(f'https://api.myanimelist.net/v2/{kind}/{mid}?fields={f}', headers={'User-Agent': UA, 'X-MAL-CLIENT-ID': cid})
     with urllib.request.urlopen(req, timeout=30) as r:
         d = json.loads(r.read().decode('utf-8'))
@@ -947,6 +947,8 @@ def mal_detail(kind, mid, cid):
         if bc.get('day_of_the_week'):
             o['bc'] = [bc['day_of_the_week'], bc.get('start_time') or '']
         o['stu'] = [x['name'] for x in d.get('studios') or []][:3]
+        o['op'] = [x.get('text', '') for x in d.get('opening_themes') or []][:12]
+        o['ed'] = [x.get('text', '') for x in d.get('ending_themes') or []][:12]
     else:
         o['au'] = [' '.join(x for x in [(a.get('node') or {}).get('first_name'), (a.get('node') or {}).get('last_name')] if x) for a in d.get('authors') or []][:3]
         o['n'] = d.get('num_chapters') or 0
@@ -2372,8 +2374,37 @@ def update_music_genres():
     log(f'music genres: +{got}, {sum(1 for a in mu["artists"].values() if a.get("lf"))} artists tagged')
 
 
+def update_anime_themes():
+    """Opening and ending songs for the anime in your list (MAL), for ones fetched before songs were kept."""
+    cid = settings.get('malClientId')
+    path = os.path.join(DATA, 'mal_details.json')
+    det = load_json(path, {'a': {}, 'm': {}})
+    got = tried = 0
+    for a in site.get('anime', []):
+        d = det['a'].get(str(a[0]))
+        if d is None or 'op' in d or tried >= 600:
+            continue
+        tried += 1
+        try:
+            req = urllib.request.Request(f'https://api.myanimelist.net/v2/anime/{a[0]}?fields=opening_themes,ending_themes', headers={'User-Agent': UA, 'X-MAL-CLIENT-ID': cid})
+            with urllib.request.urlopen(req, timeout=30) as r:
+                j = json.loads(r.read().decode('utf-8'))
+        except Exception as e:
+            log('themes failed', a[0], e)
+            if tried - got > 20:
+                break  # MAL is having trouble; try again next time
+            continue
+        d['op'] = [x.get('text', '') for x in j.get('opening_themes') or []][:12]
+        d['ed'] = [x.get('text', '') for x in j.get('ending_themes') or []][:12]
+        got += 1
+        time.sleep(0.25)
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(det, f, ensure_ascii=False, separators=(',', ':'))
+    log(f'anime songs: +{got}')
+
+
 for name, fn in [('anime', update_anime), ('manga', update_manga), ('letterboxd', update_letterboxd), ('letterboxd films', update_letterboxd_watched),
-                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('music', update_music), ('music pictures', update_music_pics), ('music genres', update_music_genres), ('book copies', mirror_book_covers), ('grouvee', update_grouvee), ('film ids', update_film_ids), ('film details', update_film_details), ('series', update_series), ('mal details', update_mal_details), ('summaries', update_summaries), ('book details', update_book_details), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('rawg', update_rawg), ('characters', update_char_info), ('people', update_people_info), ('extra manga', update_manga_extra), ('cover mirror', update_cover_mirror), ('overview files', build_overview_files)]:
+                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('anime songs', update_anime_themes), ('music', update_music), ('music pictures', update_music_pics), ('music genres', update_music_genres), ('book copies', mirror_book_covers), ('grouvee', update_grouvee), ('film ids', update_film_ids), ('film details', update_film_details), ('series', update_series), ('mal details', update_mal_details), ('summaries', update_summaries), ('book details', update_book_details), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('rawg', update_rawg), ('characters', update_char_info), ('people', update_people_info), ('extra manga', update_manga_extra), ('cover mirror', update_cover_mirror), ('overview files', build_overview_files)]:
     try:
         fn()
         status[name] = 'ok'
