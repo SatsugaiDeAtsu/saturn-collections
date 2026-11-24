@@ -1,9 +1,0 @@
-name: probe
-on: workflow_dispatch
-jobs:
-  p:
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          for i in 1 2 3; do curl -s -o /tmp/o -w "worker search %{http_code} " -H "Origin: https://satsugaideatsu.github.io" "https://saturn-mal.vananimestia.workers.dev/search?type=anime&q=naruto$i"; head -c 120 /tmp/o; echo; done
-          curl -s -o /tmp/o -w "worker token %{http_code} " -X POST -H "Origin: https://satsugaideatsu.github.io" -H "Content-Type: application/json" https://saturn-mal.vananimestia.workers.dev/token -d '{"refresh_token":"x"}'; head -c 200 /tmp/o; echo
