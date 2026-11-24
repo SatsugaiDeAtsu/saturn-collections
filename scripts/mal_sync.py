@@ -114,8 +114,43 @@ def main():
             break
         time.sleep(0.5)
     if done:
+        # put the synced values into the site's own copy now, so nothing jumps back while MAL's public list catches up
+        sp = os.path.join(DATA, 'site.json')
+        site = load(sp, {})
+        for it in done:
+            L = site.get(it['k'], [])
+            row = next((r for r in L if r[0] == it['id']), None)
+            if it.get('del'):
+                if row:
+                    L.remove(row)
+                continue
+            sv = it.get('s') or {}
+            if not row and it.get('info'):
+                inf = it['info']
+                row = ([it['id'], inf.get('t', ''), '', 6, 0, 0, inf.get('n', 0), inf.get('type', ''), inf.get('img', ''), str(inf.get('y', '')), [], 0, 0, 0, 0]
+                       if it['k'] == 'anime' else
+                       [it['id'], inf.get('t', ''), '', 6, 0, 0, inf.get('n', 0), 0, inf.get('v', 0), inf.get('type', ''), inf.get('img', ''), str(inf.get('y', '')), [], 0, 0, 0, 0])
+                L.append(row)
+            if not row:
+                continue
+            row[3], row[4] = sv.get('st', row[3]), sv.get('sc', row[4])
+            row[5] = sv.get('ep' if it['k'] == 'anime' else 'ch', row[5])
+            up = 12 if it['k'] == 'anime' else 16
+            if len(row) > up:
+                row[up] = int(it['t'] / 1000)
+            if it['k'] == 'anime' and len(row) > 13:
+                row[13] = sv.get('rw', row[13])
+            if it['k'] == 'manga':
+                row[7] = sv.get('vol', row[7])
+            if sv.get('tags') is not None:
+                site.setdefault('animeTags' if it['k'] == 'anime' else 'mangaTags', {})[str(it['id'])] = sv['tags']
+        if site:
+            json.dump(site, open(sp, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
         left = [x for x in q if not any(x['k'] == d['k'] and x['id'] == d['id'] and x['t'] == d['t'] for d in done)]
-        json.dump({'q': left}, open(QF, 'w', encoding='utf-8'), ensure_ascii=False)
+        # keep what was just synced for a few days, so the nightly update can't undo it if MAL's public list is slow to show it
+        now = time.time() * 1000
+        recent = [x for x in load(QF, {}).get('recent', []) if now - x.get('done', 0) < 3 * 86400000] + [dict(d, done=now) for d in done]
+        json.dump({'q': left, 'recent': recent[-60:]}, open(QF, 'w', encoding='utf-8'), ensure_ascii=False)
     print(f'{len(done)} synced, {len(q) - len(done)} still waiting')
     open(os.environ.get('GITHUB_OUTPUT', os.devnull), 'a').write(f'synced={len(done)}\n')
 

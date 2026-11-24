@@ -2439,7 +2439,8 @@ def anilist_detail(kind, mid):
 
 def apply_mal_queue():
     """Edits made on the site while MAL was down: keep them on top of what MAL says until MAL has them (newest change wins)."""
-    q = load_json(os.path.join(DATA, 'mal_queue.json'), {}).get('q', [])
+    Q = load_json(os.path.join(DATA, 'mal_queue.json'), {})
+    q = Q.get('q', []) + Q.get('recent', [])  # recent: just synced; kept on top until MAL's public list shows them
     if not q:
         return
     ST = {'watching': 1, 'reading': 1, 'completed': 2, 'on_hold': 3, 'dropped': 4, 'plan_to_watch': 6, 'plan_to_read': 6}
