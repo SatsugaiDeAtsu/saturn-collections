@@ -267,6 +267,7 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .rdtext p{margin:0 0 1.1em}
 .rdpaper .rdtext>p:first-child::first-letter{float:left;font-size:3.3em;line-height:.86;padding:.06em .1em 0 0;color:var(--story);font-weight:600}
 .rdpaper .rdtext.poem>p:first-child::first-letter{float:none;font-size:inherit;padding:0;color:inherit}
+.rdpaper .rdtext>p.tmark:first-child::first-letter{float:none;font-size:inherit;padding:0;color:inherit;font-weight:inherit}.rdpaper .rdtext>p.tmark{color:var(--story);font-size:.92em;letter-spacing:.02em;margin:1.6em 0 1em}.rdpaper .rdtext>p.tmark:first-child{margin-top:0}
 .rdtext.poem{text-align:center}
 .rdtext hr{border:0;height:auto;text-align:center;margin:2em 0;overflow:visible}
 .rdtext hr::after{content:'⁂';color:var(--ink3);font-size:1.1em}
@@ -2541,7 +2542,9 @@ const WSEC=[['stories','Stories'],['wip','Works in progress'],['articles','Artic
 const WST={complete:'Complete',ongoing:'Ongoing',hiatus:'On hiatus'};
 const PEN=()=>SET.penName||'Rajeel Javed';
 let works=[];
-function rebuildWorks(){works=(D.works||[]).slice()}
+function rebuildWorks(){works=(D.works||[]).slice();
+  // a story posted on Medium is linked to its page here by title, so it isn't listed twice
+  works.forEach(w=>{if(!w.medium){const s=(D.stories||[]).find(s=>norm(s.title)===norm(w.t));if(s)w.medium=s.link}})}
 rebuildWorks();
 const titleCase=t=>/[a-z]/.test(t)?t:t.toLowerCase().replace(/(^|\s)\S/g,c=>c.toUpperCase());
 const mediumOnly=()=>stories.filter(s=>!works.some(w=>w.medium&&w.medium.split('?')[0]===s.link.split('?')[0])).map(s=>({id:'m:'+s.link,t:titleCase(s.title),sec:(s.tags||[]).includes('articles')?'articles':'stories',st:'complete',date:s.date,tags:s.tags||[],blurb:s.blurb,words:s.words,medium:s.link,mo:1,chn:['']}));
