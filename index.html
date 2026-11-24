@@ -2001,7 +2001,7 @@ async function malFinish(){
     if(!r.ok||!j.access_token)throw new Error(j.message||j.error||'MAL said no');
     if(store.get('mal_sync_setup',0)){store.set('mal_sync_setup',0);await malSyncSave(j.refresh_token);return}
     MALA.t={...j,exp:Date.now()+(j.expires_in-60)*1000};toast('MyAnimeList connected')}
-  catch(e){toast('MAL sign-in failed: '+e.message,true)}
+  catch(e){toast('MAL sign-in failed: '+(/JSON|token/i.test(e.message)?'MAL had a hiccup. Please tap the button and Allow again.':e.message),true)}
 }
 async function malToken(){const a=MALA.t;if(!a)throw new Error('Connect MAL first (pencil button).');if(Date.now()<a.exp)return a.access_token;
   const r=await fetch(SET.workerUrl+'/token',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({refresh_token:a.refresh_token})});const j=await r.json();

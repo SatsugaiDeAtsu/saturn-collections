@@ -1,9 +1,0 @@
-name: probe
-on: workflow_dispatch
-jobs:
-  p:
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          curl -s -o /tmp/o -w "token %{http_code}\n" -X POST https://myanimelist.net/v1/oauth2/token -d "grant_type=authorization_code&code=x&client_id=x"; head -c 300 /tmp/o; echo
-          curl -s -o /tmp/o -w "worker token %{http_code}\n" -X POST -H "Origin: https://satsugaideatsu.github.io" -H "Content-Type: application/json" https://saturn-mal.vananimestia.workers.dev/token -d '{"code":"x","code_verifier":"y","redirect_uri":"https://satsugaideatsu.github.io/saturn-collections/"}'; head -c 300 /tmp/o; echo

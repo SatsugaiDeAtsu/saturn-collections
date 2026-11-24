@@ -10,6 +10,25 @@
 //   LASTFM_API_KEY         (secret)  from last.fm/api/account/create
 const ORIGIN = 'https://satsugaideatsu.github.io';  // only your site may use this helper
 const MAL = 'https://api.myanimelist.net/v2';
+
+// MyAnimeList sometimes fails for a moment (Cloudflare error 5xx, or an error page instead of data): try again a few times
+async function malFetch(url, opts) {
+  let last = null;
+  for (let i = 0; i < 4; i++) {
+    try {
+      const r = await fetch(url, opts && opts.body ? { ...opts, body: opts.body.toString() } : opts);
+      const text = await r.text();
+      let data = null;
+      try { data = text ? JSON.parse(text) : {}; } catch (e) { data = null; }
+      if (data !== null && r.status < 500) return { status: r.status, data };
+      last = { status: r.status >= 500 ? r.status : 502, data: { error: 'MAL is having trouble (error ' + r.status + '). Try again in a few minutes.' } };
+    } catch (e) {
+      last = { status: 502, data: { error: 'Could not reach MAL. Try again in a few minutes.' } };
+    }
+    await new Promise(ok => setTimeout(ok, 700 * (i + 1)));
+  }
+  return last;
+}
 let igdbToken = null, igdbExp = 0;
 async function igdb(env, body) {
   if (!igdbToken || Date.now() > igdbExp) {
@@ -57,8 +76,8 @@ export default {
         const fields = type === 'anime'
           ? 'alternative_titles,start_season,num_episodes,mean,media_type,synopsis,genres'
           : 'alternative_titles,start_date,num_chapters,mean,media_type,synopsis,genres';
-        const r = await fetch(`${MAL}/${type}?q=${encodeURIComponent(q)}&limit=16&nsfw=false&fields=${fields}`, { headers: { 'X-MAL-CLIENT-ID': env.MAL_CLIENT_ID } });
-        return json(await r.json(), r.status);
+        const r = await malFetch(`${MAL}/${type}?q=${encodeURIComponent(q)}&limit=16&nsfw=false&fields=${fields}`, { headers: { 'X-MAL-CLIENT-ID': env.MAL_CLIENT_ID } });
+        return json(r.data, r.status);
       }
       // game search (IGDB)
       if (url.pathname === '/games') {
@@ -89,8 +108,8 @@ export default {
         const body = new URLSearchParams({ client_id: env.MAL_CLIENT_ID, client_secret: env.MAL_CLIENT_SECRET });
         if (b.refresh_token) { body.set('grant_type', 'refresh_token'); body.set('refresh_token', b.refresh_token); }
         else { body.set('grant_type', 'authorization_code'); body.set('code', b.code); body.set('code_verifier', b.code_verifier); body.set('redirect_uri', b.redirect_uri); }
-        const r = await fetch('https://myanimelist.net/v1/oauth2/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
-        return json(await r.json(), r.status);
+        const r = await malFetch('https://myanimelist.net/v1/oauth2/token', { method: 'POST', headers: { 'Content-Type': 'application/x-www-form-urlencoded' }, body });
+        return json(r.data, r.status);
       }
       // ---- Spotify: one-time sign-in, then read-only data ----
       if (url.pathname === '/spotify/login') {
@@ -139,12 +158,12 @@ export default {
         const target = `${MAL}/${m[1]}/${m[2]}/my_list_status`;
         if (req.method === 'PATCH') {
           const b = await req.json();
-          const r = await fetch(target, { method: 'PATCH', headers: { Authorization: auth, 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(b) });
-          return json(await r.json().catch(() => ({})), r.status);
+          const r = await malFetch(target, { method: 'PATCH', headers: { Authorization: auth, 'Content-Type': 'application/x-www-form-urlencoded' }, body: new URLSearchParams(b) });
+          return json(r.data, r.status);
         }
         if (req.method === 'DELETE') {
-          const r = await fetch(target, { method: 'DELETE', headers: { Authorization: auth } });
-          return json({ ok: r.ok }, r.status);
+          const r = await malFetch(target, { method: 'DELETE', headers: { Authorization: auth } });
+          return json({ ok: r.status < 300, ...r.data }, r.status);
         }
       }
       return json({ ok: true, service: 'saturn-mal' });
