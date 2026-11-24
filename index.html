@@ -530,6 +530,8 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .mplays{margin-left:8px;font-family:"JetBrains Mono";font-size:10.5px;color:var(--music);white-space:nowrap}
 @media(max-width:560px){.mrow .spt{display:none}.mrow{gap:6px;padding:6px}.mrow .du{display:none}.mcompact .mrow,.mscroll .mrow{grid-template-columns:20px 40px minmax(0,1fr) auto}.mplays{display:block;margin-left:0}.mseg{flex-wrap:wrap}}
 .mrow .no{white-space:nowrap}
+.mtab2{display:flex;gap:6px;margin:16px 0 4px;border-bottom:1px solid var(--line)}.mtab2 button{background:none;border:0;border-bottom:3px solid transparent;color:var(--ink2);padding:8px 14px;font:inherit;font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;cursor:pointer}
+.mtab2 button.on{color:var(--ink);border-bottom-color:var(--anime)}.mtab2 button[data-at="mus"].on{border-bottom-color:var(--music)}.mtab2 button:hover{color:var(--ink)}
 /* game screenshots */
 .gshots{display:flex;gap:8px;overflow-x:auto;margin:12px 0 4px;padding-bottom:6px;scroll-snap-type:x mandatory}.gshots a{flex:0 0 auto;scroll-snap-align:start}.gshots img{height:120px;width:auto;display:block;border:1px solid var(--line)}
 #editbtn.on{background:var(--accent);border-color:var(--accent)}
@@ -2146,11 +2148,13 @@ function openAnime(a){
   <div class="bigscore"><div><b>${a.sc||'–'}</b><small>Your score</small></div><div><b>${a.mal?a.mal.toFixed(2):'–'}</b><small>MAL score</small></div><div><b style="color:${AST[a.st][1]}">■</b><small>${AST[a.st][0]}</small></div></div>
   <div class="kv"><div>Type</div><div>${esc(a.type)}</div><div>Episodes</div><div>${a.st===2&&a.eps?a.eps:a.ep} watched of ${a.eps||'?'}</div><div>Rewatched</div><div>${a.rw} time${a.rw===1?'':'s'}${a.rwing?' · rewatching now':''}</div><div>Aired</div><div>${a.y||'–'}</div><div>Genres</div><div>${a.g.map(g=>`<span class="tag">${esc(g)}</span>`).join('')||'–'}</div>${a.up?`<div>Updated</div><div>${fdate(new Date(a.up*1000).toISOString())}</div>`:''}</div>
   ${a.pend?'<div class="note" style="margin-top:10px">⏳ Your latest change is saved here and waiting for MyAnimeList to come back.</div>':''}
-  <div id="m_x"></div>
+  <div class="mtab2" id="m_tabs"><button data-at="rel" class="on">Related</button><button data-at="mus" hidden>Music</button></div>
+  <div id="m_x"></div><div id="m_mus" hidden></div>
   ${a.tags?`<div class="review" style="--c:var(--anime)">${esc(a.tags)}</div>`:''}
   <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?'<button class="btn pri" id="m_edit">Edit</button>':''}<a class="btn${ED.on?'':' pri'}" href="https://myanimelist.net/anime/${a.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
   const me=$('#m_edit');if(me)me.onclick=()=>editMal('anime',a);
   malExtra('a',a);animeSongs(a);
+  document.querySelectorAll('#m_tabs [data-at]').forEach(b=>b.onclick=()=>{const w=b.dataset.at;document.querySelectorAll('#m_tabs [data-at]').forEach(x=>x.classList.toggle('on',x===b));$('#m_x').hidden=w!=='rel';$('#m_mus').hidden=w!=='mus'});
 }
 /* openings and endings (from MAL), matched to my Spotify music */
 function themeParse(s){const m=String(s).match(/^(?:#?\d+:\s*)?"(.+?)"\s*(?:by\s+(.+?))?\s*(\((?:eps?|episodes?)[^)]*\))?\s*$/i);
@@ -2161,16 +2165,15 @@ async function animeSongs(a){
   if(!_MD)_MD=await loadJ('data/mal_details.json')||{a:{},m:{}};const d=(_MD.a||{})[a.id]||{};
   const op=d.op||[],ed=d.ed||[];if(!op.length&&!ed.length)return;
   await Promise.all([muLoad(),mhLoad()]);
-  const box=$('#m_x');if(!box)return;
+  const box=$('#m_mus');if(!box)return;
   const idx={};if(MU&&MU.tracks)for(const [id,t] of Object.entries(MU.tracks)){const k=mBase(t.n);if(k&&!idx[k])idx[k]=id}
   if(MH&&MH.tracks)for(const [id,t] of Object.entries(MH.tracks)){const k=mBase(t[4]);if(k&&!idx[k])idx[k]=id}
   const row=(s,i,kind)=>{const p=themeParse(s);const id=idx[mBase(p.t)]||(p.alt&&idx[mBase(p.alt)]);if(id)mhKnow(id);const q=encodeURIComponent(p.t+' '+p.ar.replace(/\s*\(.*?\)/g,''));
     const h=id?mhT(id):null;
     return `<div class="mrow"><span class="no">${kind}${i+1}</span><span></span><div style="min-width:0"><div class="tt">${esc(p.t)}${p.alt?` <span class="muted">(${esc(p.alt)})</span>`:''}</div><div class="ar">${esc(p.ar)}${p.eps?` · <span class="muted">${esc(p.eps)}</span>`:''}${id&&h&&h[1]?`<span class="mplays">${fmt(h[1])} plays · ${mhH(h[0])}</span>`:''}</div></div><div class="al"></div><div class="du"></div>
       <div class="act2">${id?`<button class="mbtn" data-mplay="track:${id}" aria-label="Play">▶</button><a class="mbtn sp" href="${SPU('track',id)}" target="_blank" rel="noopener"><span class="spt">Spotify </span>↗</a>`:`<a class="mbtn" href="https://open.spotify.com/search/${q}" target="_blank" rel="noopener">Find on Spotify ↗</a>`}</div></div>`};
-  const el=document.createElement('div');el.className='sect';el.style.cssText='--c:var(--music);margin-top:14px';
-  el.innerHTML=`<h2><i></i>Openings &amp; endings</h2><div class="mscroll mcompact" style="max-height:330px">${op.map((s,i)=>row(s,i,'OP')).join('')}${ed.map((s,i)=>row(s,i,'ED')).join('')}</div>`;
-  box.after(el);mBind(el)}
+  box.innerHTML=`<div class="sect" style="--c:var(--music);margin-top:6px"><h2><i></i>Openings &amp; endings</h2><div class="mscroll mcompact" style="max-height:420px">${op.map((s,i)=>row(s,i,'OP')).join('')}${ed.map((s,i)=>row(s,i,'ED')).join('')}</div></div>`;
+  const tb=document.querySelector('#m_tabs [data-at="mus"]');if(tb){tb.hidden=false;tb.textContent=`Music · ${op.length+ed.length}`}mBind(box)}
 
 /* ---------- films ---------- */
 function rFilms(){
