@@ -2057,7 +2057,7 @@ function editMal(kind,x,fromSearch){
       if(!ED.token){$('#m_err').textContent=e.message;$('#m_save').textContent=isNew?'Add to my list':'Save to MAL';return}
       // MAL did not take it: keep it on the site and let MAL catch up later
       const info=isNew?{t:x.t,img:x.img||'',type:x.type||x.meta||'',y:x.y||'',n:tot||0,v:totV||0,g:x.g||[]}:null;
-      try{await malQueue({k:kind,id,b:body,s:sv,t:Date.now(),info});malApplyQ();closeM();render();toast('Saved on your site. MyAnimeList isn\'t answering, so it will catch up automatically.')}
+      try{await malQueue({k:kind,id,b:body,s:sv,t:Date.now(),info});malApplyQ();closeM();render();toast(/Connect|expired|sign/i.test(e.message)?'Saved on your site. Your MAL sign-in on this device has expired: open the pencil and tap Connect MyAnimeList, then it will sync.':'Saved on your site. MyAnimeList isn\'t answering, so it will catch up automatically.',/Connect|expired|sign/i.test(e.message))}
       catch(e2){$('#m_err').textContent='Could not save: '+e2.message;$('#m_save').textContent=isNew?'Add to my list':'Save to MAL'}}
   };
   const d=$('#m_del');if(d)d.onclick=async()=>{if(d.dataset.sure!=='1'){d.dataset.sure='1';d.textContent='Tap again to remove';return}
