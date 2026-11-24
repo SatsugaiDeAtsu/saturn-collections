@@ -11,7 +11,7 @@ from cryptography.hazmat.primitives import hashes
 
 DATA = os.path.join(os.path.dirname(__file__), '..', 'data')
 QF, SF, CF = os.path.join(DATA, 'mal_queue.json'), os.path.join(DATA, 'mal_sync.json'), os.path.join(DATA, 'mal_sync_code.json')
-CID, CSEC, PASS = os.environ.get('MAL_CLIENT_ID', ''), os.environ.get('MAL_CLIENT_SECRET', ''), os.environ.get('MAL_SYNC_KEY', '')
+CID, CSEC, PASS = os.environ.get('MAL_CLIENT_ID', '').strip(), os.environ.get('MAL_CLIENT_SECRET', '').strip(), os.environ.get('MAL_SYNC_KEY', '').strip()
 load = lambda p, d: json.load(open(p, encoding='utf-8')) if os.path.exists(p) else d
 
 
@@ -58,7 +58,8 @@ def finish_setup():
         j = call('https://myanimelist.net/v1/oauth2/token', 'POST', {'client_id': CID, 'client_secret': CSEC, 'grant_type': 'authorization_code',
                                                                      'code': d['code'], 'code_verifier': d['v'], 'redirect_uri': d['r']})
     except Exception as e:
-        print('MAL did not accept the sign-in code (it may have expired): set up hourly sync again.', e)
+        body = e.read().decode('utf-8', 'replace')[:300] if hasattr(e, 'read') else ''
+        print('MAL did not accept the sign-in code: set up hourly sync again.', e, body)
         return
     json.dump(lock(j['refresh_token']), open(SF, 'w', encoding='utf-8'))
     print('hourly sync set up')

@@ -1988,7 +1988,7 @@ function malConnect(){
 }
 /* the hourly sync's own MAL sign-in, locked with the passphrase you saved in GitHub as MAL_SYNC_KEY */
 async function malSyncSave(rt,file){
-  const pass=prompt('Type the same passphrase you saved in GitHub as MAL_SYNC_KEY:');if(!pass){toast('Hourly sync not set up (no passphrase).',true);return}
+  let pass=prompt('Type the same passphrase you saved in GitHub as MAL_SYNC_KEY:');pass=pass&&pass.trim();if(!pass){toast('Hourly sync not set up (no passphrase).',true);return}
   const enc=new TextEncoder(),salt=crypto.getRandomValues(new Uint8Array(16)),iv=crypto.getRandomValues(new Uint8Array(12));
   const base=await crypto.subtle.importKey('raw',enc.encode(pass),'PBKDF2',false,['deriveKey']);
   const key=await crypto.subtle.deriveKey({name:'PBKDF2',salt,iterations:200000,hash:'SHA-256'},base,{name:'AES-GCM',length:256},false,['encrypt']);
