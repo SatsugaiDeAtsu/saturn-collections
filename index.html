@@ -1091,7 +1091,7 @@ function rOverview(){
       ${statusBar(Object.keys(GSH).map(k=>[k,gs(k),GSH[k]]),[['Replayed',games.filter(g=>g.rp>0||g.shelf==='Replaying').length,'#b48cff']])}</a>
     <a class="box stat" href="#books" style="--c:var(--book)">${art('books')}<span class="ic">${ico('books')}</span><div class="lab"><span>Books</span><span>${(()=>{const s=books.filter(b=>b.r);return s.length?avg(s.map(b=>b.r)).toFixed(2)+'★ avg':''})()}</span></div><div class="num">${fmt(books.filter(b=>b.st!=='toread').length)}</div><div class="sub">${books.filter(b=>b.st==='read').length} read · ${books.filter(b=>b.ur).length} in Urdu</div>
       ${statusBar(Object.keys(BST).map(k=>[BST[k][0],books.filter(b=>b.st===k).length,BST[k][1]]).filter(p=>p[1]))}</a>
-    <a class="box stat" href="#stories" style="--c:var(--story)">${art('stories')}<span class="ic">${ico('stories')}</span><div class="lab"><span>Writing</span><span>${works.reduce((s,w)=>s+(w.chn||['']).length,0)} chapters</span></div><div class="num">${wPub.length}</div><div class="sub">${fmt(words)} words written · ${wPinned().length} pinned</div>
+    <a class="box stat" href="#stories" style="--c:var(--story)">${art('stories')}<span class="ic">${ico('stories')}</span><div class="lab"><span>Writing</span><span>${works.reduce((s,w)=>s+(w.chn||['']).length,0)} chapters</span></div><div class="num">${wPub.length}</div><div class="sub">${fmt(words)} words written · ${wTime(Math.round(words/230))} to read · ${wPinned().length} pinned</div>
       ${statusBar(WSEC.map(([k,l],i)=>[l,wPub.filter(w=>w.sec===k).length,['var(--story)','var(--s3)','var(--s2)','var(--s6)'][i]]))}</a>
     ${(()=>{const M=D.musicSum;if(!M)return'';const PC=['#3ccf8a','#2fa7d6','#b48cff','#f0c43c','#f06f88','#f08a50','#7be0c0','#d4a062','#9aa6ff','#e07ad0','#66d17a'];
       return `<a class="box stat mstat" href="#music" style="--c:var(--music)">${art('music')}<span class="ic">${ico('music')}</span><div class="lab"><span>Music</span><span>${M.top?'Top now: '+esc(M.top):''}</span></div><div class="num">${fmt(M.songs)}</div><div class="sub">songs · ${fmt(M.artists)} artists${M.lms?`<br><b>${fmt(Math.round(M.lms/3600000))} h</b> listened · ${fmt(M.lplays)} plays since ${M.since}`:''}</div>
@@ -1138,10 +1138,11 @@ async function overviewExtra(){
   const mH=manga.reduce((s,m)=>s+(m.st===2?(m.chs||m.ch):m.ch)*(1+(m.rw||0)),0)*5/60;
   const bH=books.filter(b=>b.st==='read').reduce((s,b)=>s+(+b.p||0),0)/50;
   const uH=((D.musicSum||{}).lms||0)/3600000;
+  const wH=[...works,...mediumOnly()].filter(w=>!w.priv).reduce((s,w)=>s+(w.words||0),0)/230/60; // my writing, by time to read
   const dh=(h,note)=>`${fmt(Math.round(h))} h<small>${(h/24).toFixed(1)} days${note?' · '+note:''}</small>`;
   const tb=$('#ov_time .tspent');
   if(tb)tb.innerHTML=`<div style="--c:var(--anime)"><b>${dh(aH)}</b><span>Anime</span></div><div style="--c:var(--manga)"><b>${dh(mH)}</b><span>Manga</span></div><div style="--c:var(--film)"><b>${dh(fH)}</b><span>Films</span></div>
-    <div style="--c:var(--game)"><b>${dh(gH)}</b><span>Games</span></div><div style="--c:var(--book)"><b>${dh(bH)}</b><span>Books</span></div>${uH?`<div style="--c:var(--music)"><b>${dh(uH,fmt((D.musicSum||{}).lplays||0)+' plays')}</b><span>Music</span></div>`:''}<div style="--c:var(--accent)" class="tall"><b>${dh(aH+mH+fH+gH+bH+uH)}</b><span>Altogether</span></div>
+    <div style="--c:var(--game)"><b>${dh(gH)}</b><span>Games</span></div><div style="--c:var(--book)"><b>${dh(bH)}</b><span>Books</span></div><div style="--c:var(--story)"><b>${dh(wH,'time to read')}</b><span>Writing</span></div>${uH?`<div style="--c:var(--music)"><b>${dh(uH,fmt((D.musicSum||{}).lplays||0)+' plays')}</b><span>Music</span></div>`:''}<div style="--c:var(--accent)" class="${uH?'':'tall'}"><b>${dh(aH+mH+fH+gH+bH+uH+wH)}</b><span>Altogether</span></div>
 `;
   const pm=$('#pickme');if(pm)pm.onclick=pickForMe;
   // ---- continue the series ----
