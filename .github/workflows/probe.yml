@@ -1,0 +1,11 @@
+name: probe
+on: workflow_dispatch
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          W=https://saturn-mal.vananimestia.workers.dev
+          for i in 1 2 3; do curl -s -o /tmp/o -w "worker PATCH %{http_code} " -X PATCH -H "Origin: https://satsugaideatsu.github.io" -H "Authorization: Bearer x" -H "Content-Type: application/json" $W/list/anime/59708 -d '{"status":"completed"}'; head -c 200 /tmp/o; echo; done
+          curl -s -o /tmp/o -w "direct PATCH %{http_code} " -X PATCH -H "Authorization: Bearer x" https://api.myanimelist.net/v2/anime/59708/my_list_status -d "status=completed"; head -c 200 /tmp/o; echo
+          curl -s -o /tmp/o -w "worker GET search %{http_code} " -H "Origin: https://satsugaideatsu.github.io" "$W/search?type=anime&q=frieren"; head -c 80 /tmp/o; echo
