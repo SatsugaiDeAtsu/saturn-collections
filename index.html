@@ -1381,6 +1381,15 @@ function rManga(){
 }
 /* ---------- connections: sequels, prequels, films, OVAs, series ---------- */
 let _MD=null,_FD=null;
+// a title's page only needs its own franchise: load that small file (data/mal/g/*.json), not the whole 3 MB file
+let _MI=null;const _MP={a:{},m:{}},_MG={};
+async function mdFor(k,id){if(_MD)return _MD;
+  if(!_MI)_MI=loadJ('data/mal/idx.json').catch(()=>null);const I=await _MI;
+  const g=I&&I[k]&&I[k][id];
+  if(!g){_MD=await loadJ('data/mal_details.json')||{a:{},m:{}};return _MD}
+  if(!_MG[g])_MG[g]=loadJ(`data/mal/g/${g}.json`).catch(()=>null).then(o=>{if(o){Object.assign(_MP.a,o.a||{});Object.assign(_MP.m,o.m||{})}return o});
+  if(!(await _MG[g])){_MD=await loadJ('data/mal_details.json')||{a:{},m:{}};return _MD}
+  return _MP}
 const loadJ=(p)=>fetch(p,{cache:'no-cache'}).then(r=>r.ok?r.json():null).catch(()=>null);
 const RELN={sequel:'Sequel',prequel:'Prequel',side_story:'Side story',parent_story:'Main story',alternative_version:'Alternative version',alternative_setting:'Alternative setting',spin_off:'Spin-off',summary:'Recap',full_story:'Full story',other:'Other',character:'Same characters',adaptation:'Adaptation'};
 const RELO=['prequel','sequel','parent_story','side_story','full_story','summary','alternative_version','alternative_setting','spin_off','adaptation','other','character'];
@@ -1402,9 +1411,9 @@ function bindRel(det){
 }
 async function malExtra(k,x){
   const box=$('#m_x');if(!box)return;
-  if(!_MD)_MD=await loadJ('data/mal_details.json')||{a:{},m:{}};
+  const det=await mdFor(k,x.id);
   if(!$('#m_x')||$('#m_x')!==box)return;
-  const det=_MD,me=det[k][x.id];
+  const me=det[k][x.id];
   if(!me){box.innerHTML=`<div class="small muted" style="margin-top:10px">Episode length and related entries for this one arrive with the next update.</div>`;return}
   const ok=(kk,id)=>{const d=det[kk][id];return d&&!d.x&&!d.gone};
   const ok2k=k==='a'?'m':'a',stub={};(me.ad||[]).forEach(r=>{if(!det[ok2k][r[0]])stub[ok2k+r[0]]={t:r[2]||'',ty:''}});
@@ -2043,7 +2052,7 @@ const AS={1:'watching',2:'completed',3:'on_hold',4:'dropped',6:'plan_to_watch'},
 function editMal(kind,x,fromSearch){
   if(x&&x.local)return editLocalManga(x);
   const isA=kind==='anime';const S=isA?AST:MST;const isNew=!x||!x.st;x=x||{};
-  const md=((_MD||{})[isA?'a':'m']||{})[x.id||x.malId]||{};
+  const md=((_MD||_MP)[isA?'a':'m']||{})[x.id||x.malId]||{};
   const tot=isA?(x.eps||md.n||0):(x.chs||md.n||0),totV=isA?0:(x.vols||md.v||0);
   modal(kind,(isNew?'Add to MAL · ':'Edit on MAL · ')+(isA?'Anime':'Manga'),`<div style="grid-column:1/-1"><h2>${esc(x.t||'')}</h2><div class="eform">
   ${fld('m_st','Status',String(x.st||6),'select:'+[1,2,3,4,6].map(k=>k+'='+S[k][0]).join('|'))}
@@ -2171,12 +2180,12 @@ function openAnime(a){
   document.querySelectorAll('#m_tabs [data-at]').forEach(b=>b.onclick=()=>{const w=b.classList.contains('on')?'':b.dataset.at;document.querySelectorAll('#m_tabs [data-at]').forEach(x=>x.classList.toggle('on',x.dataset.at===w));$('#m_x').hidden=w!=='rel';$('#m_mus').hidden=w!=='mus'});
 }
 /* openings and endings (from MAL), matched to my Spotify music */
-function themeParse(s){const m=String(s).match(/^(?:#?\d+:\s*)?"(.+?)"\s*(?:by\s+(.+?))?\s*(\((?:eps?|episodes?)[^)]*\))?\s*$/i);
+function themeParse(s){s=String(s).replace(/[“”]/g,'"');const m=String(s).match(/^(?:#?\d+:\s*)?"(.+?)"\s*(?:by\s+(.+?))?\s*(\((?:eps?|episodes?)[^)]*\))?\s*$/i);
   if(!m)return {t:s,ar:'',eps:''};let t=m[1],ar=(m[2]||'').replace(/\s*\((?:eps?|episodes?)[^)]*\)\s*$/i,'').trim();
   const jp=t.match(/^(.*?)\s*\(([^)]+)\)$/);return {t:jp?jp[1]:t,alt:jp?jp[2]:'',ar,eps:(m[3]||'').replace(/[()]/g,'')}}
 async function animeSongs(a){
   await new Promise(ok=>setTimeout(ok,50));
-  if(!_MD)_MD=await loadJ('data/mal_details.json')||{a:{},m:{}};const d=(_MD.a||{})[a.id]||{};
+  const d=((await mdFor('a',a.id)).a||{})[a.id]||{};
   const op=d.op||[],ed=d.ed||[];if(!op.length&&!ed.length)return;
   await Promise.all([muLoad(),mhLoad()]);
   const box=$('#m_mus');if(!box)return;

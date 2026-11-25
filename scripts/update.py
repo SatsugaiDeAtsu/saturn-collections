@@ -2485,8 +2485,54 @@ def apply_mal_queue():
     log(f'MAL waiting list: {kept} change(s) still waiting for MAL')
 
 
+def build_mal_groups():
+    """Anime/manga details split into small files, one per franchise (everything linked by relations), so a title's
+    page loads only its own family instead of the whole 3 MB file. data/mal/idx.json says which file holds which title."""
+    md = load_json(os.path.join(DATA, 'mal_details.json'), {'a': {}, 'm': {}})
+    other = {'a': 'm', 'm': 'a'}
+    nodes = [(k, i) for k in ('a', 'm') for i in md.get(k, {})]
+    parent = {n: n for n in nodes}
+
+    def find(n):
+        while parent[n] != n:
+            parent[n] = parent[parent[n]]
+            n = parent[n]
+        return n
+    for k, i in nodes:
+        d = md[k][i]
+        links = [(k, str(x[0])) for x in d.get('ra' if k == 'a' else 'rm', []) or []] + \
+                [(other[k], str(x[0])) for x in d.get('rm' if k == 'a' else 'ra', []) or []] + \
+                [(other[k], str(x[0])) for x in d.get('ad', []) or []]
+        for n in links:
+            if n in parent:
+                parent[find(n)] = find((k, i))
+    groups = {}
+    for n in nodes:
+        groups.setdefault(find(n), []).append(n)
+    gdir = os.path.join(DATA, 'mal', 'g')
+    os.makedirs(gdir, exist_ok=True)
+    idx, keep = {'a': {}, 'm': {}}, set()
+    for members in groups.values():
+        gid = min(f'{k}{i}' for k, i in members)
+        keep.add(gid + '.json')
+        obj = {'a': {}, 'm': {}}
+        for k, i in members:
+            obj[k][i] = md[k][i]
+            idx[k][i] = gid
+        path = os.path.join(gdir, gid + '.json')
+        txt = json.dumps(obj, ensure_ascii=False, separators=(',', ':'))
+        if not os.path.exists(path) or open(path, encoding='utf-8').read() != txt:
+            open(path, 'w', encoding='utf-8').write(txt)
+    for f in os.listdir(gdir):
+        if f not in keep:
+            os.remove(os.path.join(gdir, f))
+    with open(os.path.join(DATA, 'mal', 'idx.json'), 'w', encoding='utf-8') as f:
+        json.dump(idx, f, separators=(',', ':'))
+    log(f'mal groups: {len(groups)} files')
+
+
 for name, fn in [('anime', update_anime), ('manga', update_manga), ('mal waiting list', apply_mal_queue), ('letterboxd', update_letterboxd), ('letterboxd films', update_letterboxd_watched),
-                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('anime songs', update_anime_themes), ('music', update_music), ('music pictures', update_music_pics), ('music genres', update_music_genres), ('book copies', mirror_book_covers), ('grouvee', update_grouvee), ('film ids', update_film_ids), ('film details', update_film_details), ('series', update_series), ('mal details', update_mal_details), ('summaries', update_summaries), ('book details', update_book_details), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('rawg', update_rawg), ('characters', update_char_info), ('people', update_people_info), ('extra manga', update_manga_extra), ('cover mirror', update_cover_mirror), ('overview files', build_overview_files)]:
+                 ('posters', update_posters), ('hall of fame', update_hof), ('book covers', update_book_covers), ('game covers', update_game_covers), ('medium', update_medium), ('anime songs', update_anime_themes), ('music', update_music), ('music pictures', update_music_pics), ('music genres', update_music_genres), ('book copies', mirror_book_covers), ('grouvee', update_grouvee), ('film ids', update_film_ids), ('film details', update_film_details), ('series', update_series), ('mal details', update_mal_details), ('summaries', update_summaries), ('book details', update_book_details), ('game meta', update_game_meta), ('dlc pictures', update_dlc_pictures), ('rawg', update_rawg), ('characters', update_char_info), ('people', update_people_info), ('extra manga', update_manga_extra), ('cover mirror', update_cover_mirror), ('overview files', build_overview_files), ('mal groups', build_mal_groups)]:
     try:
         fn()
         status[name] = 'ok'
