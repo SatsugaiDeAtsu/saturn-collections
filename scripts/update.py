@@ -372,8 +372,8 @@ def update_letterboxd_watched():
                 continue
             if f.get('s') != 'w':
                 f['s'] = 'w'; f['d'] = today; moved += 1
-            if r and not f.get('r'):
-                f['r'] = r
+            if r and r != f.get('r'):
+                f['r'] = r  # a rating changed later on Letterboxd
             if lk:
                 f['lk'] = 1
         time.sleep(1.5)
