@@ -654,6 +654,46 @@ def update_summaries():
     log(f'summaries: +{n}')
 
 
+def update_related_covers():
+    """Small copies (200 px wide) of the covers in the Related tab for titles that aren't in my lists, so they don't
+    depend on MAL's image server either. Stored by MAL's picture path in covers/r/; build_mal_groups marks which exist."""
+    md = load_json(os.path.join(DATA, 'mal_details.json'), {'a': {}, 'm': {}})
+    own = {'a': {r[0] for r in site.get('anime', [])}, 'm': {r[0] for r in site.get('manga', [])}}
+    want = set()
+    for k, o in (('a', 'm'), ('m', 'a')):
+        for i, e in md.get(k, {}).items():
+            if int(i) not in own[k]:
+                continue
+            want |= {('a', r[0]) for r in e.get('ra') or []} | {('m', r[0]) for r in e.get('rm') or []} | {(o, r[0]) for r in e.get('ad') or []}
+    d = os.path.join(os.path.dirname(DATA), 'covers', 'r')
+    os.makedirs(d, exist_ok=True)
+    t0, got, fails = time.time(), 0, 0
+    for k, i in sorted(want):
+        e = md.get(k, {}).get(str(i)) or {}
+        if i in own[k] or not e.get('img') or e.get('x') or e.get('gone'):
+            continue
+        fp = os.path.join(d, f"{k}_{e['img'].replace('/', '_')}.jpg")
+        if os.path.exists(fp):
+            continue
+        if time.time() - t0 > 1200 or fails > 60:
+            break
+        try:
+            req = urllib.request.Request(f"https://cdn.myanimelist.net/images/{'anime' if k == 'a' else 'manga'}/{e['img']}.jpg", headers={'User-Agent': UA})
+            with urllib.request.urlopen(req, timeout=30) as r:
+                b = r.read()
+            from PIL import Image
+            import io
+            im = Image.open(io.BytesIO(b)).convert('RGB')
+            if im.width > 200:
+                im = im.resize((200, round(im.height * 200 / im.width)), Image.LANCZOS)
+            im.save(fp, 'JPEG', quality=80, optimize=True, progressive=True)
+            got += 1
+        except Exception:
+            fails += 1
+        time.sleep(0.1)
+    log(f'related covers: {got} new, {fails} failed, {len(os.listdir(d))} kept')
+
+
 def build_mal_groups():
     """Anime/manga details split into small files, one per franchise (everything linked by relations), so a title's
     page loads only its own family instead of the whole 3 MB file. data/mal/idx.json says which file holds which title."""
@@ -680,13 +720,17 @@ def build_mal_groups():
         groups.setdefault(find(n), []).append(n)
     gdir = os.path.join(DATA, 'mal', 'g')
     os.makedirs(gdir, exist_ok=True)
+    rdir = os.path.join(os.path.dirname(DATA), 'covers', 'r')
     idx, keep = {'a': {}, 'm': {}}, set()
     for members in groups.values():
         gid = min(f'{k}{i}' for k, i in members)
         keep.add(gid + '.json')
         obj = {'a': {}, 'm': {}}
         for k, i in members:
-            obj[k][i] = md[k][i]
+            e = md[k][i]
+            if e.get('img') and os.path.exists(os.path.join(rdir, f"{k}_{e['img'].replace('/', '_')}.jpg")):
+                e = dict(e, mi=1)  # a small copy of the cover is on the site (covers/r/)
+            obj[k][i] = e
             idx[k][i] = gid
         path = os.path.join(gdir, gid + '.json')
         txt = json.dumps(obj, ensure_ascii=False, separators=(',', ':'))
@@ -2509,6 +2553,7 @@ STEPS = [
     ('people', update_people_info),
     ('extra manga', update_manga_extra),
     ('cover mirror', update_cover_mirror),
+    ('related covers', update_related_covers),
     ('overview files', build_overview_files),
     ('mal groups', build_mal_groups),
 ]

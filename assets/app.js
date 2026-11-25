@@ -581,7 +581,7 @@ const TYN={tv:'TV',movie:'Film',ova:'OVA',ona:'ONA',special:'Special',music:'Mus
 const hm=min=>{min=Math.round(min);if(!min)return'';const h=Math.floor(min/60),m=min%60;return h?`${h} h${m?' '+m+' min':''}`:`${m} min`};
 function relTile(k,id,rel,d){
   const own=(k==='a'?anime:manga).find(x=>x.id===+id);
-  const img=own?own.img:(d.img?`https://cdn.myanimelist.net/images/${k==='a'?'anime':'manga'}/${d.img}.jpg`:'');
+  const img=own?own.img:(d.img?(d.mi?`covers/r/${k}_${d.img.replace(/\//g,'_')}.jpg`:`https://cdn.myanimelist.net/images/${k==='a'?'anime':'manga'}/${d.img}.jpg`):'');
   const st=own?(k==='a'?AST:MST)[own.st]:null;
   return `<button type="button" class="reltile" data-rk="${k}" data-rid="${id}" title="${esc(own?own.t:d.t)}">${cover(own?own.t:d.t,img,own&&own.sc?`<span class="badge">${own.sc}</span>`:'')}<span class="rl">${esc(RELN[rel]||rel)}${d.ty?` · ${esc(TYN[d.ty]||d.ty.toUpperCase())}`:''}</span><span class="rn">${esc(own?own.t:d.t)}</span><span class="rs" style="color:${st?st[1]:'var(--ink3)'}">${st?esc(st[0]):'Not in your list'}</span></button>`;
 }
@@ -1683,7 +1683,10 @@ async function rMusic(){
 }
 const mAgo=t=>{const d=(Date.now()-new Date(t))/1000;return d<3600?Math.max(1,Math.round(d/60))+' min ago':d<86400?Math.round(d/3600)+' h ago':Math.round(d/86400)+' d ago'};
 const ovMS={a:'short_term',s:'short_term'};let ovRecent=null;
-async function ovMusic(){const box=$('#ov_music');if(!box)return;const MO=MU||await loadJ('data/ov_music.json');if(!MO||!MO.top||!$('#ov_music'))return;
+let OVM=null;
+async function ovMusic(){const box=$('#ov_music');if(!box)return;OVM=OVM||await loadJ('data/ov_music.json');
+  // the full music file has no All Time lists, so those always come from the overview file
+  const MO=MU?Object.assign({},MU,OVM?{hist:OVM.hist,h:OVM.h,tracks:Object.assign({},OVM.tracks,MU.tracks),artists:Object.assign({},OVM.artists,MU.artists)}:{}):OVM;if(!MO||!MO.top||!$('#ov_music'))return;
   const MU0=MU,MH0=MH;MU=MO;if(!MH&&MO.h)MH={tracks:MO.h.t,artists:MO.h.a};
   // recently played comes live from Spotify (last 50), falling back to the nightly copy
   if(!ovRecent&&SET.workerUrl){try{let j=null;for(let k=0;k<2&&!j;k++){j=await fetch(SET.workerUrl+'/spotify/api/me/player/recently-played?limit=50').then(r=>r.ok?r.json():null);if(!j)await new Promise(ok=>setTimeout(ok,1500))}const EXC=new Set(SET.music_exclude||[]);
