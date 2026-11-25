@@ -694,6 +694,57 @@ def update_related_covers():
     log(f'related covers: {got} new, {fails} failed, {len(os.listdir(d))} kept')
 
 
+def strip_key(u):
+    """File name for a strip copy, worked out from the picture's address (the site does the same sum)."""
+    parts = u.split('?')[0].rstrip('/').split('/')
+    return parts[2][0] + '_' + re.sub(r'[^A-Za-z0-9_.-]', '_', parts[-1])[-80:]
+
+
+def update_strip_covers():
+    """Small copies (184 px wide, twice the size shown) of the outside pictures in the Overview's moving strip:
+    film posters (TMDB, Letterboxd), song covers (Spotify) and book covers, so the strip loads from the site itself."""
+    urls = set()
+    for f in site.get('films', []):
+        if f.get('s') == 'w' and str(f.get('img', '')).startswith('http'):
+            urls.add(f['img'])
+    for c in (site.get('musicSum') or {}).get('covers', []):
+        if len(c) > 1 and str(c[1]).startswith('http'):
+            urls.add(c[1])
+    bc = site.get('bookCovers', {})
+    for b in load_json(os.path.join(DATA, 'books.json'), []):
+        u = b.get('img') or bc.get(str(b.get('id'))) or ''
+        if b.get('st') != 'toread' and u.startswith('http'):
+            urls.add(u)
+    d = os.path.join(os.path.dirname(DATA), 'covers', 's')
+    os.makedirs(d, exist_ok=True)
+    keys = {strip_key(u): u for u in urls}
+    t0, got, fails = time.time(), 0, 0
+    for k, u in sorted(keys.items()):
+        fp = os.path.join(d, k + '.jpg')
+        if os.path.exists(fp):
+            continue
+        if time.time() - t0 > 600 or fails > 40:
+            break
+        try:
+            with urllib.request.urlopen(urllib.request.Request(u, headers={'User-Agent': UA}), timeout=30) as r:
+                b = r.read()
+            from PIL import Image
+            import io
+            im = Image.open(io.BytesIO(b)).convert('RGB')
+            if im.width > 184:
+                im = im.resize((184, round(im.height * 184 / im.width)), Image.LANCZOS)
+            im.save(fp, 'JPEG', quality=80, optimize=True, progressive=True)
+            got += 1
+        except Exception:
+            fails += 1
+        time.sleep(0.1)
+    for f in os.listdir(d):  # songs leave the top lists, films get new posters: drop copies nothing uses
+        if f[:-4] not in keys:
+            os.remove(os.path.join(d, f))
+    site.setdefault('mir', {})['s'] = sorted(f[:-4] for f in os.listdir(d))
+    log(f'strip covers: {got} new, {fails} failed, {len(site["mir"]["s"])} kept')
+
+
 def build_mal_groups():
     """Anime/manga details split into small files, one per franchise (everything linked by relations), so a title's
     page loads only its own family instead of the whole 3 MB file. data/mal/idx.json says which file holds which title."""
@@ -2555,6 +2606,7 @@ STEPS = [
     ('cover mirror', update_cover_mirror),
     ('related covers', update_related_covers),
     ('overview files', build_overview_files),
+    ('strip covers', update_strip_covers),
     ('mal groups', build_mal_groups),
 ]
 for name, fn in STEPS:

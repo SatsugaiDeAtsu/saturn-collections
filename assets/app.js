@@ -244,7 +244,10 @@ function rOverview(){
       out.push(pools[k].shift());last=k;if(i===0)first=k}
     return out};
   const rowA=mix(60),rowB=mix(60);const W=[...rowA,...rowB];
-  const row=(arr,dir)=>`<div class="mq ${dir}"><div class="mqt">${[...arr,...arr].map(x=>`<div class="mqi">${cover(x.t,x.img,'','')}</div>`).join('')}</div></div>`;
+  // films, songs and books in the strip use the small copies kept on the site (covers/s/) when there is one
+  const SK=u=>{const p=u.split('?')[0].replace(/\/+$/,'').split('/');return p[2][0]+'_'+p[p.length-1].replace(/[^A-Za-z0-9_.-]/g,'_').slice(-80)};
+  const MIRS=new Set((D.mir||{}).s||[]);const SIMG=u=>u&&/^https?:\/\//.test(u)&&MIRS.has(SK(u))?'covers/s/'+SK(u)+'.jpg':u;
+  const row=(arr,dir)=>`<div class="mq ${dir}"><div class="mqt">${[...arr,...arr].map(x=>`<div class="mqi">${cover(x.t,SIMG(x.img),'','')}</div>`).join('')}</div></div>`;
   const wallTop=W.length>8?`<section class="marquee" aria-label="Favourites">${row(rowA,'l')}</section>`:'';
   const wallBot=W.length>8?`<section class="marquee" aria-label="Favourites">${row(rowB,'r')}</section>`:'';
   const nowItems=[

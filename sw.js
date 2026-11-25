@@ -26,7 +26,7 @@ self.addEventListener('fetch',e=>{
   e.respondWith((async()=>{
     const c=await caches.open(C),key=r.mode==='navigate'?new URL('./',location).href:r;
     const hit=await c.match(key);
-    if(hit&&/\/covers\/(a|m|u|r)\//.test(u.pathname))return hit;
+    if(hit&&/\/covers\/(a|m|u|r|s)\//.test(u.pathname))return hit;
     const net=fetch(r,{cache:'no-cache'}).then(res=>{if(res.ok)c.put(key,res.clone());return res});
     if(!hit)return net;
     e.waitUntil(net.catch(()=>{}));
