@@ -533,6 +533,7 @@ table.lt{width:100%;border-collapse:collapse;background:var(--panel);border:1px 
 .mrow .no{white-space:nowrap}
 .mtab2{display:flex;gap:6px;margin:16px 0 4px;border-bottom:1px solid var(--line)}.mtab2 button{background:none;border:0;border-bottom:3px solid transparent;color:var(--ink2);padding:8px 14px;font:inherit;font-weight:700;font-size:13px;letter-spacing:.04em;text-transform:uppercase;cursor:pointer}
 .mtab2 button::after{content:' ▾';font-size:10px;opacity:.6}.mtab2 button.on::after{content:' ▴'}.mtab2 button.on{color:var(--ink);border-bottom-color:var(--anime)}.mtab2 button[data-at="mus"].on{border-bottom-color:var(--music)}.mtab2 button:hover{color:var(--ink)}
+.rpick{display:flex;flex-wrap:wrap;gap:6px}.rpick .btn{min-width:64px;color:var(--film)}
 /* game screenshots */
 .gshots{display:flex;gap:8px;overflow-x:auto;margin:12px 0 4px;padding-bottom:6px;scroll-snap-type:x mandatory}.gshots a{flex:0 0 auto;scroll-snap-align:start}.gshots img{height:120px;width:auto;display:block;border:1px solid var(--line)}
 #editbtn.on{background:var(--accent);border-color:var(--accent)}
@@ -783,7 +784,7 @@ setTimeout(function(){var s=document.getElementById('bootslow');if(s&&document.g
 <script>
 (async function(){
 "use strict";
-let D,SET={};try{const j=u=>fetch(u,{cache:'no-cache'}).then(r=>r.json());const [a,g,b,s,q,wr,mx,se,ov,th,fl,mq,msy]=await Promise.all([j('data/site.json'),j('data/games.json'),j('data/books.json'),j('data/settings.json').catch(()=>({})),j('data/quotes.json').catch(()=>({quotes:[]})),j('data/writing.json').catch(()=>({works:[]})),j('data/manga_extra.json').catch(()=>({items:[]})),j('data/series.json').catch(()=>({series:[]})),j('data/ovfavs.json').catch(()=>null),j('data/themes.json').catch(()=>({})),j('data/films_local.json').catch(()=>({films:[]})),j('data/mal_queue.json').catch(()=>({q:[]})),j('data/mal_sync.json').catch(()=>null)]);D=Object.assign(a,g,b,q,wr);D.mangaExtra=mx.items||[];D.ovFavs=ov;D.themes=th||{};D.series=se.series||[];D.filmsLocal=(fl&&fl.films)||[];D.malQ=(mq&&mq.q)||[];D.malSync=!!(msy&&msy.ct);SET=s}catch(e){document.getElementById('app').innerHTML='<div class="empty">Could not load data/site.json.</div>';return}
+let D,SET={};try{const j=u=>fetch(u,{cache:'no-cache'}).then(r=>r.json());const [a,g,b,s,q,wr,mx,se,ov,th,fl,mq,msy,fr]=await Promise.all([j('data/site.json'),j('data/games.json'),j('data/books.json'),j('data/settings.json').catch(()=>({})),j('data/quotes.json').catch(()=>({quotes:[]})),j('data/writing.json').catch(()=>({works:[]})),j('data/manga_extra.json').catch(()=>({items:[]})),j('data/series.json').catch(()=>({series:[]})),j('data/ovfavs.json').catch(()=>null),j('data/themes.json').catch(()=>({})),j('data/films_local.json').catch(()=>({films:[]})),j('data/mal_queue.json').catch(()=>({q:[]})),j('data/mal_sync.json').catch(()=>null),j('data/film_ratings.json').catch(()=>({}))]);D=Object.assign(a,g,b,q,wr);D.mangaExtra=mx.items||[];D.ovFavs=ov;D.themes=th||{};D.series=se.series||[];D.filmsLocal=(fl&&fl.films)||[];D.malQ=(mq&&mq.q)||[];D.malSync=!!(msy&&msy.ct);D.filmR=fr||{};SET=s}catch(e){document.getElementById('app').innerHTML='<div class="empty">Could not load data/site.json.</div>';return}
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm=s=>String(s||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
@@ -944,6 +945,9 @@ function mergeLocalFilms(){for(let i=films.length-1;i>=0;i--)if(films[i].lf)film
     const o={t:x.t,y:+x.y||0,u:x.tmdb?`https://letterboxd.com/tmdb/${x.tmdb}/`:`https://letterboxd.com/search/${encodeURIComponent(x.t)}/`,d:x.d||'',r:+x.r||0,s:x.s==='l'?'l':'w',n:norm(x.t),logs:x.s==='l'?0:1,rv:x.rv||'',lk:x.lk||0,wd:x.wd||'',img:x.img||'',tmdb:x.tmdb||0,rw:+x.rw||0,i:-1,lf:1,lix:k};
     films.push(o);filmByKey[key]=o})}
 mergeLocalFilms();
+// ratings changed here for films Letterboxd won't send again (data/film_ratings.json)
+const fKey=f=>norm(f.t)+'|'+(f.y||'');
+films.forEach(f=>{const o=(D.filmR||{})[fKey(f)];if(o&&o.r){f.lbr=f.r;f.r=o.r;f.rov=1}});
 const filmUri={};films.forEach(f=>filmUri[f.u]=f);
 /* TV series: kept on this site (data/series.json) plus anything Letterboxd logged that is really a series */
 const SST={w:['Watched','var(--s2)'],c:['Watching','var(--s1)'],l:['Watchlist','var(--s6)'],h:['On hold','var(--s3)'],d:['Dropped','var(--s4)']};
@@ -2209,17 +2213,30 @@ function rFilms(){
 function filmLists(){
   return D.filmLists.map(l=>`<section class="box" style="margin-top:14px"><div class="box-h" style="border-top:3px solid var(--film)"><h2>${esc(l.name)}</h2><span class="small muted">${l.items.length} films${l.desc?' · '+esc(l.desc):''}</span></div><div class="box-b"><div class="grid favs">${l.items.map(([t,y],i)=>{const f=filmByKey[norm(t)+'|'+y];return `<div class="card" data-lf="${esc(norm(t)+'|'+y)}" data-t="${esc(t)}">${cover(t,'',f&&f.r?`<span class="badge">${f.r}★</span>`:`<span class="badge">${i+1}</span>`)}<div class="meta"><div class="tt">${esc(t)}</div><div class="ss"><span>${y}</span></div></div></div>`}).join('')}</div></div></section>`).join('');
 }
+function rateFilm(f){
+  const opts=[0.5,1,1.5,2,2.5,3,3.5,4,4.5,5];
+  modal('films','Change my rating',`<div style="grid-column:1/-1"><h2>${esc(f.t)} <span class="muted">${f.y||''}</span></h2>
+  <p class="muted small" style="margin:6px 0 12px">For films Letterboxd won't send again. This stays even if Letterboxd keeps the old rating.${f.rov&&f.lbr?' Letterboxd has '+stars(f.lbr)+'.':''}</p>
+  <div class="rpick">${opts.map(r=>`<button class="btn${f.r===r?' pri':''}" data-fr="${r}">${stars(r)}</button>`).join('')}</div>
+  ${f.rov?`<div style="margin-top:12px"><button class="btn" data-fr="0">Use Letterboxd's rating again</button></div>`:''}<div id="fr_err" class="muted small" style="margin-top:8px"></div></div>`);
+  document.querySelectorAll('[data-fr]').forEach(b=>b.onclick=async()=>{const r=+b.dataset.fr;$('#fr_err').textContent='Saving…';
+    try{let cur;try{cur=await ghLoad('data/film_ratings.json')}catch(e){cur={}}const k=fKey(f);
+      if(r)cur[k]={r,t:f.t,at:new Date().toISOString().slice(0,10)};else delete cur[k];
+      await ghSave('data/film_ratings.json',cur,(r?'Rating: ':'Rating back to Letterboxd: ')+f.t);D.filmR=cur;
+      if(r){if(!f.rov)f.lbr=f.r;f.r=r;f.rov=1}else{f.r=f.lbr||f.r;f.rov=0}
+      closeM();render();toast('Rating saved.')}catch(e){$('#fr_err').textContent='Not saved: '+e.message}})}
 function openFilm(f){
   if(f.tv)return openSeries(f);
   const ls=listsFor(f);
   modal('films','Film',`${cover(f.t,f.img||'')}<div><h2>${esc(f.t)} <span class="muted" style="font-weight:500">${f.y||''}</span></h2>
-  <div class="bigscore"><div><b class="stars">${f.r?stars(f.r):'–'}</b><small>Your rating</small></div><div><b>${f.logs||(f.s==='w'?1:0)}</b><small>Times logged</small></div>${f.lf&&ED.on?'<button class="btn pri" id="m_fedit">Edit</button>':''}<div><b>${f.lk?'♥':'–'}</b><small>Liked</small></div></div>
+  <div class="bigscore"><div><b class="stars">${f.r?stars(f.r):'–'}</b><small>Your rating${f.rov?` · changed here${f.lbr?' (Letterboxd: '+stars(f.lbr)+')':''}`:''}</small></div><div><b>${f.logs||(f.s==='w'?1:0)}</b><small>Times logged</small></div>${f.lf&&ED.on?'<button class="btn pri" id="m_fedit">Edit</button>':''}${!f.lf&&ED.on&&OWNER()?'<button class="btn" id="m_frate">Change my rating</button>':''}<div><b>${f.lk?'♥':'–'}</b><small>Liked</small></div></div>
   <div class="kv"><div>Status</div><div>${f.s==='w'?'Watched':'On watchlist'}</div>${f.wd?`<div>Last watched</div><div>${fdate(f.wd)}</div>`:''}${f.s==='w'?`<div>Rewatched</div><div>${f.rw} time${f.rw===1?'':'s'}</div>`:''}<div>Added</div><div>${fdate(f.d)}</div>${ls.length?`<div>In lists</div><div>${ls.map(l=>`<span class="tag">${esc(l)}</span>`).join('')}</div>`:''}</div>
   <div id="m_x"></div>
   ${f.rv?`<div class="review" style="--c:var(--film)">${esc(f.rv)}</div>`:''}
   <div style="margin-top:14px"><a class="btn pri" href="${esc(f.u)}" target="_blank" rel="noopener">Open on Letterboxd ↗</a></div></div>`);
   filmExtra(f);
   const fe=$('#m_fedit');if(fe)fe.onclick=()=>editFilmLocal(D.filmsLocal[f.lix]);
+  const fr=$('#m_frate');if(fr)fr.onclick=()=>rateFilm(f);
 }
 async function editFilmLocal(x){
   const isNew=!!x.__new;
