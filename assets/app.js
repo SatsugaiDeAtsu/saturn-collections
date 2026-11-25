@@ -228,9 +228,12 @@ function rOverview(){
   const rwLbl=(x,v)=>x.rwing&&x.st!==2?(v==='a'?'Rewatching':'Rereading'):(x.rwt&&x.rwt>=x.up-300)?`${v==='a'?'Rewatched':'Reread'}${x.rw>1?' ×'+x.rw:''}`:'';
   anime.filter(a=>a.up).sort((a,b)=>b.up-a.up).slice(0,12).forEach(a=>act.push({img:a.img,d:new Date(a.up*1000).toISOString(),k:'anime',t:a.t,w:`${rwLbl(a,'a')||AST[a.st][0]}${a.sc?` · scored ${a.sc}`:''}${a.st===1&&a.eps?` · ep ${a.ep}/${a.eps}`:''}`,o:()=>openAnime(a)}));
   manga.filter(m=>m.up).sort((a,b)=>b.up-a.up).slice(0,12).forEach(m=>act.push({img:m.img,d:new Date(m.up*1000).toISOString(),k:'manga',t:m.t,w:`${rwLbl(m,'m')||MST[m.st][0]}${m.sc?` · scored ${m.sc}`:''}${m.st===1&&m.ch?` · ch ${m.ch}${m.chs?'/'+m.chs:''}`:''}`,o:()=>openManga(m)}));
-  books.filter(b=>b.dr||(b.d&&b.d>'2026-11-08')).sort((a,b)=>(b.dr||b.d).localeCompare(a.dr||a.d)).slice(0,8).forEach(b=>act.push({img:b.img||'',d:b.dr||b.d,k:'books',t:b.t,w:b.dr?`Finished${b.r?` · ${b.r}★`:''}`:`Added to ${BST[b.st]?BST[b.st][0]:'shelf'}`,o:()=>openBook(b)}));
-  films.filter(f=>f.wd).sort((a,b)=>(b.lt||b.wd).localeCompare(a.lt||a.wd)).slice(0,12).forEach(f=>act.push({img:f.img||'',d:(f.lt&&f.lt.slice(0,10)>=f.wd)?f.lt:f.wd+'T23:59:59Z',k:'films',t:`${f.t} (${f.y})`,w:`Watched${f.r?` · ${stars(f.r)}`:''}`,o:()=>openFilm(f)}));
-  games.filter(g=>g.added).sort((a,b)=>b.added.localeCompare(a.added)).slice(0,10).forEach(g=>act.push({img:g.img||'',d:g.added,k:'games',t:g.t,w:`Added to ${g.shelf}${g.r?` · ${g.r}/5`:''}`,o:()=>openGame(g)}));
+  // newest of: finished, status changed, added. A reread shows as "Reread" when finished, "Rereading" while reading
+  const bDay=b=>[b.dr||'',b.sd||'',b.d||''].sort().pop();
+  books.filter(b=>b.dr||b.sd||(b.d&&b.d>'2026-11-08')).sort((a,b)=>bDay(b).localeCompare(bDay(a))).slice(0,8).forEach(b=>{const day=bDay(b),fin=b.dr&&b.dr===day&&b.st==='read';
+    act.push({img:b.img||'',d:day,k:'books',t:b.t,w:b.st==='reading'&&b.rr>0?'Rereading':fin?`${b.rrd&&b.rrd>=b.dr?`Reread${b.rr>1?' ×'+b.rr:''}`:'Finished'}${b.r?` · ${b.r}★`:''}`:b.sd&&b.sd===day?(BST[b.st]?BST[b.st][0]:'Moved'):`Added to ${BST[b.st]?BST[b.st][0]:'shelf'}`,o:()=>openBook(b)})});
+  films.filter(f=>f.wd).sort((a,b)=>(b.lt||b.wd).localeCompare(a.lt||a.wd)).slice(0,12).forEach(f=>act.push({img:f.img||'',d:(f.lt&&f.lt.slice(0,10)>=f.wd)?f.lt:f.wd+'T23:59:59Z',k:'films',t:`${f.t} (${f.y})`,w:`${(f.rwd||[]).includes(f.wd)?'Rewatched':'Watched'}${f.r?` · ${stars(f.r)}`:''}`,o:()=>openFilm(f)}));
+  games.filter(g=>g.added).sort((a,b)=>b.added.localeCompare(a.added)).slice(0,10).forEach(g=>act.push({img:g.img||'',d:g.added,k:'games',t:g.t,w:`${g.shelf==='Replaying'?'Replaying':g.rpd&&g.rpd===g.added?`Replayed${g.rp>1?' ×'+g.rp:''}`:'Added to '+g.shelf}${g.r?` · ${g.r}/5`:''}`,o:()=>openGame(g)}));
   wPub.forEach(w=>act.push({img:w.cover||'',d:w.up||w.date,k:'stories',t:w.t,w:w.mo?'Published on Medium':`${w.up&&w.up>w.date?'Updated':'Wrote'} · ${wKind(w)}`,o:()=>openWork(w)}));
   act.sort((a,b)=>b.d.localeCompare(a.d));
   const acts=act.slice(0,15);
@@ -1064,6 +1067,7 @@ function editGame(g){
     const raw=isNew?{id:Date.now(),u:'',fr:[],pub:[],log:[],shelves:[],rvd:''}:D.games[g.i];
     const oldT=raw.t;const shelf=gv('e_shelf');
     if(isNew||raw.shelf!==shelf)raw.added=today();
+    if(!isNew&&((raw.shelf==='Replaying'&&shelf!=='Replaying'&&shelf!=='Wish List'&&shelf!=='Backlog')||(+gv('e_rp')||0)>(raw.rp||0))){raw.rpd=today();raw.added=today()}
     Object.assign(raw,{img:gv('e_img'),t,shelf,shelves:[shelf],r:+gv('e_r')||0,pf:list(gv('e_pf')),g:list(gv('e_g')),dev:list(gv('e_dev')),rel:gv('e_rel'),rvt:gv('e_rvt'),rv:gv('e_rv'),rp:+gv('e_rp')||0,dlcs:DL.filter(d=>d.p||d.mine).map(d=>({n:d.n,p:d.p?1:0}))});
     const nh=+gv('e_hrs')||0;if(nh){raw.hrs=nh;delete raw.hrsEst}else if(gv('e_hrs')===''&&!raw.hrsEst){delete raw.hrs}
     if(raw.rv&&!raw.rvd)raw.rvd=today();
@@ -1087,6 +1091,7 @@ function editBook(b){
   ${fld('e_p','Pages',b.p||'','number','min="0"')}
   ${fld('e_y','First published (year)',b.y||'','number')}
   ${fld('e_dr','Date finished',b.dr||'','date')}
+  ${fld('e_rr','Times reread',b.rr||0,'number','min="0" step="1"')}
   <div class="ef" style="grid-column:1/-1"><span>Shelves</span><input type="hidden" id="e_sh" value="${esc((b.sh||[]).join(', '))}"><details class="shdd"><summary id="e_shs"></summary><div id="e_shl" class="shl"></div><div style="display:flex;margin-top:8px"><input id="e_shn" placeholder="New shelf name" style="flex:1"><button class="btn" type="button" id="e_sha" style="border-radius:0">Create</button></div></details></div>
   ${fld('e_rv','Review',b.rv,'textarea')}
   ${fld('e_img','Cover image link (optional)',!isNew&&D.books[b.i]?D.books[b.i].img||'':b.img||'','url','placeholder="https://..."')}<div class="ef"><span>Or your own picture</span><div style="display:flex;gap:8px;align-items:center"><button type="button" class="btn" id="e_up">Upload a cover</button><span class="small muted" id="e_upm"></span></div><input type="file" id="e_upf" accept="image/*" hidden></div></div>
@@ -1109,7 +1114,10 @@ function editBook(b){
   $('#e_save').onclick=()=>{
     const t=gv('e_t');if(!t){$('#e_err').textContent='Give it a title.';return}
     const raw=isNew?{id:'s'+Date.now(),d:today()}:D.books[b.i];
-    const st=gv('e_st');
+    const st=gv('e_st'),rr=+gv('e_rr')||0;
+    if(!isNew&&raw.st!==st)raw.sd=today();
+    if(rr>(raw.rr||0)){raw.rrd=today();if(st==='read'&&gv('e_dr')===(raw.dr||''))$('#e_dr').value=today()}
+    raw.rr=rr;
     Object.assign(raw,{t,ur:gv('e_ur'),a:gv('e_a'),st,r:+gv('e_r')||0,p:+gv('e_p')||0,y:+gv('e_y')||0,dr:gv('e_dr')||(st==='read'&&raw.st!=='read'?today():raw.dr||''),sh:list(gv('e_sh')),rv:gv('e_rv'),img:gv('e_img')});
     if(isNew)D.books.unshift(raw);
     rebuildBooks();closeM();render();persist('books',(isNew?'Add book: ':'Edit book: ')+t,raw.id);
