@@ -4,7 +4,7 @@ Uses its own MAL sign-in, kept in data/mal_sync.json locked (AES-GCM) with the p
 MAL_SYNC_KEY secret. Needs the secrets MAL_CLIENT_ID, MAL_CLIENT_SECRET and MAL_SYNC_KEY.
 Newest change wins: if an entry was changed on MAL after the site edit, the site edit is dropped."""
 import base64, json, os, sys, time, urllib.request, urllib.parse
-from datetime import datetime, timezone
+from datetime import datetime
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 from cryptography.hazmat.primitives import hashes
