@@ -237,6 +237,19 @@ def mal_rewatches(kind='anime'):
     return out
 
 
+def add_rewatch_times(rows, old_rows, i_rw, i_ing, i_up):
+    """Add one more column to each row: when it was last rewatched/reread (the rewatch count went up or a rewatch
+    started), so Recent activity can say "Rewatched" instead of "Completed". Kept from the previous run otherwise."""
+    old = {r[0]: r for r in old_rows}
+    col = len(rows[0]) if rows else 0
+    for r in rows:
+        o = old.get(r[0])
+        t = o[col] if o and len(o) > col else 0
+        if o and len(o) > i_ing and (r[i_rw] > (o[i_rw] or 0) or (r[i_ing] and not o[i_ing])):
+            t = r[i_up] or int(time.time())
+        r.append(t)
+
+
 def update_anime():
     rows = mal_list('anime')
     old_rw = {a[0]: (a[13], a[14]) for a in site.get('anime', []) if len(a) > 14}
@@ -270,6 +283,7 @@ def update_anime():
             tags[str(a['anime_id'])] = note
     if len(A) < 50:
         raise RuntimeError(f'only {len(A)} anime returned')
+    add_rewatch_times(A, site.get('anime', []), 13, 14, 12)
     site['anime'], site['animeGenres'], site['animeTags'] = A, genres, tags
 
 
@@ -312,6 +326,7 @@ def update_manga():
             mtags[str(m['manga_id'])] = note
     if len(M) < 20:
         raise RuntimeError(f'only {len(M)} manga returned')
+    add_rewatch_times(M, site.get('manga', []), 14, 15, 16)
     site['manga'], site['mangaGenres'], site['mangaTags'] = M, genres, mtags
 
 

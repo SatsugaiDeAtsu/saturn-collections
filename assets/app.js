@@ -130,7 +130,7 @@ const AST={1:['Watching','var(--s1)'],2:['Completed','var(--s2)'],3:['On-Hold','
 const TAGS=D.animeTags||{};
 ((D.mir||{}).u||[]).forEach(x=>MIRU.add(x));
 const MIRA=new Set((D.mir||{}).a||[]),MIRM=new Set((D.mir||{}).m||[]);
-const anime=D.anime.map(a=>({tags:TAGS[a[0]]||'',id:a[0],t:a[1],alt:a[2],st:a[3],sc:a[4],ep:a[5],eps:a[6],type:a[7],img:MIRA.has(a[0])?`covers/a/${a[0]}.jpg`:/^http/.test(a[8]||'')?a[8]:a[8]?`https://cdn.myanimelist.net/images/anime/${a[8]}.jpg`:'',y:a[9],g:a[10].map(i=>D.animeGenres[i]),mal:a[11],up:a[12],rw:a[13]||0,rwing:a[14]||0,n:norm(a[1]+' '+a[2])}));
+const anime=D.anime.map(a=>({tags:TAGS[a[0]]||'',id:a[0],t:a[1],alt:a[2],st:a[3],sc:a[4],ep:a[5],eps:a[6],type:a[7],img:MIRA.has(a[0])?`covers/a/${a[0]}.jpg`:/^http/.test(a[8]||'')?a[8]:a[8]?`https://cdn.myanimelist.net/images/anime/${a[8]}.jpg`:'',y:a[9],g:a[10].map(i=>D.animeGenres[i]),mal:a[11],up:a[12],rw:a[13]||0,rwing:a[14]||0,rwt:a[15]||0,n:norm(a[1]+' '+a[2])}));
 const filmByKey={};
 const films=D.films.map((f,i)=>{const o=Object.assign({},f,{i,logs:f.n,rw:f.rw||0,n:norm(f.t)});filmByKey[norm(f.t)+'|'+f.y]=o;return o});
 /* films added by hand on this site (data/films_local.json); one Letterboxd already has is skipped */
@@ -224,8 +224,10 @@ function rOverview(){
   const wPub=[...works,...mediumOnly()],words=wPub.reduce((s,x)=>s+(x.words||0),0);
   // activity
   const act=[];
-  anime.filter(a=>a.up).sort((a,b)=>b.up-a.up).slice(0,12).forEach(a=>act.push({img:a.img,d:new Date(a.up*1000).toISOString(),k:'anime',t:a.t,w:`${AST[a.st][0]}${a.sc?` · scored ${a.sc}`:''}${a.st===1&&a.eps?` · ep ${a.ep}/${a.eps}`:''}`,o:()=>openAnime(a)}));
-  manga.filter(m=>m.up).sort((a,b)=>b.up-a.up).slice(0,12).forEach(m=>act.push({img:m.img,d:new Date(m.up*1000).toISOString(),k:'manga',t:m.t,w:`${MST[m.st][0]}${m.sc?` · scored ${m.sc}`:''}${m.st===1&&m.ch?` · ch ${m.ch}${m.chs?'/'+m.chs:''}`:''}`,o:()=>openManga(m)}));
+  // "Rewatched" / "Reread" when the last change was a rewatch (count went up), "Rewatching" / "Rereading" while one is going
+  const rwLbl=(x,v)=>x.rwing&&x.st!==2?(v==='a'?'Rewatching':'Rereading'):(x.rwt&&x.rwt>=x.up-300)?`${v==='a'?'Rewatched':'Reread'}${x.rw>1?' ×'+x.rw:''}`:'';
+  anime.filter(a=>a.up).sort((a,b)=>b.up-a.up).slice(0,12).forEach(a=>act.push({img:a.img,d:new Date(a.up*1000).toISOString(),k:'anime',t:a.t,w:`${rwLbl(a,'a')||AST[a.st][0]}${a.sc?` · scored ${a.sc}`:''}${a.st===1&&a.eps?` · ep ${a.ep}/${a.eps}`:''}`,o:()=>openAnime(a)}));
+  manga.filter(m=>m.up).sort((a,b)=>b.up-a.up).slice(0,12).forEach(m=>act.push({img:m.img,d:new Date(m.up*1000).toISOString(),k:'manga',t:m.t,w:`${rwLbl(m,'m')||MST[m.st][0]}${m.sc?` · scored ${m.sc}`:''}${m.st===1&&m.ch?` · ch ${m.ch}${m.chs?'/'+m.chs:''}`:''}`,o:()=>openManga(m)}));
   books.filter(b=>b.dr||(b.d&&b.d>'2026-11-08')).sort((a,b)=>(b.dr||b.d).localeCompare(a.dr||a.d)).slice(0,8).forEach(b=>act.push({img:b.img||'',d:b.dr||b.d,k:'books',t:b.t,w:b.dr?`Finished${b.r?` · ${b.r}★`:''}`:`Added to ${BST[b.st]?BST[b.st][0]:'shelf'}`,o:()=>openBook(b)}));
   films.filter(f=>f.wd).sort((a,b)=>(b.lt||b.wd).localeCompare(a.lt||a.wd)).slice(0,12).forEach(f=>act.push({img:f.img||'',d:(f.lt&&f.lt.slice(0,10)>=f.wd)?f.lt:f.wd+'T23:59:59Z',k:'films',t:`${f.t} (${f.y})`,w:`Watched${f.r?` · ${stars(f.r)}`:''}`,o:()=>openFilm(f)}));
   games.filter(g=>g.added).sort((a,b)=>b.added.localeCompare(a.added)).slice(0,10).forEach(g=>act.push({img:g.img||'',d:g.added,k:'games',t:g.t,w:`Added to ${g.shelf}${g.r?` · ${g.r}/5`:''}`,o:()=>openGame(g)}));
@@ -546,7 +548,7 @@ function addOvFav(k){
 const MST={1:['Reading','var(--s1)'],2:['Completed','var(--s2)'],3:['On-Hold','var(--s3)'],4:['Dropped','var(--s4)'],6:['Plan to Read','var(--s6)']};
 const MTAGS=D.mangaTags||{};
 const XMANGA=x=>({tags:x.note||'',id:x.id,t:x.t,alt:x.alt||'',st:x.st||6,sc:x.sc||0,ch:x.ch||0,chs:x.chs||0,vol:x.vol||0,vols:x.vols||0,type:x.ty||'Novel',img:x.img||'',y:x.y||0,g:x.g||[],mal:0,rw:x.rw||0,rwing:0,up:x.up||0,n:norm(x.t+' '+(x.alt||'')+' '+(x.en||'')),local:1,au:x.au||'',jt:x.jt||'',d:x.d||''});
-const manga=D.manga.map(m=>({tags:MTAGS[m[0]]||'',id:m[0],t:m[1],alt:m[2],st:m[3],sc:m[4],ch:m[5],chs:m[6],vol:m[7],vols:m[8],type:m[9],img:MIRM.has(m[0])?`covers/m/${m[0]}.jpg`:/^http/.test(m[10]||'')?m[10]:m[10]?`https://cdn.myanimelist.net/images/manga/${m[10]}.jpg`:'',y:m[11],g:m[12].map(i=>D.mangaGenres[i]),mal:m[13],rw:m[14]||0,rwing:m[15]||0,up:m[16]||0,n:norm(m[1]+' '+m[2])}));
+const manga=D.manga.map(m=>({tags:MTAGS[m[0]]||'',id:m[0],t:m[1],alt:m[2],st:m[3],sc:m[4],ch:m[5],chs:m[6],vol:m[7],vols:m[8],type:m[9],img:MIRM.has(m[0])?`covers/m/${m[0]}.jpg`:/^http/.test(m[10]||'')?m[10]:m[10]?`https://cdn.myanimelist.net/images/manga/${m[10]}.jpg`:'',y:m[11],g:m[12].map(i=>D.mangaGenres[i]),mal:m[13],rw:m[14]||0,rwt:m[17]||0,rwing:m[15]||0,up:m[16]||0,n:norm(m[1]+' '+m[2])}));
 (D.mangaExtra||[]).forEach(x=>manga.push(XMANGA(x)));
 malApplyQ();
 function rManga(){
@@ -1215,7 +1217,7 @@ const MQF='data/mal_queue.json';
 function malApplyQ(){(D.malQ||[]).forEach(it=>{const L=it.k==='anime'?anime:manga;let x=L.find(e=>e.id===it.id);
   if(it.del){if(x)L.splice(L.indexOf(x),1);return}
   if(!x&&it.info){x=Object.assign({id:it.id,t:it.info.t,alt:'',img:it.info.img||'',type:it.info.type||'',y:it.info.y||'',g:it.info.g||[],mal:0,rw:0,rwing:0,tags:'',n:norm(it.info.t)},it.k==='anime'?{ep:0,eps:it.info.n||0}:{ch:0,chs:it.info.n||0,vol:0,vols:it.info.v||0});L.push(x)}
-  if(x){Object.assign(x,it.s||{});x.pend=1}})}
+  if(x){if(it.s&&it.s.rw>(x.rw||0)){x.rwt=Math.floor((it.t||Date.now())/1000);x.up=Math.max(x.up||0,x.rwt)}Object.assign(x,it.s||{});x.pend=1}})}
 async function malQueue(it){let cur;try{cur=await ghLoad(MQF)}catch(e){cur={q:[]}}cur.q=(cur.q||[]).filter(x=>!(x.k===it.k&&x.id===it.id));cur.q.push(it);
   await ghSave(MQF,cur,'MAL waiting list: '+(it.info&&it.info.t||it.k+' '+it.id));D.malQ=cur.q}
 async function malUnqueue(done){if(!done.length)return;let cur;try{cur=await ghLoad(MQF)}catch(e){return}

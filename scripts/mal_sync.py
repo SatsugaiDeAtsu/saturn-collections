@@ -138,8 +138,13 @@ def main():
             up = 12 if it['k'] == 'anime' else 16
             if len(row) > up:
                 row[up] = int(it['t'] / 1000)
-            if it['k'] == 'anime' and len(row) > 13:
-                row[13] = sv.get('rw', row[13])
+            irw, ing, irt = (13, 14, 15) if it['k'] == 'anime' else (14, 15, 17)
+            if len(row) > ing and sv.get('rw') is not None:
+                while len(row) <= irt:
+                    row.append(0)
+                if sv['rw'] > (row[irw] or 0):
+                    row[irt] = int(it['t'] / 1000)  # a rewatch/reread: Recent activity shows it as one
+                row[irw] = sv['rw']
             if it['k'] == 'manga':
                 row[7] = sv.get('vol', row[7])
             if sv.get('tags') is not None:
