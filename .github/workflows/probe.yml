@@ -1,0 +1,10 @@
+name: probe
+on: workflow_dispatch
+jobs:
+  p:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          CID=$(python3 -c "import json;print(json.load(open('data/settings.json'))['malClientId'])")
+          for i in 64380 35434 63188 58473 18497 53865; do curl -s -m 40 -o /tmp/o -w "$i %{http_code} %{time_total}s " -H "X-MAL-CLIENT-ID: $CID" "https://api.myanimelist.net/v2/anime/$i?fields=opening_themes,ending_themes"; python3 -c "import json;d=json.load(open('/tmp/o'));print(d.get('title'),'| OP',len(d.get('opening_themes') or []),'ED',len(d.get('ending_themes') or []))" 2>/dev/null || head -c 120 /tmp/o; echo; sleep 1; done
