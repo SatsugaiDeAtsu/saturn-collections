@@ -2252,6 +2252,68 @@ def update_music():
         json.dump(out, f, ensure_ascii=False, separators=(',', ':'))
 
 
+def song_key(n, a):
+    """Same song, same artist: the site's mBase() in Python (drops brackets and " - ..." parts; keeps Japanese)."""
+    n = re.sub(r'\s*[\(\[【（][^\)\]】）]*[\)\]】）]', '', str(n or '').lower())
+    n = re.sub(r'\s+[-–—~]\s+.*$', '', n)
+    clean = lambda x: re.sub(r'[\W_]+', ' ', x).strip()
+    return clean(n) + '|' + clean(str(a or '').lower())
+
+
+def lastfm_plays(sp, tr, plog, known):
+    """Last.fm keeps every play, offline ones too once the Spotify app syncs, while Spotify only lists the last 50
+    (and often skips offline plays). Add the Last.fm plays of the last week that the log doesn't have, as Spotify songs."""
+    U, W = settings.get('lastfm'), settings.get('workerUrl', '').rstrip('/')
+    if not U or not W:
+        return plog
+    EXC = set(settings.get('music_exclude', []))
+    since = int(time.time()) - 7 * 86400
+    scr, page = [], 1
+    while page <= 5:
+        url = W + '/lastfm?' + urllib.parse.urlencode({'method': 'user.getrecenttracks', 'user': U, 'limit': 200, 'from': since, 'page': page})
+        with urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent': UA}), timeout=40) as r:
+            j = json.load(r).get('recenttracks', {})
+        for x in j.get('track', []):
+            if x.get('date') and x.get('artist', {}).get('#text') not in EXC:
+                scr.append((int(x['date']['uts']), x.get('name', ''), x['artist'].get('#text', '')))
+        if page >= int((j.get('@attr') or {}).get('totalPages', 1) or 1):
+            break
+        page += 1
+    idx = {}
+    for i, t in known.items():
+        for a in t.get('ar', []):
+            idx.setdefault(song_key(t.get('n'), a[1]), i)
+    when = lambda iso: datetime.strptime(iso[:19], '%Y-%m-%dT%H:%M:%S').replace(tzinfo=timezone.utc).timestamp()
+    have = [(when(r['t']), r['id']) for r in plog if r.get('t')]
+    added, searched, missing = 0, 0, 0
+    for uts, n, a in scr:
+        k = song_key(n, a)
+        i = idx.get(k)
+        if not i and searched < 40:  # a song not seen before: find it on Spotify
+            searched += 1
+            try:
+                for t in sp('/search', q=f'track:{n} artist:{a}', type='track', limit=5).get('tracks', {}).get('items', []):
+                    if any(song_key(n, x.get('name')) == k for x in t.get('artists', [])) or song_key(t.get('name'), a) == k:
+                        i = tr(t)
+                        known[i] = {'n': t.get('name'), 'ar': [[x.get('id'), x.get('name')] for x in t.get('artists', [])]}
+                        idx[k] = i
+                        break
+            except Exception:
+                pass
+        if not i:
+            missing += 1
+            continue
+        # Spotify's time is when the song ended, Last.fm's when it started: same song within 20 minutes is the same play
+        if any(h == i and abs(ht - uts) < 1200 for ht, h in have):
+            continue
+        plog.append({'t': datetime.fromtimestamp(uts, timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.000Z'), 'id': i, 'src': 'lf'})
+        have.append((uts, i))
+        added += 1
+    plog.sort(key=lambda r: r['t'], reverse=True)
+    log(f'music: last.fm {len(scr)} plays in the last week, {added} added that Spotify missed, {missing} not found on Spotify')
+    return plog
+
+
 def update_spotify(sp, me, out):
     tracks, artists = {}, out.get('artists', {})
     img = lambda o: ((o or {}).get('images') or [{}])[0].get('url', '')
@@ -2279,6 +2341,10 @@ def update_spotify(sp, me, out):
     seen = {(r['t'], r['id']) for r in out.get('log', [])}
     plog = out.get('log', []) + [r for r in recent if r['id'] and (r['t'], r['id']) not in seen]
     plog.sort(key=lambda r: r['t'], reverse=True)
+    try:
+        plog = lastfm_plays(sp, tr, plog, {**out.get('tracks', {}), **tracks})
+    except Exception as e:
+        log('music: last.fm plays failed', e)
     pls, off = [], 0
     while True:
         j = sp('/me/playlists', limit=50, offset=off)
