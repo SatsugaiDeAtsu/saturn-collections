@@ -1841,15 +1841,15 @@ async function rMusic(){
   mBind();
 }
 const mAgo=t=>{const d=(Date.now()-new Date(t))/1000;return d<3600?Math.max(1,Math.round(d/60))+' min ago':d<86400?Math.round(d/3600)+' h ago':Math.round(d/86400)+' d ago'};
-const ovMS={a:'short_term',s:'short_term'};let ovRecent=null;
+const ovMS={a:'short_term',s:'short_term'};let ovRecent=null,ovRecentAt=0;
 let OVM=null;
 async function ovMusic(){const box=$('#ov_music');if(!box)return;OVM=OVM||await loadJ('data/ov_music.json');
   // the full music file has no All Time lists, so those always come from the overview file
   const MO=MU?Object.assign({},MU,OVM?{hist:OVM.hist,h:OVM.h,tracks:Object.assign({},OVM.tracks,MU.tracks),artists:Object.assign({},OVM.artists,MU.artists)}:{}):OVM;if(!MO||!MO.top||!$('#ov_music'))return;
   const MU0=MU,MH0=MH;MU=MO;if(!MH&&MO.h)MH={tracks:MO.h.t,artists:MO.h.a};
   // recently played comes live from Spotify (last 50), falling back to the nightly copy
-  if(!ovRecent&&SET.workerUrl){try{let j=null;for(let k=0;k<2&&!j;k++){j=await fetch(SET.workerUrl+'/spotify/api/me/player/recently-played?limit=50').then(r=>r.ok?r.json():null);if(!j)await new Promise(ok=>setTimeout(ok,1500))}const EXC=new Set(SET.music_exclude||[]);
-    if(j&&j.items){ovRecent=j.items.filter(it=>it.track&&!(it.track.artists||[]).some(a=>EXC.has(a.name))).map(it=>{const t=it.track;MKN.t[t.id]=MKN.t[t.id]||{n:t.name,ar:(t.artists||[]).map(a=>[a.id,a.name]),al:(t.album||{}).name||'',img:((t.album||{}).images||[])[0]?.url||'',ms:t.duration_ms||0};return {t:it.played_at,id:t.id}})}}catch(e){}}
+  if((!ovRecent||Date.now()-ovRecentAt>60000)&&SET.workerUrl){try{let j=null;const mn=Math.floor(Date.now()/60000)*60000;for(let k=0;k<2&&!j;k++){j=await fetch(SET.workerUrl+'/spotify/api/me/player/recently-played?limit=50&before='+mn).then(r=>r.ok?r.json():null);if(!j)await new Promise(ok=>setTimeout(ok,1500))}const EXC=new Set(SET.music_exclude||[]);
+    if(j&&j.items){ovRecentAt=Date.now();ovRecent=j.items.filter(it=>it.track&&!(it.track.artists||[]).some(a=>EXC.has(a.name))).map(it=>{const t=it.track;MKN.t[t.id]=MKN.t[t.id]||{n:t.name,ar:(t.artists||[]).map(a=>[a.id,a.name]),al:(t.album||{}).name||'',img:((t.album||{}).images||[])[0]?.url||'',ms:t.duration_ms||0};return {t:it.played_at,id:t.id}})}}catch(e){}}
   const rec=ovRecent||MO.log||MO.recent||[];
   const R=[['short_term','4 weeks'],['medium_term','6 months'],['long_term',"Spotify's"],...(MO.hist?[['hist','All Time']]:[])];
   const seg=(k)=>`<div class="mseg sm">${R.map(([r,l])=>`<button data-ovm="${k}:${r}" class="${ovMS[k]===r?'on':''}">${l}</button>`).join('')}</div>`;

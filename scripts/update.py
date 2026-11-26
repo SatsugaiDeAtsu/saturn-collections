@@ -2483,8 +2483,8 @@ def build_overview_files():
     dump('ov_film.json', {'f': {i: {f: v[f] for f in ('rt', 'g') if f in v} for i, v in fd.get('f', {}).items()}, 'col': {}})
     mu = load_json(os.path.join(DATA, 'music.json'), {})
     if mu.get('top'):
-        top = {'artists': {r: mu['top']['artists'].get(r, [])[:10] for r in ('short_term', 'long_term')},
-               'tracks': {r: mu['top']['tracks'].get(r, [])[:10] for r in ('short_term', 'long_term')}}
+        top = {'artists': {r: mu['top']['artists'].get(r, [])[:10] for r in ('short_term', 'medium_term', 'long_term')},
+               'tracks': {r: mu['top']['tracks'].get(r, [])[:10] for r in ('short_term', 'medium_term', 'long_term')}}
         rec = (mu.get('log') or mu.get('recent') or [])[:50]
         ids = {r['id'] for r in rec if r.get('id')} | {i for r in top['tracks'].values() for i in r}
         tr = {i: mu['tracks'][i] for i in ids if i in mu.get('tracks', {})}
