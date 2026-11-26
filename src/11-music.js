@@ -94,10 +94,10 @@ async function openArtist(id,ext){await Promise.all([muLoad(),mhLoad()]);const a
   modal('music','Artist',`<div class="mart" style="cursor:default;max-width:220px"><div class="pic">${a.img?`<img src="${esc(a.img)}" alt="" referrerpolicy="no-referrer">`:`<b>${esc(initials(a.n))}</b>`}</div></div><div><h2>${esc(a.n)}</h2>
   ${rk.length?`<div class="muted" style="margin:4px 0 10px">Your top artist: ${rk.join(' · ')}</div>`:''}
   <div class="kv"><div>Songs in your playlists</div><div><b>${mine.length}</b> <span class="muted" id="m_tot">/ counting…</span></div>${(()=>{const x=mhA(a.n);return x?`<div>Listened</div><div><b>${mhH(x[0])}</b> · ${fmt(x[1])} plays · since ${fdate(x[2])}</div>`:''})()}${inL.length?`<div>In playlists</div><div>${inL.map(n=>`<span class="tag">${esc(n)}</span>`).join('')}</div>`:''}</div>
-  <div style="margin:14px 0;display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-mplay="artist:${id}">▶ Play</button><a class="btn pri" href="${SPU('artist',id)}" target="_blank" rel="noopener">Open on Spotify ↗</a>${OWNER()&&ED.on&&!ovFavList('singers').some(x=>x.id===id)?`<button class="btn" id="m_fsing">♥ Add to favourite singers</button>`:''}</div>
+  <div style="margin:14px 0;display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-mplay="artist:${id}">▶ Play</button><a class="btn pri" href="${SPU('artist',id)}" target="_blank" rel="noopener">Open on Spotify ↗</a></div>
   <div class="mseg"><button class="on" data-al="in">In your playlists <span class="mono">${mine.length}</span></button><button data-al="out">Not in your playlists <span class="mono" id="m_outn">…</span></button></div>
   <div class="mscroll" id="m_list"></div></div>`);
-  const fs=$('#m_fsing');if(fs)fs.onclick=()=>saveOvFavs('singers',[...ovFavList('singers'),{id,t:a.n,img:a.img||''}],'Add '+a.n+' to favourite singers').then(ok=>{if(ok)closeM()});
+  addToHook({k:'artist',id,name:a.n,img:a.img||''});
   let out=null,cur='in';
   const show=w=>{cur=w;document.querySelectorAll('[data-al]').forEach(b=>b.classList.toggle('on',b.dataset.al===w));const box=$('#m_list');if(!box)return;
     if(w==='in')box.innerHTML=mine.map((s,i)=>mRow(s,i)).join('')||'<div class="muted small" style="padding:10px">None of their songs are in your playlists yet.</div>';
@@ -170,7 +170,7 @@ async function openSong(id){await Promise.all([muLoad(),mhLoad()]);const t=MU.tr
   modal('music','Song',`<div class="msqr">${t.img?`<img src="${esc(t.img)}" alt="" referrerpolicy="no-referrer">`:''}</div><div><h2>${esc(t.n)}</h2><div class="ar" style="margin:4px 0 10px">${mArtLinks(t)}</div>
   <div class="kv">${t.al?`<div>Album</div><div>${esc(t.al)}${t.y?' · '+t.y:''}</div>`:''}${t.ms?`<div>Length</div><div>${mDur(t.ms)}</div>`:''}${(()=>{const x=mhT(id);return x?`<div>Listened</div><div><b>${fmt(x[1])} plays</b> · ${mhH(x[0])}</div><div>First played</div><div>${fdate(x[2])}</div><div>Last played</div><div>${fdate(x[3])}</div>`:''})()}${inL.length?`<div>In playlists</div><div>${inL.map(n=>`<span class="tag">${esc(n)}</span>`).join('')}</div>`:''}</div>
   <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-mplay="track:${id}">▶ Play</button><a class="btn pri" href="${SPU('track',id)}" target="_blank" rel="noopener">Open on Spotify ↗</a></div></div>`);
-  mBind($('#modal'))}
+  mBind($('#modal'));addToHook({k:'song',id,name:t.n,ar:t.ar||[],al:t.al||'',img:t.img||'',ms:t.ms||0,y:t.y||''})}
 /* Spotify search through the helper: songs or artists */
 async function spSearch(type,q){if(!SET.workerUrl)return [];
   let j=null;for(let k=0;k<3&&!j;k++){const r=await fetch(`${SET.workerUrl}/spotify/api/search?q=${encodeURIComponent(q)}&type=${type}&limit=10`);if(r.ok)j=await r.json();else await new Promise(ok=>setTimeout(ok,1500*(k+1)))}if(!j)throw new Error('busy');
@@ -195,9 +195,9 @@ function mSearchModal(type,title,onPick){
 let MF=null;const mfLoad=async()=>MF||(MF=await loadJ('data/music_favs.json')||{});
 const MFS=[['songs','Favourite songs','song'],['en','Favourite singers · English','artist'],['jp','Favourite singers · Japanese','artist'],['anime','Favourite anime songs','song'],['hof','Hall of Fame','song']];
 const mfAll=()=>MFS.filter(s=>s[2]==='song').flatMap(s=>MF[s[0]]||[]);
-async function saveMF(cur,msg){toast('Saving…');try{let base;try{base=await ghLoad('data/music_favs.json')}catch(e){base={}}Object.assign(base,cur);await ghSave('data/music_favs.json',base,msg);MF=base;toast('Saved.');rHof();return true}catch(e){toast('Not saved: '+e.message,true);return false}}
+async function saveMF(cur,msg){toast('Saving…');try{let base;try{base=await ghLoad('data/music_favs.json')}catch(e){base={}}Object.assign(base,cur);await ghSave('data/music_favs.json',base,msg);MF=base;toast('Saved.');if(route==='hof')hofRedraw();return true}catch(e){toast('Not saved: '+e.message,true);return false}}
 function mfCards(key,kind){const L=MF[key]||[];
-  const card=(x,i)=>kind==='artist'?`<div class="card martc" data-mar="${esc(x.id)}">${cover(x.t,x.img||'',ED.on?`<button type="button" class="favx" data-mfdel="${key}:${i}" aria-label="Remove">✕</button>`:'','round')}<div class="meta"><div class="tt">${esc(x.t)}</div></div></div>`
+  const card=(x,i)=>kind==='artist'?`<div class="card martc" data-mar="${esc(x.id)}" style="position:relative">${ED.on?`<button type="button" class="favx" data-mfdel="${key}:${i}" aria-label="Remove">✕</button>`:''}${cover(x.t,x.img||'','','round')}<div class="meta"><div class="tt">${esc(x.t)}</div></div></div>`
     :`<div class="card msongc" data-msong="${esc(x.id)}">${cover(x.n||x.t,x.img||'',`<button type="button" class="mplayb" data-mplay="track:${esc(x.id)}" aria-label="Play">▶</button>`+(ED.on?`<button type="button" class="favx" data-mfdel="${key}:${i}" aria-label="Remove">✕</button>`:''),'sq')}<div class="meta"><div class="tt">${esc(x.n||x.t)}</div><div class="ss"><span>${esc((x.ar||[]).map(a=>a[1]).join(', '))}</span></div></div></div>`;
   return `<div class="hgrid">${L.map(card).join('')}${ED.on?`<button type="button" class="card favadd" data-mfadd="${key}"><div class="cover sq"><b>+</b></div><div class="meta"><div class="tt">Add</div></div></button>`:''}</div>`+(ED.on?`<div style="margin-top:8px"><button class="btn" data-mfnote="${key}">✎ ${MF.notes&&MF.notes[key]?'Edit':'Add'} a note</button></div>`:'')}
 function mfBind(){

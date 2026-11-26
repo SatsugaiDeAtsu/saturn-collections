@@ -886,68 +886,71 @@ def update_hof():
                 favs[k] = hof.get('malFavs', {}).get(k, [])
         hof['malFavs'] = favs
     log('favourites found:', {k: len(v) for k, v in favs.items()})
-    # blog posts
-    def flip(k, n):
-        if k in 'cp' and n.count(', ') == 1:
-            a, b = n.split(', ')
-            return f'{b} {a}'
-        return n
-    def items(s):
-        out = []
-        for k, i, txt, img in s['items']:
-            c = info(k, i, '')
-            name = flip(k, c["n"] or txt or "?").replace('~', ' ')
-            # each link keeps its own picture from the blog, so the same character can appear with different pictures
-            out.append(f'{k}{i}~{name}~{img}' if img else f'{k}{i}~{name}')
-        return out
-    hon_chr = blog_sections(804802)
-    log('blog 804802 sections:', len(hon_chr))
-    hon, chr_ = [], []
-    prev = ''
-    for s in hon_chr:
-        h = nice(s['h']); d = nice(' '.join(s['d']))
-        if re.match(r'honorary favou?rite', h, re.I):
-            prev = re.sub(r'(?i)honorary favou?rite ', '', h)
-            hon.append([h, d, items(s)])
-        elif re.match(r'honorary mentions', h, re.I) and prev:
-            hon.append([f'Honorary mentions: {prev}', d, items(s)])
-        else:
-            chr_.append([h, d, items(s)])
-    wai = [[nice(s['h']), nice(' '.join(s['d'])), items(s)] for s in blog_sections(804810)]
-    cou = blog_sections(804809)
-    couples, special, sdesc, in_special = [], [], '', False
-    def split_name(text):
-        """'some intro sentence. Name And Name ( Show )' -> ('intro', 'Name and Name', 'Show')"""
-        m = re.search(r'([^.!?]*?)\s*\(\s*([^()]*?)\s*\)\s*$', text)
-        if not m:
-            return text, '', ''
-        intro = text[:m.start()].strip()
-        name = m.group(1).strip()
-        return intro, re.sub(r'\s+And\s+', ' and ', name), m.group(2)
-    for s in cou:
-        h = s['h']; d = ' '.join(s['d'])
-        intro = ''
-        if re.match(r'(?i)favou?rite anime couples|a special mention', h):
-            if re.match(r'(?i)a special mention', h):
-                in_special = True
-            intro, name, show = split_name(d)
-            if in_special and intro:
-                sdesc = intro
-        else:
-            _, name, show = split_name((h + ' ' + d).strip())
-            if not name:
-                name, show = h, d
-        pair = items(s)
-        for extra in settings.get('hof_add', {}).get(name, []):
-            if extra not in pair:
-                pair.insert(0, extra)
-        (special if in_special else couples).append([name, show, pair])
-    if len(hon) >= 4 and len(chr_) >= 4 and len(wai) >= 4:
-        hof['blog'] = [{'post': 804802, 'secs': hon}, {'post': 804802, 'secs': chr_}, {'post': 804810, 'secs': wai}]
-        hof['people'] = []
-    if len(couples) >= 10:
-        hof['couples'] = couples
-        hof['specialCouples'] = {'desc': sdesc or hof.get('specialCouples', {}).get('desc', ''), 'pairs': special}
+    # blog posts. Once the Hall of Fame is edited on the site (siteEdited), the site is the source and the blogs are left alone
+    if hof.get('siteEdited'):
+        log('hall of fame: edited on the site, MAL blogs not read')
+    else:
+        def flip(k, n):
+            if k in 'cp' and n.count(', ') == 1:
+                a, b = n.split(', ')
+                return f'{b} {a}'
+            return n
+        def items(s):
+            out = []
+            for k, i, txt, img in s['items']:
+                c = info(k, i, '')
+                name = flip(k, c["n"] or txt or "?").replace('~', ' ')
+                # each link keeps its own picture from the blog, so the same character can appear with different pictures
+                out.append(f'{k}{i}~{name}~{img}' if img else f'{k}{i}~{name}')
+            return out
+        hon_chr = blog_sections(804802)
+        log('blog 804802 sections:', len(hon_chr))
+        hon, chr_ = [], []
+        prev = ''
+        for s in hon_chr:
+            h = nice(s['h']); d = nice(' '.join(s['d']))
+            if re.match(r'honorary favou?rite', h, re.I):
+                prev = re.sub(r'(?i)honorary favou?rite ', '', h)
+                hon.append([h, d, items(s)])
+            elif re.match(r'honorary mentions', h, re.I) and prev:
+                hon.append([f'Honorary mentions: {prev}', d, items(s)])
+            else:
+                chr_.append([h, d, items(s)])
+        wai = [[nice(s['h']), nice(' '.join(s['d'])), items(s)] for s in blog_sections(804810)]
+        cou = blog_sections(804809)
+        couples, special, sdesc, in_special = [], [], '', False
+        def split_name(text):
+            """'some intro sentence. Name And Name ( Show )' -> ('intro', 'Name and Name', 'Show')"""
+            m = re.search(r'([^.!?]*?)\s*\(\s*([^()]*?)\s*\)\s*$', text)
+            if not m:
+                return text, '', ''
+            intro = text[:m.start()].strip()
+            name = m.group(1).strip()
+            return intro, re.sub(r'\s+And\s+', ' and ', name), m.group(2)
+        for s in cou:
+            h = s['h']; d = ' '.join(s['d'])
+            intro = ''
+            if re.match(r'(?i)favou?rite anime couples|a special mention', h):
+                if re.match(r'(?i)a special mention', h):
+                    in_special = True
+                intro, name, show = split_name(d)
+                if in_special and intro:
+                    sdesc = intro
+            else:
+                _, name, show = split_name((h + ' ' + d).strip())
+                if not name:
+                    name, show = h, d
+            pair = items(s)
+            for extra in settings.get('hof_add', {}).get(name, []):
+                if extra not in pair:
+                    pair.insert(0, extra)
+            (special if in_special else couples).append([name, show, pair])
+        if len(hon) >= 4 and len(chr_) >= 4 and len(wai) >= 4:
+            hof['blog'] = [{'post': 804802, 'secs': hon}, {'post': 804802, 'secs': chr_}, {'post': 804810, 'secs': wai}]
+            hof['people'] = []
+        if len(couples) >= 10:
+            hof['couples'] = couples
+            hof['specialCouples'] = {'desc': sdesc or hof.get('specialCouples', {}).get('desc', ''), 'pairs': special}
     with open(os.path.join(DATA, 'hof.json'), 'w', encoding='utf-8') as f:
         json.dump(hof, f, ensure_ascii=False, indent=1)
     with open(os.path.join(DATA, 'hof_cache.json'), 'w', encoding='utf-8') as f:

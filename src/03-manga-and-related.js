@@ -140,7 +140,7 @@ function openManga(m){
   <div id="m_x"></div>
   ${m.tags?`<div class="review" style="--c:var(--manga)">${esc(m.tags)}</div>`:''}
   <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?'<button class="btn pri" id="m_edit">Edit</button>':''}${m.local?`<span class="small muted" style="align-self:center">Not on MyAnimeList, so it's kept on this site.</span>`:`<a class="btn${ED.on?'':' pri'}" href="https://myanimelist.net/manga/${m.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a>`}</div></div>`);
-  const me=$('#m_edit');if(me)me.onclick=()=>editMal('manga',m);
+  const me=$('#m_edit');if(me)me.onclick=()=>editMal('manga',m);if(!m.local)addToHook({k:'m',id:m.id,name:m.t,img:m.img||''});
   if(m.local){const kv=$('#modal .kv');if(kv&&(m.au||m.jt))kv.insertAdjacentHTML('beforeend',`${m.au?`<div>Author</div><div>${esc(m.au)}</div>`:''}${m.jt?`<div>Japanese</div><div>${esc(m.jt)}</div>`:''}`);if(m.d){$('#m_x').innerHTML=`<div class="syn">${esc(m.d)}</div>`}}
   else malExtra('m',m);
 }

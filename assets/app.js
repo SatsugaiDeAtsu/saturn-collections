@@ -1,7 +1,7 @@
 /* Saturn Collections: the site. Edit the files in src/ (one per section), then run: python3 tools/build.py */
 (async function(){
 "use strict";
-let D,SET={};try{const j=u=>fetch(u,{cache:'no-cache'}).then(r=>r.json());const [a,g,b,s,q,wr,mx,se,ov,th,fl,mq,msy,fr]=await Promise.all([j('data/site.json'),j('data/games.json'),j('data/books.json'),j('data/settings.json').catch(()=>({})),j('data/quotes.json').catch(()=>({quotes:[]})),j('data/writing.json').catch(()=>({works:[]})),j('data/manga_extra.json').catch(()=>({items:[]})),j('data/series.json').catch(()=>({series:[]})),j('data/ovfavs.json').catch(()=>null),j('data/themes.json').catch(()=>({})),j('data/films_local.json').catch(()=>({films:[]})),j('data/mal_queue.json').catch(()=>({q:[]})),j('data/mal_sync.json').catch(()=>null),j('data/film_ratings.json').catch(()=>({}))]);D=Object.assign(a,g,b,q,wr);D.mangaExtra=mx.items||[];D.ovFavs=ov;D.themes=th||{};D.series=se.series||[];D.filmsLocal=(fl&&fl.films)||[];D.malQ=(mq&&mq.q)||[];D.malSync=!!(msy&&msy.ct);D.filmR=fr||{};SET=s}catch(e){document.getElementById('app').innerHTML='<div class="empty">Could not load data/site.json.</div>';return}
+let D,SET={};try{const j=u=>fetch(u,{cache:'no-cache'}).then(r=>r.json());const [a,g,b,s,q,wr,mx,se,ov,th,fl,mq,msy,fr,hf]=await Promise.all([j('data/site.json'),j('data/games.json'),j('data/books.json'),j('data/settings.json').catch(()=>({})),j('data/quotes.json').catch(()=>({quotes:[]})),j('data/writing.json').catch(()=>({works:[]})),j('data/manga_extra.json').catch(()=>({items:[]})),j('data/series.json').catch(()=>({series:[]})),j('data/ovfavs.json').catch(()=>null),j('data/themes.json').catch(()=>({})),j('data/films_local.json').catch(()=>({films:[]})),j('data/mal_queue.json').catch(()=>({q:[]})),j('data/mal_sync.json').catch(()=>null),j('data/film_ratings.json').catch(()=>({})),j('data/hof.json').catch(()=>null)]);D=Object.assign(a,g,b,q,wr);D.mangaExtra=mx.items||[];D.ovFavs=ov;D.themes=th||{};D.series=se.series||[];D.filmsLocal=(fl&&fl.films)||[];D.malQ=(mq&&mq.q)||[];D.malSync=!!(msy&&msy.ct);D.filmR=fr||{};if(hf&&hf.blog)D.hof=hf;SET=s}catch(e){document.getElementById('app').innerHTML='<div class="empty">Could not load data/site.json.</div>';return}
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm=s=>String(s||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim();
@@ -689,7 +689,7 @@ function openManga(m){
   <div id="m_x"></div>
   ${m.tags?`<div class="review" style="--c:var(--manga)">${esc(m.tags)}</div>`:''}
   <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?'<button class="btn pri" id="m_edit">Edit</button>':''}${m.local?`<span class="small muted" style="align-self:center">Not on MyAnimeList, so it's kept on this site.</span>`:`<a class="btn${ED.on?'':' pri'}" href="https://myanimelist.net/manga/${m.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a>`}</div></div>`);
-  const me=$('#m_edit');if(me)me.onclick=()=>editMal('manga',m);
+  const me=$('#m_edit');if(me)me.onclick=()=>editMal('manga',m);if(!m.local)addToHook({k:'m',id:m.id,name:m.t,img:m.img||''});
   if(m.local){const kv=$('#modal .kv');if(kv&&(m.au||m.jt))kv.insertAdjacentHTML('beforeend',`${m.au?`<div>Author</div><div>${esc(m.au)}</div>`:''}${m.jt?`<div>Japanese</div><div>${esc(m.jt)}</div>`:''}`);if(m.d){$('#m_x').innerHTML=`<div class="syn">${esc(m.d)}</div>`}}
   else malExtra('m',m);
 }
@@ -734,16 +734,16 @@ const MALK={a:'anime',m:'manga',c:'character',p:'people'};
 const KLAB={a:'Anime',m:'Manga',c:'Character',p:'Person'};
 let hofSeg='home';
 const HOFITEMS=[];
-function hItem(code,extra){
+function hItem(code,extra,ref,pos){
   const [kid,name,pic]=code.split('~');const k=kid[0],id=+kid.slice(1);
   const own=k==='a'?anime.find(x=>x.id===id):k==='m'?manga.find(x=>x.id===id):null;
   const idx=HOFITEMS.push({k,id,name,own,pic})-1;
   const sub=(k==='c'||k==='p')&&(D.hofSub||{})[k+id]||extra||KLAB[k];
-  return `<div class="card" data-h="${idx}">${cover(own?own.t:name,pic||(own&&own.img?own.img:HIMG(k,id)),(own&&own.sc?`<span class="badge">${own.sc}</span>`:''))}<div class="meta"><div class="tt">${esc(name)}</div><div class="ss"><span>${esc(sub)}</span></div></div></div>`;
+  return `<div class="card" data-h="${idx}">${cover(own?own.t:name,pic||(own&&own.img?own.img:HIMG(k,id)),(own&&own.sc?`<span class="badge">${own.sc}</span>`:'')+(ref&&ED.on?hDelBtn(ref,pos):''))}<div class="meta"><div class="tt">${esc(name)}</div><div class="ss"><span>${esc(sub)}</span></div></div></div>`;
 }
 const HIMG=(k,id)=>(D.hofImages||{})[k+id]||'';
-function coupleCards(list){
-  return `<div class="couples">${list.map(([n,show,cs])=>`<div class="couple"><div class="pair">${cs.map(c=>{const [kid,nm,pic]=c.split('~');const idx=HOFITEMS.push({k:kid[0],id:+kid.slice(1),name:nm,pic})-1;return `<div data-h="${idx}" style="cursor:pointer">${cover(nm,pic||HIMG(kid[0],+kid.slice(1)))}</div>`}).join('')}</div><div class="meta"><b>${esc(n)}</b><span>${esc(show)}</span></div></div>`).join('')}</div>`;
+function coupleCards(list,ref){
+  return `<div class="couples">${list.map(([n,show,cs],ci)=>`<div class="couple" style="position:relative">${ref&&ED.on?hDelBtn(ref,ci):''}<div class="pair">${cs.map(c=>{const [kid,nm,pic]=c.split('~');const idx=HOFITEMS.push({k:kid[0],id:+kid.slice(1),name:nm,pic})-1;return `<div data-h="${idx}" style="cursor:pointer">${cover(nm,pic||HIMG(kid[0],+kid.slice(1)))}</div>`}).join('')}</div><div class="meta"><b>${esc(n)}</b><span>${esc(show)}</span></div></div>`).join('')}</div>`;
 }
 function rHof(){
   HOFITEMS.length=0;
@@ -752,17 +752,17 @@ function rHof(){
   const H=D.hof,F=H.malFavs;
   const grid=items=>`<div class="hgrid">${items}</div>`;
   const groups=[];
-  const G=(id,title,desc,icon,c,src,secs)=>groups.push({id,title,desc,icon,c,src,secs});
-  const sec=(id,title,desc,inner,cls)=>({id,title,desc,inner,cls});
+  const G=(id,title,desc,icon,c,src,secs,nsec)=>groups.push({id,title,desc,icon,c,src,secs,nsec});
+  const sec=(id,title,desc,inner,cls,ref)=>({id,title,desc,inner,cls,ref});
   const blogUrl=e=>`https://myanimelist.net/blog.php?eid=${e}`;
-  const fil=(arr,re)=>arr.filter(s=>re.test(s[0]));
-  const hon=H.blog[0].secs, chr=H.blog[1].secs, wai=H.blog[2].secs;
+  // blog sections keep their place in data/hof.json (b:<blog>:<section>) so they can be edited on the site
+  const hSecs=(gi,seg,pfx,cls)=>H.blog[gi].secs.map((s,si)=>[s,si]).filter(([s])=>!seg||hSeg(s,gi)===seg).map(([[t,d,it],si],i)=>sec(pfx+i,t.replace(/^Honorary mentions: /,'Honorary mentions · '),d,grid(it.map((c,j)=>hItem(c,undefined,`b:${gi}:${si}`,j)).join('')),cls?cls(t):'',`b:${gi}:${si}`));
   if(hofSeg==='anime'){
     G('g-mal','MAL favourites','My official top anime and studios on MyAnimeList.','star','#8a50e0','https://myanimelist.net/profile/SatsugaiDeAtsu',[
       sec('s-mal-a','Top anime','',grid(F.anime.map(([id,t,sub])=>hItem('a'+id+'~'+t,sub)).join(''))),
       sec('s-mal-s','Top studios','',grid(F.company.map(studioTile).join('')))]);
     G('g-hon','Honorary favourites','Shows special to me beyond the top 10, plus my nurturing legacy.','star','#d9a514',blogUrl(804802),
-      fil(hon,/anime/i).map(([t,d,it],i)=>sec('s-hon-'+i,t.replace(/^Honorary mentions: /,'Honorary mentions · '),d,grid(it.map(c=>hItem(c)).join('')))));
+      hSecs(0,'a','s-hon-'),'0:a');
     const p10=anime.filter(a=>a.sc===10).sort((a,b)=>b.mal-a.mal);
     G('g-a10','Perfect 10s','Every anime I scored 10 out of 10 on MAL.','ten','#8a50e0','',[sec('s-a10','Scored 10','',grid(p10.map(a=>hItem('a'+a.id+'~'+a.t,a.type+(a.y?' · '+a.y:''))).join('')))]);
   }else if(hofSeg==='chars'){
@@ -770,27 +770,27 @@ function rHof(){
       sec('s-mal-c','Top characters','',grid(F.character.map(([id,t,sub])=>hItem('c'+id+'~'+t,sub)).join(''))),
       sec('s-mal-p','Top people','',grid(F.people.map(([id,t])=>hItem('p'+id+'~'+t)).join('')))]);
     G('g-honc','Honorary favourites','Characters special to me beyond the top 10.','star','#d9a514',blogUrl(804802),
-      fil(hon,/character/i).map(([t,d,it],i)=>sec('s-honc-'+i,t.replace(/^Honorary mentions: /,'Honorary mentions · '),d,grid(it.map(c=>hItem(c)).join('')))));
+      hSecs(0,'c','s-honc-'),'0:c');
     G('g-chr','Character corner','Parents, battalions, villains, the ones I hate, and the people behind it all.','mask','#24a896',blogUrl(804802),
-      chr.map(([t,d,it],i)=>sec('s-chr-'+i,t,d,grid(it.map(c=>hItem(c)).join('')),/hate/i.test(t)?'hated':'')).concat((H.people||[]).map(([t,d,it],i)=>sec('s-ppl-'+i,t,d,grid(it.map(c=>hItem(c)).join(''))))));
+      hSecs(1,'','s-chr-',t=>/hate/i.test(t)?'hated':'').concat((H.people||[]).map(([t,d,it],i)=>sec('s-ppl-'+i,t,d,grid(it.map(c=>hItem(c)).join(''))))),'1:');
   }else if(hofSeg==='waifus'){
     G('g-wai','Waifus','A blog of its own: the goddess, the waifus, the battalion and more.','heart','#d24a7a',blogUrl(804810),
-      wai.map(([t,d,it],i)=>sec('s-wai-'+i,t,d,grid(it.map(c=>hItem(c)).join('')))));
+      hSecs(2,'','s-wai-'),'2:');
   }else if(hofSeg==='music'){
     const segb=(k)=>`<div class="mseg">${[['short_term','Last 4 weeks'],['medium_term','Last 6 months'],['long_term',"Spotify's ranking"],...(MH&&MH.tot?[['hist','All Time']]:[])].map(([r,l])=>`<button data-hms="${k}:${r}" class="${hmS[k]===r?'on':''}">${l}</button>`).join('')}</div>`;
     const note=k=>(MF.notes||{})[k]||'';
     const fs=MFS.filter(([k])=>ED.on||(MF[k]||[]).length);
-    if(fs.length)G('g-mfav','Music favourites','The songs and singers I keep coming back to, picked by hand.','heart','#1f9d63','',fs.map(([k,l,kind])=>sec('s-mf-'+k,l,note(k),mfCards(k,kind))));
+    if(fs.length)G('g-mfav','Music favourites','The songs and singers I keep coming back to, picked by hand.','heart','#1f9d63','',fs.map(([k,l,kind])=>sec('s-mf-'+k,l,note(k),mfCards(k,kind),'','mf:'+k)));
     if(MU&&MU.top){G('g-mtop','Top artists',"Spotify's ranking mixes how much and how recently I listen. All Time is the real total of hours since 2021.",'star','#1f9d63','',[sec('s-mta','Top artists','',segb('a')+(hmS.a==='hist'?`<div class="martists">${Object.entries(MH.artists).sort((a,b)=>b[1][0]-a[1][0]).slice(0,50).map(([n,v],i)=>{const id=Object.keys(MU.artists).find(k=>MU.artists[k].n===n);return id?mArtTile(id,i).replace('</button>',`<div class="rk">${mhH(v[0])}</div></button>`):`<div class="mart"><div class="pic"><b>${esc(initials(n))}</b></div><div class="nm">${esc(n)}</div><div class="rk">#${i+1} · ${mhH(v[0])}</div></div>`}).join('')}</div>`:`<div class="martists">${(MU.top.artists[hmS.a]||[]).map(mArtTile).join('')}</div>`))]);
       G('g-mts','Top songs',"Spotify's ranking mixes how much and how recently I play. All Time counts real plays since 2021.",'music','#1f9d63','',[sec('s-mts','Top songs','',segb('s')+`<div class="box mcompact">${(hmS.s==='hist'?MH.songs.slice(0,50).map(x=>{mhKnow(x.id);return x.id}):(MU.top.tracks[hmS.s]||[])).map((id,i)=>mRow(id,i)).join('')}</div>`)])}
   }else if(hofSeg==='couples'){
     G('g-cou','Couples','Favourite anime couples, and two special cases.','couple','#e8733a',blogUrl(804809),[
-      sec('s-cou','Favourite anime couples','The name says it all.',coupleCards(H.couples)),
-      sec('s-cou-sp','A special mention',H.specialCouples.desc,coupleCards(H.specialCouples.pairs))]);
+      sec('s-cou','Favourite anime couples','The name says it all.',coupleCards(H.couples,'c'),'','c'),
+      sec('s-cou-sp','A special mention',H.specialCouples.desc,coupleCards(H.specialCouples.pairs,'sp'),'','sp')]);
   }else if(hofSeg==='manga'){
     G('g-mmal','MAL favourites','My official top manga on MyAnimeList.','star','#d24a5f','https://myanimelist.net/profile/SatsugaiDeAtsu',[sec('s-mm','Top manga','',grid(F.manga.map(([id,t,sub])=>hItem('m'+id+'~'+t,sub)).join('')))]);
     G('g-mhon','Honorary favourites','Manga special to me like my favs, even outside the top 10.','star','#d9a514',blogUrl(804802),
-      fil(hon,/manga/i).map(([t,d,it],i)=>sec('s-mhon-'+i,t.replace(/^Honorary mentions: /,'Honorary mentions · '),d,grid(it.map(c=>hItem(c)).join('')))));
+      hSecs(0,'m','s-mhon-'),'0:m');
     const p10=manga.filter(m=>m.sc===10).sort((a,b)=>b.mal-a.mal);
     G('g-m10','Perfect 10s','Every manga I scored 10 out of 10.','ten','#d24a5f','',[sec('s-m10','Scored 10','',grid(p10.map(m=>hItem('m'+m.id+'~'+m.t,m.type+(m.y?' · '+m.y:''))).join('')))]);
   }else if(hofSeg==='films'){
@@ -801,11 +801,11 @@ function rHof(){
     const five=films.filter(f=>f.r===5);
     G('g-f5','Five stars','Every film I rated ★★★★★.','ten','#e8733a','',[sec('s-f5','Rated five stars','',grid(five.map(f=>fc(f.t,f.y)).join('')))]);
   }else if(hofSeg==='games'){
-    const gc=g=>{const idx=HOFITEMS.push({game:g})-1;return `<div class="card" data-h="${idx}">${cover(g.t,g.img||'',gBadge(g)+gDlcStack(g))}<div class="meta"><div class="tt">${esc(g.t)}</div>${gDlcLine(g)}<div class="ss"><span>${esc(g.shelf)}</span></div></div></div>`};
+    const gc=(g,pos)=>{const idx=HOFITEMS.push({game:g})-1;return `<div class="card" data-h="${idx}">${cover(g.t,g.img||'',gBadge(g)+gDlcStack(g)+(pos!=null&&ED.on?hDelBtn('gv',pos):''))}<div class="meta"><div class="tt">${esc(g.t)}</div>${gDlcLine(g)}<div class="ss"><span>${esc(g.shelf)}</span></div></div></div>`};
     const favG=D.gvFav.map(n=>games.find(g=>g.t===n)).filter(Boolean);
-    G('g-gtop','Favourite games','My favourite games, in order.','star','#8a55e6','',[sec('s-gtop','Favourites','',grid(favG.map(gc).join('')))]);
-    G('g-g5','Also rated 5/5','','ten','#8a55e6','',[sec('s-g5','Five out of five','',grid(games.filter(g=>g.r===5&&!D.gvFav.includes(g.t)).map(gc).join('')))]);
-    G('g-grv','Games I wrote about','My reviews.','stories','#8a55e6','',[sec('s-grv','Reviewed','',grid(games.filter(g=>g.rv).sort((a,b)=>b.r-a.r).map(gc).join('')))]);
+    G('g-gtop','Favourite games','My favourite games, in order.','star','#8a55e6','',[sec('s-gtop','Favourites','',grid(favG.map(g=>gc(g,D.gvFav.indexOf(g.t))).join('')),'','gv')]);
+    G('g-g5','Also rated 5/5','','ten','#8a55e6','',[sec('s-g5','Five out of five','',grid(games.filter(g=>g.r===5&&!D.gvFav.includes(g.t)).map(g=>gc(g)).join('')))]);
+    G('g-grv','Games I wrote about','My reviews.','stories','#8a55e6','',[sec('s-grv','Reviewed','',grid(games.filter(g=>g.rv).sort((a,b)=>b.r-a.r).map(g=>gc(g)).join('')))]);
   }else{
     const bc=b=>{const idx=HOFITEMS.push({book:b})-1;return `<div class="card book" data-h="${idx}">${cover(b.t,b.img||'',b.r?`<span class="badge">${b.r}★</span>`:'')}<div class="meta"><div class="tt">${esc(b.t)}</div><div class="ss"><span>${esc(b.a)}</span></div></div></div>`};
     G('g-b5','Five stars','Books I rated 5 out of 5.','ten','#b07a38','',[sec('s-b5','Five stars','',grid(books.filter(b=>b.r>=5).map(bc).join('')))]);
@@ -820,9 +820,10 @@ function rHof(){
     <details style="margin-top:8px"><summary class="link" style="cursor:pointer">Read the full introduction</summary><div style="margin-top:10px">${A.paras.map(p=>`<p>${esc(p)}</p>`).join('')}<a class="link" href="https://myanimelist.net/blog.php?eid=${A.post}" target="_blank" rel="noopener">Continue on MAL ↗</a></div></details></div></section>
   <div class="segtabs"><button data-seg="home" style="--c:var(--gold)">← Hall</button>${segs.map(([k,l,c])=>`<button data-seg="${k}" class="${hofSeg===k?'on':''}" style="--c:${c}">${ico({chars:'mask',waifus:'heart',couples:'couple'}[k]||k)} ${l}</button>`).join('')}</div>
   <div class="jgroups">${groups.map(g=>`<div class="jg" style="--c:${g.c}"><span class="jl" data-j="${g.id}">${ico(g.icon)}${esc(g.title)}</span>${g.secs.length>1?g.secs.map(s=>`<a href="#hof" data-j="${s.id}">${esc(s.title)}</a>`).join(''):''}</div>`).join('')}</div>
-  ${groups.map(g=>`<div class="grp" id="${g.id}" style="--c:${g.c}">${artBg(g.c,g.title.length*7,'')}<div class="gi">${ico(g.icon)}</div><div><h2>${esc(g.title)}</h2>${g.desc?`<p>${esc(g.desc)}</p>`:''}</div>${g.src?`<a href="${g.src}" target="_blank" rel="noopener">Source ↗</a>`:''}</div>
-    ${g.secs.map(s=>`<section class="box hsec ${s.cls||''}" id="${s.id}" style="--c:${/hate/i.test(s.title)?'var(--s4)':g.c}"><div class="box-h"><h2>${esc(s.title)}</h2></div>${s.desc?`<div class="desc">${esc(s.desc)}</div>`:''}<div class="box-b">${s.inner}</div></section>`).join('')}`).join('')}`;
+  ${groups.map(g=>`<div class="grp" id="${g.id}" style="--c:${g.c}">${artBg(g.c,g.title.length*7,'')}<div class="gi">${ico(g.icon)}</div><div><h2>${esc(g.title)}</h2>${g.desc?`<p>${esc(g.desc)}</p>`:''}</div>${g.src?`<a href="${g.src}" target="_blank" rel="noopener">Source ↗</a>`:''}${ED.on&&g.nsec?`<button class="btn" data-hnew="${g.nsec}">＋ New section</button>`:''}</div>
+    ${g.secs.map(s=>`<section class="box hsec ${s.cls||''}" id="${s.id}" style="--c:${/hate/i.test(s.title)?'var(--s4)':g.c}"><div class="box-h"><h2>${esc(s.title)}</h2>${ED.on&&s.ref?hTools(s.ref):''}</div>${s.desc?`<div class="desc">${esc(s.desc)}</div>`:''}<div class="box-b">${s.inner}</div></section>`).join('')}`).join('')}`;
   document.querySelectorAll('[data-seg]').forEach(b=>b.onclick=()=>{hofSeg=b.dataset.seg;rHof();window.scrollTo(0,0)});
+  hofEditBind();
   if(hofSeg==='music'){mfBind();document.querySelectorAll('[data-hms]').forEach(b=>b.onclick=()=>{const [k,r]=b.dataset.hms.split(':');hmS[k]=r;const y=scrollY;rHof();scrollTo(0,y)})}
   document.querySelectorAll('[data-j]').forEach(a=>a.onclick=e=>{e.preventDefault();const el=document.getElementById(a.dataset.j);if(el)el.scrollIntoView({behavior:'smooth'})});
   document.querySelectorAll('[data-st]').forEach(el=>el.onclick=()=>openStudio(F.company[+el.dataset.st]));
@@ -843,7 +844,7 @@ function hofTiles(){
   const imgsF=[...favF,...films.filter(f=>f.r===5)].map(f=>f.img);
   const imgsG=games.filter(g=>g.r===5||D.gvFav.includes(g.t)).map(g=>g.img);
   const imgsB=books.filter(b=>b.r>=5).map(b=>b.img);
-  const imgsC=[...F.character.map(([id])=>HIMG('c',id)),...H.blog[0].secs.filter(s=>/character/i.test(s[0])).flatMap(s=>s[2].map(ci)),...H.blog[1].secs.flatMap(s=>s[2].map(ci))];
+  const imgsC=[...F.character.map(([id])=>HIMG('c',id)),...H.blog[0].secs.filter(s=>hSeg(s,0)==='c').flatMap(s=>s[2].map(ci)),...H.blog[1].secs.flatMap(s=>s[2].map(ci))];
   const imgsW=H.blog[2].secs.flatMap(s=>s[2].map(ci));
   const imgsCo=H.couples.flatMap(c=>c[2].map(ci));
   return [
@@ -912,7 +913,7 @@ const bdAge=bd=>{if(!bd||!/\d{4}/.test(bd))return 0;const d=new Date(bd);if(isNa
 async function openPerson(it){
   if(!D.peopleInfo){try{D.peopleInfo=await fetch('data/people_info.json',{cache:'no-cache'}).then(r=>r.json())}catch(e){D.peopleInfo={p:{},s:{}}}}
   const p=(D.peopleInfo.p||{})[it.id];
-  if(!p){modal('anime','Person',`${cover(it.name,it.pic||HIMG('p',it.id))}<div><h2>${esc(it.name)}</h2><div class="muted">Their details arrive with the next update.</div><div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/people/${it.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);return}
+  if(!p){modal('anime','Person',`${cover(it.name,it.pic||HIMG('p',it.id))}<div><h2>${esc(it.name)}</h2><div class="muted">Their details arrive with the next update.</div><div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/people/${it.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);addToHook({k:'p',id:it.id,name:it.name,img:it.pic||HIMG('p',it.id)});return}
   const age=bdAge(p.bd),L=p.labels||[];
   const an=(id,t)=>{const o=anime.find(a=>a.id===id);return o?o.t:t};
   modal('anime','Person',`${cover(p.name||it.name,it.pic||HIMG('p',it.id)||p.img)}<div><h2>${esc(p.name||it.name)}</h2>${p.jp?`<div class="muted">${esc(p.jp)}</div>`:''}
@@ -924,6 +925,7 @@ async function openPerson(it){
   ${!p.works&&!p.va&&p.staff&&p.staff.length?`<div class="sect" style="--c:var(--anime);margin-top:14px"><h2><i></i>Anime work</h2><div class="kv" style="margin-top:0">${p.staff.map(x=>`<div>${esc(x[2])}</div><div>${esc(an(x[0],x[1]))}</div>`).join('')}</div></div>`:''}
   ${p.about?`<div class="review" style="--c:var(--anime)">${esc(p.about)}</div>`:''}
   <div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/people/${it.id}" target="_blank" rel="noopener">Full profile on MyAnimeList ↗</a></div></div>`);
+  addToHook({k:'p',id:it.id,name:p.name||it.name,img:it.pic||HIMG('p',it.id)||p.img});
   document.querySelectorAll('[data-pc]').forEach(b=>b.onclick=()=>{const c=p.va[+b.dataset.pc];openMal({k:'c',id:c[0],name:c[1],pic:c[2]})});
   document.querySelectorAll('[data-pw]').forEach(b=>b.onclick=()=>{const w=p.works[+b.dataset.pw];const o=manga.find(m=>m.id===w[0]);if(o)return openManga(o);openExt('manga',{malId:w[0],t:w[1],img:w[2],meta:[(w[3]||''),w[4]?fmt(w[4])+' members':''].filter(Boolean).join(' · '),url:'https://myanimelist.net/manga/'+w[0]})});
 }
@@ -942,12 +944,155 @@ async function openMal(it){
     ${ci.about?`<div class="review" style="--c:var(--anime)">${esc(ci.about)}</div>`:''}
     <div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/character/${it.id}" target="_blank" rel="noopener">Full profile on MyAnimeList ↗</a></div></div>`);
     document.querySelectorAll('[data-own]').forEach(a=>a.onclick=e=>{e.preventDefault();const [k,id]=a.dataset.own.split(':');const o=(k==='anime'?anime:manga).find(x=>x.id===+id);if(o)(k==='anime'?openAnime:openManga)(o)});
+    addToHook({k:'c',id:it.id,name:ci.name||it.name,img:it.pic||HIMG(it.k,it.id)});
     return;
   }
   modal(it.k==='m'?'manga':'anime',KLAB[it.k],`${cover(it.name,it.pic||HIMG(it.k,it.id))}<div><h2>${esc(it.name)}</h2><div class="muted">${esc(KLAB[it.k])} on MyAnimeList</div>
   <div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/${MALK[it.k]}/${it.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
+  addToHook({k:it.k,id:it.id,name:it.name,img:it.pic||HIMG(it.k,it.id)});
 }
 
+/* ---------- Hall of Fame editing on the site ----------
+   Lists are named by a ref:  b:<blog>:<section> (honorary, character corner, waifus; data/hof.json),
+   c / sp (couples, special couples; data/hof.json), mf:<key> (music favourites; data/music_favs.json),
+   gv (favourite games; data/games.json), ov:<kind> (Overview favourites; data/ovfavs.json).
+   Once anything in data/hof.json is edited here it is marked siteEdited, and the nightly update
+   stops reading the MAL blogs, so the site is the source from then on. */
+// which page a blog section belongs on: its own mark, otherwise its title
+const hSeg=(s,gi)=>s[3]||(gi!==0?'':/manga/i.test(s[0])?'m':/character/i.test(s[0])?'c':/anime/i.test(s[0])?'a':'');
+const hCode=x=>`${x.k}${x.id}~${String(x.name||'').replace(/~/g,' ')}${x.img?'~'+x.img:''}`;
+const hDelBtn=(ref,pos)=>`<button type="button" class="favx" data-hdel="${ref}|${pos}" aria-label="Remove">✕</button>`;
+const hTools=ref=>`<span class="htools"><button class="btn" data-hadd="${ref}">＋ Add</button><button class="btn" data-hord="${ref}">⇅ Reorder</button>${ref.startsWith('b:')?`<button class="btn" data-hsec="${ref}">✎ Section</button>`:''}</span>`;
+function hofList(H,ref){const p=ref.split(':');
+  if(p[0]==='b'){const s=((H.blog[+p[1]]||{}).secs||[])[+p[2]];return s?s[2]:null}
+  if(p[0]==='c')return H.couples;if(p[0]==='sp')return H.specialCouples.pairs;return null}
+function hofRedraw(){if(route!=='hof')return;const y=scrollY;rHof();scrollTo(0,y)}
+// save a change to data/hof.json, starting from the newest copy on GitHub
+async function hofSave(fn,msg){toast('Saving…');
+  try{let base;try{base=await ghLoad('data/hof.json')}catch(e){base=JSON.parse(JSON.stringify(D.hof))}
+    if(fn(base)===false)return false;base.siteEdited=1;await ghSave('data/hof.json',base,msg);D.hof=base;toast('Saved.');hofRedraw();return true}
+  catch(e){toast('Not saved: '+e.message,true);return false}}
+// the items of a list, as name + picture, for the reorder window
+function hofRows(ref){
+  if(ref.startsWith('mf:'))return (MF[ref.slice(3)]||[]).map(x=>({label:x.t||x.n,img:x.img||''}));
+  if(ref==='gv')return D.gvFav.map(n=>{const g=games.find(x=>x.t===n);return {label:n,img:g&&g.img||''}});
+  const L=hofList(D.hof,ref)||[];
+  if(ref==='c'||ref==='sp')return L.map(([n,show,cs])=>{const [kid,,pic]=(cs[0]||'').split('~');return {label:n+(show?' · '+show:''),img:pic||HIMG(kid&&kid[0],+String(kid).slice(1))}});
+  return L.map(c=>{const [kid,n,pic]=c.split('~');return {label:n,img:pic||HIMG(kid[0],+kid.slice(1))}})}
+function reorderModal(title,rows,onSave){let L=rows.map((x,i)=>Object.assign({i},x));
+  modal('anime',title,`<div style="grid-column:1/-1"><h2>${esc(title)}</h2><div class="small muted">Move with ▲ ▼ (or Top), then save.</div><div id="ro_l" class="rolist"></div>
+  <div style="display:flex;gap:8px;margin-top:12px"><button class="btn pri" id="ro_s">Save order</button><button class="btn" id="ro_c">Cancel</button></div></div>`);
+  const draw=()=>{$('#ro_l').innerHTML=L.map((x,j)=>`<div class="rorow"><span class="mono muted">${j+1}</span>${x.img?`<img src="${esc(LOC(x.img))}" alt="" referrerpolicy="no-referrer">`:'<i></i>'}<span class="ron">${esc(x.label)}</span><button class="btn" data-ro="${j}:top" ${j?'':'disabled'}>Top</button><button class="btn" data-ro="${j}:-1" ${j?'':'disabled'}>▲</button><button class="btn" data-ro="${j}:1" ${j<L.length-1?'':'disabled'}>▼</button></div>`).join('');
+    document.querySelectorAll('[data-ro]').forEach(b=>b.onclick=()=>{const [j,d]=b.dataset.ro.split(':');const a=+j,x=L.splice(a,1)[0];L.splice(d==='top'?0:a+(+d),0,x);const y=$('#ro_l').scrollTop;draw();$('#ro_l').scrollTop=y})};
+  draw();$('#ro_c').onclick=closeM;
+  $('#ro_s').onclick=async()=>{if(L.every((x,j)=>x.i===j))return closeM();if(await onSave(L.map(x=>x.i)))closeM()}}
+// put items in a new order; anything added elsewhere in the meantime stays, at the end
+const reordered=(cur,old,order)=>{const key=x=>JSON.stringify(x);const want=order.map(i=>old[i]).filter(x=>x!=null);const ks=new Set(want.map(key));return [...want.filter(x=>cur.some(y=>key(y)===key(x))),...cur.filter(x=>!ks.has(key(x)))]};
+async function hofReorder(ref){
+  const title='Reorder · '+(ref.startsWith('mf:')?MFS.find(s=>s[0]===ref.slice(3))[1]:ref==='gv'?'Favourite games':ref==='c'?'Favourite anime couples':ref==='sp'?'A special mention':hofList(D.hof,ref)?D.hof.blog[+ref.split(':')[1]].secs[+ref.split(':')[2]][0]:'');
+  reorderModal(title,hofRows(ref),async order=>{
+    if(ref.startsWith('mf:')){const k=ref.slice(3),L=MF[k]||[];return saveMF({[k]:order.map(i=>L[i])},'Music favourites: reorder')}
+    if(ref==='gv'){D.gvFav=order.map(i=>D.gvFav[i]);persist('games','Reorder favourite games','');return true}
+    const old=hofList(D.hof,ref).slice();
+    return hofSave(H=>{const L=hofList(H,ref);if(!L)return false;const n=reordered(L,old,order);L.length=0;L.push(...n)},'Hall of Fame: reorder')})}
+async function hofDel(ref,pos,btn){
+  if(btn.dataset.sure!=='1'){btn.dataset.sure='1';btn.textContent='Remove?';btn.classList.add('sure');setTimeout(()=>{if(btn.isConnected){btn.dataset.sure='';btn.textContent='✕';btn.classList.remove('sure')}},3000);return}
+  if(ref==='gv'){const n=D.gvFav[pos];D.gvFav=D.gvFav.filter(x=>x!==n);persist('games','Remove '+n+' from favourite games','');return}
+  const x=(hofList(D.hof,ref)||[])[pos];if(x==null)return;const key=JSON.stringify(x);
+  hofSave(H=>{const L=hofList(H,ref);const i=L?L.findIndex(y=>JSON.stringify(y)===key):-1;if(i<0)return false;L.splice(i,1)},'Hall of Fame: remove '+(Array.isArray(x)?x[0]:x.split('~')[1]))}
+// search for something to add: characters and people come from Jikan (MAL's public mirror), anime and manga from the usual search
+const HKIND={c:'Characters',p:'People',a:'Anime',m:'Manga'};
+function pickHof(kinds,title,onPick){let k=kinds[0];
+  modal('anime',title,`<div style="grid-column:1/-1"><h2>${esc(title)}</h2>${kinds.length>1?`<div class="mseg" id="hp_k">${kinds.map(x=>`<button data-hk="${x}" class="${x===k?'on':''}">${HKIND[x]}</button>`).join('')}</div>`:''}
+  <form id="hp_f" style="display:flex;margin-top:12px"><input id="hp_q" placeholder="Search by name (English or Japanese)" style="flex:1;border:1px solid var(--line2);padding:10px 12px;background:var(--panel);outline:none"><button class="btn pri" style="border-radius:0">Search</button></form>
+  <div id="hp_res" style="margin-top:12px"><div class="small muted">Ones already on your site show first, then all of MyAnimeList.</div></div></div>`);
+  document.querySelectorAll('[data-hk]').forEach(b=>b.onclick=()=>{k=b.dataset.hk;document.querySelectorAll('[data-hk]').forEach(x=>x.classList.toggle('on',x===b));if(gv('hp_q'))go()});
+  const nm=s=>String(s||'').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g,'').replace(/[^\p{L}\p{N}]+/gu,' ').trim();
+  const tile=(x,i,src)=>`<button type="button" class="ptile" data-hp="${src}:${i}">${cover(x.name,x.img||'','',x.k==='c'||x.k==='p'?'':'')}<span class="pn">${esc(x.name)}</span><span class="ps">${esc(x.sub||'')}</span></button>`;
+  const go=async()=>{const q=gv('hp_q');if(!q)return;const box=$('#hp_res'),W=nm(q).split(' '),m=s=>W.every(w=>nm(s).includes(w)),kk=k;
+    const seen=new Set(),mine=[];const add=(id,name,img,sub)=>{if(seen.has(id)||!m(name))return;seen.add(id);mine.push({k:kk,id,name,img,sub})};
+    if(kk==='a'||kk==='m')(kk==='a'?anime:manga).forEach(x=>add(x.id,x.t,x.img,'in your list'));
+    const H=D.hof;[...H.blog.flatMap(b=>b.secs.flatMap(s=>s[2])),...H.couples.flatMap(c=>c[2]),...H.specialCouples.pairs.flatMap(c=>c[2])].forEach(c=>{const [kid,n,pic]=c.split('~');if(kid[0]===kk)add(+kid.slice(1),n,pic||HIMG(kk,+kid.slice(1)),'on your site')});
+    ((H.malFavs||{})[{a:'anime',m:'manga',c:'character',p:'people'}[kk]]||[]).forEach(([id,n])=>add(id,n,HIMG(kk,id),'MAL favourite'));
+    const list=mine.slice(0,12);
+    box.innerHTML=`${list.length?`<div class="small muted" style="margin-bottom:6px">On your site</div><div class="pgrid">${list.map((x,i)=>tile(x,i,'m')).join('')}</div>`:''}<div id="hp_ext" style="margin-top:14px"><div class="muted small"><span class="spin"></span>Searching MyAnimeList…</div></div>`;
+    box.querySelectorAll('[data-hp^="m:"]').forEach(b=>b.onclick=()=>onPick(list[+b.dataset.hp.slice(2)]));
+    let ext=[];
+    try{if(kk==='c'||kk==='p'){const j=await fetch(`https://api.jikan.moe/v4/${kk==='c'?'characters':'people'}?q=${encodeURIComponent(q)}&limit=12&order_by=favorites&sort=desc`).then(r=>r.json());
+        ext=(j.data||[]).map(x=>({k:kk,id:x.mal_id,name:x.name,img:((x.images||{}).jpg||{}).image_url||'',sub:[x.name_kanji||x.family_name&&x.given_name&&`${x.family_name} ${x.given_name}`,x.favorites?fmt(x.favorites)+' favourites':''].filter(Boolean).join(' · ')}))}
+      else{const r=await viaApi(kk==='a'?'anime':'manga',q);ext=(r||[]).filter(x=>x.malId).map(x=>({k:kk,id:x.malId,name:x.t,img:x.img||'',sub:[x.meta&&x.meta.split(' · ')[0],x.y].filter(Boolean).join(' · ')}))}}catch(e){}
+    ext=ext.filter(x=>!seen.has(x.id)).map(x=>(x.img=x.img&&!/questionmark/.test(x.img)?x.img.replace(/\?.*$/,''):'',x));
+    const ex=$('#hp_ext');if(!ex||kk!==k)return;ex.innerHTML=ext.length?`<div class="small muted" style="margin-bottom:6px">On MyAnimeList</div><div class="pgrid">${ext.map((x,i)=>tile(x,i,'e')).join('')}</div>`:'<div class="muted small">Nothing more found. MyAnimeList may be busy, try again in a moment.</div>';
+    ex.querySelectorAll('[data-hp^="e:"]').forEach(b=>b.onclick=()=>onPick(ext[+b.dataset.hp.slice(2)]))};
+  $('#hp_f').onsubmit=e=>{e.preventDefault();go()};$('#hp_q').focus()}
+function hofAdd(ref){
+  if(ref.startsWith('mf:')){const t=document.querySelector(`[data-mfadd="${ref.slice(3)}"]`);if(t)t.click();return}
+  if(ref==='gv')return pickGame();
+  if(ref==='c'||ref==='sp')return addCouple(ref);
+  const p=ref.split(':'),s=D.hof.blog[+p[1]].secs[+p[2]],seg=hSeg(s,+p[1]);
+  const first=(s[2][0]||'')[0];const kinds=seg==='a'?['a']:seg==='m'?['m']:first==='p'||/\b(va|people|seiyuu)/i.test(s[0])?['p','c']:['c','p'];
+  pickHof(kinds,'Add to '+s[0],x=>{const L=hofList(D.hof,ref);if(L.some(c=>c.startsWith(x.k+x.id+'~')))return toast('Already there.');
+    hofSave(H=>{const T=hofList(H,ref);if(!T||T.some(c=>c.startsWith(x.k+x.id+'~')))return false;T.push(hCode(x))},'Hall of Fame: add '+x.name+' to '+s[0]).then(ok=>{if(ok)closeM()})})}
+// a couple: pick both characters, then name it
+function addCouple(ref){const st=[];
+  const step=()=>pickHof(['c'],st.length?`Second character (with ${st[0].name})`:'First character of the couple',x=>{st.push(x);if(st.length<2)return step();
+    const [a,b]=st,f=n=>String(n).split(' ')[0];
+    modal('anime','Add a couple',`<div style="grid-column:1/-1"><h2>Add a couple</h2><div class="eform">${fld('cp_n','Couple name',f(a.name)+' and '+f(b.name))}${fld('cp_s','Anime',(D.charInfo&&D.charInfo[a.id]&&((D.charInfo[a.id].anime||[])[0]||[])[1])||'')}</div>
+    <div style="display:flex;gap:8px;margin-top:12px"><button class="btn pri" id="cp_ok">Add couple</button></div></div>`);
+    $('#cp_ok').onclick=()=>hofSave(H=>{(ref==='sp'?H.specialCouples.pairs:H.couples).push([gv('cp_n')||'Couple',gv('cp_s'),[hCode(a),hCode(b)]])},'Hall of Fame: add couple '+gv('cp_n')).then(ok=>{if(ok)closeM()})});
+  step()}
+function pickGame(){
+  modal('games','Add a favourite game',`<div style="grid-column:1/-1"><h2>Add a favourite game</h2><input id="pg_q" placeholder="Filter your games" style="width:100%;margin-top:12px;border:1px solid var(--line2);padding:10px 12px;background:var(--panel);outline:none"><div id="pg_l" class="pgrid" style="margin-top:12px"></div></div>`);
+  const draw=()=>{const n=norm(gv('pg_q'));const L=games.filter(g=>!D.gvFav.includes(g.t)&&(!n||norm(g.t).includes(n))).slice(0,40);
+    $('#pg_l').innerHTML=L.map((g,i)=>`<button type="button" class="ptile" data-pg="${i}">${cover(g.t,g.img||'','')}<span class="pn">${esc(g.t)}</span><span class="ps">${esc(g.shelf||'')}</span></button>`).join('')||'<div class="muted small">No games match.</div>';
+    document.querySelectorAll('[data-pg]').forEach(b=>b.onclick=()=>{const g=L[+b.dataset.pg];D.gvFav=[...D.gvFav,g.t];closeM();persist('games','Add '+g.t+' to favourite games','')})};
+  $('#pg_q').oninput=draw;draw()}
+// rename, describe or delete a blog section; or start a new one
+function hofSection(ref){const p=ref.split(':'),s=D.hof.blog[+p[1]].secs[+p[2]];
+  modal('anime','Section',`<div style="grid-column:1/-1"><h2>Section</h2><div class="eform">${fld('hs_t','Title',s[0])}${fld('hs_d','Description',s[1],'textarea')}</div>
+  <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap"><button class="btn pri" id="hs_ok">Save</button><button class="btn" id="hs_del" style="margin-left:auto;color:var(--s4)">Delete section</button></div></div>`);
+  const same=x=>x&&x[0]===s[0]&&JSON.stringify(x[2])===JSON.stringify(s[2]);
+  $('#hs_ok').onclick=()=>hofSave(H=>{const t=H.blog[+p[1]].secs.find(same);if(!t)return false;const seg=hSeg(t,+p[1]);t[0]=gv('hs_t')||t[0];t[1]=gv('hs_d');if(seg&&!t[3])t[3]=seg},'Hall of Fame: edit section '+s[0]).then(ok=>{if(ok)closeM()});
+  const d=$('#hs_del');d.onclick=()=>{if(d.dataset.sure!=='1'){d.dataset.sure='1';d.textContent=`Tap again to delete (${s[2].length} inside)`;return}
+    hofSave(H=>{const L=H.blog[+p[1]].secs,i=L.findIndex(same);if(i<0)return false;L.splice(i,1)},'Hall of Fame: delete section '+s[0]).then(ok=>{if(ok)closeM()})}}
+function hofNewSection(where){const [gi,seg]=where.split(':');
+  modal('anime','New section',`<div style="grid-column:1/-1"><h2>New section</h2><div class="eform">${fld('hs_t','Title','')}${fld('hs_d','Description','','textarea')}</div>
+  <div style="margin-top:12px"><button class="btn pri" id="hs_ok">Create</button></div></div>`);
+  $('#hs_ok').onclick=()=>{const t=gv('hs_t');if(!t)return toast('Give it a title.',true);
+    hofSave(H=>{H.blog[+gi].secs.push(seg?[t,gv('hs_d'),[],seg]:[t,gv('hs_d'),[]])},'Hall of Fame: new section '+t).then(ok=>{if(ok)closeM()})}}
+function hofEditBind(){if(!ED.on)return;
+  document.querySelectorAll('[data-hadd]').forEach(b=>b.onclick=()=>hofAdd(b.dataset.hadd));
+  document.querySelectorAll('[data-hord]').forEach(b=>b.onclick=()=>hofReorder(b.dataset.hord));
+  document.querySelectorAll('[data-hsec]').forEach(b=>b.onclick=()=>hofSection(b.dataset.hsec));
+  document.querySelectorAll('[data-hnew]').forEach(b=>b.onclick=()=>hofNewSection(b.dataset.hnew));
+  document.querySelectorAll('[data-hdel]').forEach(b=>b.onclick=e=>{e.stopPropagation();e.preventDefault();const [ref,pos]=b.dataset.hdel.split('|');hofDel(ref,+pos,b)})}
+
+/* ---------- "Add to": every Overview and Hall of Fame list that fits a character, person, anime, manga, singer or song ---------- */
+function addToLists(it){const H=D.hof,L=[];
+  const blog=(gi,seg,grp)=>H.blog[gi].secs.forEach((s,si)=>{if(!seg||hSeg(s,gi)===seg)L.push({grp,label:s[0],ref:`b:${gi}:${si}`})});
+  if(it.k==='c'||it.k==='p'){blog(0,'c','Hall · Honorary favourites');blog(1,'','Hall · Character corner');blog(2,'','Hall · Waifus')}
+  if(it.k==='a'||it.k==='m'){L.push({grp:'Overview',label:it.k==='a'?'Favorite anime':'Favorite manga',ref:'ov:'+(it.k==='a'?'anime':'manga')});blog(0,it.k,'Hall · Honorary favourites')}
+  if(it.k==='artist'){L.push({grp:'Overview',label:'Favorite singers',ref:'ov:singers'});MFS.filter(s=>s[2]==='artist').forEach(s=>L.push({grp:'Hall · Music',label:s[1],ref:'mf:'+s[0]}))}
+  if(it.k==='song')MFS.filter(s=>s[2]==='song').forEach(s=>L.push({grp:'Hall · Music',label:s[1],ref:'mf:'+s[0]}));
+  return L}
+function addToHas(ref,it){
+  if(ref.startsWith('ov:'))return ovFavList(ref.slice(3)).some(x=>String(x.id)===String(it.id));
+  if(ref.startsWith('mf:'))return (MF[ref.slice(3)]||[]).some(x=>x.id===it.id);
+  return (hofList(D.hof,ref)||[]).some(c=>c.startsWith(it.k+it.id+'~'))}
+async function addToToggle(ref,it){const has=addToHas(ref,it);
+  if(ref.startsWith('ov:')){const k=ref.slice(3),L=ovFavList(k);return saveOvFavs(k,has?L.filter(x=>String(x.id)!==String(it.id)):[...L,{id:it.id,t:it.name,img:it.img||''}],(has?'Take ':'Add ')+it.name+(has?' off':' to')+' overview favourites')}
+  if(ref.startsWith('mf:')){const k=ref.slice(3),L=MF[k]||[];const x=it.k==='artist'?{id:it.id,t:it.name,img:it.img||''}:{id:it.id,n:it.name,ar:it.ar||[],al:it.al||'',img:it.img||'',ms:it.ms||0,y:it.y||''};
+    return saveMF({[k]:has?L.filter(y=>y.id!==it.id):[...L,x]},'Music favourites: '+(has?'remove ':'add ')+it.name)}
+  return hofSave(H=>{const T=hofList(H,ref);if(!T)return false;const i=T.findIndex(c=>c.startsWith(it.k+it.id+'~'));if(has){if(i<0)return false;T.splice(i,1)}else{if(i>=0)return false;T.push(hCode({k:it.k,id:it.id,name:it.name,img:it.img}))}},'Hall of Fame: '+(has?'remove ':'add ')+it.name)}
+async function addToModal(it){await mfLoad();const L=addToLists(it);
+  modal(it.k==='artist'||it.k==='song'?'music':'anime','Add to',`<div style="grid-column:1/-1"><h2>Add ${esc(it.name)} to…</h2><div class="small muted">Tap a list to add or take it off. ✓ means it's already there.</div><div id="at_l" style="margin-top:12px"></div></div>`);
+  const draw=()=>{let g='';$('#at_l').innerHTML=L.map((x,i)=>{const h=g!==x.grp?`<div class="small muted" style="margin:12px 0 6px">${esc(x.grp)}</div>`:'';g=x.grp;const on=addToHas(x.ref,it);
+      return `${h}<button type="button" class="atrow${on?' on':''}" data-at2="${i}"><b>${on?'✓':'＋'}</b><span>${esc(x.label)}</span></button>`}).join('')||'<div class="muted">No lists fit this one.</div>';
+    document.querySelectorAll('[data-at2]').forEach(b=>b.onclick=async()=>{if(b.disabled)return;b.disabled=true;b.querySelector('b').innerHTML='<span class="spin"></span>';await addToToggle(L[+b.dataset.at2].ref,it);if($('#at_l'))draw()})};
+  draw()}
+// adds the "Add to" button to the window that is open (edit mode only)
+function addToHook(it){if(!ED.on||!OWNER())return;const m=$('#modal');if(!m)return;const a=m.querySelector('a.btn[target="_blank"]');const row=a&&a.parentElement;if(!row||row.querySelector('[data-addto]'))return;
+  const b=document.createElement('button');b.className='btn';b.dataset.addto=1;b.textContent='＋ Add to…';b.onclick=()=>addToModal(it);row.appendChild(b)}
 /* ---------- editor (games & books, saved to GitHub) ---------- */
 const REPO='SatsugaiDeAtsu/saturn-collections';
 const ED={get token(){return store.get('gh_token','')},set token(v){store.set('gh_token',v)},get on(){return !!store.get('edit_on',false)&&!!this.token},set on(v){store.set('edit_on',!!v)}};
@@ -1372,6 +1517,7 @@ function openAnime(a){
   ${a.tags?`<div class="review" style="--c:var(--anime)">${esc(a.tags)}</div>`:''}
   <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?'<button class="btn pri" id="m_edit">Edit</button>':''}<a class="btn${ED.on?'':' pri'}" href="https://myanimelist.net/anime/${a.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
   const me=$('#m_edit');if(me)me.onclick=()=>editMal('anime',a);
+  addToHook({k:'a',id:a.id,name:a.t,img:a.img||''});
   malExtra('a',a);animeSongs(a);
   document.querySelectorAll('#m_tabs [data-at]').forEach(b=>b.onclick=()=>{const w=b.classList.contains('on')?'':b.dataset.at;document.querySelectorAll('#m_tabs [data-at]').forEach(x=>x.classList.toggle('on',x.dataset.at===w));$('#m_x').hidden=w!=='rel';$('#m_mus').hidden=w!=='mus'});
 }
@@ -1643,10 +1789,10 @@ async function openArtist(id,ext){await Promise.all([muLoad(),mhLoad()]);const a
   modal('music','Artist',`<div class="mart" style="cursor:default;max-width:220px"><div class="pic">${a.img?`<img src="${esc(a.img)}" alt="" referrerpolicy="no-referrer">`:`<b>${esc(initials(a.n))}</b>`}</div></div><div><h2>${esc(a.n)}</h2>
   ${rk.length?`<div class="muted" style="margin:4px 0 10px">Your top artist: ${rk.join(' · ')}</div>`:''}
   <div class="kv"><div>Songs in your playlists</div><div><b>${mine.length}</b> <span class="muted" id="m_tot">/ counting…</span></div>${(()=>{const x=mhA(a.n);return x?`<div>Listened</div><div><b>${mhH(x[0])}</b> · ${fmt(x[1])} plays · since ${fdate(x[2])}</div>`:''})()}${inL.length?`<div>In playlists</div><div>${inL.map(n=>`<span class="tag">${esc(n)}</span>`).join('')}</div>`:''}</div>
-  <div style="margin:14px 0;display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-mplay="artist:${id}">▶ Play</button><a class="btn pri" href="${SPU('artist',id)}" target="_blank" rel="noopener">Open on Spotify ↗</a>${OWNER()&&ED.on&&!ovFavList('singers').some(x=>x.id===id)?`<button class="btn" id="m_fsing">♥ Add to favourite singers</button>`:''}</div>
+  <div style="margin:14px 0;display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-mplay="artist:${id}">▶ Play</button><a class="btn pri" href="${SPU('artist',id)}" target="_blank" rel="noopener">Open on Spotify ↗</a></div>
   <div class="mseg"><button class="on" data-al="in">In your playlists <span class="mono">${mine.length}</span></button><button data-al="out">Not in your playlists <span class="mono" id="m_outn">…</span></button></div>
   <div class="mscroll" id="m_list"></div></div>`);
-  const fs=$('#m_fsing');if(fs)fs.onclick=()=>saveOvFavs('singers',[...ovFavList('singers'),{id,t:a.n,img:a.img||''}],'Add '+a.n+' to favourite singers').then(ok=>{if(ok)closeM()});
+  addToHook({k:'artist',id,name:a.n,img:a.img||''});
   let out=null,cur='in';
   const show=w=>{cur=w;document.querySelectorAll('[data-al]').forEach(b=>b.classList.toggle('on',b.dataset.al===w));const box=$('#m_list');if(!box)return;
     if(w==='in')box.innerHTML=mine.map((s,i)=>mRow(s,i)).join('')||'<div class="muted small" style="padding:10px">None of their songs are in your playlists yet.</div>';
@@ -1719,7 +1865,7 @@ async function openSong(id){await Promise.all([muLoad(),mhLoad()]);const t=MU.tr
   modal('music','Song',`<div class="msqr">${t.img?`<img src="${esc(t.img)}" alt="" referrerpolicy="no-referrer">`:''}</div><div><h2>${esc(t.n)}</h2><div class="ar" style="margin:4px 0 10px">${mArtLinks(t)}</div>
   <div class="kv">${t.al?`<div>Album</div><div>${esc(t.al)}${t.y?' · '+t.y:''}</div>`:''}${t.ms?`<div>Length</div><div>${mDur(t.ms)}</div>`:''}${(()=>{const x=mhT(id);return x?`<div>Listened</div><div><b>${fmt(x[1])} plays</b> · ${mhH(x[0])}</div><div>First played</div><div>${fdate(x[2])}</div><div>Last played</div><div>${fdate(x[3])}</div>`:''})()}${inL.length?`<div>In playlists</div><div>${inL.map(n=>`<span class="tag">${esc(n)}</span>`).join('')}</div>`:''}</div>
   <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap"><button class="btn" data-mplay="track:${id}">▶ Play</button><a class="btn pri" href="${SPU('track',id)}" target="_blank" rel="noopener">Open on Spotify ↗</a></div></div>`);
-  mBind($('#modal'))}
+  mBind($('#modal'));addToHook({k:'song',id,name:t.n,ar:t.ar||[],al:t.al||'',img:t.img||'',ms:t.ms||0,y:t.y||''})}
 /* Spotify search through the helper: songs or artists */
 async function spSearch(type,q){if(!SET.workerUrl)return [];
   let j=null;for(let k=0;k<3&&!j;k++){const r=await fetch(`${SET.workerUrl}/spotify/api/search?q=${encodeURIComponent(q)}&type=${type}&limit=10`);if(r.ok)j=await r.json();else await new Promise(ok=>setTimeout(ok,1500*(k+1)))}if(!j)throw new Error('busy');
@@ -1744,9 +1890,9 @@ function mSearchModal(type,title,onPick){
 let MF=null;const mfLoad=async()=>MF||(MF=await loadJ('data/music_favs.json')||{});
 const MFS=[['songs','Favourite songs','song'],['en','Favourite singers · English','artist'],['jp','Favourite singers · Japanese','artist'],['anime','Favourite anime songs','song'],['hof','Hall of Fame','song']];
 const mfAll=()=>MFS.filter(s=>s[2]==='song').flatMap(s=>MF[s[0]]||[]);
-async function saveMF(cur,msg){toast('Saving…');try{let base;try{base=await ghLoad('data/music_favs.json')}catch(e){base={}}Object.assign(base,cur);await ghSave('data/music_favs.json',base,msg);MF=base;toast('Saved.');rHof();return true}catch(e){toast('Not saved: '+e.message,true);return false}}
+async function saveMF(cur,msg){toast('Saving…');try{let base;try{base=await ghLoad('data/music_favs.json')}catch(e){base={}}Object.assign(base,cur);await ghSave('data/music_favs.json',base,msg);MF=base;toast('Saved.');if(route==='hof')hofRedraw();return true}catch(e){toast('Not saved: '+e.message,true);return false}}
 function mfCards(key,kind){const L=MF[key]||[];
-  const card=(x,i)=>kind==='artist'?`<div class="card martc" data-mar="${esc(x.id)}">${cover(x.t,x.img||'',ED.on?`<button type="button" class="favx" data-mfdel="${key}:${i}" aria-label="Remove">✕</button>`:'','round')}<div class="meta"><div class="tt">${esc(x.t)}</div></div></div>`
+  const card=(x,i)=>kind==='artist'?`<div class="card martc" data-mar="${esc(x.id)}" style="position:relative">${ED.on?`<button type="button" class="favx" data-mfdel="${key}:${i}" aria-label="Remove">✕</button>`:''}${cover(x.t,x.img||'','','round')}<div class="meta"><div class="tt">${esc(x.t)}</div></div></div>`
     :`<div class="card msongc" data-msong="${esc(x.id)}">${cover(x.n||x.t,x.img||'',`<button type="button" class="mplayb" data-mplay="track:${esc(x.id)}" aria-label="Play">▶</button>`+(ED.on?`<button type="button" class="favx" data-mfdel="${key}:${i}" aria-label="Remove">✕</button>`:''),'sq')}<div class="meta"><div class="tt">${esc(x.n||x.t)}</div><div class="ss"><span>${esc((x.ar||[]).map(a=>a[1]).join(', '))}</span></div></div></div>`;
   return `<div class="hgrid">${L.map(card).join('')}${ED.on?`<button type="button" class="card favadd" data-mfadd="${key}"><div class="cover sq"><b>+</b></div><div class="meta"><div class="tt">Add</div></div></button>`:''}</div>`+(ED.on?`<div style="margin-top:8px"><button class="btn" data-mfnote="${key}">✎ ${MF.notes&&MF.notes[key]?'Edit':'Add'} a note</button></div>`:'')}
 function mfBind(){

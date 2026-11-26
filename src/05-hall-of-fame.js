@@ -3,16 +3,16 @@ const MALK={a:'anime',m:'manga',c:'character',p:'people'};
 const KLAB={a:'Anime',m:'Manga',c:'Character',p:'Person'};
 let hofSeg='home';
 const HOFITEMS=[];
-function hItem(code,extra){
+function hItem(code,extra,ref,pos){
   const [kid,name,pic]=code.split('~');const k=kid[0],id=+kid.slice(1);
   const own=k==='a'?anime.find(x=>x.id===id):k==='m'?manga.find(x=>x.id===id):null;
   const idx=HOFITEMS.push({k,id,name,own,pic})-1;
   const sub=(k==='c'||k==='p')&&(D.hofSub||{})[k+id]||extra||KLAB[k];
-  return `<div class="card" data-h="${idx}">${cover(own?own.t:name,pic||(own&&own.img?own.img:HIMG(k,id)),(own&&own.sc?`<span class="badge">${own.sc}</span>`:''))}<div class="meta"><div class="tt">${esc(name)}</div><div class="ss"><span>${esc(sub)}</span></div></div></div>`;
+  return `<div class="card" data-h="${idx}">${cover(own?own.t:name,pic||(own&&own.img?own.img:HIMG(k,id)),(own&&own.sc?`<span class="badge">${own.sc}</span>`:'')+(ref&&ED.on?hDelBtn(ref,pos):''))}<div class="meta"><div class="tt">${esc(name)}</div><div class="ss"><span>${esc(sub)}</span></div></div></div>`;
 }
 const HIMG=(k,id)=>(D.hofImages||{})[k+id]||'';
-function coupleCards(list){
-  return `<div class="couples">${list.map(([n,show,cs])=>`<div class="couple"><div class="pair">${cs.map(c=>{const [kid,nm,pic]=c.split('~');const idx=HOFITEMS.push({k:kid[0],id:+kid.slice(1),name:nm,pic})-1;return `<div data-h="${idx}" style="cursor:pointer">${cover(nm,pic||HIMG(kid[0],+kid.slice(1)))}</div>`}).join('')}</div><div class="meta"><b>${esc(n)}</b><span>${esc(show)}</span></div></div>`).join('')}</div>`;
+function coupleCards(list,ref){
+  return `<div class="couples">${list.map(([n,show,cs],ci)=>`<div class="couple" style="position:relative">${ref&&ED.on?hDelBtn(ref,ci):''}<div class="pair">${cs.map(c=>{const [kid,nm,pic]=c.split('~');const idx=HOFITEMS.push({k:kid[0],id:+kid.slice(1),name:nm,pic})-1;return `<div data-h="${idx}" style="cursor:pointer">${cover(nm,pic||HIMG(kid[0],+kid.slice(1)))}</div>`}).join('')}</div><div class="meta"><b>${esc(n)}</b><span>${esc(show)}</span></div></div>`).join('')}</div>`;
 }
 function rHof(){
   HOFITEMS.length=0;
@@ -21,17 +21,17 @@ function rHof(){
   const H=D.hof,F=H.malFavs;
   const grid=items=>`<div class="hgrid">${items}</div>`;
   const groups=[];
-  const G=(id,title,desc,icon,c,src,secs)=>groups.push({id,title,desc,icon,c,src,secs});
-  const sec=(id,title,desc,inner,cls)=>({id,title,desc,inner,cls});
+  const G=(id,title,desc,icon,c,src,secs,nsec)=>groups.push({id,title,desc,icon,c,src,secs,nsec});
+  const sec=(id,title,desc,inner,cls,ref)=>({id,title,desc,inner,cls,ref});
   const blogUrl=e=>`https://myanimelist.net/blog.php?eid=${e}`;
-  const fil=(arr,re)=>arr.filter(s=>re.test(s[0]));
-  const hon=H.blog[0].secs, chr=H.blog[1].secs, wai=H.blog[2].secs;
+  // blog sections keep their place in data/hof.json (b:<blog>:<section>) so they can be edited on the site
+  const hSecs=(gi,seg,pfx,cls)=>H.blog[gi].secs.map((s,si)=>[s,si]).filter(([s])=>!seg||hSeg(s,gi)===seg).map(([[t,d,it],si],i)=>sec(pfx+i,t.replace(/^Honorary mentions: /,'Honorary mentions · '),d,grid(it.map((c,j)=>hItem(c,undefined,`b:${gi}:${si}`,j)).join('')),cls?cls(t):'',`b:${gi}:${si}`));
   if(hofSeg==='anime'){
     G('g-mal','MAL favourites','My official top anime and studios on MyAnimeList.','star','#8a50e0','https://myanimelist.net/profile/SatsugaiDeAtsu',[
       sec('s-mal-a','Top anime','',grid(F.anime.map(([id,t,sub])=>hItem('a'+id+'~'+t,sub)).join(''))),
       sec('s-mal-s','Top studios','',grid(F.company.map(studioTile).join('')))]);
     G('g-hon','Honorary favourites','Shows special to me beyond the top 10, plus my nurturing legacy.','star','#d9a514',blogUrl(804802),
-      fil(hon,/anime/i).map(([t,d,it],i)=>sec('s-hon-'+i,t.replace(/^Honorary mentions: /,'Honorary mentions · '),d,grid(it.map(c=>hItem(c)).join('')))));
+      hSecs(0,'a','s-hon-'),'0:a');
     const p10=anime.filter(a=>a.sc===10).sort((a,b)=>b.mal-a.mal);
     G('g-a10','Perfect 10s','Every anime I scored 10 out of 10 on MAL.','ten','#8a50e0','',[sec('s-a10','Scored 10','',grid(p10.map(a=>hItem('a'+a.id+'~'+a.t,a.type+(a.y?' · '+a.y:''))).join('')))]);
   }else if(hofSeg==='chars'){
@@ -39,27 +39,27 @@ function rHof(){
       sec('s-mal-c','Top characters','',grid(F.character.map(([id,t,sub])=>hItem('c'+id+'~'+t,sub)).join(''))),
       sec('s-mal-p','Top people','',grid(F.people.map(([id,t])=>hItem('p'+id+'~'+t)).join('')))]);
     G('g-honc','Honorary favourites','Characters special to me beyond the top 10.','star','#d9a514',blogUrl(804802),
-      fil(hon,/character/i).map(([t,d,it],i)=>sec('s-honc-'+i,t.replace(/^Honorary mentions: /,'Honorary mentions · '),d,grid(it.map(c=>hItem(c)).join('')))));
+      hSecs(0,'c','s-honc-'),'0:c');
     G('g-chr','Character corner','Parents, battalions, villains, the ones I hate, and the people behind it all.','mask','#24a896',blogUrl(804802),
-      chr.map(([t,d,it],i)=>sec('s-chr-'+i,t,d,grid(it.map(c=>hItem(c)).join('')),/hate/i.test(t)?'hated':'')).concat((H.people||[]).map(([t,d,it],i)=>sec('s-ppl-'+i,t,d,grid(it.map(c=>hItem(c)).join(''))))));
+      hSecs(1,'','s-chr-',t=>/hate/i.test(t)?'hated':'').concat((H.people||[]).map(([t,d,it],i)=>sec('s-ppl-'+i,t,d,grid(it.map(c=>hItem(c)).join(''))))),'1:');
   }else if(hofSeg==='waifus'){
     G('g-wai','Waifus','A blog of its own: the goddess, the waifus, the battalion and more.','heart','#d24a7a',blogUrl(804810),
-      wai.map(([t,d,it],i)=>sec('s-wai-'+i,t,d,grid(it.map(c=>hItem(c)).join('')))));
+      hSecs(2,'','s-wai-'),'2:');
   }else if(hofSeg==='music'){
     const segb=(k)=>`<div class="mseg">${[['short_term','Last 4 weeks'],['medium_term','Last 6 months'],['long_term',"Spotify's ranking"],...(MH&&MH.tot?[['hist','All Time']]:[])].map(([r,l])=>`<button data-hms="${k}:${r}" class="${hmS[k]===r?'on':''}">${l}</button>`).join('')}</div>`;
     const note=k=>(MF.notes||{})[k]||'';
     const fs=MFS.filter(([k])=>ED.on||(MF[k]||[]).length);
-    if(fs.length)G('g-mfav','Music favourites','The songs and singers I keep coming back to, picked by hand.','heart','#1f9d63','',fs.map(([k,l,kind])=>sec('s-mf-'+k,l,note(k),mfCards(k,kind))));
+    if(fs.length)G('g-mfav','Music favourites','The songs and singers I keep coming back to, picked by hand.','heart','#1f9d63','',fs.map(([k,l,kind])=>sec('s-mf-'+k,l,note(k),mfCards(k,kind),'','mf:'+k)));
     if(MU&&MU.top){G('g-mtop','Top artists',"Spotify's ranking mixes how much and how recently I listen. All Time is the real total of hours since 2021.",'star','#1f9d63','',[sec('s-mta','Top artists','',segb('a')+(hmS.a==='hist'?`<div class="martists">${Object.entries(MH.artists).sort((a,b)=>b[1][0]-a[1][0]).slice(0,50).map(([n,v],i)=>{const id=Object.keys(MU.artists).find(k=>MU.artists[k].n===n);return id?mArtTile(id,i).replace('</button>',`<div class="rk">${mhH(v[0])}</div></button>`):`<div class="mart"><div class="pic"><b>${esc(initials(n))}</b></div><div class="nm">${esc(n)}</div><div class="rk">#${i+1} · ${mhH(v[0])}</div></div>`}).join('')}</div>`:`<div class="martists">${(MU.top.artists[hmS.a]||[]).map(mArtTile).join('')}</div>`))]);
       G('g-mts','Top songs',"Spotify's ranking mixes how much and how recently I play. All Time counts real plays since 2021.",'music','#1f9d63','',[sec('s-mts','Top songs','',segb('s')+`<div class="box mcompact">${(hmS.s==='hist'?MH.songs.slice(0,50).map(x=>{mhKnow(x.id);return x.id}):(MU.top.tracks[hmS.s]||[])).map((id,i)=>mRow(id,i)).join('')}</div>`)])}
   }else if(hofSeg==='couples'){
     G('g-cou','Couples','Favourite anime couples, and two special cases.','couple','#e8733a',blogUrl(804809),[
-      sec('s-cou','Favourite anime couples','The name says it all.',coupleCards(H.couples)),
-      sec('s-cou-sp','A special mention',H.specialCouples.desc,coupleCards(H.specialCouples.pairs))]);
+      sec('s-cou','Favourite anime couples','The name says it all.',coupleCards(H.couples,'c'),'','c'),
+      sec('s-cou-sp','A special mention',H.specialCouples.desc,coupleCards(H.specialCouples.pairs,'sp'),'','sp')]);
   }else if(hofSeg==='manga'){
     G('g-mmal','MAL favourites','My official top manga on MyAnimeList.','star','#d24a5f','https://myanimelist.net/profile/SatsugaiDeAtsu',[sec('s-mm','Top manga','',grid(F.manga.map(([id,t,sub])=>hItem('m'+id+'~'+t,sub)).join('')))]);
     G('g-mhon','Honorary favourites','Manga special to me like my favs, even outside the top 10.','star','#d9a514',blogUrl(804802),
-      fil(hon,/manga/i).map(([t,d,it],i)=>sec('s-mhon-'+i,t.replace(/^Honorary mentions: /,'Honorary mentions · '),d,grid(it.map(c=>hItem(c)).join('')))));
+      hSecs(0,'m','s-mhon-'),'0:m');
     const p10=manga.filter(m=>m.sc===10).sort((a,b)=>b.mal-a.mal);
     G('g-m10','Perfect 10s','Every manga I scored 10 out of 10.','ten','#d24a5f','',[sec('s-m10','Scored 10','',grid(p10.map(m=>hItem('m'+m.id+'~'+m.t,m.type+(m.y?' · '+m.y:''))).join('')))]);
   }else if(hofSeg==='films'){
@@ -70,11 +70,11 @@ function rHof(){
     const five=films.filter(f=>f.r===5);
     G('g-f5','Five stars','Every film I rated ★★★★★.','ten','#e8733a','',[sec('s-f5','Rated five stars','',grid(five.map(f=>fc(f.t,f.y)).join('')))]);
   }else if(hofSeg==='games'){
-    const gc=g=>{const idx=HOFITEMS.push({game:g})-1;return `<div class="card" data-h="${idx}">${cover(g.t,g.img||'',gBadge(g)+gDlcStack(g))}<div class="meta"><div class="tt">${esc(g.t)}</div>${gDlcLine(g)}<div class="ss"><span>${esc(g.shelf)}</span></div></div></div>`};
+    const gc=(g,pos)=>{const idx=HOFITEMS.push({game:g})-1;return `<div class="card" data-h="${idx}">${cover(g.t,g.img||'',gBadge(g)+gDlcStack(g)+(pos!=null&&ED.on?hDelBtn('gv',pos):''))}<div class="meta"><div class="tt">${esc(g.t)}</div>${gDlcLine(g)}<div class="ss"><span>${esc(g.shelf)}</span></div></div></div>`};
     const favG=D.gvFav.map(n=>games.find(g=>g.t===n)).filter(Boolean);
-    G('g-gtop','Favourite games','My favourite games, in order.','star','#8a55e6','',[sec('s-gtop','Favourites','',grid(favG.map(gc).join('')))]);
-    G('g-g5','Also rated 5/5','','ten','#8a55e6','',[sec('s-g5','Five out of five','',grid(games.filter(g=>g.r===5&&!D.gvFav.includes(g.t)).map(gc).join('')))]);
-    G('g-grv','Games I wrote about','My reviews.','stories','#8a55e6','',[sec('s-grv','Reviewed','',grid(games.filter(g=>g.rv).sort((a,b)=>b.r-a.r).map(gc).join('')))]);
+    G('g-gtop','Favourite games','My favourite games, in order.','star','#8a55e6','',[sec('s-gtop','Favourites','',grid(favG.map(g=>gc(g,D.gvFav.indexOf(g.t))).join('')),'','gv')]);
+    G('g-g5','Also rated 5/5','','ten','#8a55e6','',[sec('s-g5','Five out of five','',grid(games.filter(g=>g.r===5&&!D.gvFav.includes(g.t)).map(g=>gc(g)).join('')))]);
+    G('g-grv','Games I wrote about','My reviews.','stories','#8a55e6','',[sec('s-grv','Reviewed','',grid(games.filter(g=>g.rv).sort((a,b)=>b.r-a.r).map(g=>gc(g)).join('')))]);
   }else{
     const bc=b=>{const idx=HOFITEMS.push({book:b})-1;return `<div class="card book" data-h="${idx}">${cover(b.t,b.img||'',b.r?`<span class="badge">${b.r}★</span>`:'')}<div class="meta"><div class="tt">${esc(b.t)}</div><div class="ss"><span>${esc(b.a)}</span></div></div></div>`};
     G('g-b5','Five stars','Books I rated 5 out of 5.','ten','#b07a38','',[sec('s-b5','Five stars','',grid(books.filter(b=>b.r>=5).map(bc).join('')))]);
@@ -89,9 +89,10 @@ function rHof(){
     <details style="margin-top:8px"><summary class="link" style="cursor:pointer">Read the full introduction</summary><div style="margin-top:10px">${A.paras.map(p=>`<p>${esc(p)}</p>`).join('')}<a class="link" href="https://myanimelist.net/blog.php?eid=${A.post}" target="_blank" rel="noopener">Continue on MAL ↗</a></div></details></div></section>
   <div class="segtabs"><button data-seg="home" style="--c:var(--gold)">← Hall</button>${segs.map(([k,l,c])=>`<button data-seg="${k}" class="${hofSeg===k?'on':''}" style="--c:${c}">${ico({chars:'mask',waifus:'heart',couples:'couple'}[k]||k)} ${l}</button>`).join('')}</div>
   <div class="jgroups">${groups.map(g=>`<div class="jg" style="--c:${g.c}"><span class="jl" data-j="${g.id}">${ico(g.icon)}${esc(g.title)}</span>${g.secs.length>1?g.secs.map(s=>`<a href="#hof" data-j="${s.id}">${esc(s.title)}</a>`).join(''):''}</div>`).join('')}</div>
-  ${groups.map(g=>`<div class="grp" id="${g.id}" style="--c:${g.c}">${artBg(g.c,g.title.length*7,'')}<div class="gi">${ico(g.icon)}</div><div><h2>${esc(g.title)}</h2>${g.desc?`<p>${esc(g.desc)}</p>`:''}</div>${g.src?`<a href="${g.src}" target="_blank" rel="noopener">Source ↗</a>`:''}</div>
-    ${g.secs.map(s=>`<section class="box hsec ${s.cls||''}" id="${s.id}" style="--c:${/hate/i.test(s.title)?'var(--s4)':g.c}"><div class="box-h"><h2>${esc(s.title)}</h2></div>${s.desc?`<div class="desc">${esc(s.desc)}</div>`:''}<div class="box-b">${s.inner}</div></section>`).join('')}`).join('')}`;
+  ${groups.map(g=>`<div class="grp" id="${g.id}" style="--c:${g.c}">${artBg(g.c,g.title.length*7,'')}<div class="gi">${ico(g.icon)}</div><div><h2>${esc(g.title)}</h2>${g.desc?`<p>${esc(g.desc)}</p>`:''}</div>${g.src?`<a href="${g.src}" target="_blank" rel="noopener">Source ↗</a>`:''}${ED.on&&g.nsec?`<button class="btn" data-hnew="${g.nsec}">＋ New section</button>`:''}</div>
+    ${g.secs.map(s=>`<section class="box hsec ${s.cls||''}" id="${s.id}" style="--c:${/hate/i.test(s.title)?'var(--s4)':g.c}"><div class="box-h"><h2>${esc(s.title)}</h2>${ED.on&&s.ref?hTools(s.ref):''}</div>${s.desc?`<div class="desc">${esc(s.desc)}</div>`:''}<div class="box-b">${s.inner}</div></section>`).join('')}`).join('')}`;
   document.querySelectorAll('[data-seg]').forEach(b=>b.onclick=()=>{hofSeg=b.dataset.seg;rHof();window.scrollTo(0,0)});
+  hofEditBind();
   if(hofSeg==='music'){mfBind();document.querySelectorAll('[data-hms]').forEach(b=>b.onclick=()=>{const [k,r]=b.dataset.hms.split(':');hmS[k]=r;const y=scrollY;rHof();scrollTo(0,y)})}
   document.querySelectorAll('[data-j]').forEach(a=>a.onclick=e=>{e.preventDefault();const el=document.getElementById(a.dataset.j);if(el)el.scrollIntoView({behavior:'smooth'})});
   document.querySelectorAll('[data-st]').forEach(el=>el.onclick=()=>openStudio(F.company[+el.dataset.st]));
@@ -112,7 +113,7 @@ function hofTiles(){
   const imgsF=[...favF,...films.filter(f=>f.r===5)].map(f=>f.img);
   const imgsG=games.filter(g=>g.r===5||D.gvFav.includes(g.t)).map(g=>g.img);
   const imgsB=books.filter(b=>b.r>=5).map(b=>b.img);
-  const imgsC=[...F.character.map(([id])=>HIMG('c',id)),...H.blog[0].secs.filter(s=>/character/i.test(s[0])).flatMap(s=>s[2].map(ci)),...H.blog[1].secs.flatMap(s=>s[2].map(ci))];
+  const imgsC=[...F.character.map(([id])=>HIMG('c',id)),...H.blog[0].secs.filter(s=>hSeg(s,0)==='c').flatMap(s=>s[2].map(ci)),...H.blog[1].secs.flatMap(s=>s[2].map(ci))];
   const imgsW=H.blog[2].secs.flatMap(s=>s[2].map(ci));
   const imgsCo=H.couples.flatMap(c=>c[2].map(ci));
   return [
@@ -181,7 +182,7 @@ const bdAge=bd=>{if(!bd||!/\d{4}/.test(bd))return 0;const d=new Date(bd);if(isNa
 async function openPerson(it){
   if(!D.peopleInfo){try{D.peopleInfo=await fetch('data/people_info.json',{cache:'no-cache'}).then(r=>r.json())}catch(e){D.peopleInfo={p:{},s:{}}}}
   const p=(D.peopleInfo.p||{})[it.id];
-  if(!p){modal('anime','Person',`${cover(it.name,it.pic||HIMG('p',it.id))}<div><h2>${esc(it.name)}</h2><div class="muted">Their details arrive with the next update.</div><div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/people/${it.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);return}
+  if(!p){modal('anime','Person',`${cover(it.name,it.pic||HIMG('p',it.id))}<div><h2>${esc(it.name)}</h2><div class="muted">Their details arrive with the next update.</div><div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/people/${it.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);addToHook({k:'p',id:it.id,name:it.name,img:it.pic||HIMG('p',it.id)});return}
   const age=bdAge(p.bd),L=p.labels||[];
   const an=(id,t)=>{const o=anime.find(a=>a.id===id);return o?o.t:t};
   modal('anime','Person',`${cover(p.name||it.name,it.pic||HIMG('p',it.id)||p.img)}<div><h2>${esc(p.name||it.name)}</h2>${p.jp?`<div class="muted">${esc(p.jp)}</div>`:''}
@@ -193,6 +194,7 @@ async function openPerson(it){
   ${!p.works&&!p.va&&p.staff&&p.staff.length?`<div class="sect" style="--c:var(--anime);margin-top:14px"><h2><i></i>Anime work</h2><div class="kv" style="margin-top:0">${p.staff.map(x=>`<div>${esc(x[2])}</div><div>${esc(an(x[0],x[1]))}</div>`).join('')}</div></div>`:''}
   ${p.about?`<div class="review" style="--c:var(--anime)">${esc(p.about)}</div>`:''}
   <div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/people/${it.id}" target="_blank" rel="noopener">Full profile on MyAnimeList ↗</a></div></div>`);
+  addToHook({k:'p',id:it.id,name:p.name||it.name,img:it.pic||HIMG('p',it.id)||p.img});
   document.querySelectorAll('[data-pc]').forEach(b=>b.onclick=()=>{const c=p.va[+b.dataset.pc];openMal({k:'c',id:c[0],name:c[1],pic:c[2]})});
   document.querySelectorAll('[data-pw]').forEach(b=>b.onclick=()=>{const w=p.works[+b.dataset.pw];const o=manga.find(m=>m.id===w[0]);if(o)return openManga(o);openExt('manga',{malId:w[0],t:w[1],img:w[2],meta:[(w[3]||''),w[4]?fmt(w[4])+' members':''].filter(Boolean).join(' · '),url:'https://myanimelist.net/manga/'+w[0]})});
 }
@@ -211,9 +213,11 @@ async function openMal(it){
     ${ci.about?`<div class="review" style="--c:var(--anime)">${esc(ci.about)}</div>`:''}
     <div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/character/${it.id}" target="_blank" rel="noopener">Full profile on MyAnimeList ↗</a></div></div>`);
     document.querySelectorAll('[data-own]').forEach(a=>a.onclick=e=>{e.preventDefault();const [k,id]=a.dataset.own.split(':');const o=(k==='anime'?anime:manga).find(x=>x.id===+id);if(o)(k==='anime'?openAnime:openManga)(o)});
+    addToHook({k:'c',id:it.id,name:ci.name||it.name,img:it.pic||HIMG(it.k,it.id)});
     return;
   }
   modal(it.k==='m'?'manga':'anime',KLAB[it.k],`${cover(it.name,it.pic||HIMG(it.k,it.id))}<div><h2>${esc(it.name)}</h2><div class="muted">${esc(KLAB[it.k])} on MyAnimeList</div>
   <div style="margin-top:14px"><a class="btn pri" href="https://myanimelist.net/${MALK[it.k]}/${it.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
+  addToHook({k:it.k,id:it.id,name:it.name,img:it.pic||HIMG(it.k,it.id)});
 }
 

@@ -718,3 +718,14 @@ footer{max-width:1240px;margin:0 auto;padding:0 16px 30px;font-size:12px;color:v
   .hbar{grid-template-columns:90px 1fr 34px}
   .sres{grid-template-columns:minmax(0,1fr)}
 }
+/* Hall of Fame editing: section tools, reorder window, Add to window */
+.box-h .htools{display:flex;gap:6px;flex-wrap:wrap;margin-left:auto}.box-h .htools .btn{padding:4px 10px;font-size:12px}
+.grp>.btn{margin-left:8px;padding:4px 10px;font-size:12px}
+.rolist{margin-top:10px;max-height:60vh;overflow:auto;border:1px solid var(--line)}
+.rorow{display:flex;align-items:center;gap:8px;padding:6px 8px;border-bottom:1px solid var(--line)}.rorow:last-child{border-bottom:0}
+.rorow img,.rorow i{width:34px;height:46px;object-fit:cover;flex:none;background:var(--panel2,#2a2033)}.rorow .mono{width:22px;text-align:right;flex:none}
+.rorow .ron{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rorow .btn{padding:4px 9px;flex:none}.rorow .btn:disabled{opacity:.3}
+.atrow{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:10px 12px;margin-bottom:6px;border:1px solid var(--line2);background:var(--panel);color:inherit;cursor:pointer;font:inherit}
+.atrow b{width:20px;text-align:center;color:var(--ink3)}.atrow.on{border-color:var(--accent)}.atrow.on b{color:var(--accent)}
+.martc>.favx{top:2px;left:2px}
+.hsec .box-h{flex-wrap:wrap;row-gap:6px}

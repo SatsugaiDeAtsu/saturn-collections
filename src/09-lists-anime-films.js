@@ -72,6 +72,7 @@ function openAnime(a){
   ${a.tags?`<div class="review" style="--c:var(--anime)">${esc(a.tags)}</div>`:''}
   <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">${ED.on?'<button class="btn pri" id="m_edit">Edit</button>':''}<a class="btn${ED.on?'':' pri'}" href="https://myanimelist.net/anime/${a.id}" target="_blank" rel="noopener">Open on MyAnimeList ↗</a></div></div>`);
   const me=$('#m_edit');if(me)me.onclick=()=>editMal('anime',a);
+  addToHook({k:'a',id:a.id,name:a.t,img:a.img||''});
   malExtra('a',a);animeSongs(a);
   document.querySelectorAll('#m_tabs [data-at]').forEach(b=>b.onclick=()=>{const w=b.classList.contains('on')?'':b.dataset.at;document.querySelectorAll('#m_tabs [data-at]').forEach(x=>x.classList.toggle('on',x.dataset.at===w));$('#m_x').hidden=w!=='rel';$('#m_mus').hidden=w!=='mus'});
 }
