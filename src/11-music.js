@@ -181,7 +181,9 @@ function mSearchModal(type,title,onPick){
   modal('music',title,`<div style="grid-column:1/-1"><h2>${esc(title)}</h2>
   <form id="ms_f" style="display:flex;margin-top:12px"><input id="ms_q" placeholder="Search ${type==='artist'?'an artist':'a song'}" style="flex:1;border:1px solid var(--line2);padding:10px 12px;background:var(--panel);outline:none"><button class="btn pri" style="border-radius:0">Search</button></form>
   <div id="ms_res" style="margin-top:12px"><div class="small muted">Your own library shows first, then all of Spotify.</div></div></div>`);
-  const go=async()=>{const q=gv('ms_q');if(!q)return;const box=$('#ms_res');await muLoad();const n=norm(q),W=n.split(' ');const m=s=>W.every(w=>norm(s).includes(w));
+  // matching keeps Japanese and other scripts (norm() keeps only a-z and 0-9)
+  const nm=s=>String(s||'').toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^\p{L}\p{N}]+/gu,' ').trim();
+  const go=async()=>{const q=gv('ms_q');if(!q)return;const box=$('#ms_res');await muLoad();const n=nm(q),W=n.split(' ');const m=s=>W.every(w=>nm(s).includes(w));
     const mine=type==='artist'?Object.entries(MU.artists).filter(([,a])=>m(a.n)).slice(0,12).map(([id,a])=>({id,t:a.n,img:a.img})):Object.entries(MU.tracks).filter(([,t])=>m(t.n+' '+(t.ar||[]).map(x=>x[1]).join(' '))).slice(0,12).map(([id,t])=>Object.assign({id,t:t.n},t));
     const tile=(x,i,src)=>`<button type="button" class="ptile" data-ms="${src}:${i}">${cover(x.t,x.img||'','',type==='artist'?'round':'sq')}<span class="pn">${esc(x.t)}</span><span class="ps">${esc(type==='artist'?(src==='m'?'in your library':''):(x.ar||[]).map(a=>a[1]).join(', '))}</span></button>`;
     box.innerHTML=`${mine.length?`<div class="small muted" style="margin-bottom:6px">In your library</div><div class="pgrid">${mine.map((x,i)=>tile(x,i,'m')).join('')}</div>`:''}<div id="ms_ext" style="margin-top:14px"><div class="muted small"><span class="spin"></span>Searching Spotify…</div></div>`;
